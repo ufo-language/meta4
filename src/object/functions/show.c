@@ -5,20 +5,20 @@
 #include "object/object.h"
 #include "object/typeids.h"
 #include "object/functions/show.h"
-#include "object/types/array.h"
-
 
 /* Defines *******************************************************************/
 
 /* Types *********************************************************************/
 
 struct Array;
+struct Boolean;
 struct Integer;
 struct Nil;
 
 /* Forward declarations ******************************************************/
 
 void array_show  (struct Array*,   FILE* stream);
+void boolean_show(struct Boolean*, FILE* stream);
 void integer_show(struct Integer*, FILE* stream);
 void nil_show    (struct Nil*,     FILE* stream);
 
@@ -33,7 +33,7 @@ void show(struct Object* obj, FILE* stream) {
         case OT_Apply:         break;
         case OT_Array:         array_show((struct Array*)obj, stream); return;
         case OT_BinOp:         break;
-        case OT_Boolean:       break;
+        case OT_Boolean:       boolean_show((struct Boolean*)obj, stream); return;
         case OT_ByteBuffer:    break;
         case OT_ConstantLimit: break;
         case OT_Dec:           break;
