@@ -23,6 +23,7 @@ struct Array* array_new(count_t nElems, struct Object* elems[]) {
     return array;
 }
 
+/*
 struct Array* array_new_fill(count_t nElems, struct Object* elem) {
     struct Array* array = (struct Array*)object_new(OT_Array, NWORDS(struct Array) + nElems);
     array->nElems = nElems;
@@ -31,6 +32,7 @@ struct Array* array_new_fill(count_t nElems, struct Object* elem) {
     }
     return array;
 }
+*/
 
 struct Array* array_new_nofill(count_t nElems) {
     struct Array* array = (struct Array*)object_new(OT_Array, NWORDS(struct Array) + nElems);
@@ -69,13 +71,17 @@ bool_t array_eval(struct Array* array, struct Evaluator* etor, struct Object** v
 
 void array_show(struct Array* array, FILE* stream) {
     fputc('{', stream);
-    for (index_t n=0; n<array->nElems; n++) {
-        if (n > 0) {
-            fputs(", ", stream);
-        }
-        show(array->elems[n], stream);
-    }
+    array_showElemsWith(array->nElems, array->elems, ", ", stream);
     fputc('}', stream);
+}
+
+void array_showElemsWith(count_t nElems, struct Object* elems[], const string_t sep, FILE* stream) {
+    for (index_t n=0; n<nElems; n++) {
+        if (n > 0) {
+            fputs(sep, stream);
+        }
+        show(elems[n], stream);
+    }
 }
 
 /* Private functions *********************************************************/

@@ -20,7 +20,7 @@ int main(int argc, char* argv[]) {
 
     TEST(nil_checkEval)
         struct Nil* nil = nil_new();
-        struct Evaluator* etor = etor_new();
+        struct Evaluator* etor = evaluator_new();
         struct Object* value;
         ASSERT_TRUE(eval(OBJ(nil), etor, &value))
         EXPECT_EQ(nil, value);

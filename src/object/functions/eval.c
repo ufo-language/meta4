@@ -14,14 +14,16 @@ struct Array;
 struct Evaluator;
 struct IfThen;
 struct Object;
+struct Sequence;
 
 /* Forward declarations ******************************************************/
 
-bool_t array_eval  (struct Array*,   struct Evaluator*, struct Object**);
-bool_t ifThen_eval (struct IfThen*,  struct Evaluator*, struct Object**);
+bool_t array_eval   (struct Array*,    struct Evaluator*, struct Object**);
+bool_t ifThen_eval  (struct IfThen*,   struct Evaluator*, struct Object**);
+bool_t sequence_eval(struct Sequence*, struct Evaluator*, struct Object**);
 
-bool_t _const_eval (struct Object*,  struct Evaluator*, struct Object**);
-bool_t _evalError  (struct Object*,  struct Evaluator*, struct Object**);
+bool_t _const_eval  (struct Object*,   struct Evaluator*, struct Object**);
+bool_t _evalError   (struct Object*,   struct Evaluator*, struct Object**);
 
 /* Global variables **********************************************************/
 
@@ -54,7 +56,7 @@ bool_t eval(struct Object* obj, struct Evaluator* etor, struct Object** value) {
         case OT_Primitive:     return _const_eval(obj, etor, value);;
         case OT_Quote:         break;
         case OT_Real:          return _const_eval(obj, etor, value);;
-        case OT_Sequence:      break;
+        case OT_Sequence:      return sequence_eval((struct Sequence*)obj, etor, value);
         case OT_String:        return _const_eval(obj, etor, value);;
         case OT_Symbol:        return _const_eval(obj, etor, value);;
         case OT_Test:          break;

@@ -20,7 +20,7 @@ int main(int argc, char* argv[]) {
 
     TEST(integer_checkEval)
         struct Integer* integer = integer_new(123);
-        struct Evaluator* etor = etor_new();
+        struct Evaluator* etor = evaluator_new();
         struct Object* value;
         ASSERT_TRUE(eval(OBJ(integer), etor, &value))
         EXPECT_EQ(integer, value);

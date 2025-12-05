@@ -24,7 +24,7 @@ int main(int argc, char* argv[]) {
 
     TEST(array_checkEval)
         struct Array* array = array_new(3, elems);
-        struct Evaluator* etor = etor_new();
+        struct Evaluator* etor = evaluator_new();
         struct Object* value;
         ASSERT_TRUE(eval(OBJ(array), etor, &value))
         ASSERT_PTRNE(array, value);

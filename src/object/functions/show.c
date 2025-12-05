@@ -14,13 +14,15 @@ struct Array;
 struct Boolean;
 struct Integer;
 struct Nil;
+struct Sequence;
 
 /* Forward declarations ******************************************************/
 
-void array_show  (struct Array*,   FILE* stream);
-void boolean_show(struct Boolean*, FILE* stream);
-void integer_show(struct Integer*, FILE* stream);
-void nil_show    (struct Nil*,     FILE* stream);
+void array_show   (struct Array*,    FILE* stream);
+void boolean_show (struct Boolean*,  FILE* stream);
+void integer_show (struct Integer*,  FILE* stream);
+void nil_show     (struct Nil*,      FILE* stream);
+void sequence_show(struct Sequence*, FILE* stream);
 
 /* Global variables **********************************************************/
 
@@ -53,7 +55,7 @@ void show(struct Object* obj, FILE* stream) {
         case OT_Primitive:     break;
         case OT_Quote:         break;
         case OT_Real:          break;
-        case OT_Sequence:      break;
+        case OT_Sequence:      sequence_show((struct Sequence*)obj, stream); return;
         case OT_String:        break;
         case OT_Symbol:        break;
         case OT_Test:          break;

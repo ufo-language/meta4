@@ -24,7 +24,7 @@ int main(int argc, char* argv[]) {
 
     TEST(ifThen_checkEval_true)
         struct IfThen* ifThen = ifThen_new(OBJ(g_true), OBJ(i100), OBJ(i200));
-        struct Evaluator* etor = etor_new();
+        struct Evaluator* etor = evaluator_new();
         struct Object* value;
         ASSERT_TRUE(eval(OBJ(ifThen), etor, &value));
         EXPECT_EQ(i100, value);
@@ -32,7 +32,7 @@ int main(int argc, char* argv[]) {
 
     TEST(ifThen_checkEval_false)
         struct IfThen* ifThen = ifThen_new(OBJ(g_false), OBJ(i100), OBJ(i200));
-        struct Evaluator* etor = etor_new();
+        struct Evaluator* etor = evaluator_new();
         struct Object* value;
         ASSERT_TRUE(eval(OBJ(ifThen), etor, &value));
         EXPECT_EQ(i200, value);

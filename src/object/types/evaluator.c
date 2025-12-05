@@ -15,7 +15,7 @@
 
 /* Lifecycle functions *******************************************************/
 
-struct Evaluator* etor_new(void) {
+struct Evaluator* evaluator_new(void) {
     struct Evaluator* etor = (struct Evaluator*)object_new(OT_Evaluator, NWORDS(*etor));
     return etor;
 }
@@ -24,11 +24,11 @@ struct Evaluator* etor_new(void) {
 
 /* Unique functions ******************/
 
-void etor_run(struct Evaluator* etor, void (*initCallback)(struct Evaluator* etor)) {
+void evaluator_run(struct Evaluator* etor, void (*initCallback)(struct Evaluator* etor)) {
     initCallback(etor);
 }
 
 /* Object functions ******************/
 
-void etor_show(struct Evaluator* etor, FILE* stream) {
+void evaluator_show(struct Evaluator* etor, FILE* stream) {
 }

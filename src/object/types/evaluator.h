@@ -26,14 +26,14 @@ struct Evaluator {
 
 /* Lifecycle functions *******************************************************/
 
-struct Evaluator* etor_new(void);
+struct Evaluator* evaluator_new(void);
 
 /* Public functions **********************************************************/
 
 /* Unique functions ******************/
 
-void etor_run(struct Evaluator* etor, void (*initCallback)(struct Evaluator* etor));
+void evaluator_run(struct Evaluator* etor, void (*initCallback)(struct Evaluator* etor));
 
 /* Object functions ******************/
 
-void etor_show(struct Evaluator* etor, FILE* stream);
+void evaluator_show(struct Evaluator* etor, FILE* stream);
