@@ -1,0 +1,55 @@
+#include <stdio.h>
+
+#include "_typedefs.h"
+
+#include "object/typeids.h"
+
+/* Defines *******************************************************************/
+
+/* Types *********************************************************************/
+
+/* Forward declarations ******************************************************/
+
+/* Global variables **********************************************************/
+
+/* Lifecycle functions *******************************************************/
+
+/* Public functions **********************************************************/
+
+string_t typeName(enum TypeId typeId) {
+    switch (typeId) {
+        case OT_Apply:         return "Apply";
+        case OT_Array:         return "Array";
+        case OT_BinOp:         return "BinOp";
+        case OT_Boolean:       return "Boolean";
+        case OT_ByteBuffer:    return "ByteBuffer";
+        case OT_ConstantLimit: return "ConstantLimit";
+        case OT_Dec:           return "Dec";
+        case OT_Device:        return "Device";
+        case OT_Evaluator:     return "Evaluator";
+        case OT_Function:      return "Function";
+        case OT_HashTable:     return "HashTable";
+        case OT_Identifier:    return "Identifier";
+        case OT_IfThen:        return "IfThen";
+        case OT_Inc:           return "Inc";
+        case OT_Integer:       return "Integer";
+        case OT_IVar:          return "IVar";
+        case OT_Let:           return "Let";
+        case OT_List:          return "List";
+        case OT_Nil:           return "Nil";
+        case OT_Null:          return "Null";
+        case OT_Primitive:     return "Primitive";
+        case OT_Quote:         return "Quote";
+        case OT_Real:          return "Real";
+        case OT_Sequence:      return "Sequence";
+        case OT_String:        return "String";
+        case OT_Symbol:        return "Symbol";
+        case OT_Test:          return "Test";
+        case OT_User:          return "User";
+        case OT_Var:           return "Var";
+        case OT_While:         return "While";
+        default:
+            fprintf(stderr, "Unknown type ID %u\n", typeId);
+            return "UNKNOWN";
+    }
+}

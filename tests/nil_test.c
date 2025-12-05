@@ -1,12 +1,12 @@
+#include <string.h>
+
 #include "_test.h"
 #include "_typedefs.h"
 
 #include "object/types/evaluator.h"
 #include "object/types/nil.h"
 #include "object/globals.h"
-
-static void _checkEval(struct Evaluator* etor) {
-}
+#include "object/functions/show.h"
 
 int main(int argc, char* argv[]) {
     BEGIN_TESTS
@@ -15,17 +15,19 @@ int main(int argc, char* argv[]) {
         struct Nil* nil = nil_new();
         ASSERT_PTRNE(NULL, nil);
         ASSERT_IEQ(OT_Nil, nil->obj.typeId);
+        EXPECT_IEQ(0, strcmp("Nil", typeName(nil->obj.typeId)));
     END
 
     TEST(nil_checkEval)
+        struct Nil* nil = nil_new();
         struct Evaluator* etor = etor_new();
-        etor_run(etor, _checkEval);
-        etor_show(etor, stderr);
+        struct Object* value;
+        ASSERT_TRUE(eval(OBJ(nil), etor, &value))
+        EXPECT_EQ(nil, value);
     END
 
     TEST(nil_checkShow)
-        MESSAGE("Should show 'nil':");
-        nil_show(g_nil, stderr);
+        SHOW("Should show 'nil'", g_nil);
     END
 
     END_TESTS

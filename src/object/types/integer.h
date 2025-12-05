@@ -1,15 +1,20 @@
 #include <stdio.h>
-#include <stdlib.h>
 
 #include "_typedefs.h"
 
-#include "memory/memory.h"
 #include "object/object.h"
 #include "object/typeids.h"
+#include "object/functions/eval.h"
+#include "object/functions/show.h"
 
 /* Defines *******************************************************************/
 
 /* Types *********************************************************************/
+
+struct Integer {
+    struct Object obj;
+    int_t i;
+};
 
 /* Forward declarations ******************************************************/
 
@@ -17,15 +22,7 @@
 
 /* Lifecycle functions *******************************************************/
 
-struct Object* object_new(enum TypeId typeId, count_t nWords) {
-    #if 0
-    fprintf(stderr, "object_new %s : %lu words\n", typeName(typeId), nWords);    
-    #endif
-    struct Object* obj = memory_alloc(nWords);
-    obj->typeId = typeId;
-    obj->nWords = nWords;
-    return obj;
-}
+struct Integer* integer_new(int_t i);
 
 /* Public functions **********************************************************/
 
@@ -33,4 +30,5 @@ struct Object* object_new(enum TypeId typeId, count_t nWords) {
 
 /* Object functions ******************/
 
-/* Private functions *********************************************************/
+bool_t integer_eval(struct Integer* integer, struct Evaluator* etor, struct Object** value);
+void integer_show(struct Integer* integer, FILE* stream);

@@ -1,11 +1,12 @@
 #include <stdio.h>
-#include <stdlib.h>
 
 #include "_typedefs.h"
 
-#include "memory/memory.h"
+#include "object/functions/eval.h"
+#include "object/functions/show.h"
 #include "object/object.h"
 #include "object/typeids.h"
+#include "object/types/integer.h"
 
 /* Defines *******************************************************************/
 
@@ -17,14 +18,10 @@
 
 /* Lifecycle functions *******************************************************/
 
-struct Object* object_new(enum TypeId typeId, count_t nWords) {
-    #if 0
-    fprintf(stderr, "object_new %s : %lu words\n", typeName(typeId), nWords);    
-    #endif
-    struct Object* obj = memory_alloc(nWords);
-    obj->typeId = typeId;
-    obj->nWords = nWords;
-    return obj;
+struct Integer* integer_new(int_t i) {
+    struct Integer* integer = (struct Integer*)object_new(OT_Integer, NWORDS(*integer));
+    integer->i = i;
+    return integer;
 }
 
 /* Public functions **********************************************************/
@@ -32,5 +29,14 @@ struct Object* object_new(enum TypeId typeId, count_t nWords) {
 /* Unique functions ******************/
 
 /* Object functions ******************/
+
+bool_t integer_eval(struct Integer* integer, struct Evaluator* etor, struct Object** value) {
+    *value = (struct Object*)integer;
+    return true;
+}
+
+void integer_show(struct Integer* integer, FILE* stream) {
+    fprintf(stream, "%ld", integer->i);
+}
 
 /* Private functions *********************************************************/

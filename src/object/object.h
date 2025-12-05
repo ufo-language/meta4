@@ -11,7 +11,7 @@
 /* Types *********************************************************************/
 
 struct Object {
-    enum TypeID typeId;
+    enum TypeId typeId;
     count_t nWords;
 };
 
@@ -23,7 +23,7 @@ struct Evaluator;
 
 /* Lifecycle functions *******************************************************/
 
-struct Object* object_new(enum TypeID typeId, count_t nWords);
+struct Object* object_new(enum TypeId typeId, count_t nWords);
 
 /* Public functions **********************************************************/
 

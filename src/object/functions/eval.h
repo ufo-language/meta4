@@ -7,20 +7,6 @@ struct Object;
 
 /* Types *********************************************************************/
 
-typedef void (*EvalFunction2)(struct Object* obj, struct Evaluator* etor);
-
-struct EvalFunction_handler2 {
-    enum TypeID typeId;
-    EvalFunction2 function;
-};
-
-typedef void (*EvalFunction)(struct Object* obj, struct Evaluator* etor);
-
-struct EvalFunction_handler {
-    enum TypeID typeId;
-    EvalFunction function;
-};
-
 /* Forward declarations ******************************************************/
 
 /* Global variables **********************************************************/
@@ -32,3 +18,5 @@ struct EvalFunction_handler {
 /* Unique functions ******************/
 
 /* Object functions ******************/
+
+bool_t eval(struct Object* obj, struct Evaluator* etor, struct Object** value);

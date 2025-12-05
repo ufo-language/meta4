@@ -29,5 +29,5 @@ struct Nil* nil_new(void);
 
 /* Object functions ******************/
 
-void nil_eval(struct Nil* nil, struct Evaluator* etor);
+bool_t nil_eval(struct Nil* nil, struct Evaluator* etor, struct Object** value);
 void nil_show(struct Nil* nil, FILE* stream);

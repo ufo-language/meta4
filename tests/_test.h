@@ -94,11 +94,11 @@ void t_env_bindEach(struct Environment* env, struct Object* objs[]) {
     } \
     else { \
         fprintf(stderr, "[%sFAIL%s] ❌ [%s:%d] %s == %s, expected = ", RED, NORMAL, __FILE__, __LINE__, (#expected), (#actual)); \
-        object_show((struct Object*)expected, stderr); \
+        show((struct Object*)expected, stderr); \
         fputs(" :: ", stderr); \
         fputs(typeName(((struct Object*)expected)->typeId), stderr); \
         fputs(", actual = ", stderr); \
-        object_show((struct Object*)actual, stderr); \
+        show((struct Object*)actual, stderr); \
         fputs(" :: ", stderr); \
         fputs(typeName(((struct Object*)actual)->typeId), stderr); \
         fputc('\n', stderr); \
@@ -112,11 +112,11 @@ void t_env_bindEach(struct Environment* env, struct Object* objs[]) {
     } \
     else { \
         fprintf(stderr, "[%sFAIL%s] ❌ [%s:%d] %s == %s, expected = ", RED, NORMAL, __FILE__, __LINE__, (#expected), (#actual)); \
-        object_show((struct Object*)expected, stderr); \
+        show((struct Object*)expected, stderr); \
         fputs(" :: ", stderr); \
         fputs(typeName(((struct Object*)expected)->typeId), stderr); \
         fputs(", actual = ", stderr); \
-        object_show((struct Object*)actual, stderr); \
+        show((struct Object*)actual, stderr); \
         fputs(" :: ", stderr); \
         fputs(typeName(((struct Object*)actual)->typeId), stderr); \
         fputc('\n', stderr); \
@@ -268,5 +268,5 @@ void t_env_bindEach(struct Environment* env, struct Object* objs[]) {
     fprintf(stderr, "[%sSHOW%s] ⏩ [%s:%d] ", CYAN, NORMAL, __FILE__, __LINE__); \
     fputs(message, stderr); \
     fputs(":\n       ⏩ ", stderr); \
-    object_show((struct Object*)obj, stderr); \
+    show((struct Object*)obj, stderr); \
     fputs("\n", stderr);

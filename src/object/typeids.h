@@ -6,7 +6,7 @@
 
 /* Types *********************************************************************/
 
-enum TypeID {
+enum TypeId {
     OT_Null,  /* Should never be used */
     OT_Boolean,
     OT_Device,
@@ -38,6 +38,7 @@ enum TypeID {
     OT_While,
     /* Other */
     OT_Evaluator,
+    OT_User,
     OT_Test,
     OT_Max
 };
@@ -49,3 +50,5 @@ enum TypeID {
 /* Lifecycle functions *******************************************************/
 
 /* Public functions **********************************************************/
+
+string_t typeName(enum TypeId typeId);

@@ -1,15 +1,16 @@
-#include <stdio.h>
-#include <stdlib.h>
-
 #include "_typedefs.h"
 
-#include "memory/memory.h"
 #include "object/object.h"
-#include "object/typeids.h"
 
 /* Defines *******************************************************************/
 
 /* Types *********************************************************************/
+
+struct Array {
+    struct Object obj;
+    count_t nElems;
+    struct Object* elems[];
+};
 
 /* Forward declarations ******************************************************/
 
@@ -17,20 +18,17 @@
 
 /* Lifecycle functions *******************************************************/
 
-struct Object* object_new(enum TypeId typeId, count_t nWords) {
-    #if 0
-    fprintf(stderr, "object_new %s : %lu words\n", typeName(typeId), nWords);    
-    #endif
-    struct Object* obj = memory_alloc(nWords);
-    obj->typeId = typeId;
-    obj->nWords = nWords;
-    return obj;
-}
+struct Array* array_new(count_t nElems, struct Object* elems[]);
+struct Array* array_new_fill(count_t nElems, struct Object* elem);
+struct Array* array_new_nofill(count_t nElems);
+void array_init(struct Array* array, count_t nElems, struct Object* elems[]);
 
 /* Public functions **********************************************************/
 
 /* Unique functions ******************/
 
 /* Object functions ******************/
+
+bool_t array_eval(struct Array* array, struct Evaluator* etor, struct Object** value);
 
 /* Private functions *********************************************************/

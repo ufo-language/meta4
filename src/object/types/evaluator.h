@@ -10,8 +10,14 @@
 
 /* Types *********************************************************************/
 
+enum OperationType {
+    Etor_Closing,
+    Etor_Evaluating
+};
+
 struct Evaluator {
     struct Object obj;
+    enum OperationType operationType;
 };
 
 /* Forward declarations ******************************************************/

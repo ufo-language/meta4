@@ -6,13 +6,6 @@
 
 /* Types *********************************************************************/
 
-typedef void (*ShowFunction)(struct Object* obj, FILE* stream);
-
-struct ShowFunction_handler {
-    enum TypeID typeId;
-    ShowFunction function;
-};
-
 /* Forward declarations ******************************************************/
 
 /* Global variables **********************************************************/
@@ -24,3 +17,5 @@ struct ShowFunction_handler {
 /* Unique functions ******************/
 
 /* Object functions ******************/
+
+void show(struct Object* obj, FILE* stream);

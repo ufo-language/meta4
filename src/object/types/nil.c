@@ -2,18 +2,15 @@
 
 #include "_typedefs.h"
 
-#include "object/object.h"
-#include "object/typeids.h"
 #include "object/functions/eval.h"
 #include "object/functions/show.h"
+#include "object/object.h"
+#include "object/typeids.h"
+#include "object/types/nil.h"
 
 /* Defines *******************************************************************/
 
 /* Types *********************************************************************/
-
-struct Nil {
-    struct Object obj;
-};
 
 /* Forward declarations ******************************************************/
 
@@ -31,18 +28,13 @@ struct Nil* nil_new(void) {
 
 /* Object functions ******************/
 
-void nil_eval(struct Object* nil, struct Evaluator* etor) {
-    fputs("foo_eval called\n", stderr);
+bool_t nil_eval(struct Nil* nil, struct Evaluator* etor, struct Object** value) {
+    *value = (struct Object*)nil;
+    return true;
 }
 
-void nil_show(struct Object* nil, FILE* stream) {
-    fputs("nil\n", stream);
+void nil_show(struct Nil* nil, FILE* stream) {
+    fputs("nil", stream);
 }
 
 /* Private functions *********************************************************/
-
-__attribute__((used, section("eval_function")))
-static const struct EvalFunction_handler h_nil_eval = {OT_Nil, nil_eval};
-
-__attribute__((used, section("show_function")))
-static const struct ShowFunction_handler h_nil_show = {OT_Nil, nil_show};
