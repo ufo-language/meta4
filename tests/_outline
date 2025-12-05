@@ -1,7 +1,7 @@
 #include "_test.h"
 #include "_typedefs.h"
 
-#include "evaluator/evaluator.h"
+#include "object/types/evaluator.h"
 
 int main(int argc, char* argv[]) {
     BEGIN_TESTS

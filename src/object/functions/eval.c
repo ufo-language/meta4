@@ -12,14 +12,16 @@
 
 struct Array;
 struct Evaluator;
+struct IfThen;
 struct Object;
 
 /* Forward declarations ******************************************************/
 
 bool_t array_eval  (struct Array*,   struct Evaluator*, struct Object**);
+bool_t ifThen_eval (struct IfThen*,  struct Evaluator*, struct Object**);
 
-bool_t _const_eval(struct Object* obj, struct Evaluator* etor, struct Object** value);
-bool_t _evalError(struct Object* obj, struct Evaluator* etor, struct Object** value);
+bool_t _const_eval (struct Object*,  struct Evaluator*, struct Object**);
+bool_t _evalError  (struct Object*,  struct Evaluator*, struct Object**);
 
 /* Global variables **********************************************************/
 
@@ -41,7 +43,7 @@ bool_t eval(struct Object* obj, struct Evaluator* etor, struct Object** value) {
         case OT_Function:      break;
         case OT_HashTable:     break;
         case OT_Identifier:    break;
-        case OT_IfThen:        break;
+        case OT_IfThen:        return ifThen_eval((struct IfThen*)obj, etor, value);
         case OT_Inc:           break;
         case OT_Integer:       return _const_eval(obj, etor, value);
         case OT_IVar:          break;

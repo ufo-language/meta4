@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 #include "_typedefs.h"
 
 #include "object/object.h"
@@ -6,10 +8,11 @@
 
 /* Types *********************************************************************/
 
-struct Array {
+struct IfThen {
     struct Object obj;
-    count_t nElems;
-    struct Object* elems[];
+    struct Object* cond;
+    struct Object* conseq;
+    struct Object* alt;
 };
 
 struct Evaluator;
@@ -20,10 +23,7 @@ struct Evaluator;
 
 /* Lifecycle functions *******************************************************/
 
-struct Array* array_new(count_t nElems, struct Object* elems[]);
-struct Array* array_new_fill(count_t nElems, struct Object* elem);
-struct Array* array_new_nofill(count_t nElems);
-void array_init(struct Array* array, count_t nElems, struct Object* elems[]);
+struct IfThen* ifThen_new(struct Object* cond, struct Object* conseq, struct Object* alt);
 
 /* Public functions **********************************************************/
 
@@ -31,6 +31,5 @@ void array_init(struct Array* array, count_t nElems, struct Object* elems[]);
 
 /* Object functions ******************/
 
-bool_t array_eval(struct Array* array, struct Evaluator* etor, struct Object** value);
-
-/* Private functions *********************************************************/
+bool_t ifThen_eval(struct IfThen* ifThen, struct Evaluator* etor, struct Object** value);
+void ifThen_show(struct IfThen* ifThen, FILE* stream);
