@@ -1,0 +1,39 @@
+#!/bin/bash
+
+totalPass=0
+totalFail=0
+failedTests=()
+
+runtest=""
+#runtest="valgrind --leak-check=full --errors-for-leak-kinds=all --quiet "
+
+if [ "$1" != "" ]; then
+    for f in bin/$1*_test; do
+        echo "Running $f"
+        $runtest $f
+    done
+    exit
+fi
+
+for f in bin/*_test; do
+    echo "Running $f"
+    # Capture the output of the command and parse it into the variables
+    capture=$($runtest $f)
+    echo "$capture"
+    read _ nPass _ nFail <<< "$capture"
+    totalPass=$((totalPass + nPass))
+    if [ "$nFail" -ne 0 ]; then
+        totalFail=$((totalFail + nFail))
+        failedTests+=("$f")
+    fi
+    echo
+done
+
+echo "$totalPass passed"
+echo "$totalFail failed"
+
+if [ "${#failedTests[@]}" -ne 0 ]; then
+    for t in "${failedTests[@]}"; do
+        echo "  $t"
+    done
+fi

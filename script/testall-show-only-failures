@@ -1,0 +1,6 @@
+#!/bin/sh
+
+# Test and show only the failures
+for f in bin/*_test; do
+    $f 1> /dev/null
+done

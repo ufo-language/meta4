@@ -1,0 +1,49 @@
+#!/bin/sh
+
+# PLX build script
+
+# compile options
+compileForSpeed="-DNDEBUG -std=c17 -Wall -O3 -ffast-math"
+compileForSize="-DNDEBUG -std=c17 -Wall -Os"
+compileForDebug="-DDEBUG -std=c17 -Wall -g -O0"
+compileForDebugWithMemCheck="-DDEBUG -std=c17 -Wall -fsanitize=address -g -O0"  # must also use clang
+# the -fsanitize=address option is currently not useful because plx does not free any memory
+
+options="$compileForDebug"
+
+CC=clang
+# CC=gcc
+# CC=tcc
+
+mkdir -p bin lib
+#rm -f bin/* lib/*
+
+# compile all the source files into .o files
+cd lib
+sources=$(find ../src -name *.c ! -name main.c)
+echo $CC $options -c -I ../src $sources
+$CC $options -c -I ../src $sources
+if [ $? -ne 0 ]; then
+    exit 1
+fi
+# build the archive library and then remove the .o files
+ar rcs libplx.a *.o
+rm *.o
+cd ..
+
+# build the main executable concurrently
+echo $CC $options -o bin/plx -I src -Llib src/main.c -lplx &
+$CC $options -o bin/plx -I src -Llib src/main.c -lplx &
+
+# build each test executable concurrently
+for sourceFile in tests/*.c; do
+    f=$(basename $sourceFile .c)
+    s="${f%_test}"
+    exeFile=bin/$f
+
+# This doesn't work if the .a file is newer than the source files
+#    if [ $sourceFile -nt $exeFile ] || [ ! -e $exeFile ]; then
+        echo $CC $options -o $exeFile -I src $sourceFile -Llib -lplx
+        $CC $options -o $exeFile -I src $sourceFile -Llib -lplx &
+#    fi
+done

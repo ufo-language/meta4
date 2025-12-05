@@ -1,0 +1,51 @@
+#pragma once
+
+#include "_typedefs.h"
+
+/* Defines *******************************************************************/
+
+/* Types *********************************************************************/
+
+enum TypeID {
+    OT_Null,  /* Should never be used */
+    OT_Boolean,
+    OT_Device,
+    OT_Integer,
+    OT_Nil,
+    OT_Primitive,
+    OT_Real,
+    OT_String,
+    OT_Symbol,
+    OT_ConstantLimit,  /* Constant typeIds are less than this value */
+    /* Containers */
+    OT_Array,
+    OT_ByteBuffer,
+    OT_HashTable,
+    OT_IVar,
+    OT_List,
+    OT_Var,
+    /* Expressions */
+    OT_Apply,
+    OT_BinOp,
+    OT_Dec,
+    OT_Function,
+    OT_Identifier,
+    OT_IfThen,
+    OT_Inc,
+    OT_Let,
+    OT_Quote,
+    OT_Sequence,
+    OT_While,
+    /* Other */
+    OT_Evaluator,
+    OT_Test,
+    OT_Max
+};
+
+/* Forward declarations ******************************************************/
+
+/* Global variables **********************************************************/
+
+/* Lifecycle functions *******************************************************/
+
+/* Public functions **********************************************************/

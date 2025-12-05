@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# Usage: ./replace.sh <directory> <oldstring> <newstring>
+
+set -e
+
+DIRECTORY=$1
+OLDSTRING=$2
+NEWSTRING=$3
+
+if [ -z "$NEWSTRING" ]; then
+    echo "Usage: $0 <directory> <oldname> <newname>"
+    exit 1
+fi
+
+find "$DIRECTORY" -type f -name "*.java" \
+  -exec grep -lF "$OLDSTRING" {} + \
+  | while IFS= read -r file; do
+      echo "Updating $file"
+      sed -i "s|$OLDSTRING|$NEWSTRING|g" "$file"
+    done
