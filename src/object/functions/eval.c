@@ -12,15 +12,14 @@
 
 struct Array;
 struct Evaluator;
-struct Integer;
-struct Nil;
 struct Object;
 
 /* Forward declarations ******************************************************/
 
 bool_t array_eval  (struct Array*,   struct Evaluator*, struct Object**);
-bool_t integer_eval(struct Integer*, struct Evaluator*, struct Object**);
-bool_t nil_eval    (struct Nil*,     struct Evaluator*, struct Object**);
+
+bool_t _const_eval(struct Object* obj, struct Evaluator* etor, struct Object** value);
+bool_t _evalError(struct Object* obj, struct Evaluator* etor, struct Object** value);
 
 /* Global variables **********************************************************/
 
@@ -33,29 +32,29 @@ bool_t eval(struct Object* obj, struct Evaluator* etor, struct Object** value) {
         case OT_Apply:         break;
         case OT_Array:         return array_eval((struct Array*)obj, etor, value);
         case OT_BinOp:         break;
-        case OT_Boolean:       break;
+        case OT_Boolean:       return _const_eval(obj, etor, value);
         case OT_ByteBuffer:    break;
-        case OT_ConstantLimit: break;
+        case OT_ConstantLimit: return _evalError(obj, etor, value);
         case OT_Dec:           break;
-        case OT_Device:        break;
+        case OT_Device:        return _const_eval(obj, etor, value);;
         case OT_Evaluator:     break;
         case OT_Function:      break;
         case OT_HashTable:     break;
         case OT_Identifier:    break;
         case OT_IfThen:        break;
         case OT_Inc:           break;
-        case OT_Integer:       return integer_eval((struct Integer*)obj, etor, value);
+        case OT_Integer:       return _const_eval(obj, etor, value);
         case OT_IVar:          break;
         case OT_Let:           break;
         case OT_List:          break;
-        case OT_Nil:           return nil_eval((struct Nil*)obj, etor, value);
-        case OT_Null:          break;
-        case OT_Primitive:     break;
+        case OT_Nil:           return _const_eval(obj, etor, value);
+        case OT_Null:          return _evalError(obj, etor, value);
+        case OT_Primitive:     return _const_eval(obj, etor, value);;
         case OT_Quote:         break;
-        case OT_Real:          break;
+        case OT_Real:          return _const_eval(obj, etor, value);;
         case OT_Sequence:      break;
-        case OT_String:        break;
-        case OT_Symbol:        break;
+        case OT_String:        return _const_eval(obj, etor, value);;
+        case OT_Symbol:        return _const_eval(obj, etor, value);;
         case OT_Test:          break;
         case OT_User:          break;
         case OT_Var:           break;
@@ -68,3 +67,13 @@ bool_t eval(struct Object* obj, struct Evaluator* etor, struct Object** value) {
 }
 
 /* Private functions *********************************************************/
+
+bool_t _const_eval(struct Object* obj, struct Evaluator* etor, struct Object** value) {
+    *value = obj;
+    return true;
+}
+
+bool_t _evalError(struct Object* obj, struct Evaluator* etor, struct Object** value) {
+    fprintf(stderr, "Error evaluating object of type '%s'\n", typeName(obj->typeId));
+    return false;
+}

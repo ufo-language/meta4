@@ -30,11 +30,6 @@ struct Boolean* boolean_new(bool_t b) {
 
 /* Object functions ******************/
 
-bool_t boolean_eval(struct Boolean* boolean, struct Evaluator* etor, struct Object** value) {
-    *value = (struct Object*)boolean;
-    return true;
-}
-
 void boolean_show(struct Boolean* boolean, FILE* stream) {
     fputs(boolean->b ? "true" : "false", stream);
 }

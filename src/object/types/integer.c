@@ -30,11 +30,6 @@ struct Integer* integer_new(int_t i) {
 
 /* Object functions ******************/
 
-bool_t integer_eval(struct Integer* integer, struct Evaluator* etor, struct Object** value) {
-    *value = (struct Object*)integer;
-    return true;
-}
-
 void integer_show(struct Integer* integer, FILE* stream) {
     fprintf(stream, "%ld", integer->i);
 }
