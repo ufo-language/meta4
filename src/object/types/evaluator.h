@@ -5,6 +5,7 @@
 #include "_typedefs.h"
 
 #include "object/object.h"
+#include "object/types/vector.h"
 
 /* Defines *******************************************************************/
 
@@ -18,7 +19,13 @@ enum OperationType {
 struct Evaluator {
     struct Object obj;
     enum OperationType operationType;
+    struct Vector* vStack;
+    struct Vector* eStack;
+    struct Vector* env;
+    struct IntVector* iStack;
 };
+
+struct Identifier;
 
 /* Forward declarations ******************************************************/
 
@@ -32,6 +39,8 @@ struct Evaluator* evaluator_new(void);
 
 /* Unique functions ******************/
 
+void evaluator_bind(struct Evaluator* etor, struct Identifier* ident, struct Object* value);
+bool_t evaluator_lookup(struct Evaluator* etor, struct Identifier* ident, struct Object** value);
 void evaluator_run(struct Evaluator* etor, void (*initCallback)(struct Evaluator* etor));
 
 /* Object functions ******************/

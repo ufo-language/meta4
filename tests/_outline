@@ -7,7 +7,7 @@ int main(int argc, char* argv[]) {
     BEGIN_TESTS
 
     TEST(structName_checkConstruction)
-        EXPECT_TRUE(true);
+        FORCE_FAIL();
     END
 
     END_TESTS

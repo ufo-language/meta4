@@ -1,0 +1,107 @@
+#include <string.h>
+
+#include "_test.h"
+#include "_typedefs.h"
+
+#include "object/typeids.h"
+#include "object/types/evaluator.h"
+#include "object/types/integer.h"
+
+int main(int argc, char* argv[]) {
+    BEGIN_TESTS
+
+    struct Integer* i0 = integer_new(0);
+    struct Integer* i100 = integer_new(100);
+    struct Integer* i200 = integer_new(200);
+    struct Integer* i300 = integer_new(300);
+
+    TEST(vector_checkConstruction)
+        struct Vector* vector = vector_new();
+        ASSERT_IEQ(OT_Vector, vector->obj.typeId);
+        ASSERT_IEQ(0, vector_count(vector));
+        ASSERT_IEQ(0, vector->nResizes);
+        EXPECT_IEQ(0, strcmp("Vector", typeName(vector->obj.typeId)));
+    END
+
+    TEST(vector_checkPushAndPop)
+        struct Vector* vector = vector_new();
+        ASSERT_IEQ(0, vector_count(vector));
+        vector_push(vector, OBJ(i100));
+        vector_push(vector, OBJ(i200));
+        vector_push(vector, OBJ(i300));
+        struct Object* value;
+        ASSERT_TRUE(vector_pop(vector, &value));
+        EXPECT_EQ(i300, value);
+        ASSERT_TRUE(vector_pop(vector, &value));
+        EXPECT_EQ(i200, value);
+        ASSERT_TRUE(vector_pop(vector, &value));
+        EXPECT_EQ(i100, value);
+        EXPECT_FALSE(vector_pop(vector, &value));
+    END
+
+    TEST(vector_checkSetAndGet)
+        struct Vector* vector = vector_new();
+        vector_push(vector, OBJ(i0));
+        vector_push(vector, OBJ(i0));
+        vector_push(vector, OBJ(i0));
+        struct Object* value;
+        ASSERT_TRUE(vector_get(vector, 0, &value));
+        EXPECT_EQ(i0, value);
+        ASSERT_TRUE(vector_get(vector, 1, &value));
+        EXPECT_EQ(i0, value);
+        ASSERT_TRUE(vector_get(vector, 2, &value));
+        EXPECT_EQ(i0, value);
+
+        ASSERT_TRUE(vector_set(vector, 0, OBJ(i100)));
+        ASSERT_TRUE(vector_get(vector, 0, &value));
+        ASSERT_EQ(i100, value);
+        ASSERT_TRUE(vector_get(vector, 1, &value));
+        EXPECT_EQ(i0, value);
+        ASSERT_TRUE(vector_get(vector, 2, &value));
+        EXPECT_EQ(i0, value);
+
+        ASSERT_TRUE(vector_set(vector, 1, OBJ(i200)));
+        ASSERT_TRUE(vector_get(vector, 0, &value));
+        EXPECT_EQ(i100, value);
+        ASSERT_TRUE(vector_get(vector, 1, &value));
+        ASSERT_EQ(i200, value);
+        ASSERT_TRUE(vector_get(vector, 2, &value));
+        EXPECT_EQ(i0, value);
+
+        ASSERT_TRUE(vector_set(vector, 2, OBJ(i300)));
+        ASSERT_TRUE(vector_get(vector, 0, &value));
+        EXPECT_EQ(i100, value);
+        ASSERT_TRUE(vector_get(vector, 1, &value));
+        EXPECT_EQ(i200, value);
+        ASSERT_TRUE(vector_get(vector, 2, &value));
+        ASSERT_EQ(i300, value);
+    END
+
+    TEST(vector_checkResize)
+        struct Vector* vector = vector_new_withCapacity(4);
+        ASSERT_IEQ(0, vector_count(vector));
+        count_t capacity = vector->capacity;
+        ASSERT_IEQ(4, capacity);
+        for (count_t n=0; n<capacity; n++) {
+            vector_push(vector, OBJ(integer_new(n * 100)));
+        }
+        ASSERT_IEQ(0, vector->nResizes);
+        vector_push(vector, OBJ(integer_new((capacity + 1) * 100)));
+        ASSERT_IEQ(1, vector->nResizes);
+        ASSERT_IEQ(capacity * 2, vector->capacity);
+        struct Object* value;
+        ASSERT_TRUE(vector_pop(vector, &value));
+        ASSERT_IEQ(OT_Integer, value->typeId);
+        ASSERT_IEQ((capacity + 1) * 100, ((struct Integer*)value)->i);
+    END
+
+    TEST(vector_checkShow)
+        struct Vector* vector = vector_new();
+        vector_push(vector, OBJ(i100));
+        vector_push(vector, OBJ(i200));
+        vector_push(vector, OBJ(i300));
+        SHOW("Should show '{|300, 200, 100|}'", vector);
+    END
+
+    END_TESTS
+}

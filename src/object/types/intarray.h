@@ -3,11 +3,16 @@
 #include "_typedefs.h"
 
 #include "object/object.h"
-#include "object/types/evaluator.h"
 
 /* Defines *******************************************************************/
 
 /* Types *********************************************************************/
+
+struct IntArray {
+    struct Object obj;
+    count_t nElems;
+    int_t elems[];
+};
 
 /* Forward declarations ******************************************************/
 
@@ -15,29 +20,14 @@
 
 /* Lifecycle functions *******************************************************/
 
-struct Evaluator* evaluator_new(void) {
-    struct Evaluator* etor = (struct Evaluator*)object_new(OT_Evaluator, NWORDS(*etor));
-    return etor;
-}
+struct IntArray* intArray_new_elem(count_t nElems, int_t elems);
+struct IntArray* intArray_new_elems(count_t nElems, int_t elems[]);
+struct IntArray* intArray_new_noFill(count_t nElems);
 
 /* Public functions **********************************************************/
 
 /* Unique functions ******************/
 
-#include <assert.h>
-void evaluator_bind(struct Evaluator* etor, struct Identifier* ident, struct Object* value) {
-    assert(false);
-}
-
-bool_t evaluator_lookup(struct Evaluator* etor, struct Identifier* ident, struct Object** value) {
-    assert(false);
-}
-
-void evaluator_run(struct Evaluator* etor, void (*initCallback)(struct Evaluator* etor)) {
-    initCallback(etor);
-}
-
 /* Object functions ******************/
 
-void evaluator_show(struct Evaluator* etor, FILE* stream) {
-}
+void intArray_show(struct IntArray* intArray, FILE* stream);

@@ -21,8 +21,11 @@ enum TypeId {
     OT_Array,
     OT_ByteBuffer,
     OT_HashTable,
+    OT_IntArray,
+    OT_IntVector,
     OT_IVar,
     OT_List,
+    OT_Vector,
     OT_Var,
     /* Expressions */
     OT_Apply,

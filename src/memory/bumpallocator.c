@@ -69,7 +69,7 @@ address_t bumpAllocator_realloc(struct BumpAllocator* allocator, address_t addr,
     word_t* base = bump->arena;
     word_t* oldPtr = (word_t*)addr;
     index_t oldIndex = oldPtr - base;
-    /* Case 1: In-place grow/shrink if top of stack */
+    /* Case 1: In-place grow/shrink if top of vector */
     if (oldIndex + oldNWords == bump->nextFree) {
         if (oldIndex + newNWords > bump->nWordsCapacity) {
             fprintf(stderr,

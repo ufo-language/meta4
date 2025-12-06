@@ -6,7 +6,6 @@
 #include "object/functions/eval.h"
 #include "object/globals.h"
 #include "object/object.h"
-#include "object/types/array.h"
 #include "object/types/evaluator.h"
 #include "object/types/sequence.h"
 
@@ -35,7 +34,7 @@ struct Sequence* sequence_new(count_t nExprs, struct Object* exprs[]) {
 
 bool_t sequence_eval(struct Sequence* seq, struct Evaluator* etor, struct Object** value) {
     *value = (struct Object*)g_nil;
-    for (index_t n=0; n<seq->nExprs; n++) {
+    for (index_t n=0; n<seq->nExprs; ++n) {
         if (!eval(seq->exprs[n], etor, value)) {
             return false;
         }

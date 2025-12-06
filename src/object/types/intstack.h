@@ -1,18 +1,17 @@
 #include "_typedefs.h"
 
 #include "object/object.h"
+#include "object/types/intarray.h"
 
 /* Defines *******************************************************************/
 
 /* Types *********************************************************************/
 
-struct Array {
+struct IntVector {
     struct Object obj;
-    count_t nElems;
-    struct Object* elems[];
+    count_t top;
+    struct IntArray* elems;
 };
-
-struct Evaluator;
 
 /* Forward declarations ******************************************************/
 
@@ -20,21 +19,10 @@ struct Evaluator;
 
 /* Lifecycle functions *******************************************************/
 
-struct Array* array_new_elem(count_t nElems, struct Object* elem);
-struct Array* array_new_elems(count_t nElems, struct Object* elems[]);
-struct Array* array_new_fromArray(count_t nElems, struct Array* oldArray);
-struct Array* array_new_noFill(count_t nElems);
-
 /* Public functions **********************************************************/
 
 /* Unique functions ******************/
 
-struct Object* array_get_unsafe(struct Array* array, index_t index);
-void array_set_unsafe(struct Array* array, index_t index, struct Object* value);
-void array_showElemsWith(count_t nElems, struct Object* elems[], const string_t sep, FILE* stream);
-
 /* Object functions ******************/
-
-bool_t array_eval(struct Array* array, struct Evaluator* etor, struct Object** value);
 
 /* Private functions *********************************************************/

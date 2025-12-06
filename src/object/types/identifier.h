@@ -3,11 +3,18 @@
 #include "_typedefs.h"
 
 #include "object/object.h"
-#include "object/types/evaluator.h"
 
 /* Defines *******************************************************************/
 
 /* Types *********************************************************************/
+
+struct Identifier {
+    struct Object obj;
+    string_t name;
+    word_t hashCode;
+};
+
+struct Evaluator;
 
 /* Forward declarations ******************************************************/
 
@@ -15,29 +22,14 @@
 
 /* Lifecycle functions *******************************************************/
 
-struct Evaluator* evaluator_new(void) {
-    struct Evaluator* etor = (struct Evaluator*)object_new(OT_Evaluator, NWORDS(*etor));
-    return etor;
-}
+struct Identifier* identifier_new(const string_t name);
 
 /* Public functions **********************************************************/
 
 /* Unique functions ******************/
 
-#include <assert.h>
-void evaluator_bind(struct Evaluator* etor, struct Identifier* ident, struct Object* value) {
-    assert(false);
-}
-
-bool_t evaluator_lookup(struct Evaluator* etor, struct Identifier* ident, struct Object** value) {
-    assert(false);
-}
-
-void evaluator_run(struct Evaluator* etor, void (*initCallback)(struct Evaluator* etor)) {
-    initCallback(etor);
-}
-
 /* Object functions ******************/
 
-void evaluator_show(struct Evaluator* etor, FILE* stream) {
-}
+bool_t identifier_equal(struct Identifier* ident, struct Identifier* otherIdent);
+bool_t identifier_eval(struct Identifier* ident, struct Evaluator* etor, struct Object** value);
+void identifier_show(struct Identifier* ident, FILE* stream);

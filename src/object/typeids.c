@@ -33,6 +33,8 @@ string_t typeName(enum TypeId typeId) {
         case OT_IfThen:        return "IfThen";
         case OT_Inc:           return "Inc";
         case OT_Integer:       return "Integer";
+        case OT_IntArray:      return "IntArray";
+        case OT_IntVector:      return "IntVector";
         case OT_IVar:          return "IVar";
         case OT_Let:           return "Let";
         case OT_List:          return "List";
@@ -42,6 +44,7 @@ string_t typeName(enum TypeId typeId) {
         case OT_Quote:         return "Quote";
         case OT_Real:          return "Real";
         case OT_Sequence:      return "Sequence";
+        case OT_Vector:         return "Vector";
         case OT_String:        return "String";
         case OT_Symbol:        return "Symbol";
         case OT_Test:          return "Test";

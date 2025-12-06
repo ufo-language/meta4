@@ -47,7 +47,9 @@ bool_t eval(struct Object* obj, struct Evaluator* etor, struct Object** value) {
         case OT_Identifier:    break;
         case OT_IfThen:        return ifThen_eval((struct IfThen*)obj, etor, value);
         case OT_Inc:           break;
+        case OT_IntArray:      break;
         case OT_Integer:       return _const_eval(obj, etor, value);
+        case OT_IntVector:      break;
         case OT_IVar:          break;
         case OT_Let:           break;
         case OT_List:          break;
@@ -57,6 +59,7 @@ bool_t eval(struct Object* obj, struct Evaluator* etor, struct Object** value) {
         case OT_Quote:         break;
         case OT_Real:          return _const_eval(obj, etor, value);;
         case OT_Sequence:      return sequence_eval((struct Sequence*)obj, etor, value);
+        case OT_Vector:         break;
         case OT_String:        return _const_eval(obj, etor, value);;
         case OT_Symbol:        return _const_eval(obj, etor, value);;
         case OT_Test:          break;
