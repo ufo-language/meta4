@@ -5,6 +5,7 @@
 #include "object/types/array.h"
 #include "object/types/boolean.h"
 #include "object/types/integer.h"
+#include "object/types/string.h"
 
 /* Defines *******************************************************************/
 
@@ -50,7 +51,7 @@ bool_t boolValue(struct Object* obj) {
         case OT_Quote:         return true;
         case OT_Real:          break;
         case OT_Sequence:      return true;
-        case OT_String:        break;
+        case OT_String:        return ((struct String*)obj)->nChars > 0;
         case OT_Symbol:        return true;
         case OT_Test:          return true;
         case OT_User:          return true;

@@ -6,6 +6,7 @@
 #include "object/object.h"
 #include "object/typeids.h"
 #include "object/types/integer.h"
+#include "object/types/string.h"
 
 /* Defines *******************************************************************/
 
@@ -50,7 +51,7 @@ bool_t equal(struct Object* obj, struct Object* other) {
         case OT_Quote:         break;
         case OT_Real:          break;
         case OT_Sequence:      break; /*return sequence_equal((struct Sequence*)obj, stream);*/
-        case OT_String:        break;
+        case OT_String:        return string_equal((struct String*)obj, (struct String*)other);
         case OT_Symbol:        break;
         case OT_Test:          break;
         case OT_User:          break;
