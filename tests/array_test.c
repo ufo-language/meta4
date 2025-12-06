@@ -4,6 +4,7 @@
 #include "_typedefs.h"
 
 #include "object/typeids.h"
+#include "object/types/array.h"
 #include "object/types/evaluator.h"
 #include "object/types/integer.h"
 

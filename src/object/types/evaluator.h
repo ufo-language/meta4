@@ -5,8 +5,6 @@
 #include "_typedefs.h"
 
 #include "object/object.h"
-#include "object/types/intvector.h"
-#include "object/types/vector.h"
 
 /* Defines *******************************************************************/
 
@@ -16,6 +14,9 @@ enum OperationType {
     Etor_Closing,
     Etor_Evaluating
 };
+
+struct Vector;
+struct IntVector;
 
 struct Evaluator {
     struct Object obj;
@@ -42,7 +43,7 @@ struct Evaluator* evaluator_new(void);
 
 void evaluator_bind(struct Evaluator* etor, struct Identifier* name, struct Object* value);
 bool_t evaluator_lookup(struct Evaluator* etor, struct Identifier* name, struct Object** value);
-void evaluator_run(struct Evaluator* etor, void (*initCallback)(struct Evaluator* etor));
+void evaluator_run(struct Evaluator* etor);
 
 /* Object functions ******************/
 

@@ -2,9 +2,9 @@
 
 #include "_typedefs.h"
 
+#include "object/functions/show.h"
 #include "object/object.h"
 #include "object/typeids.h"
-#include "object/functions/show.h"
 
 /* Defines *******************************************************************/
 
@@ -74,7 +74,7 @@ void show(struct Object* obj, FILE* stream) {
         default:
             break;
     }
-    fprintf(stderr, "show: Unknown type ID %u\n", obj->typeId);
+    fprintf(stderr, "show: Unknown type ID %u (%s)\n", obj->typeId, typeName(obj->typeId));
     fputs("UNKNOWN", stream);
 }
 

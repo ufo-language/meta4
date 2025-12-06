@@ -24,7 +24,7 @@ int main(int argc, char* argv[]) {
     TEST(evaluator_checkBindAndLookup)
         struct Identifier* a = identifier_new("a");
         struct Identifier* b = identifier_new("b");
-        // struct Identifier* c = identifier_new("c");
+        struct Identifier* c = identifier_new("c");
         struct Integer* i100 = integer_new(100);
         struct Integer* i200 = integer_new(200);
         struct Evaluator* etor = evaluator_new();

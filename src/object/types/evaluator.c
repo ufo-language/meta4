@@ -3,7 +3,10 @@
 #include "_typedefs.h"
 
 #include "object/object.h"
+#include "object/typeids.h"
 #include "object/types/evaluator.h"
+#include "object/types/intvector.h"
+#include "object/types/vector.h"
 
 /* Defines *******************************************************************/
 
@@ -17,6 +20,9 @@
 
 struct Evaluator* evaluator_new(void) {
     struct Evaluator* etor = (struct Evaluator*)object_new(OT_Evaluator, NWORDS(*etor));
+    etor->vStack = vector_new();
+    etor->eStack = vector_new();
+    etor->iStack = intVector_new();
     return etor;
 }
 
@@ -24,7 +30,6 @@ struct Evaluator* evaluator_new(void) {
 
 /* Unique functions ******************/
 
-#include <assert.h>
 void evaluator_bind(struct Evaluator* etor, struct Identifier* name, struct Object* value) {
     vector_push(etor->env, (struct Object*)name);
     vector_push(etor->env, value);
@@ -34,8 +39,7 @@ bool_t evaluator_lookup(struct Evaluator* etor, struct Identifier* name, struct 
     return vector_lookup(etor->env, (struct Object*)name, value);
 }
 
-void evaluator_run(struct Evaluator* etor, void (*initCallback)(struct Evaluator* etor)) {
-    initCallback(etor);
+void evaluator_run(struct Evaluator* etor) {
 }
 
 /* Object functions ******************/

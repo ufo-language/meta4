@@ -2,33 +2,16 @@
 
 #include "_typedefs.h"
 
+#include "object/functions/equal.h"
 #include "object/object.h"
 #include "object/typeids.h"
-#include "object/functions/equal.h"
+#include "object/types/integer.h"
 
 /* Defines *******************************************************************/
 
 /* Types *********************************************************************/
 
-// struct Array;
-// struct Boolean;
-// struct IntArray;
-struct Integer;
-// struct IntVector;
-// struct Nil;
-// struct Sequence;
-// struct Vector;
-
 /* Forward declarations ******************************************************/
-
-// void array_show    (struct Array*,     struct Array*);
-// void boolean_show  (struct Boolean*,   struct Boolean*);
-// void intArray_show (struct IntArray*,  struct IntArray*);
-bool_t integer_equal  (struct Integer*,   struct Integer*);
-// void intVector_equal(struct IntVector*, struct IntVector*);
-// void nil_show      (struct Nil*,       struct Nil*);
-// void sequence_show (struct Sequence*,  struct Sequence*);
-// void vector_show   (struct Vector*,    struct Vector*);
 
 /* Global variables **********************************************************/
 
@@ -77,7 +60,7 @@ bool_t equal(struct Object* obj, struct Object* other) {
         default:
             break;
     }
-    fprintf(stderr, "equal: Unknown type ID %u\n", obj->typeId);
+    fprintf(stderr, "equal: Unknown type ID %u (%s)\n", obj->typeId, typeName(obj->typeId));
     fputs("UNKNOWN", stderr);
     return false;
 }

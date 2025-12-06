@@ -4,6 +4,7 @@
 
 #include "object/object.h"
 #include "object/types/array.h"
+#include "object/functions/equal.h"
 #include "object/functions/eval.h"
 #include "object/functions/show.h"
 

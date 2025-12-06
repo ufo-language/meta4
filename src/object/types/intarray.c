@@ -3,7 +3,9 @@
 
 #include "_typedefs.h"
 
+#include "object/object.h"
 #include "object/types/intarray.h"
+#include "object/typeids.h"
 
 /* Defines *******************************************************************/
 
@@ -14,9 +16,6 @@
 /* Global variables **********************************************************/
 
 /* Lifecycle functions *******************************************************/
-
-#include <assert.h>
-
 
 struct IntArray* intArray_new_elem(count_t nElems, int_t elem) {
     struct IntArray* intArray = intArray_new_noFill(nElems);

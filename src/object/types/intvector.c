@@ -3,8 +3,8 @@
 #include "_typedefs.h"
 
 #include "object/object.h"
+#include "object/typeids.h"
 #include "object/types/intvector.h"
-#include "object/functions/show.h"
 
 /* Defines *******************************************************************/
 

@@ -7,6 +7,7 @@
 #include "object/types/evaluator.h"
 #include "object/types/identifier.h"
 #include "object/types/integer.h"
+#include "object/types/vector.h"
 
 int main(int argc, char* argv[]) {
     BEGIN_TESTS

@@ -1,4 +1,7 @@
+#pragma once
+
 #include <stdio.h>
+
 #include "object/functions/show.h"
 
 #define DEBUG0(string1) \

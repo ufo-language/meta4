@@ -1,3 +1,5 @@
+#pragma once
+
 #include "object/typeids.h"
 
 struct Evaluator;

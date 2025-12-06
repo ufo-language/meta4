@@ -4,6 +4,7 @@
 #include "_typedefs.h"
 
 #include "object/typeids.h"
+#include "object/types/intvector.h"
 #include "object/types/evaluator.h"
 
 int main(int argc, char* argv[]) {

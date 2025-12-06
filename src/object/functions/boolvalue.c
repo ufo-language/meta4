@@ -1,10 +1,9 @@
 #include "_typedefs.h"
 
-#include "object/typeids.h"
 #include "object/object.h"
+#include "object/typeids.h"
 #include "object/types/array.h"
 #include "object/types/boolean.h"
-#include "object/types/ifthen.h"
 #include "object/types/integer.h"
 
 /* Defines *******************************************************************/
@@ -61,7 +60,7 @@ bool_t boolValue(struct Object* obj) {
         default:
             break;
     }
-    fprintf(stderr, "boolValue: Unknown type ID %u\n", obj->typeId);
+    fprintf(stderr, "boolValue: Unknown type ID %u (%s)\n", obj->typeId, typeName(obj->typeId));
     return false;
 }
 /* Private functions *********************************************************/

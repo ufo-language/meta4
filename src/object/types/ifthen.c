@@ -6,6 +6,7 @@
 #include "object/functions/eval.h"
 #include "object/functions/show.h"
 #include "object/object.h"
+#include "object/typeids.h"
 #include "object/types/ifthen.h"
 
 /* Defines *******************************************************************/

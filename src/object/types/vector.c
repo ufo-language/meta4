@@ -3,6 +3,7 @@
 #include "_typedefs.h"
 
 #include "object/object.h"
+#include "object/typeids.h"
 #include "object/types/vector.h"
 #include "object/functions/equal.h"
 #include "object/functions/show.h"
@@ -76,7 +77,7 @@ bool_t vector_pop(struct Vector* vector, struct Object** elem) {
 }
 
 void vector_push(struct Vector* vector, struct Object* elem) {
-    if (vector->top == vector->elems->nElems) {
+    if (vector->top == vector->capacity) {
         _resize(vector);
     }
     vector->elems->elems[vector->top++] = elem;

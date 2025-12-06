@@ -2,9 +2,9 @@
 
 #include "_typedefs.h"
 
+#include "object/functions/eval.h"
 #include "object/object.h"
 #include "object/typeids.h"
-#include "object/functions/eval.h"
 
 /* Defines *******************************************************************/
 
@@ -67,7 +67,7 @@ bool_t eval(struct Object* obj, struct Evaluator* etor, struct Object** value) {
         case OT_Vector:        break;
         case OT_While:         break;
         default:
-            fprintf(stderr, "eval: Unknown type ID %u\n", obj->typeId);
+            fprintf(stderr, "eval: Unknown type ID %u (%s)\n", obj->typeId, typeName(obj->typeId));
             return false;
     }
     return false;
