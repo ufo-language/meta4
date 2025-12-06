@@ -22,6 +22,7 @@ struct Evaluator* evaluator_new(void) {
     struct Evaluator* etor = (struct Evaluator*)object_new(OT_Evaluator, NWORDS(*etor));
     etor->vStack = vector_new();
     etor->eStack = vector_new();
+    etor->env = vector_new();
     etor->iStack = intVector_new();
     return etor;
 }

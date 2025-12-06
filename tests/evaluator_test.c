@@ -30,6 +30,12 @@ int main(int argc, char* argv[]) {
         struct Evaluator* etor = evaluator_new();
         evaluator_bind(etor, a, OBJ(i100));
         evaluator_bind(etor, b, OBJ(i200));
+        struct Object* value;
+        ASSERT_TRUE(evaluator_lookup(etor, a, &value));
+        EXPECT_EQ(i100, value);
+        ASSERT_TRUE(evaluator_lookup(etor, b, &value));
+        EXPECT_EQ(i200, value);
+        ASSERT_FALSE(evaluator_lookup(etor, c, &value));
     END
 
     END_TESTS
