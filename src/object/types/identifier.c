@@ -35,19 +35,6 @@ struct Identifier* identifier_new(const string_t name) {
 
 /* Object functions ******************/
 
-#if 0
-bool_t identifier_equal(struct Identifier* ident, struct Identifier* otherIdent) {
-    if (ident == otherIdent) {
-        /* This check could be redundant, depending on who calls this. */
-        return true;
-    }
-    if (ident->hashCode != otherIdent->hashCode) {
-        return false;
-    }
-    return strcmp(ident->name, otherIdent->name) ? false : true;
-}
-#endif
-
 bool_t identifier_eval_recursive(struct Identifier* ident, struct Evaluator* etor, struct Object** value) {
     bool_t success = evaluator_lookup(etor, ident, value);
     switch (etor->operationType) {
@@ -73,9 +60,10 @@ void identifier_show(struct Identifier* ident, FILE* stream) {
 /* Private functions *********************************************************/
 
 struct Identifier* _identifier_new_aux(const string_t name, index_t hashCode) {
-    struct Identifier* ident = (struct Identifier*)object_new(OT_Identifier, NWORDS(struct Identifier));
-    ident->name = name;
+    count_t nChars = strlen(name);
+    struct Identifier* ident = (struct Identifier*)object_new(OT_Identifier, NWORDS(*ident) + NWORDS_FROM_BYTES(nChars + 1));
     ident->hashCode = hashCode;
+    memcpy(ident->name, name, nChars + 1);
     return ident;
 }
 

@@ -1,7 +1,3 @@
-#pragma once
-
-#include <stdio.h>
-
 #include "_typedefs.h"
 
 #include "object/object.h"
@@ -10,13 +6,14 @@
 
 /* Types *********************************************************************/
 
-struct Identifier {
+struct Symbolic {
     struct Object obj;
     word_t hashCode;
     char name[];
 };
 
-struct Evaluator;
+enum TypeId;
+struct Vector;
 
 /* Forward declarations ******************************************************/
 
@@ -24,7 +21,7 @@ struct Evaluator;
 
 /* Lifecycle functions *******************************************************/
 
-struct Identifier* identifier_new(const string_t name);
+struct Symbolic* symbolic_new(const string_t name, enum TypeId typeId, struct Vector* internTable);
 
 /* Public functions **********************************************************/
 
@@ -32,5 +29,4 @@ struct Identifier* identifier_new(const string_t name);
 
 /* Object functions ******************/
 
-bool_t identifier_eval_recursive(struct Identifier* ident, struct Evaluator* etor, struct Object** value);
-void identifier_show(struct Identifier* ident, FILE* stream);
+/* Private functions *********************************************************/
