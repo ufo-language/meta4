@@ -5,6 +5,7 @@
 
 #include "object/types/evaluator.h"
 #include "object/types/identifier.h"
+#include "object/types/integer.h"
 
 int main(int argc, char* argv[]) {
     BEGIN_TESTS
@@ -21,7 +22,16 @@ int main(int argc, char* argv[]) {
     END
 
     TEST(identifier_checkEval)
-        FORCE_FAIL()
+        struct Integer* i100 = integer_new(100);
+        struct Evaluator* etor = evaluator_new();
+        evaluator_bind(etor, a1, OBJ(i100));
+        struct Object* value;
+        /* Verify that the binding is correct */
+        ASSERT_TRUE(evaluator_lookup(etor, a1, &value));
+        EXPECT_EQ(i100, value);
+        /* Now check the eval function */
+        ASSERT_TRUE(identifier_eval(a1, etor, &value));
+        EXPECT_EQ(i100, value);
     END
 
     END_TESTS
