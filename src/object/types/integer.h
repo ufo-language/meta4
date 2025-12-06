@@ -6,7 +6,7 @@
 
 #include "object/object.h"
 #include "object/typeids.h"
-#include "object/functions/eval.h"
+#include "object/functions/eval_recursive.h"
 #include "object/functions/show.h"
 
 /* Defines *******************************************************************/

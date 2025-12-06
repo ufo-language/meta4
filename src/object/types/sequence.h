@@ -32,5 +32,5 @@ struct Sequence* sequence_new(count_t nExprs, struct Object* exprs[]);
 
 /* Object functions ******************/
 
-bool_t sequence_eval(struct Sequence* sequence, struct Evaluator* etor, struct Object** value);
+bool_t sequence_eval_recursive(struct Sequence* sequence, struct Evaluator* etor, struct Object** value);
 void sequence_show(struct Sequence* sequence, FILE* stream);

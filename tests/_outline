@@ -1,8 +1,7 @@
 #include "_test.h"
 #include "_typedefs.h"
 
-#include "object/types/evaluator.h"
-
+#include "object/evaluator/evaluator_recursive.h"
 int main(int argc, char* argv[]) {
     BEGIN_TESTS
 

@@ -37,7 +37,7 @@ void array_showElemsWith(count_t nElems, struct Object* elems[], const string_t 
 
 /* Object functions ******************/
 
-bool_t array_eval(struct Array* array, struct Evaluator* etor, struct Object** value);
+bool_t array_eval_recursive(struct Array* array, struct Evaluator* etor, struct Object** value);
 void array_show(struct Array* array, FILE* stream);
 
 /* Private functions *********************************************************/

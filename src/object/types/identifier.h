@@ -33,5 +33,5 @@ struct Identifier* identifier_new(const string_t name);
 /* Object functions ******************/
 
 bool_t identifier_equal(struct Identifier* ident, struct Identifier* otherIdent);
-bool_t identifier_eval(struct Identifier* ident, struct Evaluator* etor, struct Object** value);
+bool_t identifier_eval_recursive(struct Identifier* ident, struct Evaluator* etor, struct Object** value);
 void identifier_show(struct Identifier* ident, FILE* stream);

@@ -3,11 +3,11 @@
 #include "_test.h"
 #include "_typedefs.h"
 
-#include "object/types/evaluator.h"
-#include "object/types/integer.h"
-#include "object/globals.h"
+#include "object/evaluator/evaluator_recursive.h"
 #include "object/functions/equal.h"
 #include "object/functions/show.h"
+#include "object/globals.h"
+#include "object/types/integer.h"
 
 int main(int argc, char* argv[]) {
     BEGIN_TESTS
@@ -31,7 +31,7 @@ int main(int argc, char* argv[]) {
         struct Integer* integer = integer_new(123);
         struct Evaluator* etor = evaluator_new();
         struct Object* value;
-        ASSERT_TRUE(eval(OBJ(integer), etor, &value))
+        ASSERT_TRUE(eval_recursive(OBJ(integer), etor, &value))
         EXPECT_EQ(integer, value);
     END
 

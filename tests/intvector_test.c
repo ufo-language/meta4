@@ -5,7 +5,7 @@
 
 #include "object/typeids.h"
 #include "object/types/intvector.h"
-#include "object/types/evaluator.h"
+#include "object/evaluator/evaluator_recursive.h"
 
 int main(int argc, char* argv[]) {
     BEGIN_TESTS

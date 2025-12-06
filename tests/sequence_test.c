@@ -1,9 +1,9 @@
 #include "_test.h"
 #include "_typedefs.h"
 
-#include "object/functions/eval.h"
+#include "object/evaluator/evaluator_recursive.h"
+#include "object/functions/eval_recursive.h"
 #include "object/functions/show.h"
-#include "object/types/evaluator.h"
 #include "object/types/identifier.h"
 #include "object/types/integer.h"
 #include "object/types/sequence.h"
@@ -36,7 +36,7 @@ int main(int argc, char* argv[]) {
         evaluator_bind(etor, b, OBJ(i200));
         evaluator_bind(etor, c, OBJ(i300));
         struct Object* value;
-        ASSERT_TRUE(eval(OBJ(seq), etor, &value));
+        ASSERT_TRUE(eval_recursive(OBJ(seq), etor, &value));
         EXPECT_EQ(i300, value);
     END
 

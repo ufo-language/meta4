@@ -6,9 +6,6 @@
 #include "object/typeids.h"
 #include "object/types/nil.h"
 
-// static void _checkConstruction(struct Evaluator* etor) {
-// }
-
 int main(int argc, char* argv[]) {
     BEGIN_TESTS
 

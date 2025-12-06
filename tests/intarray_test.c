@@ -3,9 +3,9 @@
 #include "_test.h"
 #include "_typedefs.h"
 
+#include "object/functions/show.h"
 #include "object/typeids.h"
 #include "object/types/intarray.h"
-#include "object/functions/show.h"
 
 int main(int argc, char* argv[]) {
     BEGIN_TESTS
@@ -40,7 +40,7 @@ int main(int argc, char* argv[]) {
         struct IntArray* intArray = intArray_new_elems(3, elems);
         struct Evaluator* etor = evaluator_new();
         struct Object* value;
-        ASSERT_TRUE(eval(OBJ(intArray), etor, &value))
+        ASSERT_TRUE(eval_recursive(OBJ(intArray), etor, &value))
         ASSERT_PTRNE(intArray, value);
         ASSERT_IEQ(OT_Array, value->typeId);
         struct IntArray* intArrayValue = (struct IntArray*)value;

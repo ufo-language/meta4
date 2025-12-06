@@ -21,10 +21,10 @@ struct IntVector;
 struct Evaluator {
     struct Object obj;
     enum OperationType operationType;
-    struct Vector* vStack;
-    struct Vector* eStack;
+    /* struct Vector* vStack; */
+    /* struct Vector* eStack; */
     struct Vector* env;
-    struct IntVector* iStack;
+    /* struct IntVector* iStack; */
 };
 
 struct Identifier;

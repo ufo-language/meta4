@@ -4,7 +4,7 @@
 
 #include "object/object.h"
 #include "object/typeids.h"
-#include "object/types/evaluator.h"
+#include "object/evaluator/evaluator_recursive.h"
 #include "object/types/intvector.h"
 #include "object/types/vector.h"
 
@@ -20,10 +20,10 @@
 
 struct Evaluator* evaluator_new(void) {
     struct Evaluator* etor = (struct Evaluator*)object_new(OT_Evaluator, NWORDS(*etor));
-    etor->vStack = vector_new();
-    etor->eStack = vector_new();
+    /* etor->vStack = vector_new(); */
+    /* etor->eStack = vector_new(); */
     etor->env = vector_new();
-    etor->iStack = intVector_new();
+    /* etor->iStack = intVector_new(); */
     return etor;
 }
 

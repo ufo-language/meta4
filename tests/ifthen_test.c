@@ -1,12 +1,11 @@
 #include "_test.h"
 #include "_typedefs.h"
 
+#include "object/evaluator/evaluator_recursive.h"
 #include "object/globals.h"
 #include "object/types/boolean.h"
-#include "object/types/evaluator.h"
 #include "object/types/ifthen.h"
 #include "object/types/integer.h"
-#include "object/types/evaluator.h"
 
 int main(int argc, char* argv[]) {
     BEGIN_TESTS
@@ -26,7 +25,7 @@ int main(int argc, char* argv[]) {
         struct IfThen* ifThen = ifThen_new(OBJ(g_true), OBJ(i100), OBJ(i200));
         struct Evaluator* etor = evaluator_new();
         struct Object* value;
-        ASSERT_TRUE(eval(OBJ(ifThen), etor, &value));
+        ASSERT_TRUE(eval_recursive(OBJ(ifThen), etor, &value));
         EXPECT_EQ(i100, value);
     END
 
@@ -34,7 +33,7 @@ int main(int argc, char* argv[]) {
         struct IfThen* ifThen = ifThen_new(OBJ(g_false), OBJ(i100), OBJ(i200));
         struct Evaluator* etor = evaluator_new();
         struct Object* value;
-        ASSERT_TRUE(eval(OBJ(ifThen), etor, &value));
+        ASSERT_TRUE(eval_recursive(OBJ(ifThen), etor, &value));
         EXPECT_EQ(i200, value);
     END
 

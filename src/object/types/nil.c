@@ -26,7 +26,7 @@ struct Nil* nil_new(void) {
 
 /* Object functions ******************/
 
-bool_t nil_eval(struct Nil* nil, struct Evaluator* etor, struct Object** value) {
+bool_t nil_eval_recursive(struct Nil* nil, struct Evaluator* etor, struct Object** value) {
     *value = (struct Object*)nil;
     return true;
 }

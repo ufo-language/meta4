@@ -21,4 +21,4 @@ struct Object;
 
 /* Object functions ******************/
 
-bool_t eval(struct Object* obj, struct Evaluator* etor, struct Object** value);
+bool_t eval_recursive(struct Object* obj, struct Evaluator* etor, struct Object** value);

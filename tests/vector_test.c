@@ -3,8 +3,8 @@
 #include "_test.h"
 #include "_typedefs.h"
 
+#include "object/evaluator/evaluator_recursive.h"
 #include "object/typeids.h"
-#include "object/types/evaluator.h"
 #include "object/types/identifier.h"
 #include "object/types/integer.h"
 #include "object/types/vector.h"

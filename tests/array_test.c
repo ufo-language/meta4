@@ -3,9 +3,9 @@
 #include "_test.h"
 #include "_typedefs.h"
 
+#include "object/evaluator/evaluator_recursive.h"
 #include "object/typeids.h"
 #include "object/types/array.h"
-#include "object/types/evaluator.h"
 #include "object/types/identifier.h"
 #include "object/types/integer.h"
 
@@ -71,7 +71,7 @@ int main(int argc, char* argv[]) {
         evaluator_bind(etor, b, OBJ(i200));
         evaluator_bind(etor, c, OBJ(i300));
         struct Object* value;
-        ASSERT_TRUE(eval(OBJ(array), etor, &value))
+        ASSERT_TRUE(eval_recursive(OBJ(array), etor, &value))
         ASSERT_PTRNE(array, value);
         ASSERT_IEQ(OT_Array, value->typeId);
         struct Array* arrayValue = (struct Array*)value;

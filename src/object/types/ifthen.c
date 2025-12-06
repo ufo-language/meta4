@@ -3,7 +3,7 @@
 #include "_typedefs.h"
 
 #include "object/functions/boolvalue.h"
-#include "object/functions/eval.h"
+#include "object/functions/eval_recursive.h"
 #include "object/functions/show.h"
 #include "object/object.h"
 #include "object/typeids.h"
@@ -35,12 +35,12 @@ struct IfThen* ifThen_new(struct Object* cond, struct Object* conseq, struct Obj
 
 /* Private functions *********************************************************/
 
-bool_t ifThen_eval(struct IfThen* ifThen, struct Evaluator* etor, struct Object** value) {
-    if (!eval(ifThen->cond, etor, value)) {
+bool_t ifThen_eval_recursive(struct IfThen* ifThen, struct Evaluator* etor, struct Object** value) {
+    if (!eval_recursive(ifThen->cond, etor, value)) {
         return false;
     }
     bool_t b = boolValue(*value);
-    return eval(b ? ifThen->conseq : ifThen->alt, etor, value);
+    return eval_recursive(b ? ifThen->conseq : ifThen->alt, etor, value);
 }
 
 void ifThen_show(struct IfThen* ifThen, FILE* stream) {

@@ -33,5 +33,5 @@ struct IfThen* ifThen_new(struct Object* cond, struct Object* conseq, struct Obj
 
 /* Object functions ******************/
 
-bool_t ifThen_eval(struct IfThen* ifThen, struct Evaluator* etor, struct Object** value);
+bool_t ifThen_eval_recursive(struct IfThen* ifThen, struct Evaluator* etor, struct Object** value);
 void ifThen_show(struct IfThen* ifThen, FILE* stream);

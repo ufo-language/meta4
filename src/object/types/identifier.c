@@ -6,7 +6,7 @@
 
 #include "object/object.h"
 #include "object/typeids.h"
-#include "object/types/evaluator.h"
+#include "object/evaluator/evaluator_recursive.h"
 #include "object/types/identifier.h"
 
 /* Defines *******************************************************************/
@@ -43,7 +43,7 @@ bool_t identifier_equal(struct Identifier* ident, struct Identifier* otherIdent)
     return strcmp(ident->name, otherIdent->name) ? false : true;
 }
 
-bool_t identifier_eval(struct Identifier* ident, struct Evaluator* etor, struct Object** value) {
+bool_t identifier_eval_recursive(struct Identifier* ident, struct Evaluator* etor, struct Object** value) {
     bool_t success = evaluator_lookup(etor, ident, value);
     switch (etor->operationType) {
         case Etor_Closing:
