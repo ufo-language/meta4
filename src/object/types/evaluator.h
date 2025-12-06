@@ -5,6 +5,7 @@
 #include "_typedefs.h"
 
 #include "object/object.h"
+#include "object/types/intvector.h"
 #include "object/types/vector.h"
 
 /* Defines *******************************************************************/

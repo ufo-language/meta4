@@ -25,43 +25,43 @@
 
 bool_t boolValue(struct Object* obj) {
     switch(obj->typeId) {
-        case OT_Apply:         break;
+        case OT_Apply:         return true;
         case OT_Array:         return ((struct Array*)obj)->nElems != 0;
-        case OT_BinOp:         break;
+        case OT_BinOp:         return true;
         case OT_Boolean:       return ((struct Boolean*)obj)->b;
         case OT_ByteBuffer:    break;
         case OT_ConstantLimit: break;
-        case OT_Dec:           break;
-        case OT_Device:        break;
-        case OT_Evaluator:     break;
-        case OT_Function:      break;
+        case OT_Dec:           return true;
+        case OT_Device:        return true;
+        case OT_Evaluator:     return true;
+        case OT_Function:      return true;
         case OT_HashTable:     break;
-        case OT_Identifier:    break;
-        case OT_IfThen:        break;
-        case OT_Inc:           break;
+        case OT_Identifier:    return true;
+        case OT_IfThen:        return true;
+        case OT_Inc:           return true;
         case OT_IntArray:      break;
         case OT_Integer:       return ((struct Integer*)obj)->i != 0;
-        case OT_IntVector:      break;
+        case OT_IntVector:     break;
         case OT_IVar:          break;
-        case OT_Let:           break;
+        case OT_Let:           return true;
         case OT_List:          break;
         case OT_Nil:           return false;
         case OT_Null:          break;
-        case OT_Primitive:     break;
-        case OT_Quote:         break;
+        case OT_Primitive:     return true;
+        case OT_Quote:         return true;
         case OT_Real:          break;
-        case OT_Sequence:      break;
-        case OT_Vector:         break;
+        case OT_Sequence:      return true;
         case OT_String:        break;
-        case OT_Symbol:        break;
-        case OT_Test:          break;
-        case OT_User:          break;
-        case OT_Var:           break;
-        case OT_While:         break;
+        case OT_Symbol:        return true;
+        case OT_Test:          return true;
+        case OT_User:          return true;
+        case OT_Var:           return true;
+        case OT_Vector:        break;
+        case OT_While:         return true;
         default:
-            fprintf(stderr, "show: Unknown type ID %u\n", obj->typeId);
-            return false;
+            break;
     }
-    return true;
+    fprintf(stderr, "boolValue: Unknown type ID %u\n", obj->typeId);
+    return false;
 }
 /* Private functions *********************************************************/

@@ -14,7 +14,7 @@
 
 /* Forward declarations ******************************************************/
 
-void _resize(struct Vector* vector);
+static void _resize(struct Vector* vector);
 
 /* Global variables **********************************************************/
 
@@ -37,27 +37,27 @@ struct Vector* vector_new_withCapacity(count_t capacity) {
 
 /* Unique functions ******************/
 
-bool_t vector_get(struct Vector* vector, index_t index, struct Object** value) {
+bool_t vector_get(struct Vector* vector, index_t index, struct Object** elem) {
     if (index >= vector->top) {
         return false;
     }
-    *value = array_get_unsafe(vector->elems, index);
+    *elem = array_get_unsafe(vector->elems, index);
     return true;
 }
 
-bool_t vector_set(struct Vector* vector, index_t index, struct Object* value) {
+bool_t vector_set(struct Vector* vector, index_t index, struct Object* elem) {
     if (index >= vector->top) {
         return false;
     }
-    array_set_unsafe(vector->elems, index, value);
+    array_set_unsafe(vector->elems, index, elem);
     return true;
 }
 
-bool_t vector_pop(struct Vector* vector, struct Object** value) {
+bool_t vector_pop(struct Vector* vector, struct Object** elem) {
     if (vector->top == 0) {
         return false;
     }
-    *value = vector->elems->elems[--vector->top];
+    *elem = vector->elems->elems[--vector->top];
     return true;
 }
 
@@ -89,7 +89,7 @@ void vector_show(struct Vector* vector, FILE* stream) {
 
 /* Private functions *********************************************************/
 
-void _resize(struct Vector* vector) {
+static void _resize(struct Vector* vector) {
     vector->capacity *= 2;
     struct Array* newElems = array_new_fromArray(vector->capacity, vector->elems);
     vector->elems = newElems;

@@ -14,18 +14,20 @@ struct Array;
 struct Boolean;
 struct IntArray;
 struct Integer;
+struct IntVector;
 struct Nil;
 struct Sequence;
 struct Vector;
 
 /* Forward declarations ******************************************************/
 
-void array_show   (struct Array*,    FILE* stream);
-void boolean_show (struct Boolean*,  FILE* stream);
-void intArray_show(struct IntArray*, FILE* stream);
-void integer_show (struct Integer*,  FILE* stream);
-void nil_show     (struct Nil*,      FILE* stream);
-void sequence_show(struct Sequence*, FILE* stream);
+void array_show    (struct Array*,     FILE* stream);
+void boolean_show  (struct Boolean*,   FILE* stream);
+void intArray_show (struct IntArray*,  FILE* stream);
+void integer_show  (struct Integer*,   FILE* stream);
+void intVector_show(struct IntVector*, FILE* stream);
+void nil_show      (struct Nil*,       FILE* stream);
+void sequence_show (struct Sequence*,  FILE* stream);
 void vector_show   (struct Vector*,    FILE* stream);
 
 /* Global variables **********************************************************/
@@ -52,7 +54,7 @@ void show(struct Object* obj, FILE* stream) {
         case OT_Inc:           break;
         case OT_IntArray:      intArray_show((struct IntArray*)obj, stream); return;
         case OT_Integer:       integer_show((struct Integer*)obj, stream); return;
-        case OT_IntVector:      break;
+        case OT_IntVector:     intVector_show((struct IntVector*)obj, stream); return;
         case OT_IVar:          break;
         case OT_Let:           break;
         case OT_List:          break;
@@ -62,18 +64,18 @@ void show(struct Object* obj, FILE* stream) {
         case OT_Quote:         break;
         case OT_Real:          break;
         case OT_Sequence:      sequence_show((struct Sequence*)obj, stream); return;
-        case OT_Vector:         vector_show((struct Vector*)obj, stream); return;
         case OT_String:        break;
         case OT_Symbol:        break;
         case OT_Test:          break;
         case OT_User:          break;
         case OT_Var:           break;
+        case OT_Vector:        vector_show((struct Vector*)obj, stream); return;
         case OT_While:         break;
         default:
-            fprintf(stderr, "show: Unknown type ID %u\n", obj->typeId);
-            fputs("UNKNOWN", stream);
             break;
     }
+    fprintf(stderr, "show: Unknown type ID %u\n", obj->typeId);
+    fputs("UNKNOWN", stream);
 }
 
 /* Private functions *********************************************************/

@@ -5,7 +5,7 @@
 // #include "object/globals.h"
 // #include "object/interntable.h"
 // #include "memory/memory.h"
-// #include "object/functions/show.h"
+#include "object/functions/show.h"
 // #include "object/objecttypes.h"
 #include "plx.h"
 

@@ -32,6 +32,17 @@ struct IntArray* intArray_new_elems(count_t nElems, int_t elems[]) {
     return intArray;
 }
 
+struct IntArray* intArray_new_fromIntArray(count_t nElems, struct IntArray* oldArray) {
+    struct IntArray* intArray = intArray_new_noFill(nElems);
+    if (nElems > oldArray->nElems) {
+        nElems = oldArray->nElems;
+    }
+    for (index_t n=0; n<nElems; ++n) {
+        intArray->elems[n] = oldArray->elems[n];
+    }
+    return intArray;
+}
+
 struct IntArray* intArray_new_noFill(count_t nElems) {
     struct IntArray* intArray = (struct IntArray*)object_new(OT_IntArray, NWORDS(*intArray) + nElems);
     intArray->nElems = nElems;
@@ -41,6 +52,14 @@ struct IntArray* intArray_new_noFill(count_t nElems) {
 /* Public functions **********************************************************/
 
 /* Unique functions ******************/
+
+int_t intArray_get_unsafe(struct IntArray* intArray, index_t index) {
+    return intArray->elems[index];
+}
+
+void intArray_set_unsafe(struct IntArray* intArray, index_t index, int_t elem) {
+    intArray->elems[index] = elem;
+}
 
 /* Object functions ******************/
 
