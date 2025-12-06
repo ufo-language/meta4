@@ -32,7 +32,7 @@ rm *.o
 cd ..
 
 # build the main executable concurrently
-echo $CC $options -o bin/plx -I src -Llib src/main.c -lplx &
+echo $CC $options -o bin/plx -I src -Llib src/main.c -lplx
 $CC $options -o bin/plx -I src -Llib src/main.c -lplx &
 
 # build each test executable concurrently

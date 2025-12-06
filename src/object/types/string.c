@@ -18,15 +18,20 @@
 
 struct String* string_new(const string_t chars) {
     count_t nChars = strlen(chars);
-    struct String* string = (struct String*)object_new(OT_String, NWORDS(*string) + NWORDS_FROM_BYTES(nChars + 1));
+    struct String* string = (struct String*)object_new(OT_String, NWORDS(struct String) + NWORDS_FROM_BYTES(nChars + 1));
     string->nChars = nChars;
-    strcpy(string->chars, chars);
+    memcpy(string->chars, chars, nChars + 1);
     return string;
 }
+
 
 /* Public functions **********************************************************/
 
 /* Unique functions ******************/
+
+bool_t string_equal_chars(struct String* string, string_t chars) {
+    return strcmp(string->chars, chars) == 0;
+}
 
 /* Object functions ******************/
 
@@ -40,15 +45,19 @@ bool_t string_equal(struct String* string, struct String* other) {
 
 void string_show(struct String* string, FILE* stream) {
     fputc('"', stream);
-    string_t chars = string->chars;
-    for (char c=*chars; c; chars++) {
+    for (char *p=string->chars; *p; p++) {
+        char c = *p;
         switch (c) {
             case '\n': fputs("\\n", stream); break;
             case '\r': fputs("\\r", stream); break;
             case '\t': fputs("\\t", stream); break;
             case '\\': fputs("\\\\", stream); break;
+            case '"':  fputs("\\\"", stream); break;
             default:
-                fputc(c, stream);
+                if ((unsigned char)c < 0x20 || c == 0x7F)
+                    fprintf(stream, "\\x%02X", (unsigned char)c);
+                else
+                    fputc(c, stream);
                 break;
         }
     }

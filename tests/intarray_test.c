@@ -35,22 +35,6 @@ int main(int argc, char* argv[]) {
         EXPECT_IEQ(300, intArray->elems[2]);
     END
 
-#if 0
-    TEST(intArray_checkEval)
-        struct IntArray* intArray = intArray_new_elems(3, elems);
-        struct Evaluator* etor = evaluator_new();
-        struct Object* value;
-        ASSERT_TRUE(eval_recursive(OBJ(intArray), etor, &value))
-        ASSERT_PTRNE(intArray, value);
-        ASSERT_IEQ(OT_Array, value->typeId);
-        struct IntArray* intArrayValue = (struct IntArray*)value;
-        ASSERT_IEQ(3, intArrayValue->nElems);
-        EXPECT_EQ(i100, intArray->elems[0]);
-        EXPECT_EQ(i200, intArray->elems[1]);
-        EXPECT_EQ(i300, intArray->elems[2]);
-    END
-#endif
-
     TEST(intArray_checkShow)
         struct IntArray* intArray = intArray_new_elems(3, elems);
         SHOW("Should show 'IntArray{100, 200, 300}'", intArray);

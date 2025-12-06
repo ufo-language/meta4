@@ -11,7 +11,7 @@
 struct String {
     struct Object obj;
     count_t nChars;
-    string_t chars;
+    char chars[];
 };
 
 /* Forward declarations ******************************************************/
@@ -25,6 +25,8 @@ struct String* string_new(const string_t chars);
 /* Public functions **********************************************************/
 
 /* Unique functions ******************/
+
+bool_t string_equal_chars(struct String* string, string_t chars);
 
 /* Object functions ******************/
 
