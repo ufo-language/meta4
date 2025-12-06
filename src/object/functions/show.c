@@ -5,30 +5,21 @@
 #include "object/functions/show.h"
 #include "object/object.h"
 #include "object/typeids.h"
+#include "object/types/array.h"
+#include "object/types/boolean.h"
+#include "object/types/identifier.h"
+#include "object/types/intarray.h"
+#include "object/types/integer.h"
+#include "object/types/intvector.h"
+#include "object/types/nil.h"
+#include "object/types/sequence.h"
+#include "object/types/vector.h"
 
 /* Defines *******************************************************************/
 
 /* Types *********************************************************************/
 
-struct Array;
-struct Boolean;
-struct IntArray;
-struct Integer;
-struct IntVector;
-struct Nil;
-struct Sequence;
-struct Vector;
-
 /* Forward declarations ******************************************************/
-
-void array_show    (struct Array*,     FILE*);
-void boolean_show  (struct Boolean*,   FILE*);
-void intArray_show (struct IntArray*,  FILE*);
-void integer_show  (struct Integer*,   FILE*);
-void intVector_show(struct IntVector*, FILE*);
-void nil_show      (struct Nil*,       FILE*);
-void sequence_show (struct Sequence*,  FILE*);
-void vector_show   (struct Vector*,    FILE*);
 
 /* Global variables **********************************************************/
 
@@ -49,7 +40,7 @@ void show(struct Object* obj, FILE* stream) {
         case OT_Evaluator:     break;
         case OT_Function:      break;
         case OT_HashTable:     break;
-        case OT_Identifier:    break;
+        case OT_Identifier:    identifier_show((struct Identifier*)obj, stream); return;
         case OT_IfThen:        break;
         case OT_Inc:           break;
         case OT_IntArray:      intArray_show((struct IntArray*)obj, stream); return;

@@ -34,5 +34,23 @@ int main(int argc, char* argv[]) {
         EXPECT_EQ(i100, value);
     END
 
+    TEST(identifier_checkClose_bound)
+        struct Integer* i100 = integer_new(100);
+        struct Evaluator* etor = evaluator_new();
+        evaluator_bind(etor, a1, OBJ(i100));
+        etor->operationType = Etor_Closing;
+        struct Object* value;
+        ASSERT_TRUE(identifier_eval(a1, etor, &value));
+        ASSERT_EQ(i100, value);
+    END
+
+    TEST(identifier_checkClose_unbound)
+        struct Evaluator* etor = evaluator_new();
+        etor->operationType = Etor_Closing;
+        struct Object* value;
+        ASSERT_TRUE(identifier_eval(a1, etor, &value));
+        ASSERT_EQ(a1, value);
+    END
+
     END_TESTS
 }
