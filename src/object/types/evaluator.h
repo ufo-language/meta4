@@ -40,8 +40,8 @@ struct Evaluator* evaluator_new(void);
 
 /* Unique functions ******************/
 
-void evaluator_bind(struct Evaluator* etor, struct Identifier* ident, struct Object* value);
-bool_t evaluator_lookup(struct Evaluator* etor, struct Identifier* ident, struct Object** value);
+void evaluator_bind(struct Evaluator* etor, struct Identifier* name, struct Object* value);
+bool_t evaluator_lookup(struct Evaluator* etor, struct Identifier* name, struct Object** value);
 void evaluator_run(struct Evaluator* etor, void (*initCallback)(struct Evaluator* etor));
 
 /* Object functions ******************/

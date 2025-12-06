@@ -4,6 +4,7 @@
 
 #include "object/object.h"
 #include "object/types/vector.h"
+#include "object/functions/equal.h"
 #include "object/functions/show.h"
 
 /* Defines *******************************************************************/
@@ -36,6 +37,19 @@ struct Vector* vector_new_withCapacity(count_t capacity) {
 /* Public functions **********************************************************/
 
 /* Unique functions ******************/
+
+/* This treats the vector as an association list of [key, value, key, value...] */
+bool_t vector_lookup(struct Vector* vector, struct Object* key, struct Object** value) {
+    struct Object** elems = vector->elems->elems;
+    count_t top = vector->top;
+    for (index_t n=0; n<top; n+=2) {
+        if (equal(elems[n], key)) {
+            *value = elems[n+1];
+            return true;
+        }
+    }
+    return false;
+}
 
 bool_t vector_get(struct Vector* vector, index_t index, struct Object** elem) {
     if (index >= vector->top) {

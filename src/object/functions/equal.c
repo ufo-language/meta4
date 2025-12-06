@@ -4,31 +4,31 @@
 
 #include "object/object.h"
 #include "object/typeids.h"
-#include "object/functions/show.h"
+#include "object/functions/equal.h"
 
 /* Defines *******************************************************************/
 
 /* Types *********************************************************************/
 
-struct Array;
-struct Boolean;
-struct IntArray;
-struct Integer;
-struct IntVector;
-struct Nil;
-struct Sequence;
-struct Vector;
+// struct Array;
+// struct Boolean;
+// struct IntArray;
+// struct Integer;
+// struct IntVector;
+// struct Nil;
+// struct Sequence;
+// struct Vector;
 
 /* Forward declarations ******************************************************/
 
-void array_show    (struct Array*,     FILE*);
-void boolean_show  (struct Boolean*,   FILE*);
-void intArray_show (struct IntArray*,  FILE*);
-void integer_show  (struct Integer*,   FILE*);
-void intVector_show(struct IntVector*, FILE*);
-void nil_show      (struct Nil*,       FILE*);
-void sequence_show (struct Sequence*,  FILE*);
-void vector_show   (struct Vector*,    FILE*);
+// void array_show    (struct Array*,     struct Array*);
+// void boolean_show  (struct Boolean*,   struct Boolean*);
+// void intArray_show (struct IntArray*,  struct IntArray*);
+// void integer_show  (struct Integer*,   struct Integer*);
+// void intVector_equal(struct IntVector*, struct IntVector*);
+// void nil_show      (struct Nil*,       struct Nil*);
+// void sequence_show (struct Sequence*,  struct Sequence*);
+// void vector_show   (struct Vector*,    struct Vector*);
 
 /* Global variables **********************************************************/
 
@@ -36,12 +36,15 @@ void vector_show   (struct Vector*,    FILE*);
 
 /* Public functions **********************************************************/
 
-void show(struct Object* obj, FILE* stream) {
+bool_t equal(struct Object* obj, struct Object* other) {
+    if (obj->typeId != other->typeId) {
+        return false;
+    }
     switch(obj->typeId) {
         case OT_Apply:         break;
-        case OT_Array:         array_show((struct Array*)obj, stream); return;
+        case OT_Array:         break; /*return array_equal((struct Array*)obj, (struct Array*)(other));*/
         case OT_BinOp:         break;
-        case OT_Boolean:       boolean_show((struct Boolean*)obj, stream); return;
+        case OT_Boolean:       break; /*boolean_equal((struct Boolean*)obj, stream); return;*/
         case OT_ByteBuffer:    break;
         case OT_ConstantLimit: break;
         case OT_Dec:           break;
@@ -52,30 +55,31 @@ void show(struct Object* obj, FILE* stream) {
         case OT_Identifier:    break;
         case OT_IfThen:        break;
         case OT_Inc:           break;
-        case OT_IntArray:      intArray_show((struct IntArray*)obj, stream); return;
-        case OT_Integer:       integer_show((struct Integer*)obj, stream); return;
-        case OT_IntVector:     intVector_show((struct IntVector*)obj, stream); return;
+        case OT_IntArray:      break; /*intArray_equal((struct IntArray*)obj, stream); return;*/
+        case OT_Integer:       break; /*integer_equal((struct Integer*)obj, stream); return;*/
+        case OT_IntVector:     break; /*intVector_equal((struct IntVector*)obj, stream); return;*/
         case OT_IVar:          break;
         case OT_Let:           break;
         case OT_List:          break;
-        case OT_Nil:           nil_show((struct Nil*)obj, stream); return;
+        case OT_Nil:           break; /*nil_equal((struct Nil*)obj, stream); return;*/
         case OT_Null:          break;
         case OT_Primitive:     break;
         case OT_Quote:         break;
         case OT_Real:          break;
-        case OT_Sequence:      sequence_show((struct Sequence*)obj, stream); return;
+        case OT_Sequence:      break; /*sequence_equal((struct Sequence*)obj, stream); return;*/
         case OT_String:        break;
         case OT_Symbol:        break;
         case OT_Test:          break;
         case OT_User:          break;
         case OT_Var:           break;
-        case OT_Vector:        vector_show((struct Vector*)obj, stream); return;
+        case OT_Vector:        break; /*vector_equal((struct Vector*)obj, stream); return;*/
         case OT_While:         break;
         default:
             break;
     }
-    fprintf(stderr, "show: Unknown type ID %u\n", obj->typeId);
-    fputs("UNKNOWN", stream);
+    fprintf(stderr, "equal: Unknown type ID %u\n", obj->typeId);
+    fputs("UNKNOWN", stderr);
+    return false;
 }
 
 /* Private functions *********************************************************/

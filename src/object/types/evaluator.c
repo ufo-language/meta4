@@ -25,12 +25,13 @@ struct Evaluator* evaluator_new(void) {
 /* Unique functions ******************/
 
 #include <assert.h>
-void evaluator_bind(struct Evaluator* etor, struct Identifier* ident, struct Object* value) {
-    assert(false);
+void evaluator_bind(struct Evaluator* etor, struct Identifier* name, struct Object* value) {
+    vector_push(etor->env, (struct Object*)name);
+    vector_push(etor->env, value);
 }
 
-bool_t evaluator_lookup(struct Evaluator* etor, struct Identifier* ident, struct Object** value) {
-    assert(false);
+bool_t evaluator_lookup(struct Evaluator* etor, struct Identifier* name, struct Object** value) {
+    return vector_lookup(etor->env, (struct Object*)name, value);
 }
 
 void evaluator_run(struct Evaluator* etor, void (*initCallback)(struct Evaluator* etor)) {

@@ -28,6 +28,7 @@ struct Vector* vector_new_withCapacity(count_t capacity);
 
 /* Unique functions ******************/
 
+bool_t vector_lookup(struct Vector* vector, struct Object* key, struct Object** value);
 bool_t vector_get(struct Vector* vector, index_t index, struct Object** elem);
 bool_t vector_set(struct Vector* vector, index_t index, struct Object* elem);
 bool_t vector_pop(struct Vector* vector, struct Object** elem);
