@@ -19,12 +19,17 @@ for f in bin/*_test; do
     echo "Running $f"
     # Capture the output of the command and parse it into the variables
     capture=$($runtest $f)
-    echo "$capture"
-    read _ nPass _ nFail <<< "$capture"
-    totalPass=$((totalPass + nPass))
-    if [ "$nFail" -ne 0 ]; then
-        totalFail=$((totalFail + nFail))
+    if [ "$?" -ne 0 ]; then
+        totalFail=$((totalFail + 1))
         failedTests+=("$f")
+    else
+        echo "$capture"
+        read _ nPass _ nFail <<< "$capture"
+        totalPass=$((totalPass + nPass))
+        if [ "$nFail" -ne 0 ]; then
+            totalFail=$((totalFail + nFail))
+            failedTests+=("$f")
+        fi
     fi
     echo
 done
