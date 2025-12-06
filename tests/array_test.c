@@ -6,6 +6,7 @@
 #include "object/typeids.h"
 #include "object/types/array.h"
 #include "object/types/evaluator.h"
+#include "object/types/identifier.h"
 #include "object/types/integer.h"
 
 int main(int argc, char* argv[]) {
@@ -60,8 +61,15 @@ int main(int argc, char* argv[]) {
     END
 
     TEST(array_checkEval)
-        struct Array* array = array_new_elems(3, elems);
+        struct Identifier* a = identifier_new("a");
+        struct Identifier* b = identifier_new("b");
+        struct Identifier* c = identifier_new("c");
+        struct Object* identElems[] = {OBJ(a), OBJ(b), OBJ(c)};
+        struct Array* array = array_new_elems(3, identElems);
         struct Evaluator* etor = evaluator_new();
+        evaluator_bind(etor, a, OBJ(i100));
+        evaluator_bind(etor, b, OBJ(i200));
+        evaluator_bind(etor, c, OBJ(i300));
         struct Object* value;
         ASSERT_TRUE(eval(OBJ(array), etor, &value))
         ASSERT_PTRNE(array, value);

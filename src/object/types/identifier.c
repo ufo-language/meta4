@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -43,7 +44,21 @@ bool_t identifier_equal(struct Identifier* ident, struct Identifier* otherIdent)
 }
 
 bool_t identifier_eval(struct Identifier* ident, struct Evaluator* etor, struct Object** value) {
-    return evaluator_lookup(etor, ident, value);
+    bool_t success = evaluator_lookup(etor, ident, value);
+    switch (etor->operationType) {
+        case Etor_Closing:
+            if (!success) {
+                *value = (struct Object*)ident;
+            }
+            return true;
+        case Etor_Evaluating:
+            if (!success) {
+                fprintf(stderr, "ERROR: unbound identifier '%s'\n", ident->name);
+                assert(false);
+                exit(1);
+            }
+            return true;
+    }
 }
 
 void identifier_show(struct Identifier* ident, FILE* stream) {

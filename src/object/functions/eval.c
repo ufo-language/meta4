@@ -5,22 +5,16 @@
 #include "object/functions/eval.h"
 #include "object/object.h"
 #include "object/typeids.h"
+#include "object/types/array.h"
+#include "object/types/identifier.h"
+#include "object/types/ifthen.h"
+#include "object/types/sequence.h"
 
 /* Defines *******************************************************************/
 
 /* Types *********************************************************************/
 
-struct Array;
-struct Evaluator;
-struct IfThen;
-struct Object;
-struct Sequence;
-
 /* Forward declarations ******************************************************/
-
-bool_t array_eval   (struct Array*,    struct Evaluator*, struct Object**);
-bool_t ifThen_eval  (struct IfThen*,   struct Evaluator*, struct Object**);
-bool_t sequence_eval(struct Sequence*, struct Evaluator*, struct Object**);
 
 bool_t _const_eval  (struct Object*,   struct Evaluator*, struct Object**);
 bool_t _evalError   (struct Object*,   struct Evaluator*, struct Object**);
@@ -44,7 +38,7 @@ bool_t eval(struct Object* obj, struct Evaluator* etor, struct Object** value) {
         case OT_Evaluator:     break;
         case OT_Function:      break;
         case OT_HashTable:     break;
-        case OT_Identifier:    break;
+        case OT_Identifier:    return identifier_eval((struct Identifier*)obj, etor, value);
         case OT_IfThen:        return ifThen_eval((struct IfThen*)obj, etor, value);
         case OT_Inc:           break;
         case OT_IntArray:      break;
