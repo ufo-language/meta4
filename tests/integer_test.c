@@ -6,6 +6,7 @@
 #include "object/types/evaluator.h"
 #include "object/types/integer.h"
 #include "object/globals.h"
+#include "object/functions/equal.h"
 #include "object/functions/show.h"
 
 int main(int argc, char* argv[]) {
@@ -16,6 +17,14 @@ int main(int argc, char* argv[]) {
         ASSERT_PTRNE(NULL, integer);
         ASSERT_IEQ(OT_Integer, integer->obj.typeId);
         EXPECT_IEQ(0, strcmp("Integer", typeName(integer->obj.typeId)));
+    END
+
+    TEST(integer_checkEqual)
+        struct Integer* i100a = integer_new(100);
+        struct Integer* i100b = integer_new(100);
+        struct Integer* i200 = integer_new(200);
+        EXPECT_TRUE(equal(OBJ(i100a), OBJ(i100b)));
+        EXPECT_FALSE(equal(OBJ(i100a), OBJ(i200)));
     END
 
     TEST(integer_checkEval)

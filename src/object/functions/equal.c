@@ -13,7 +13,7 @@
 // struct Array;
 // struct Boolean;
 // struct IntArray;
-// struct Integer;
+struct Integer;
 // struct IntVector;
 // struct Nil;
 // struct Sequence;
@@ -24,7 +24,7 @@
 // void array_show    (struct Array*,     struct Array*);
 // void boolean_show  (struct Boolean*,   struct Boolean*);
 // void intArray_show (struct IntArray*,  struct IntArray*);
-// void integer_show  (struct Integer*,   struct Integer*);
+bool_t integer_equal  (struct Integer*,   struct Integer*);
 // void intVector_equal(struct IntVector*, struct IntVector*);
 // void nil_show      (struct Nil*,       struct Nil*);
 // void sequence_show (struct Sequence*,  struct Sequence*);
@@ -44,7 +44,7 @@ bool_t equal(struct Object* obj, struct Object* other) {
         case OT_Apply:         break;
         case OT_Array:         break; /*return array_equal((struct Array*)obj, (struct Array*)(other));*/
         case OT_BinOp:         break;
-        case OT_Boolean:       break; /*boolean_equal((struct Boolean*)obj, stream); return;*/
+        case OT_Boolean:       break; /*return boolean_equal((struct Boolean*)obj, stream);*/
         case OT_ByteBuffer:    break;
         case OT_ConstantLimit: break;
         case OT_Dec:           break;
@@ -52,27 +52,27 @@ bool_t equal(struct Object* obj, struct Object* other) {
         case OT_Evaluator:     break;
         case OT_Function:      break;
         case OT_HashTable:     break;
-        case OT_Identifier:    break;
+        case OT_Identifier:    return obj == other;
         case OT_IfThen:        break;
         case OT_Inc:           break;
-        case OT_IntArray:      break; /*intArray_equal((struct IntArray*)obj, stream); return;*/
-        case OT_Integer:       break; /*integer_equal((struct Integer*)obj, stream); return;*/
-        case OT_IntVector:     break; /*intVector_equal((struct IntVector*)obj, stream); return;*/
+        case OT_IntArray:      break; /*return intArray_equal((struct IntArray*)obj, stream);*/
+        case OT_Integer:       return integer_equal((struct Integer*)obj, (struct Integer*)other);
+        case OT_IntVector:     break; /*return intVector_equal((struct IntVector*)obj, stream);*/
         case OT_IVar:          break;
         case OT_Let:           break;
         case OT_List:          break;
-        case OT_Nil:           break; /*nil_equal((struct Nil*)obj, stream); return;*/
+        case OT_Nil:           break; /*return nil_equal((struct Nil*)obj, stream);*/
         case OT_Null:          break;
         case OT_Primitive:     break;
         case OT_Quote:         break;
         case OT_Real:          break;
-        case OT_Sequence:      break; /*sequence_equal((struct Sequence*)obj, stream); return;*/
+        case OT_Sequence:      break; /*return sequence_equal((struct Sequence*)obj, stream);*/
         case OT_String:        break;
         case OT_Symbol:        break;
         case OT_Test:          break;
         case OT_User:          break;
         case OT_Var:           break;
-        case OT_Vector:        break; /*vector_equal((struct Vector*)obj, stream); return;*/
+        case OT_Vector:        break; /*return vector_equal((struct Vector*)obj, stream);*/
         case OT_While:         break;
         default:
             break;

@@ -5,6 +5,7 @@
 
 #include "object/typeids.h"
 #include "object/types/evaluator.h"
+#include "object/types/identifier.h"
 #include "object/types/integer.h"
 
 int main(int argc, char* argv[]) {
@@ -93,6 +94,23 @@ int main(int argc, char* argv[]) {
         ASSERT_TRUE(vector_pop(vector, &value));
         ASSERT_IEQ(OT_Integer, value->typeId);
         ASSERT_IEQ((capacity + 1) * 100, ((struct Integer*)value)->i);
+    END
+
+    TEST(vector_checkLookup)
+        struct Identifier* a = identifier_new("a");
+        struct Identifier* b = identifier_new("b");
+        struct Identifier* c = identifier_new("c");
+        struct Vector* vector = vector_new();
+        vector_push(vector, OBJ(a));
+        vector_push(vector, OBJ(i100));
+        vector_push(vector, OBJ(b));
+        vector_push(vector, OBJ(i200));
+        struct Object* value;
+        ASSERT_TRUE(vector_lookup(vector, OBJ(a), &value));
+        EXPECT_EQ(OBJ(i100), value);
+        ASSERT_TRUE(vector_lookup(vector, OBJ(b), &value));
+        EXPECT_EQ(OBJ(i200), value);
+        ASSERT_FALSE(vector_lookup(vector, OBJ(c), &value));
     END
 
     TEST(vector_checkShow)
