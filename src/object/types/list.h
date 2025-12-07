@@ -1,31 +1,38 @@
+#include <stdio.h>
+
 #pragma once
 
 #include "_typedefs.h"
+
+#include "object/object.h"
 
 /* Defines *******************************************************************/
 
 /* Types *********************************************************************/
 
-struct Boolean;
-struct GC;
-struct List;
-struct Nil;
-struct Vector;
+struct List {
+    struct Object obj;
+    struct Object* first;
+    struct Object* rest;
+};
+
+struct Etor_Rec;
 
 /* Forward declarations ******************************************************/
 
 /* Global variables **********************************************************/
 
-extern struct Boolean* g_true;
-extern struct Boolean* g_false;
-extern struct GC*      g_gc;
-extern struct List*    g_emptyList;
-extern struct Nil*     g_nil;
-extern struct Vector*  g_identifierInternTable;
-extern struct Vector*  g_symbolInternTable;
-
 /* Lifecycle functions *******************************************************/
+
+struct List* list_new(struct Object* first, struct Object* rest);
+struct List* list_new_empty(void);
 
 /* Public functions **********************************************************/
 
-void globals_init(void);
+/* Unique functions ******************/
+
+/* Object functions ******************/
+
+count_t list_count(struct List* list);
+bool_t list_eval(struct List* list, struct Etor_Rec* etor, struct Object** value);
+void list_show(struct List* list, FILE* stream);

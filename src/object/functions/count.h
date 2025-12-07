@@ -6,26 +6,18 @@
 
 /* Types *********************************************************************/
 
-struct Boolean;
-struct GC;
-struct List;
-struct Nil;
-struct Vector;
+struct Object;
 
 /* Forward declarations ******************************************************/
 
 /* Global variables **********************************************************/
 
-extern struct Boolean* g_true;
-extern struct Boolean* g_false;
-extern struct GC*      g_gc;
-extern struct List*    g_emptyList;
-extern struct Nil*     g_nil;
-extern struct Vector*  g_identifierInternTable;
-extern struct Vector*  g_symbolInternTable;
-
 /* Lifecycle functions *******************************************************/
 
 /* Public functions **********************************************************/
 
-void globals_init(void);
+/* Unique functions ******************/
+
+/* Object functions ******************/
+
+bool_t count(struct Object* obj, int_t* count);

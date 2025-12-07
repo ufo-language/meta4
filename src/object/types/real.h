@@ -1,31 +1,36 @@
 #pragma once
 
+#include <stdio.h>
+
 #include "_typedefs.h"
+
+#include "object/object.h"
+#include "object/typeids.h"
+#include "object/functions/eval_rec.h"
+#include "object/functions/show.h"
 
 /* Defines *******************************************************************/
 
 /* Types *********************************************************************/
 
-struct Boolean;
-struct GC;
-struct List;
-struct Nil;
-struct Vector;
+struct Real {
+    struct Object obj;
+    real_t r;
+};
 
 /* Forward declarations ******************************************************/
 
 /* Global variables **********************************************************/
 
-extern struct Boolean* g_true;
-extern struct Boolean* g_false;
-extern struct GC*      g_gc;
-extern struct List*    g_emptyList;
-extern struct Nil*     g_nil;
-extern struct Vector*  g_identifierInternTable;
-extern struct Vector*  g_symbolInternTable;
-
 /* Lifecycle functions *******************************************************/
+
+struct Real* real_new(real_t i);
 
 /* Public functions **********************************************************/
 
-void globals_init(void);
+/* Unique functions ******************/
+
+/* Object functions ******************/
+
+bool_t real_equal(struct Real* real, struct Real* other);
+void real_show(struct Real* real, FILE* stream);
