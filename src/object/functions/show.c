@@ -14,6 +14,7 @@
 #include "object/types/nil.h"
 #include "object/types/sequence.h"
 #include "object/types/string.h"
+#include "object/types/symbol.h"
 #include "object/types/vector.h"
 
 /* Defines *******************************************************************/
@@ -57,7 +58,7 @@ void show(struct Object* obj, FILE* stream) {
         case OT_Real:          break;
         case OT_Sequence:      sequence_show((struct Sequence*)obj, stream); return;
         case OT_String:        string_show((struct String*)obj, stream); return;
-        case OT_Symbol:        break;
+        case OT_Symbol:        symbol_show((struct Symbolic*)obj, stream); return;
         case OT_Test:          break;
         case OT_User:          break;
         case OT_Var:           break;

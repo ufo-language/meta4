@@ -1,29 +1,28 @@
 #pragma once
 
+#include <stdio.h>
+
 #include "_typedefs.h"
+
+#include "object/object.h"
+#include "object/types/symbolic.h"
 
 /* Defines *******************************************************************/
 
 /* Types *********************************************************************/
 
-struct Boolean;
-struct GC;
-struct Nil;
-struct Vector;
-
 /* Forward declarations ******************************************************/
 
 /* Global variables **********************************************************/
 
-extern struct Boolean* g_true;
-extern struct Boolean* g_false;
-extern struct GC* g_gc;
-extern struct Nil* g_nil;
-extern struct Vector* g_identifierInternTable;
-extern struct Vector* g_symbolInternTable;
-
 /* Lifecycle functions *******************************************************/
+
+struct Symbolic* symbol_new(const string_t name);
 
 /* Public functions **********************************************************/
 
-void globals_init(void);
+/* Unique functions ******************/
+
+/* Object functions ******************/
+
+void symbol_show(struct Symbolic* symbol, FILE* stream);

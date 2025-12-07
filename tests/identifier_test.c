@@ -4,6 +4,7 @@
 #include "_typedefs.h"
 
 #include "object/evaluator/evaluator_recursive.h"
+#include "object/functions/eval_recursive.h"
 #include "object/types/identifier.h"
 #include "object/types/integer.h"
 
@@ -40,7 +41,7 @@ int main(int argc, char* argv[]) {
         evaluator_bind(etor, a1, OBJ(i100));
         etor->operationType = Etor_Closing;
         struct Object* value;
-        ASSERT_TRUE(identifier_eval_recursive(a1, etor, &value));
+        ASSERT_TRUE(eval_recursive(OBJ(a1), etor, &value));
         ASSERT_EQ(i100, value);
     END
 
@@ -48,7 +49,7 @@ int main(int argc, char* argv[]) {
         struct Evaluator* etor = evaluator_new();
         etor->operationType = Etor_Closing;
         struct Object* value;
-        ASSERT_TRUE(identifier_eval_recursive(a1, etor, &value));
+        ASSERT_TRUE(eval_recursive(OBJ(a1), etor, &value));
         ASSERT_EQ(a1, value);
     END
 

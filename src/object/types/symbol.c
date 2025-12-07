@@ -1,10 +1,17 @@
+#include <assert.h>
+#include <stdlib.h>
+#include <string.h>
+
 #include "_typedefs.h"
 
-#include "memory/gc.h"
+#include "object/evaluator/evaluator_recursive.h"
 #include "object/globals.h"
-#include "object/types/boolean.h"
-#include "object/types/nil.h"
+#include "object/object.h"
+#include "object/typeids.h"
+#include "object/types/symbol.h"
+#include "object/types/string.h"
 #include "object/types/vector.h"
+#include "object/types/symbolic.h"
 
 /* Defines *******************************************************************/
 
@@ -14,27 +21,20 @@
 
 /* Global variables **********************************************************/
 
-struct Boolean* g_true;
-struct Boolean* g_false;
-struct GC* g_gc;
-struct Nil* g_nil;
-struct Vector* g_identifierInternTable;
-struct Vector* g_symbolInternTable;
-
 /* Lifecycle functions *******************************************************/
+
+struct Symbolic* symbol_new(const string_t name) {
+    return symbolic_new(name, OT_Symbol, g_symbolInternTable);
+}
 
 /* Public functions **********************************************************/
 
-void globals_init(void) {
-    /* Memory & GC first */
-    g_gc = gc_new();
-    /* Create constants next */
-    g_true = boolean_new(true);
-    g_false = boolean_new(false);
-    g_nil = nil_new();
-    /* Data structures come last */
-    g_identifierInternTable = vector_new();
-    g_symbolInternTable = vector_new();
+/* Unique functions ******************/
+
+/* Object functions ******************/
+
+void symbol_show(struct Symbolic* symbol, FILE* stream) {
+    fputs(symbol->name, stream);
 }
 
 /* Private functions *********************************************************/
