@@ -34,6 +34,5 @@ struct IfThen* ifThen_new(struct Object* cond, struct Object* conseq, struct Obj
 
 /* Object functions ******************/
 
-void ifThen_eval_cps(struct IfThen* ifThen, struct Etor_CPS* etor);
 bool_t ifThen_eval_rec(struct IfThen* ifThen, struct Etor_Rec* etor, struct Object** value);
 void ifThen_show(struct IfThen* ifThen, FILE* stream);

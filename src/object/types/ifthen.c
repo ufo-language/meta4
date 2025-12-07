@@ -36,9 +36,6 @@ struct IfThen* ifThen_new(struct Object* cond, struct Object* conseq, struct Obj
 
 /* Private functions *********************************************************/
 
-void ifThen_eval_cps(struct IfThen* ifThen, struct Etor_CPS* etor) {
-}
-
 bool_t ifThen_eval_rec(struct IfThen* ifThen, struct Etor_Rec* etor, struct Object** value) {
     if (!eval_rec(ifThen->cond, etor, value)) {
         return false;
