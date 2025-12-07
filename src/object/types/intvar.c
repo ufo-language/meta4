@@ -33,7 +33,7 @@ bool_t intVar_equal(struct IntVar* intVar, struct IntVar* other) {
 }
 
 void intVar_show(struct IntVar* intVar, FILE* stream) {
-    fprintf(stream, "%ld", intVar->i);
+    fprintf(stream, "IntVar{%ld}", intVar->i);
 }
 
 /* Private functions *********************************************************/
