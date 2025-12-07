@@ -4,7 +4,7 @@
 
 #include "_typedefs.h"
 
-#include "object/evaluator/evaluator_recursive.h"
+#include "object/evaluator/etor_rec.h"
 #include "object/globals.h"
 #include "object/object.h"
 #include "object/typeids.h"
@@ -34,7 +34,7 @@ struct Symbolic* identifier_new(const string_t name) {
 /* Object functions ******************/
 
 bool_t identifier_eval_recursive(struct Symbolic* ident, struct Evaluator* etor, struct Object** value) {
-    bool_t success = evaluator_lookup(etor, ident, value);
+    bool_t success = etor_rec_lookup(etor, ident, value);
     switch (etor->operationType) {
         case Etor_Closing:
             if (!success) {

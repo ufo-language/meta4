@@ -15,14 +15,10 @@ enum OperationType {
     Etor_Evaluating
 };
 
-
 struct Evaluator {
     struct Object obj;
     enum OperationType operationType;
-    /* struct Vector* vStack; */
-    /* struct Vector* eStack; */
     struct Vector* env;
-    /* struct IntVector* iStack; */
 };
 
 struct Symbolic;
@@ -33,16 +29,16 @@ struct Symbolic;
 
 /* Lifecycle functions *******************************************************/
 
-struct Evaluator* evaluator_new(void);
+struct Evaluator* etor_rec_new(void);
 
 /* Public functions **********************************************************/
 
 /* Unique functions ******************/
 
-void evaluator_bind(struct Evaluator* etor, struct Symbolic* name, struct Object* value);
-bool_t evaluator_lookup(struct Evaluator* etor, struct Symbolic* name, struct Object** value);
-void evaluator_run(struct Evaluator* etor);
+void etor_rec_bind(struct Evaluator* etor, struct Symbolic* name, struct Object* value);
+bool_t etor_rec_lookup(struct Evaluator* etor, struct Symbolic* name, struct Object** value);
+void etor_rec_run(struct Evaluator* etor);
 
 /* Object functions ******************/
 
-void evaluator_show(struct Evaluator* etor, FILE* stream);
+void etor_rec_show(struct Evaluator* etor, FILE* stream);

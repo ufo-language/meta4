@@ -4,7 +4,7 @@
 
 #include "_typedefs.h"
 
-#include "object/evaluator/evaluator_recursive.h"
+#include "object/evaluator/etor_rec.h"
 #include "object/globals.h"
 #include "object/object.h"
 #include "object/typeids.h"

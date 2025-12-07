@@ -4,7 +4,7 @@
 
 #include "object/object.h"
 #include "object/typeids.h"
-#include "object/evaluator/evaluator_recursive.h"
+#include "object/evaluator/etor_rec.h"
 #include "object/types/intvector.h"
 #include "object/types/vector.h"
 
@@ -18,7 +18,7 @@
 
 /* Lifecycle functions *******************************************************/
 
-struct Evaluator* evaluator_new(void) {
+struct Evaluator* etor_rec_new(void) {
     struct Evaluator* etor = (struct Evaluator*)object_new(OT_Evaluator, NWORDS(*etor));
     /* etor->vStack = vector_new(); */
     /* etor->eStack = vector_new(); */
@@ -31,19 +31,19 @@ struct Evaluator* evaluator_new(void) {
 
 /* Unique functions ******************/
 
-void evaluator_bind(struct Evaluator* etor, struct Symbolic* name, struct Object* value) {
+void etor_rec_bind(struct Evaluator* etor, struct Symbolic* name, struct Object* value) {
     vector_push(etor->env, (struct Object*)name);
     vector_push(etor->env, value);
 }
 
-bool_t evaluator_lookup(struct Evaluator* etor, struct Symbolic* name, struct Object** value) {
+bool_t etor_rec_lookup(struct Evaluator* etor, struct Symbolic* name, struct Object** value) {
     return vector_lookup(etor->env, (struct Object*)name, value);
 }
 
-void evaluator_run(struct Evaluator* etor) {
+void etor_rec_run(struct Evaluator* etor) {
 }
 
 /* Object functions ******************/
 
-void evaluator_show(struct Evaluator* etor, FILE* stream) {
+void etor_rec_show(struct Evaluator* etor, FILE* stream) {
 }

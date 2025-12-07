@@ -3,7 +3,7 @@
 #include "_test.h"
 #include "_typedefs.h"
 
-#include "object/evaluator/evaluator_recursive.h"
+#include "object/evaluator/etor_rec.h"
 #include "object/functions/show.h"
 #include "object/globals.h"
 #include "object/types/nil.h"
@@ -20,7 +20,7 @@ int main(int argc, char* argv[]) {
 
     TEST(nil_checkEval)
         struct Nil* nil = nil_new();
-        struct Evaluator* etor = evaluator_new();
+        struct Evaluator* etor = etor_rec_new();
         struct Object* value;
         ASSERT_TRUE(eval_recursive(OBJ(nil), etor, &value))
         EXPECT_EQ(nil, value);

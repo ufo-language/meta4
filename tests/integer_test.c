@@ -3,7 +3,7 @@
 #include "_test.h"
 #include "_typedefs.h"
 
-#include "object/evaluator/evaluator_recursive.h"
+#include "object/evaluator/etor_rec.h"
 #include "object/functions/equal.h"
 #include "object/functions/show.h"
 #include "object/globals.h"
@@ -29,7 +29,7 @@ int main(int argc, char* argv[]) {
 
     TEST(integer_checkEval)
         struct Integer* integer = integer_new(123);
-        struct Evaluator* etor = evaluator_new();
+        struct Evaluator* etor = etor_rec_new();
         struct Object* value;
         ASSERT_TRUE(eval_recursive(OBJ(integer), etor, &value))
         EXPECT_EQ(integer, value);

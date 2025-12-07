@@ -8,7 +8,7 @@
 #include "object/object.h"
 #include "object/typeids.h"
 #include "object/types/array.h"
-#include "object/evaluator/evaluator_recursive.h"
+#include "object/evaluator/etor_rec.h"
 #include "object/types/sequence.h"
 
 /* Defines *******************************************************************/
