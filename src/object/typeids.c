@@ -26,7 +26,7 @@ string_t typeName(enum TypeId typeId) {
         case OT_ConstantLimit: return "ConstantLimit";
         case OT_Dec:           return "Dec";
         case OT_Device:        return "Device";
-        case OT_Etor_Rec:     return "Evaluator";
+        case OT_Etor_Rec:      return "Evaluator";
         case OT_Function:      return "Function";
         case OT_HashTable:     return "HashTable";
         case OT_Identifier:    return "Identifier";
@@ -34,8 +34,8 @@ string_t typeName(enum TypeId typeId) {
         case OT_Inc:           return "Inc";
         case OT_Integer:       return "Integer";
         case OT_IntArray:      return "IntArray";
-        case OT_IntVector:      return "IntVector";
-        case OT_IntVar:          return "IVar";
+        case OT_IntVector:     return "IntVector";
+        case OT_IntVar:        return "IntVar";
         case OT_Let:           return "Let";
         case OT_Pair:          return "Pair";
         case OT_Nil:           return "Nil";
@@ -44,7 +44,7 @@ string_t typeName(enum TypeId typeId) {
         case OT_Quote:         return "Quote";
         case OT_Real:          return "Real";
         case OT_Sequence:      return "Sequence";
-        case OT_Vector:         return "Vector";
+        case OT_Vector:        return "Vector";
         case OT_String:        return "String";
         case OT_Symbol:        return "Symbol";
         case OT_Test:          return "Test";

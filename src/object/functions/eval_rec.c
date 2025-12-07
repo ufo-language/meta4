@@ -6,6 +6,7 @@
 #include "object/object.h"
 #include "object/typeids.h"
 #include "object/types/array.h"
+#include "object/types/dec.h"
 #include "object/types/identifier.h"
 #include "object/types/ifthen.h"
 #include "object/types/pair.h"
@@ -32,6 +33,7 @@ bool_t eval_rec(struct Object* obj, struct Etor_Rec* etor, struct Object** value
         case OT_Boolean:
         case OT_Device:
         case OT_Integer:
+        case OT_IntVar:
         case OT_Nil:
         case OT_Primitive:
         case OT_Real:
@@ -45,7 +47,7 @@ bool_t eval_rec(struct Object* obj, struct Etor_Rec* etor, struct Object** value
         case OT_Array:      return array_eval_rec((struct Array*)obj, etor, value);
         case OT_BinOp:      break;
         case OT_ByteBuffer: break;
-        case OT_Dec:        break;
+        case OT_Dec:        return dec_eval_rec((struct Dec*)obj, etor, value);
         case OT_Etor_Rec:   break;
         case OT_Function:   break;
         case OT_HashTable:  break;
@@ -54,7 +56,6 @@ bool_t eval_rec(struct Object* obj, struct Etor_Rec* etor, struct Object** value
         case OT_Inc:        break;
         case OT_IntArray:   break;
         case OT_IntVector:  break;
-        case OT_IntVar:       break;
         case OT_Let:        break;
         case OT_Pair:       return pair_eval_rec((struct Pair*)obj, etor, value);
         case OT_Quote:      break;
