@@ -26,9 +26,9 @@ int main(int argc, char* argv[]) {
     END
 
     TEST(sequence_checkEval)
-        struct Identifier* a = identifier_new("a");
-        struct Identifier* b = identifier_new("b");
-        struct Identifier* c = identifier_new("c");
+        struct Symbolic* a = identifier_new("a");
+        struct Symbolic* b = identifier_new("b");
+        struct Symbolic* c = identifier_new("c");
         struct Object* identExprs[] = {OBJ(a), OBJ(b), OBJ(c)};
         struct Sequence* seq = sequence_new(3, identExprs);
         struct Evaluator* etor = evaluator_new();

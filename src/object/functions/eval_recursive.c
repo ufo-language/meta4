@@ -38,7 +38,7 @@ bool_t eval_recursive(struct Object* obj, struct Evaluator* etor, struct Object*
         case OT_Evaluator:     break;
         case OT_Function:      break;
         case OT_HashTable:     break;
-        case OT_Identifier:    return identifier_eval_recursive((struct Identifier*)obj, etor, value);
+        case OT_Identifier:    return identifier_eval_recursive((struct Symbolic*)obj, etor, value);
         case OT_IfThen:        return ifThen_eval_recursive((struct IfThen*)obj, etor, value);
         case OT_Inc:           break;
         case OT_IntArray:      break;

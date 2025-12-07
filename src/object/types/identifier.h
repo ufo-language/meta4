@@ -5,16 +5,19 @@
 #include "_typedefs.h"
 
 #include "object/object.h"
+#include "object/types/symbolic.h"
 
 /* Defines *******************************************************************/
 
 /* Types *********************************************************************/
 
+#if 0
 struct Identifier {
     struct Object obj;
     word_t hashCode;
     char name[];
 };
+#endif
 
 struct Evaluator;
 
@@ -24,7 +27,7 @@ struct Evaluator;
 
 /* Lifecycle functions *******************************************************/
 
-struct Identifier* identifier_new(const string_t name);
+struct Symbolic* identifier_new(const string_t name);
 
 /* Public functions **********************************************************/
 
@@ -32,5 +35,5 @@ struct Identifier* identifier_new(const string_t name);
 
 /* Object functions ******************/
 
-bool_t identifier_eval_recursive(struct Identifier* ident, struct Evaluator* etor, struct Object** value);
-void identifier_show(struct Identifier* ident, FILE* stream);
+bool_t identifier_eval_recursive(struct Symbolic* ident, struct Evaluator* etor, struct Object** value);
+void identifier_show(struct Symbolic* ident, FILE* stream);

@@ -41,7 +41,7 @@ void show(struct Object* obj, FILE* stream) {
         case OT_Evaluator:     break;
         case OT_Function:      break;
         case OT_HashTable:     break;
-        case OT_Identifier:    identifier_show((struct Identifier*)obj, stream); return;
+        case OT_Identifier:    identifier_show((struct Symbolic*)obj, stream); return;
         case OT_IfThen:        break;
         case OT_Inc:           break;
         case OT_IntArray:      intArray_show((struct IntArray*)obj, stream); return;

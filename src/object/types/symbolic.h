@@ -1,3 +1,5 @@
+#pragma once
+
 #include "_typedefs.h"
 
 #include "object/object.h"
@@ -28,5 +30,7 @@ struct Symbolic* symbolic_new(const string_t name, enum TypeId typeId, struct Ve
 /* Unique functions ******************/
 
 /* Object functions ******************/
+
+void symbolic_show(struct Symbolic* symbolic, FILE* stream);
 
 /* Private functions *********************************************************/

@@ -15,8 +15,6 @@ enum OperationType {
     Etor_Evaluating
 };
 
-struct Vector;
-struct IntVector;
 
 struct Evaluator {
     struct Object obj;
@@ -27,7 +25,7 @@ struct Evaluator {
     /* struct IntVector* iStack; */
 };
 
-struct Identifier;
+struct Symbolic;
 
 /* Forward declarations ******************************************************/
 
@@ -41,8 +39,8 @@ struct Evaluator* evaluator_new(void);
 
 /* Unique functions ******************/
 
-void evaluator_bind(struct Evaluator* etor, struct Identifier* name, struct Object* value);
-bool_t evaluator_lookup(struct Evaluator* etor, struct Identifier* name, struct Object** value);
+void evaluator_bind(struct Evaluator* etor, struct Symbolic* name, struct Object* value);
+bool_t evaluator_lookup(struct Evaluator* etor, struct Symbolic* name, struct Object** value);
 void evaluator_run(struct Evaluator* etor);
 
 /* Object functions ******************/
