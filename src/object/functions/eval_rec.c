@@ -8,7 +8,7 @@
 #include "object/types/array.h"
 #include "object/types/identifier.h"
 #include "object/types/ifthen.h"
-#include "object/types/list.h"
+#include "object/types/pair.h"
 #include "object/types/sequence.h"
 
 /* Defines *******************************************************************/
@@ -54,9 +54,9 @@ bool_t eval_rec(struct Object* obj, struct Etor_Rec* etor, struct Object** value
         case OT_Inc:        break;
         case OT_IntArray:   break;
         case OT_IntVector:  break;
-        case OT_IVar:       break;
+        case OT_IntVar:       break;
         case OT_Let:        break;
-        case OT_List:       return list_eval_rec((struct List*)obj, etor, value);
+        case OT_Pair:       return pair_eval_rec((struct Pair*)obj, etor, value);
         case OT_Quote:      break;
         case OT_Sequence:   return sequence_eval_rec((struct Sequence*)obj, etor, value);
         case OT_Test:       break;

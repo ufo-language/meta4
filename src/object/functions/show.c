@@ -12,7 +12,7 @@
 #include "object/types/intarray.h"
 #include "object/types/integer.h"
 #include "object/types/intvector.h"
-#include "object/types/list.h"
+#include "object/types/pair.h"
 #include "object/types/nil.h"
 #include "object/types/sequence.h"
 #include "object/types/string.h"
@@ -52,9 +52,9 @@ void show(struct Object* obj, FILE* stream) {
         case OT_IntArray:      intArray_show((struct IntArray*)obj, stream); return;
         case OT_Integer:       integer_show((struct Integer*)obj, stream); return;
         case OT_IntVector:     intVector_show((struct IntVector*)obj, stream); return;
-        case OT_IVar:          break;
+        case OT_IntVar:          break;
         case OT_Let:           break;
-        case OT_List:          list_show((struct List*)obj, stream); return;
+        case OT_Pair:          pair_show((struct Pair*)obj, stream); return;
         case OT_Nil:           nil_show((struct Nil*)obj, stream); return;
         case OT_Null:          break;
         case OT_Primitive:     break;

@@ -39,7 +39,7 @@ struct Vector* vector_new_withCapacity(count_t capacity) {
 
 /* Unique functions ******************/
 
-/* This treats the vector as an association list of [key, value, key, value...] */
+/* This treats the vector as an association pair of [key, value, key, value...] */
 bool_t vector_lookup(struct Vector* vector, struct Object* key, struct Object** value) {
     struct Object** elems = vector->elems->elems;
     count_t top = vector->top;

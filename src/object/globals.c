@@ -3,7 +3,7 @@
 #include "memory/gc.h"
 #include "object/globals.h"
 #include "object/types/boolean.h"
-#include "object/types/list.h"
+#include "object/types/pair.h"
 #include "object/types/nil.h"
 #include "object/types/vector.h"
 
@@ -18,7 +18,7 @@
 struct Boolean* g_true;
 struct Boolean* g_false;
 struct GC*      g_gc;
-struct List*    g_emptyList;
+struct Pair*    g_emptyPair;
 struct Nil*     g_nil;
 struct Vector*  g_identifierInternTable;
 struct Vector*  g_symbolInternTable;
@@ -35,7 +35,7 @@ void globals_init(void) {
     g_false = boolean_new(false);
     g_nil = nil_new();
     /* Data structures come last */
-    g_emptyList = list_new_empty();
+    g_emptyPair = pair_new_empty();
     g_identifierInternTable = vector_new();
     g_symbolInternTable = vector_new();
 }

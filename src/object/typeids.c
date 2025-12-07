@@ -35,9 +35,9 @@ string_t typeName(enum TypeId typeId) {
         case OT_Integer:       return "Integer";
         case OT_IntArray:      return "IntArray";
         case OT_IntVector:      return "IntVector";
-        case OT_IVar:          return "IVar";
+        case OT_IntVar:          return "IVar";
         case OT_Let:           return "Let";
-        case OT_List:          return "List";
+        case OT_Pair:          return "Pair";
         case OT_Nil:           return "Nil";
         case OT_Null:          return "Null";
         case OT_Primitive:     return "Primitive";

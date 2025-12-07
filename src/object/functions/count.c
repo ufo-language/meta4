@@ -2,6 +2,9 @@
 
 #include "object/typeids.h"
 #include "object/object.h"
+#include "object/types/array.h"
+#include "object/types/pair.h"
+#include "object/types/vector.h"
 
 /* Defines *******************************************************************/
 
@@ -21,18 +24,26 @@
 
 bool_t count(struct Object* obj, int_t* count) {
     switch(obj->typeId) {
-        case OT_Array:         break;
-        case OT_ByteBuffer:    break;
-        case OT_HashTable:     break;
-        case OT_IntArray:      break;
-        case OT_IntVector:     break;
-        case OT_List:          break;
-        case OT_String:        break;
-        case OT_Vector:        break;
+        case OT_Array:
+            return ((struct Array*)obj)->nElems;
+        case OT_ByteBuffer:
+            break;
+        case OT_HashTable:
+            break;
+        case OT_IntArray:
+            break;
+        case OT_IntVector:
+            break;
+        case OT_Pair:
+            return pair_count((struct Pair*)obj);
+        case OT_String:
+            break;
+        case OT_Vector:
+            return ((struct Vector*)obj)->top;
         default:
             return false;
     }
-    fprintf(stderr, "show: Unknown type ID %u (%s)\n", obj->typeId, typeName(obj->typeId));
+    fprintf(stderr, "count: Unhandled type ID %u (%s)\n", obj->typeId, typeName(obj->typeId));
     return false;
 }
 

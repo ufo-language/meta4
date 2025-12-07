@@ -42,9 +42,9 @@ bool_t equal(struct Object* obj, struct Object* other) {
         case OT_IntArray:      break; /*return intArray_equal((struct IntArray*)obj, stream);*/
         case OT_Integer:       return integer_equal((struct Integer*)obj, (struct Integer*)other);
         case OT_IntVector:     break; /*return intVector_equal((struct IntVector*)obj, stream);*/
-        case OT_IVar:          break;
+        case OT_IntVar:          break;
         case OT_Let:           break;
-        case OT_List:          break;
+        case OT_Pair:          break;
         case OT_Nil:           break; /*return nil_equal((struct Nil*)obj, stream);*/
         case OT_Null:          break;
         case OT_Primitive:     break;

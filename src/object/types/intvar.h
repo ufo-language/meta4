@@ -1,22 +1,22 @@
-#include <stdio.h>
-
 #pragma once
+
+#include <stdio.h>
 
 #include "_typedefs.h"
 
 #include "object/object.h"
+#include "object/typeids.h"
+#include "object/functions/eval_rec.h"
+#include "object/functions/show.h"
 
 /* Defines *******************************************************************/
 
 /* Types *********************************************************************/
 
-struct List {
+struct IntVar {
     struct Object obj;
-    struct Object* first;
-    struct Object* rest;
+    int_t i;
 };
-
-struct Etor_Rec;
 
 /* Forward declarations ******************************************************/
 
@@ -24,8 +24,7 @@ struct Etor_Rec;
 
 /* Lifecycle functions *******************************************************/
 
-struct List* list_new(struct Object* first, struct Object* rest);
-struct List* list_new_empty(void);
+struct IntVar* intVar_new(int_t i);
 
 /* Public functions **********************************************************/
 
@@ -33,6 +32,5 @@ struct List* list_new_empty(void);
 
 /* Object functions ******************/
 
-count_t list_count(struct List* list);
-bool_t list_eval_rec(struct List* list, struct Etor_Rec* etor, struct Object** value);
-void list_show(struct List* list, FILE* stream);
+bool_t intVar_equal(struct IntVar* intVar, struct IntVar* other);
+void intVar_show(struct IntVar* intVar, FILE* stream);

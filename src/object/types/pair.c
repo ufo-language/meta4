@@ -6,7 +6,7 @@
 #include "object/functions/eval_rec.h"
 #include "object/functions/show.h"
 #include "object/evaluator/etor_rec.h"
-#include "object/types/list.h"
+#include "object/types/pair.h"
 
 /* Defines *******************************************************************/
 
@@ -18,18 +18,18 @@
 
 /* Lifecycle functions *******************************************************/
 
-struct List* list_new(struct Object* first, struct Object* rest) {
-    struct List* list = (struct List*)object_new(OT_List, NWORDS(*list));
-    list->first = first;
-    list->rest = rest;
-    return list;
+struct Pair* pair_new(struct Object* first, struct Object* rest) {
+    struct Pair* pair = (struct Pair*)object_new(OT_Pair, NWORDS(*pair));
+    pair->first = first;
+    pair->rest = rest;
+    return pair;
 }
 
-struct List* list_new_empty(void) {
-    struct List* list = (struct List*)object_new(OT_List, NWORDS(*list));
-    list->first = (struct Object*)g_nil;
-    list->rest = (struct Object*)list;
-    return list;
+struct Pair* pair_new_empty(void) {
+    struct Pair* pair = (struct Pair*)object_new(OT_Pair, NWORDS(*pair));
+    pair->first = (struct Object*)g_nil;
+    pair->rest = (struct Object*)pair;
+    return pair;
 }
 
 /* Public functions **********************************************************/
@@ -38,12 +38,12 @@ struct List* list_new_empty(void) {
 
 /* Object functions ******************/
 
-count_t list_count(struct List* list) {
+count_t pair_count(struct Pair* pair) {
     count_t count = 0;
-    while (list != g_emptyList) {
+    while (pair != g_emptyPair) {
         ++count;
-        if (list->rest->typeId == OT_List) {
-            list = (struct List*)list->rest;
+        if (pair->rest->typeId == OT_Pair) {
+            pair = (struct Pair*)pair->rest;
         }
         else {
             ++count;
@@ -53,32 +53,32 @@ count_t list_count(struct List* list) {
     return count;
 }
 
-bool_t list_eval_rec(struct List* list, struct Etor_Rec* etor, struct Object** value) {
+bool_t pair_eval_rec(struct Pair* pair, struct Etor_Rec* etor, struct Object** value) {
     struct Object* newFirst;
-    eval_rec(list->first, etor, &newFirst);
+    eval_rec(pair->first, etor, &newFirst);
     struct Object* newRest;
-    eval_rec(list->rest, etor, &newRest);
-    *value = (struct Object*)list_new(newFirst, newRest);
+    eval_rec(pair->rest, etor, &newRest);
+    *value = (struct Object*)pair_new(newFirst, newRest);
     return true;
 }
 
-void list_show(struct List* list, FILE* stream) {
+void pair_show(struct Pair* pair, FILE* stream) {
     bool_t firstIter = true;
     fputc('[', stream);
-    while (list != g_emptyList) {
+    while (pair != g_emptyPair) {
         if (firstIter) {
             firstIter = false;
         }
         else {
             fputs(", ", stream);
         }
-        show(list->first, stream);
-        if (list->rest->typeId == OT_List) {
-            list = (struct List*)list->rest;
+        show(pair->first, stream);
+        if (pair->rest->typeId == OT_Pair) {
+            pair = (struct Pair*)pair->rest;
         }
         else {
             fputs(" | ", stream);
-            show(list->rest, stream);
+            show(pair->rest, stream);
             break;
         }
     }

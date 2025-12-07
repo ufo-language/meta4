@@ -42,9 +42,9 @@ bool_t boolValue(struct Object* obj) {
         case OT_IntArray:      break;
         case OT_Integer:       return ((struct Integer*)obj)->i != 0;
         case OT_IntVector:     break;
-        case OT_IVar:          break;
+        case OT_IntVar:          break;
         case OT_Let:           return true;
-        case OT_List:          break;
+        case OT_Pair:          break;
         case OT_Nil:           return false;
         case OT_Null:          break;
         case OT_Primitive:     return true;

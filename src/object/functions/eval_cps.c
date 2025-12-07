@@ -71,11 +71,11 @@ void eval_cps(struct Object* obj, struct Etor_CPS* etor) {
             break;
         case OT_IntVector:
             break;
-        case OT_IVar:
+        case OT_IntVar:
             break;
         case OT_Let:
             break;
-        case OT_List:
+        case OT_Pair:
             break;
         case OT_Quote:
             break;
