@@ -5,6 +5,7 @@
 #include "object/types/array.h"
 #include "object/types/boolean.h"
 #include "object/types/integer.h"
+#include "object/types/intvar.h"
 #include "object/types/string.h"
 
 /* Defines *******************************************************************/
@@ -33,7 +34,7 @@ bool_t boolValue(struct Object* obj) {
         case OT_ConstantLimit: break;
         case OT_Dec:           return true;
         case OT_Device:        return true;
-        case OT_Etor_Rec:     return true;
+        case OT_Etor_Rec:      return true;
         case OT_Function:      return true;
         case OT_HashTable:     break;
         case OT_Identifier:    return true;
@@ -42,7 +43,7 @@ bool_t boolValue(struct Object* obj) {
         case OT_IntArray:      break;
         case OT_Integer:       return ((struct Integer*)obj)->i != 0;
         case OT_IntVector:     break;
-        case OT_IntVar:          break;
+        case OT_IntVar:        return ((struct IntVar*)obj)->i != 0;
         case OT_Let:           return true;
         case OT_Pair:          break;
         case OT_Nil:           return false;

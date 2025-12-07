@@ -28,10 +28,6 @@ struct IntVar* intVar_new(int_t i) {
 
 /* Object functions ******************/
 
-bool_t intVar_equal(struct IntVar* intVar, struct IntVar* other) {
-    return intVar->i == other->i;
-}
-
 void intVar_show(struct IntVar* intVar, FILE* stream) {
     fprintf(stream, "IntVar{%ld}", intVar->i);
 }

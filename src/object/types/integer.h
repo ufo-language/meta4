@@ -32,5 +32,4 @@ struct Integer* integer_new(int_t i);
 
 /* Object functions ******************/
 
-bool_t integer_equal(struct Integer* integer, struct Integer* other);
 void integer_show(struct Integer* integer, FILE* stream);
