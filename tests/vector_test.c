@@ -19,7 +19,7 @@ int main(int argc, char* argv[]) {
 
     TEST(vector_checkConstruction)
         struct Vector* vector = vector_new();
-        ASSERT_IEQ(OT_Vector, vector->obj.typeId);
+        ASSERT_ISA(OT_Vector, vector);
         ASSERT_IEQ(0, vector_count(vector));
         ASSERT_IEQ(0, vector->nResizes);
         EXPECT_IEQ(0, strcmp("Vector", typeName(vector->obj.typeId)));

@@ -15,7 +15,7 @@ int main(int argc, char* argv[]) {
 
     TEST(ifThen_checkConstruction)
         struct IfThen* ifThen = ifThen_new(OBJ(g_true), OBJ(i100), OBJ(i200));
-        ASSERT_IEQ(OT_IfThen, ifThen->obj.typeId);
+        ASSERT_ISA(OT_IfThen, ifThen);
         EXPECT_EQ(OBJ(g_true), ifThen->cond);
         EXPECT_EQ(OBJ(i100), ifThen->conseq);
         EXPECT_EQ(OBJ(i200), ifThen->alt);

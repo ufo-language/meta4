@@ -20,7 +20,7 @@ int main(int argc, char* argv[]) {
 
     TEST(array_checkConstruction)
         struct Array* array = array_new_noFill(3);
-        ASSERT_IEQ(OT_Array, array->obj.typeId);
+        ASSERT_ISA(OT_Array, array);
         EXPECT_IEQ(3, array->nElems);
         EXPECT_IEQ(0, strcmp("Array", typeName(array->obj.typeId)));
     END
@@ -73,7 +73,7 @@ int main(int argc, char* argv[]) {
         struct Object* value;
         ASSERT_TRUE(eval_rec(OBJ(array), etor, &value))
         ASSERT_PTRNE(array, value);
-        ASSERT_IEQ(OT_Array, value->typeId);
+        ASSERT_ISA(OT_Array, value);
         struct Array* arrayValue = (struct Array*)value;
         ASSERT_IEQ(3, arrayValue->nElems);
         EXPECT_EQ(i100, array->elems[0]);

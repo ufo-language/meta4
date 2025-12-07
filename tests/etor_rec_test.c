@@ -10,7 +10,7 @@ int main(int argc, char* argv[]) {
 
     TEST(etor_rec_checkConstruction)
         struct Etor_Rec* etor = etor_rec_new();
-        ASSERT_IEQ(OT_Etor_Rec, etor->obj.typeId);
+        ASSERT_ISA(OT_Etor_Rec, etor);
     END
 
     TEST(etor_rec_showSize)

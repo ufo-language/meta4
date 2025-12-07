@@ -18,7 +18,7 @@ int main(int argc, char* argv[]) {
 
     TEST(sequence_checkConstruction)
         struct Sequence* seq = sequence_new(3, exprs);
-        ASSERT_IEQ(OT_Sequence, seq->obj.typeId);
+        ASSERT_ISA(OT_Sequence, seq);
         ASSERT_IEQ(3, seq->nExprs);
         EXPECT_EQ(i100, seq->exprs[0]);
         EXPECT_EQ(i200, seq->exprs[1]);

@@ -10,14 +10,14 @@
 
 /* Types *********************************************************************/
 
-enum OperationType {
+enum EvaluationType {
     Etor_Closing,
     Etor_Evaluating
 };
 
 struct Etor_Rec {
     struct Object obj;
-    enum OperationType operationType;
+    enum EvaluationType evaluationType;
     struct Vector* env;
 };
 

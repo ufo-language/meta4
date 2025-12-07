@@ -44,6 +44,7 @@ size_t _TEST_NFAIL_ = 0;
     else { \
         fprintf(stderr, "[%sFAIL%s] ❌ [%s:%d] %s == %s (%p == %p)\n", RED, NORMAL, __FILE__, __LINE__, (#expected), (#actual), (expected), (actual)); \
         ++_TEST_NFAIL_; \
+        break; \
     }
 
 #define EXPECT_PTRNE(expected, actual) \
@@ -64,6 +65,7 @@ size_t _TEST_NFAIL_ = 0;
     else { \
         fprintf(stderr, "[%sFAIL%s] ❌ [%s:%d] %s != %s (%p != %p)\n", RED, NORMAL, __FILE__, __LINE__, (#expected), (#actual), (expected), (actual)); \
         ++_TEST_NFAIL_; \
+        break; \
     }
 
 #define EXPECT_EQ(expected, actual) \
@@ -229,6 +231,27 @@ size_t _TEST_NFAIL_ = 0;
     } \
     else { \
         fprintf(stderr, "[%sFAIL%s] ❌ [%s:%d] %s is null\n", RED, NORMAL, __FILE__, __LINE__, #expr); \
+        ++_TEST_NFAIL_; \
+        break; \
+    }
+
+#define EXPECT_ISA(expectedTyped, obj) \
+    if (((struct Object*)obj)->typeId == expectedTyped) { \
+        fprintf(stderr, "[%sPASS%s] ✅ [%s:%d] %s = %s typeId\n", GREEN, NORMAL, __FILE__, __LINE__, #expectedTyped, #obj); \
+        ++_TEST_NPASS_; \
+    } \
+    else { \
+        fprintf(stderr, "[%sFAIL%s] ❌ [%s:%d] %s != %s typeId, it's a %s\n", RED, NORMAL, __FILE__, __LINE__, #expectedTyped, #obj, typeName(((struct Object*)obj)->typeId)); \
+        ++_TEST_NFAIL_; \
+    }
+
+#define ASSERT_ISA(expectedTyped, obj) \
+    if (((struct Object*)obj)->typeId == expectedTyped) { \
+        fprintf(stderr, "[%sPASS%s] ✅ [%s:%d] %s = %s typeId\n", GREEN, NORMAL, __FILE__, __LINE__, #expectedTyped, #obj); \
+        ++_TEST_NPASS_; \
+    } \
+    else { \
+        fprintf(stderr, "[%sFAIL%s] ❌ [%s:%d] %s != %s typeId, it's a %s\n", RED, NORMAL, __FILE__, __LINE__, #expectedTyped, #obj, typeName(((struct Object*)obj)->typeId)); \
         ++_TEST_NFAIL_; \
         break; \
     }

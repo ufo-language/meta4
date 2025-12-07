@@ -10,7 +10,7 @@
 
 /* Types *********************************************************************/
 
-enum OperationType {
+enum EvaluationType {
     Etor_Closing,
     Etor_Evaluating
 };
@@ -19,7 +19,7 @@ struct Vector;
 
 struct Etor_CPS {
     struct Object obj;
-    enum OperationType operationType;
+    enum EvaluationType operationType;
     struct Vector* vStack;
     struct Vector* eStack;
     struct Vector* env;

@@ -39,7 +39,7 @@ int main(int argc, char* argv[]) {
         struct Integer* i100 = integer_new(100);
         struct Etor_Rec* etor = etor_rec_new();
         etor_rec_bind(etor, a1, OBJ(i100));
-        etor->operationType = Etor_Closing;
+        etor->evaluationType = Etor_Closing;
         struct Object* value;
         ASSERT_TRUE(eval_rec(OBJ(a1), etor, &value));
         ASSERT_EQ(i100, value);
@@ -47,7 +47,7 @@ int main(int argc, char* argv[]) {
 
     TEST(identifier_checkClose_unbound)
         struct Etor_Rec* etor = etor_rec_new();
-        etor->operationType = Etor_Closing;
+        etor->evaluationType = Etor_Closing;
         struct Object* value;
         ASSERT_TRUE(eval_rec(OBJ(a1), etor, &value));
         ASSERT_EQ(a1, value);

@@ -11,7 +11,7 @@ int main(int argc, char* argv[]) {
 
     TEST(globals_checkInit)
         ASSERT_PTRNE(NULL, g_nil);
-        ASSERT_IEQ(OT_Nil, g_nil->obj.typeId);
+        ASSERT_ISA(OT_Nil, g_nil);
     END
 
     END_TESTS

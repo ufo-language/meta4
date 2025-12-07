@@ -15,7 +15,7 @@ int main(int argc, char* argv[]) {
     TEST(integer_checkConstruction)
         struct Integer* integer = integer_new(123);
         ASSERT_PTRNE(NULL, integer);
-        ASSERT_IEQ(OT_Integer, integer->obj.typeId);
+        ASSERT_ISA(OT_Integer, integer);
         EXPECT_IEQ(0, strcmp("Integer", typeName(integer->obj.typeId)));
     END
 

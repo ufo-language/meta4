@@ -35,7 +35,7 @@ struct Symbolic* identifier_new(const string_t name) {
 
 bool_t identifier_eval_rec(struct Symbolic* ident, struct Etor_Rec* etor, struct Object** value) {
     bool_t success = etor_rec_lookup(etor, ident, value);
-    switch (etor->operationType) {
+    switch (etor->evaluationType) {
         case Etor_Closing:
             if (!success) {
                 *value = (struct Object*)ident;

@@ -10,7 +10,7 @@ int main(int argc, char* argv[]) {
 
     TEST(string_checkConstruction)
         struct String* abc = string_new("abc");
-        ASSERT_IEQ(OT_String, abc->obj.typeId);
+        ASSERT_ISA(OT_String, abc);
         ASSERT_IEQ(3, abc->nChars);
         ASSERT_IEQ(0, strcmp("abc", abc->chars));
     END

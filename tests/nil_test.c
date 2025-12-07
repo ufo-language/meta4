@@ -14,7 +14,7 @@ int main(int argc, char* argv[]) {
     TEST(nil_checkConstruction)
         struct Nil* nil = nil_new();
         ASSERT_PTRNE(NULL, nil);
-        ASSERT_IEQ(OT_Nil, nil->obj.typeId);
+        ASSERT_ISA(OT_Nil, nil);
         EXPECT_IEQ(0, strcmp("Nil", typeName(nil->obj.typeId)));
     END
 

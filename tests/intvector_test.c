@@ -12,7 +12,7 @@ int main(int argc, char* argv[]) {
 
     TEST(intVector_checkConstruction)
         struct IntVector* intVector = intVector_new();
-        ASSERT_IEQ(OT_IntVector, intVector->obj.typeId);
+        ASSERT_ISA(OT_IntVector, intVector);
         ASSERT_IEQ(0, intVector_count(intVector));
         ASSERT_IEQ(0, intVector->nResizes);
         EXPECT_IEQ(0, strcmp("IntVector", typeName(intVector->obj.typeId)));

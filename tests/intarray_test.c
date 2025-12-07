@@ -14,7 +14,7 @@ int main(int argc, char* argv[]) {
 
     TEST(intArray_checkConstruction)
         struct IntArray* intArray = intArray_new_noFill(3);
-        ASSERT_IEQ(OT_IntArray, intArray->obj.typeId);
+        ASSERT_ISA(OT_IntArray, intArray);
         EXPECT_IEQ(3, intArray->nElems);
         EXPECT_IEQ(0, strcmp("IntArray", typeName(intArray->obj.typeId)));
     END

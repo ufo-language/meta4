@@ -20,9 +20,9 @@
 /* Object functions ******************/
 
 bool_t close(struct Object* obj, struct Etor_Rec* etor, struct Object** value) {
-    etor->operationType = Etor_Closing;
+    etor->evaluationType = Etor_Closing;
     bool_t success = eval_rec(obj, etor, value);
-    etor->operationType = Etor_Evaluating;
+    etor->evaluationType = Etor_Evaluating;
     return success;
 }
 

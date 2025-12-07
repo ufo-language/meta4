@@ -34,5 +34,5 @@ struct List* list_new_empty(void);
 /* Object functions ******************/
 
 count_t list_count(struct List* list);
-bool_t list_eval(struct List* list, struct Etor_Rec* etor, struct Object** value);
+bool_t list_eval_rec(struct List* list, struct Etor_Rec* etor, struct Object** value);
 void list_show(struct List* list, FILE* stream);

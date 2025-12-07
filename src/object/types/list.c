@@ -53,7 +53,7 @@ count_t list_count(struct List* list) {
     return count;
 }
 
-bool_t list_eval(struct List* list, struct Etor_Rec* etor, struct Object** value) {
+bool_t list_eval_rec(struct List* list, struct Etor_Rec* etor, struct Object** value) {
     struct Object* newFirst;
     eval_rec(list->first, etor, &newFirst);
     struct Object* newRest;
