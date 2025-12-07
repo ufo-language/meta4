@@ -4,7 +4,7 @@
 #include "_typedefs.h"
 
 #include "object/evaluator/etor_rec.h"
-#include "object/functions/eval_recursive.h"
+#include "object/functions/eval_rec.h"
 #include "object/types/identifier.h"
 #include "object/types/integer.h"
 
@@ -24,32 +24,32 @@ int main(int argc, char* argv[]) {
 
     TEST(identifier_checkEval)
         struct Integer* i100 = integer_new(100);
-        struct Evaluator* etor = etor_rec_new();
+        struct Etor_Rec* etor = etor_rec_new();
         etor_rec_bind(etor, a1, OBJ(i100));
         struct Object* value;
         /* Verify that the binding is correct */
         ASSERT_TRUE(etor_rec_lookup(etor, a1, &value));
         EXPECT_EQ(i100, value);
         /* Now check the eval function */
-        ASSERT_TRUE(identifier_eval_recursive(a1, etor, &value));
+        ASSERT_TRUE(identifier_eval_rec(a1, etor, &value));
         EXPECT_EQ(i100, value);
     END
 
     TEST(identifier_checkClose_bound)
         struct Integer* i100 = integer_new(100);
-        struct Evaluator* etor = etor_rec_new();
+        struct Etor_Rec* etor = etor_rec_new();
         etor_rec_bind(etor, a1, OBJ(i100));
         etor->operationType = Etor_Closing;
         struct Object* value;
-        ASSERT_TRUE(eval_recursive(OBJ(a1), etor, &value));
+        ASSERT_TRUE(eval_rec(OBJ(a1), etor, &value));
         ASSERT_EQ(i100, value);
     END
 
     TEST(identifier_checkClose_unbound)
-        struct Evaluator* etor = etor_rec_new();
+        struct Etor_Rec* etor = etor_rec_new();
         etor->operationType = Etor_Closing;
         struct Object* value;
-        ASSERT_TRUE(eval_recursive(OBJ(a1), etor, &value));
+        ASSERT_TRUE(eval_rec(OBJ(a1), etor, &value));
         ASSERT_EQ(a1, value);
     END
 

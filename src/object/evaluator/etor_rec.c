@@ -18,12 +18,9 @@
 
 /* Lifecycle functions *******************************************************/
 
-struct Evaluator* etor_rec_new(void) {
-    struct Evaluator* etor = (struct Evaluator*)object_new(OT_Evaluator, NWORDS(*etor));
-    /* etor->vStack = vector_new(); */
-    /* etor->eStack = vector_new(); */
+struct Etor_Rec* etor_rec_new(void) {
+    struct Etor_Rec* etor = (struct Etor_Rec*)object_new(OT_Etor_Rec, NWORDS(*etor));
     etor->env = vector_new();
-    /* etor->iStack = intVector_new(); */
     return etor;
 }
 
@@ -31,19 +28,21 @@ struct Evaluator* etor_rec_new(void) {
 
 /* Unique functions ******************/
 
-void etor_rec_bind(struct Evaluator* etor, struct Symbolic* name, struct Object* value) {
+void etor_rec_bind(struct Etor_Rec* etor, struct Symbolic* name, struct Object* value) {
     vector_push(etor->env, (struct Object*)name);
     vector_push(etor->env, value);
 }
 
-bool_t etor_rec_lookup(struct Evaluator* etor, struct Symbolic* name, struct Object** value) {
+bool_t etor_rec_lookup(struct Etor_Rec* etor, struct Symbolic* name, struct Object** value) {
     return vector_lookup(etor->env, (struct Object*)name, value);
 }
 
-void etor_rec_run(struct Evaluator* etor) {
+void etor_rec_run(struct Etor_Rec* etor) {
+    /* TODO */
 }
 
 /* Object functions ******************/
 
-void etor_rec_show(struct Evaluator* etor, FILE* stream) {
+void etor_rec_show(struct Etor_Rec* etor, FILE* stream) {
+    /* TODO */
 }

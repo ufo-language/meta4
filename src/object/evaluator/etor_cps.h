@@ -17,7 +17,7 @@ enum OperationType {
 
 struct Vector;
 
-struct Evaluator {
+struct Etor_CPS {
     struct Object obj;
     enum OperationType operationType;
     struct Vector* vStack;
@@ -34,19 +34,25 @@ struct Symbolic;
 
 /* Lifecycle functions *******************************************************/
 
-struct Evaluator* etor_rec_new(void);
+struct Etor_CPS* etor_rec_new(void);
 
 /* Public functions **********************************************************/
 
 /* Unique functions ******************/
 
-void etor_cps_vPush(struct Etor_CPS* etor, struct Object* value);
-struct Object* etor_cps_vPop(struct Etor_CPS* etor;
+void etor_cps_ePush(struct Etor_CPS* etor, struct Object* value);
+struct Object* etor_cps_ePop(struct Etor_CPS* etor);
 
-void etor_cps_bind(struct Evaluator* etor, struct Symbolic* name, struct Object* value);
-bool_t etor_cps_lookup(struct Evaluator* etor, struct Symbolic* name, struct Object** value);
-void etor_cps_run(struct Evaluator* etor);
+void etor_cps_vPush(struct Etor_CPS* etor, struct Object* value);
+struct Object* etor_cps_vPop(struct Etor_CPS* etor);
+
+void etor_cps_iPush(struct Etor_CPS* etor, int_t value);
+struct int_t etor_cps_iPop(struct Etor_CPS* etor);
+
+void etor_cps_bind(struct Etor_CPS* etor, struct Symbolic* name, struct Object* value);
+bool_t etor_cps_lookup(struct Etor_CPS* etor, struct Symbolic* name, struct Object** value);
+void etor_cps_run(struct Etor_CPS* etor);
 
 /* Object functions ******************/
 
-void etor_cps_show(struct Evaluator* etor, FILE* stream);
+void etor_cps_show(struct Etor_CPS* etor, FILE* stream);

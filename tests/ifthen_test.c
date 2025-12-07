@@ -23,17 +23,17 @@ int main(int argc, char* argv[]) {
 
     TEST(ifThen_checkEval_true)
         struct IfThen* ifThen = ifThen_new(OBJ(g_true), OBJ(i100), OBJ(i200));
-        struct Evaluator* etor = etor_rec_new();
+        struct Etor_Rec* etor = etor_rec_new();
         struct Object* value;
-        ASSERT_TRUE(eval_recursive(OBJ(ifThen), etor, &value));
+        ASSERT_TRUE(eval_rec(OBJ(ifThen), etor, &value));
         EXPECT_EQ(i100, value);
     END
 
     TEST(ifThen_checkEval_false)
         struct IfThen* ifThen = ifThen_new(OBJ(g_false), OBJ(i100), OBJ(i200));
-        struct Evaluator* etor = etor_rec_new();
+        struct Etor_Rec* etor = etor_rec_new();
         struct Object* value;
-        ASSERT_TRUE(eval_recursive(OBJ(ifThen), etor, &value));
+        ASSERT_TRUE(eval_rec(OBJ(ifThen), etor, &value));
         EXPECT_EQ(i200, value);
     END
 

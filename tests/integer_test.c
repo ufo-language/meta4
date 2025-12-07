@@ -29,9 +29,9 @@ int main(int argc, char* argv[]) {
 
     TEST(integer_checkEval)
         struct Integer* integer = integer_new(123);
-        struct Evaluator* etor = etor_rec_new();
+        struct Etor_Rec* etor = etor_rec_new();
         struct Object* value;
-        ASSERT_TRUE(eval_recursive(OBJ(integer), etor, &value))
+        ASSERT_TRUE(eval_rec(OBJ(integer), etor, &value))
         EXPECT_EQ(integer, value);
     END
 

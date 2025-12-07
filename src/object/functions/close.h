@@ -6,7 +6,7 @@
 
 /* Types *********************************************************************/
 
-struct Evaluator;
+struct Etor_Rec;
 struct Object;
 
 /* Forward declarations ******************************************************/
@@ -21,6 +21,6 @@ struct Object;
 
 /* Object functions ******************/
 
-bool_t close(struct Object* obj, struct Evaluator* etor, struct Object** value);
+bool_t close(struct Object* obj, struct Etor_Rec* etor, struct Object** value);
 
 /* Private functions *********************************************************/

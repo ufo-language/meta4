@@ -3,7 +3,7 @@
 
 #include "_typedefs.h"
 
-#include "object/functions/eval_recursive.h"
+#include "object/functions/eval_rec.h"
 #include "object/globals.h"
 #include "object/object.h"
 #include "object/typeids.h"
@@ -34,10 +34,10 @@ struct Sequence* sequence_new(count_t nExprs, struct Object* exprs[]) {
 
 /* Object functions ******************/
 
-bool_t sequence_eval_recursive(struct Sequence* seq, struct Evaluator* etor, struct Object** value) {
+bool_t sequence_eval_rec(struct Sequence* seq, struct Etor_Rec* etor, struct Object** value) {
     *value = (struct Object*)g_nil;
     for (index_t n=0; n<seq->nExprs; ++n) {
-        if (!eval_recursive(seq->exprs[n], etor, value)) {
+        if (!eval_rec(seq->exprs[n], etor, value)) {
             return false;
         }
     }

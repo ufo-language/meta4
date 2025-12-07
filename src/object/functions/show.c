@@ -7,6 +7,7 @@
 #include "object/typeids.h"
 #include "object/types/array.h"
 #include "object/types/boolean.h"
+#include "object/types/continuation.h"
 #include "object/types/identifier.h"
 #include "object/types/intarray.h"
 #include "object/types/integer.h"
@@ -37,9 +38,11 @@ void show(struct Object* obj, FILE* stream) {
         case OT_Boolean:       boolean_show((struct Boolean*)obj, stream); return;
         case OT_ByteBuffer:    break;
         case OT_ConstantLimit: break;
+        case OT_Continuation:  break;
         case OT_Dec:           break;
         case OT_Device:        break;
-        case OT_Evaluator:     break;
+        case OT_Etor_CPS:      break;
+        case OT_Etor_Rec:      break;
         case OT_Function:      break;
         case OT_HashTable:     break;
         case OT_Identifier:    identifier_show((struct Symbolic*)obj, stream); return;

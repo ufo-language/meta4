@@ -2,7 +2,7 @@
 #include "_typedefs.h"
 
 #include "object/evaluator/etor_rec.h"
-#include "object/functions/eval_recursive.h"
+#include "object/functions/eval_rec.h"
 #include "object/functions/show.h"
 #include "object/types/identifier.h"
 #include "object/types/integer.h"
@@ -31,12 +31,12 @@ int main(int argc, char* argv[]) {
         struct Symbolic* c = identifier_new("c");
         struct Object* identExprs[] = {OBJ(a), OBJ(b), OBJ(c)};
         struct Sequence* seq = sequence_new(3, identExprs);
-        struct Evaluator* etor = etor_rec_new();
+        struct Etor_Rec* etor = etor_rec_new();
         etor_rec_bind(etor, a, OBJ(i100));
         etor_rec_bind(etor, b, OBJ(i200));
         etor_rec_bind(etor, c, OBJ(i300));
         struct Object* value;
-        ASSERT_TRUE(eval_recursive(OBJ(seq), etor, &value));
+        ASSERT_TRUE(eval_rec(OBJ(seq), etor, &value));
         EXPECT_EQ(i300, value);
     END
 

@@ -6,7 +6,7 @@
 
 #include "object/object.h"
 #include "object/typeids.h"
-#include "object/functions/eval_recursive.h"
+#include "object/functions/eval_rec.h"
 #include "object/functions/show.h"
 
 /* Defines *******************************************************************/
@@ -31,5 +31,5 @@ struct Nil* nil_new(void);
 
 /* Object functions ******************/
 
-bool_t nil_eval_recursive(struct Nil* nil, struct Evaluator* etor, struct Object** value);
+bool_t nil_eval_rec(struct Nil* nil, struct Etor_Rec* etor, struct Object** value);
 void nil_show(struct Nil* nil, FILE* stream);

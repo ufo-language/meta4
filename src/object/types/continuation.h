@@ -1,7 +1,5 @@
 #pragma once
 
-#include <stdio.h>
-
 #include "_typedefs.h"
 
 #include "object/object.h"
@@ -10,13 +8,13 @@
 
 /* Types *********************************************************************/
 
-struct Sequence {
-    struct Object obj;
-    count_t nExprs;
-    struct Object* exprs[];
-};
+struct Etor_CPS;
 
-struct Etor_Rec;
+struct Continuation {
+    struct Object obj;
+    void (*eval)(struct Continuation*, struct Etor_CPS);
+    char name[];
+};
 
 /* Forward declarations ******************************************************/
 
@@ -24,7 +22,7 @@ struct Etor_Rec;
 
 /* Lifecycle functions *******************************************************/
 
-struct Sequence* sequence_new(count_t nExprs, struct Object* exprs[]);
+struct Continuation* contin_new(string_t name, void (*eval)(struct Continuation*, struct Etor_CPS));
 
 /* Public functions **********************************************************/
 
@@ -32,5 +30,5 @@ struct Sequence* sequence_new(count_t nExprs, struct Object* exprs[]);
 
 /* Object functions ******************/
 
-bool_t sequence_eval_rec(struct Sequence* sequence, struct Etor_Rec* etor, struct Object** value);
-void sequence_show(struct Sequence* sequence, FILE* stream);
+void contin_eval_cps(struct Continuation* contin, struct Etor_CPS etor);
+void contin_show(struct Continuation* contin, FILE* stream);

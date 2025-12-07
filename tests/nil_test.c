@@ -20,9 +20,9 @@ int main(int argc, char* argv[]) {
 
     TEST(nil_checkEval)
         struct Nil* nil = nil_new();
-        struct Evaluator* etor = etor_rec_new();
+        struct Etor_Rec* etor = etor_rec_new();
         struct Object* value;
-        ASSERT_TRUE(eval_recursive(OBJ(nil), etor, &value))
+        ASSERT_TRUE(eval_rec(OBJ(nil), etor, &value))
         EXPECT_EQ(nil, value);
     END
 

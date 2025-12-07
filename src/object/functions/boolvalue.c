@@ -33,7 +33,7 @@ bool_t boolValue(struct Object* obj) {
         case OT_ConstantLimit: break;
         case OT_Dec:           return true;
         case OT_Device:        return true;
-        case OT_Evaluator:     return true;
+        case OT_Etor_Rec:     return true;
         case OT_Function:      return true;
         case OT_HashTable:     break;
         case OT_Identifier:    return true;

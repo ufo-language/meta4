@@ -5,7 +5,7 @@
 #include "object/object.h"
 #include "object/types/array.h"
 #include "object/functions/equal.h"
-#include "object/functions/eval_recursive.h"
+#include "object/functions/eval_rec.h"
 #include "object/functions/show.h"
 
 /* Defines *******************************************************************/
@@ -63,14 +63,14 @@ void array_set_unsafe(struct Array* array, index_t index, struct Object* value) 
 
 /* Object functions ******************/
 
-bool_t array_eval_recursive(struct Array* array, struct Evaluator* etor, struct Object** value) {
+bool_t array_eval_rec(struct Array* array, struct Etor_Rec* etor, struct Object** value) {
     count_t nElems = array->nElems;
     struct Array* newArray = array_new_noFill(nElems);
     struct Object** elems = array->elems;
     struct Object** newElems = array->elems;
     struct Object* value1;
     for (index_t n=0; n<nElems; ++n) {
-        if (eval_recursive(elems[n], etor, &value1)) {
+        if (eval_rec(elems[n], etor, &value1)) {
             newElems[n] = value1;
         }
         else {

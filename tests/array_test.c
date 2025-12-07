@@ -66,12 +66,12 @@ int main(int argc, char* argv[]) {
         struct Symbolic* c = identifier_new("c");
         struct Object* identElems[] = {OBJ(a), OBJ(b), OBJ(c)};
         struct Array* array = array_new_elems(3, identElems);
-        struct Evaluator* etor = etor_rec_new();
+        struct Etor_Rec* etor = etor_rec_new();
         etor_rec_bind(etor, a, OBJ(i100));
         etor_rec_bind(etor, b, OBJ(i200));
         etor_rec_bind(etor, c, OBJ(i300));
         struct Object* value;
-        ASSERT_TRUE(eval_recursive(OBJ(array), etor, &value))
+        ASSERT_TRUE(eval_rec(OBJ(array), etor, &value))
         ASSERT_PTRNE(array, value);
         ASSERT_IEQ(OT_Array, value->typeId);
         struct Array* arrayValue = (struct Array*)value;

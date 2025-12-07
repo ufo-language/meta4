@@ -40,7 +40,9 @@ enum TypeId {
     OT_Sequence,
     OT_While,
     /* Other */
-    OT_Evaluator,
+    OT_Etor_Rec,
+    OT_Etor_CPS,
+    OT_Continuation,
     OT_User,
     OT_Test,
     OT_Max

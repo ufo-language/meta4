@@ -33,7 +33,7 @@ struct Symbolic* identifier_new(const string_t name) {
 
 /* Object functions ******************/
 
-bool_t identifier_eval_recursive(struct Symbolic* ident, struct Evaluator* etor, struct Object** value) {
+bool_t identifier_eval_rec(struct Symbolic* ident, struct Etor_Rec* etor, struct Object** value) {
     bool_t success = etor_rec_lookup(etor, ident, value);
     switch (etor->operationType) {
         case Etor_Closing:

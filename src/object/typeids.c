@@ -26,7 +26,7 @@ string_t typeName(enum TypeId typeId) {
         case OT_ConstantLimit: return "ConstantLimit";
         case OT_Dec:           return "Dec";
         case OT_Device:        return "Device";
-        case OT_Evaluator:     return "Evaluator";
+        case OT_Etor_Rec:     return "Evaluator";
         case OT_Function:      return "Function";
         case OT_HashTable:     return "HashTable";
         case OT_Identifier:    return "Identifier";

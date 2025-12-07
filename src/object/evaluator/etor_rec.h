@@ -15,7 +15,7 @@ enum OperationType {
     Etor_Evaluating
 };
 
-struct Evaluator {
+struct Etor_Rec {
     struct Object obj;
     enum OperationType operationType;
     struct Vector* env;
@@ -29,16 +29,16 @@ struct Symbolic;
 
 /* Lifecycle functions *******************************************************/
 
-struct Evaluator* etor_rec_new(void);
+struct Etor_Rec* etor_rec_new(void);
 
 /* Public functions **********************************************************/
 
 /* Unique functions ******************/
 
-void etor_rec_bind(struct Evaluator* etor, struct Symbolic* name, struct Object* value);
-bool_t etor_rec_lookup(struct Evaluator* etor, struct Symbolic* name, struct Object** value);
-void etor_rec_run(struct Evaluator* etor);
+void etor_rec_bind(struct Etor_Rec* etor, struct Symbolic* name, struct Object* value);
+bool_t etor_rec_lookup(struct Etor_Rec* etor, struct Symbolic* name, struct Object** value);
+void etor_rec_run(struct Etor_Rec* etor);
 
 /* Object functions ******************/
 
-void etor_rec_show(struct Evaluator* etor, FILE* stream);
+void etor_rec_show(struct Etor_Rec* etor, FILE* stream);

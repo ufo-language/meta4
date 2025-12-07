@@ -4,7 +4,7 @@
 #include "_typedefs.h"
 
 #include "object/evaluator/etor_rec.h"
-#include "object/functions/eval_recursive.h"
+#include "object/functions/eval_rec.h"
 #include "object/types/integer.h"
 #include "object/types/symbol.h"
 
@@ -23,10 +23,10 @@ int main(int argc, char* argv[]) {
     END
 
     TEST(symbol_checkEval)
-        struct Evaluator* etor = etor_rec_new();
+        struct Etor_Rec* etor = etor_rec_new();
         struct Object* value;
         /* Now check the eval function */
-        ASSERT_TRUE(eval_recursive(OBJ(a1), etor, &value));
+        ASSERT_TRUE(eval_rec(OBJ(a1), etor, &value));
         EXPECT_EQ(a1, value);
     END
 

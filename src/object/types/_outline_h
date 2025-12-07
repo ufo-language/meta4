@@ -1,9 +1,8 @@
 #pragma once
 
-#include "object/typeids.h"
+#include "_typedefs.h"
 
-struct Evaluator;
-struct Object;
+#include "object/object.h"
 
 /* Defines *******************************************************************/
 
@@ -20,5 +19,3 @@ struct Object;
 /* Unique functions ******************/
 
 /* Object functions ******************/
-
-bool_t eval_recursive(struct Object* obj, struct Evaluator* etor, struct Object** value);

@@ -1,8 +1,10 @@
+#include <string.h>
+
 #include "_typedefs.h"
 
-#include "object/functions/eval_rec.h"
-#include "object/object.h"
-#include "object/evaluator/etor_rec.h"
+#include "object/evaluator/etor_cps.h"
+#include "object/types/continuation.h"
+
 /* Defines *******************************************************************/
 
 /* Types *********************************************************************/
@@ -13,17 +15,24 @@
 
 /* Lifecycle functions *******************************************************/
 
+struct Continuation* contin_new(string_t name, void (*eval)(struct Continuation*, struct Etor_CPS)) {
+    count_t nChars = strlen(name);
+    struct Continuation* contin = (struct Continuation*)object_new(OT_Continuation, NWORDS(*contin) + NWORDS_FROM_BYTES(nChars + 1));
+    memcpy(contin->name, name, nChars + 1);
+    contin->eval = eval;
+    return contin;
+}
+
 /* Public functions **********************************************************/
 
 /* Unique functions ******************/
 
 /* Object functions ******************/
 
-bool_t close(struct Object* obj, struct Etor_Rec* etor, struct Object** value) {
-    etor->operationType = Etor_Closing;
-    bool_t success = eval_rec(obj, etor, value);
-    etor->operationType = Etor_Evaluating;
-    return success;
+void contin_eval_cps(struct Continuation* contin, struct Etor_CPS etor) {
+}
+
+void contin_show(struct Continuation* contin, FILE* stream) {
 }
 
 /* Private functions *********************************************************/
