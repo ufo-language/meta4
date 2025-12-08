@@ -8,7 +8,7 @@
 
 /* Types *********************************************************************/
 
-struct Symbolic {
+struct _Symbolic {
     struct Object obj;
     word_t hashCode;
     char name[];
@@ -23,7 +23,7 @@ struct Vector;
 
 /* Lifecycle functions *******************************************************/
 
-struct Symbolic* symbolic_new(const string_t name, enum TypeId typeId, struct Vector* internTable);
+struct _Symbolic* symbolic_new(const string_t name, enum TypeId typeId, struct Vector* internTable);
 
 /* Public functions **********************************************************/
 
@@ -31,6 +31,6 @@ struct Symbolic* symbolic_new(const string_t name, enum TypeId typeId, struct Ve
 
 /* Object functions ******************/
 
-void symbolic_show(struct Symbolic* symbolic, FILE* stream);
+void symbolic_show(struct _Symbolic* symbolic, FILE* stream);
 
 /* Private functions *********************************************************/

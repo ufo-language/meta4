@@ -1,21 +1,10 @@
 #pragma once
 
-#include <stdio.h>
-
 #include "_typedefs.h"
-
-#include "object/object.h"
-#include "object/types/symbolic.h"
 
 /* Defines *******************************************************************/
 
 /* Types *********************************************************************/
-
-struct Identifier {
-    #include "object/types/symbolic_fields.h"
-};
-
-struct Etor_Rec;
 
 /* Forward declarations ******************************************************/
 
@@ -23,14 +12,10 @@ struct Etor_Rec;
 
 /* Lifecycle functions *******************************************************/
 
-struct Identifier* identifier_new(const string_t name);
-
 /* Public functions **********************************************************/
 
 /* Unique functions ******************/
 
 /* Object functions ******************/
 
-bool_t identifier_close_rec(struct Identifier* ident, struct Etor_Rec* etor, struct Object** value);
-bool_t identifier_eval_rec(struct Identifier* ident, struct Etor_Rec* etor, struct Object** value);
-void identifier_show(struct Identifier* ident, FILE* stream);
+bool_t apply(struct Object* obj, struct Etor_Rec* etorRec, count_t nArgs, struct Object* args[]) {

@@ -11,9 +11,9 @@
 int main(int argc, char* argv[]) {
     BEGIN_TESTS
 
-    struct Symbolic* a1 = identifier_new("a");
-    struct Symbolic* a2 = identifier_new("a");
-    struct Symbolic* b = identifier_new("b");
+    struct Identifier* a1 = identifier_new("a");
+    struct Identifier* a2 = identifier_new("a");
+    struct Identifier* b = identifier_new("b");
 
     TEST(identifier_checkConstruction)
         ASSERT_IEQ(OT_Identifier, a1->obj.typeId);

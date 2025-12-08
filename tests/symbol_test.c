@@ -11,9 +11,9 @@
 int main(int argc, char* argv[]) {
     BEGIN_TESTS
 
-    struct Symbolic* a1 = symbol_new("A");
-    struct Symbolic* a2 = symbol_new("A");
-    struct Symbolic* b = symbol_new("B");
+    struct Symbol* a1 = symbol_new("A");
+    struct Symbol* a2 = symbol_new("A");
+    struct Symbol* b = symbol_new("B");
 
     TEST(symbol_checkConstruction)
         ASSERT_IEQ(OT_Symbol, a1->obj.typeId);

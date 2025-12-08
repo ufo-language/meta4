@@ -33,6 +33,7 @@ struct Pair* pair_new_empty(void);
 
 /* Object functions ******************/
 
+bool_t pair_close_rec(struct Pair* pair, struct Etor_Rec* etor, struct Object** value);
 count_t pair_count(struct Pair* pair);
 bool_t pair_eval_rec(struct Pair* pair, struct Etor_Rec* etor, struct Object** value);
 void pair_show(struct Pair* pair, FILE* stream);

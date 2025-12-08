@@ -24,7 +24,8 @@
 
 /* Object functions ******************/
 
-bool_t boolValue(struct Object* obj) {
+bool_t apply(struct Object* obj, struct Etor_Rec* etorRec, count_t nArgs, struct Object* args[]) {
+#if 0
     switch(obj->typeId) {
         case OT_Apply:         return true;
         case OT_Array:         return ((struct Array*)obj)->nElems != 0;
@@ -62,6 +63,7 @@ bool_t boolValue(struct Object* obj) {
         default:
             break;
     }
+#endif
     fprintf(stderr, "boolValue: Unknown type ID %u (%s)\n", obj->typeId, typeName(obj->typeId));
     return false;
 }

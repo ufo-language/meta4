@@ -98,9 +98,9 @@ int main(int argc, char* argv[]) {
     END
 
     TEST(vector_checkLookup)
-        struct Symbolic* a = identifier_new("a");
-        struct Symbolic* b = identifier_new("b");
-        struct Symbolic* c = identifier_new("c");
+        struct Identifier* a = identifier_new("a");
+        struct Identifier* b = identifier_new("b");
+        struct Identifier* c = identifier_new("c");
         struct Vector* vector = vector_new();
         vector_push(vector, OBJ(a));
         vector_push(vector, OBJ(i100));

@@ -23,8 +23,8 @@
 
 /* Lifecycle functions *******************************************************/
 
-struct Symbolic* identifier_new(const string_t name) {
-    return symbolic_new(name, OT_Identifier, g_identifierInternTable);
+struct Identifier* identifier_new(const string_t name) {
+    return (struct Identifier*)symbolic_new(name, OT_Identifier, g_identifierInternTable);
 }
 
 /* Public functions **********************************************************/
@@ -33,7 +33,7 @@ struct Symbolic* identifier_new(const string_t name) {
 
 /* Object functions ******************/
 
-bool_t identifier_eval_rec(struct Symbolic* ident, struct Etor_Rec* etor, struct Object** value) {
+bool_t identifier_eval_rec(struct Identifier* ident, struct Etor_Rec* etor, struct Object** value) {
     bool_t success = etor_rec_lookup(etor, ident, value);
     switch (etor->evaluationType) {
         case Etor_Closing:
@@ -51,7 +51,7 @@ bool_t identifier_eval_rec(struct Symbolic* ident, struct Etor_Rec* etor, struct
     }
 }
 
-void identifier_show(struct Symbolic* ident, FILE* stream) {
+void identifier_show(struct Identifier* ident, FILE* stream) {
     fputs(ident->name, stream);
 }
 

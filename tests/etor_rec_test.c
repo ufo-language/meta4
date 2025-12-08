@@ -22,9 +22,9 @@ int main(int argc, char* argv[]) {
     END
 
     TEST(etor_rec_checkBindAndLookup)
-        struct Symbolic* a = identifier_new("a");
-        struct Symbolic* b = identifier_new("b");
-        struct Symbolic* c = identifier_new("c");
+        struct Identifier* a = identifier_new("a");
+        struct Identifier* b = identifier_new("b");
+        struct Identifier* c = identifier_new("c");
         struct Integer* i100 = integer_new(100);
         struct Integer* i200 = integer_new(200);
         struct Etor_Rec* etor = etor_rec_new();

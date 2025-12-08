@@ -23,8 +23,8 @@
 
 /* Lifecycle functions *******************************************************/
 
-struct Symbolic* symbol_new(const string_t name) {
-    return symbolic_new(name, OT_Symbol, g_symbolInternTable);
+struct Symbol* symbol_new(const string_t name) {
+    return (struct Symbol*)symbolic_new(name, OT_Symbol, g_symbolInternTable);
 }
 
 /* Public functions **********************************************************/
@@ -33,7 +33,7 @@ struct Symbolic* symbol_new(const string_t name) {
 
 /* Object functions ******************/
 
-void symbol_show(struct Symbolic* symbol, FILE* stream) {
+void symbol_show(struct Symbol* symbol, FILE* stream) {
     fputs(symbol->name, stream);
 }
 

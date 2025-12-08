@@ -21,7 +21,7 @@ struct Etor_Rec {
     struct Vector* env;
 };
 
-struct Symbolic;
+struct Identifier;
 
 /* Forward declarations ******************************************************/
 
@@ -35,8 +35,8 @@ struct Etor_Rec* etor_rec_new(void);
 
 /* Unique functions ******************/
 
-void etor_rec_bind(struct Etor_Rec* etor, struct Symbolic* name, struct Object* value);
-bool_t etor_rec_lookup(struct Etor_Rec* etor, struct Symbolic* name, struct Object** value);
+void etor_rec_bind(struct Etor_Rec* etor, struct Identifier* name, struct Object* value);
+bool_t etor_rec_lookup(struct Etor_Rec* etor, struct Identifier* name, struct Object** value);
 void etor_rec_run(struct Etor_Rec* etor);
 
 /* Object functions ******************/

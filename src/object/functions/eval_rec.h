@@ -2,6 +2,7 @@
 
 #include "object/typeids.h"
 
+enum EvaluationType;
 struct Etor_Rec;
 struct Object;
 

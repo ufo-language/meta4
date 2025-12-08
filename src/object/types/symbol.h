@@ -11,13 +11,17 @@
 
 /* Types *********************************************************************/
 
+struct Symbol {
+    #include "object/types/symbolic_fields.h"
+};
+
 /* Forward declarations ******************************************************/
 
 /* Global variables **********************************************************/
 
 /* Lifecycle functions *******************************************************/
 
-struct Symbolic* symbol_new(const string_t name);
+struct Symbol* symbol_new(const string_t name);
 
 /* Public functions **********************************************************/
 
@@ -25,4 +29,4 @@ struct Symbolic* symbol_new(const string_t name);
 
 /* Object functions ******************/
 
-void symbol_show(struct Symbolic* symbol, FILE* stream);
+void symbol_show(struct Symbol* symbol, FILE* stream);

@@ -28,12 +28,12 @@ struct Etor_Rec* etor_rec_new(void) {
 
 /* Unique functions ******************/
 
-void etor_rec_bind(struct Etor_Rec* etor, struct Symbolic* name, struct Object* value) {
+void etor_rec_bind(struct Etor_Rec* etor, struct Identifier* name, struct Object* value) {
     vector_push(etor->env, (struct Object*)name);
     vector_push(etor->env, value);
 }
 
-bool_t etor_rec_lookup(struct Etor_Rec* etor, struct Symbolic* name, struct Object** value) {
+bool_t etor_rec_lookup(struct Etor_Rec* etor, struct Identifier* name, struct Object** value) {
     return vector_lookup(etor->env, (struct Object*)name, value);
 }
 

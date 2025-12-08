@@ -10,8 +10,8 @@
 int main(int argc, char* argv[]) {
     BEGIN_TESTS
 
-    struct Symbolic* a = identifier_new("a");
-    struct Symbolic* b = identifier_new("b");
+    struct Identifier* a = identifier_new("a");
+    struct Identifier* b = identifier_new("b");
     struct Integer* i100 = integer_new(100);
     struct Integer* i200 = integer_new(200);
 

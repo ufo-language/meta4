@@ -61,9 +61,9 @@ int main(int argc, char* argv[]) {
     END
 
     TEST(array_checkEval)
-        struct Symbolic* a = identifier_new("a");
-        struct Symbolic* b = identifier_new("b");
-        struct Symbolic* c = identifier_new("c");
+        struct Identifier* a = identifier_new("a");
+        struct Identifier* b = identifier_new("b");
+        struct Identifier* c = identifier_new("c");
         struct Object* identElems[] = {OBJ(a), OBJ(b), OBJ(c)};
         struct Array* array = array_new_elems(3, identElems);
         struct Etor_Rec* etor = etor_rec_new();
