@@ -1,3 +1,5 @@
+#include <assert.h>
+
 #include "_typedefs.h"
 
 #include "memory/memory.h"
@@ -15,39 +17,47 @@
 
 /* Forward declarations ******************************************************/
 
-static bool_t _closeRule(struct FunctionRule* rule, struct Etor_rec* etor, struct FunctionRule** closedRule);
+static bool_t _closeRule(struct FunctionRule* rule, struct Etor_rec* etor);
 static void _showRule(struct FunctionRule* rule, FILE* stream);
 
 /* Global variables **********************************************************/
 
 /* Lifecycle functions *******************************************************/
 
-struct Function* function_new(struct Identifier* name, count_t nParams, struct Object* params[], struct Object* body, struct FunctionRule* nextRule) {
-    struct Function* function = (struct Function*)object_new(OT_Function, NWORDS(*function) + nParams);
+struct Function* function_new(struct Identifier* name) {
+    struct Function* function = (struct Function*)object_new(OT_Function, NWORDS(*function));
     function->name = name;
     function->rules = g_emptyFunctionRule;
-    function->closedRules = g_emptyFunctionRule;
-    function_attachFinalRule(function, nParams, params, body);
     return function;
 }
 
 void function_attachFinalRule(struct Function* function, count_t nParams, struct Object* params[], struct Object* body) {
-    struct FunctionRule** rule = &function->rules;
-    while (*rule != g_emptyFunctionRule) {
-        *rule = (*rule)->nextRule;
+    /* Create the new rule */
+    struct FunctionRule* newRule = (struct FunctionRule*)memory_alloc(NWORDS(struct FunctionRule) + nParams);
+    newRule->nParams = nParams;
+    memcpy(newRule->params, params, nParams * sizeof(struct Object*));
+    newRule->body = body;
+    newRule->closedBody = g_uniqueObject;
+    newRule->nextRule = g_emptyFunctionRule;
+    /* Attach it to the list of rules */
+    struct FunctionRule* previousRule = g_emptyFunctionRule;
+    struct FunctionRule* rule = function->rules;
+    while (rule != g_emptyFunctionRule) {
+        previousRule = rule;
+        rule = rule->nextRule;
     }
-    *rule = (struct FunctionRule*)memory_alloc(NWORDS(*rule));
-    (*rule)->nParams = nParams;
-    memcpy((*rule)->params, params, nParams * sizeof(struct Object*));
-    (*rule)->body = body;
-    (*rule)->closedBody = g_uniqueObject;
-    (*rule)->nextRule = g_emptyFunctionRule;
+    if (previousRule == g_emptyFunctionRule) {
+        function->rules = newRule;
+    }
+    else {
+        previousRule->nextRule = newRule;
+    }
 }
 
 struct FunctionRule* function_emptyRule(void) {
     struct FunctionRule* rule = (struct FunctionRule*)memory_alloc(NWORDS(*rule));
     rule->body = (struct Object*)g_nil;
-    rule->closedBody = (struct Object*)g_nil;
+    rule->closedBody = g_uniqueObject;
     rule->nextRule = rule;
     rule->nParams = 0;
     return rule;
@@ -60,10 +70,11 @@ struct FunctionRule* function_emptyRule(void) {
 /* Object functions ******************/
 
 bool_t function_close_rec(struct Function* function, struct Etor_rec* etor, struct Object** value) {
-    fputs("function_close_rec function = ", stderr);
-    function_show(function, stderr);
-    fputc('\n', stderr);
-    return _closeRule(function->rules, etor, &function->closedRules);
+    if (_closeRule(function->rules, etor)) {
+        *value = (struct Object*)function;
+        return true;
+    }
+    return false;
 }
 
 bool_t function_eval_rec(struct Function* function, struct Etor_rec* etor, struct Object** value) {
@@ -75,12 +86,11 @@ void function_show(struct Function* function, FILE* stream) {
     if (function->name != g_idNil) {
         identifier_show(function->name, stream);
     }
-    bool_t firstIter;
-    struct FunctionRule* rule;
-    for (firstIter=true, rule=function->rules; rule!=g_emptyFunctionRule; firstIter=false, rule=rule->nextRule) {
-        if (!firstIter) {
-            fputs(" | ", stream);
-        }
+    assert(function->rules != g_emptyFunctionRule);
+    struct FunctionRule* rule = function->rules;
+    _showRule(rule, stream);
+    for (rule = rule->nextRule; rule != g_emptyFunctionRule; rule = rule->nextRule) {
+        fputs(" | ", stream);
         _showRule(rule, stream);
     }
     fputs(" end", stream);
@@ -88,30 +98,20 @@ void function_show(struct Function* function, FILE* stream) {
 
 /* Private functions *********************************************************/
 
-static bool_t _closeRule(struct FunctionRule* rule, struct Etor_rec* etor, struct FunctionRule** closedRule) {
+static bool_t _closeRule(struct FunctionRule* rule, struct Etor_rec* etor) {
     if (rule == g_emptyFunctionRule) {
-        *closedRule = rule;
         return true;
     }
-    fputs("_closeRule current rule = ", stderr);
-    _showRule(rule, stderr);
-    fputc('\n', stderr);
-
     /* Close current rule */
-    struct FunctionRule* newRule = (struct FunctionRule*)memory_alloc(NWORDS(*rule));
-
     /* Save the current environment */
     index_t savedEnv = etor_rec_envSave(etor);
     /* Prebind each parameter to itself */
     for (index_t n=0; n<rule->nParams; n++) {
         struct Object* param = rule->params[n];
         struct Vector* freeVars_ = vector_new();
-        fputs("_closeRule param = ", stderr);
-        show(param, stderr);
-        fputc('\n', stderr);
         freeVars(param, freeVars_);
         for (int m=0; m<freeVars_->top; m++) {
-            struct Identifier* freeVar = (struct Identifier*)freeVars_->elems->elems[n];
+            struct Identifier* freeVar = (struct Identifier*)freeVars_->elems->elems[m];
             etor_rec_bind(etor, freeVar, (struct Object*)freeVar);
         }
     }
@@ -123,9 +123,8 @@ static bool_t _closeRule(struct FunctionRule* rule, struct Etor_rec* etor, struc
     rule->closedBody = closedBody;
     /* Restore the environment */
     etor_rec_envRestore(etor, savedEnv);
-
     /* Close next rule */
-    if (!_closeRule(rule->nextRule, etor, &newRule->nextRule)) {
+    if (!_closeRule(rule->nextRule, etor)) {
         return false;
     }
     return true;

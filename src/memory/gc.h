@@ -16,6 +16,7 @@ struct Object;
 /* Lifecycle functions *******************************************************/
 
 struct GC* gc_new(void);
+void gc_free(struct GC* gc);
 
 /* Public functions **********************************************************/
 

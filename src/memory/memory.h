@@ -6,7 +6,7 @@
 
 /* Forward declarations ******************************************************/
 
-#define DEFAULT_HEAP_SIZE 1<<12  /* 4096 */
+#define DEFAULT_HEAP_SIZE 1<<12  /* 4096 words, or 32kB */
 
 /* Global variables **********************************************************/
 

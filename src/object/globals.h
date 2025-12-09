@@ -34,4 +34,5 @@ extern struct Vector*       g_symbolInternTable;
 
 /* Public functions **********************************************************/
 
+void globals_free(void);
 void globals_init(void);

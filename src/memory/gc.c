@@ -20,6 +20,10 @@ struct GC* gc_new(void) {
     return gc;
 }
 
+void gc_free(struct GC* gc) {
+    free(gc);
+}
+
 /* Public functions **********************************************************/
 
 bool_t gc_doGC(struct GC* gc) {

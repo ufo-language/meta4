@@ -32,6 +32,10 @@ struct Vector*       g_symbolInternTable;
 
 /* Public functions **********************************************************/
 
+void globals_free(void) {
+    gc_free(g_gc);
+}
+
 void globals_init(void) {
     /* Memory & GC first */
     g_gc = gc_new();

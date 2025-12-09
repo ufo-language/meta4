@@ -24,6 +24,7 @@ void plx_startup(void) {
 }
 
 void plx_shutdown(void) {
+    globals_free();
     // internTable_free();
     memory_free();
 }

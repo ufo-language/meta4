@@ -6,6 +6,7 @@
 #include "object/types/identifier.h"
 #include "object/types/integer.h"
 
+#include <stdio.h>
 int main(int argc, char* argv[]) {
     BEGIN_TESTS
 
@@ -13,41 +14,59 @@ int main(int argc, char* argv[]) {
     struct Identifier* x = identifier_new("x");
     struct Identifier* y = identifier_new("y");
 
-    TEST(function_checkConstruction)
+    TEST(function_checkConstruction_0rules)
+        struct Function* function = function_new(f);
+        ASSERT_ISA(OT_Function, function);
+        EXPECT_IEQ(NWORDS(struct Object) + 2, function->obj.nWords);
+        EXPECT_IEQ(NWORDS(struct Function), function->obj.nWords);
+        ASSERT_PTREQ(g_emptyFunctionRule, function->rules);
+    END
+
+    TEST(function_checkConstruction_1rule)
+        struct Function* function = function_new(f);
         count_t nParams = 2;
         struct Object* params[] = {OBJ(x), OBJ(y)};
         struct Object* body = OBJ(g_nil);
-        struct Function* function = function_new(f, nParams, params, body, g_emptyFunctionRule);
-        ASSERT_ISA(OT_Function, function);
-        EXPECT_IEQ(NWORDS(struct Object) + 3 + nParams, function->obj.nWords);
-        EXPECT_IEQ(NWORDS(struct Function) + nParams, function->obj.nWords);
+        function_attachFinalRule(function, nParams, params, body);
+        ASSERT_PTRNE(g_emptyFunctionRule, function->rules);
     END
 
-    TEST(function_checkShow)
+    TEST(function_checkShow_1Rule)
+        struct Function* function = function_new(f);
         count_t nParams = 1;
         struct Object* params[] = {OBJ(x)};
         struct Object* body = OBJ(y);
-        struct Function* function = function_new(f, nParams, params, body, g_emptyFunctionRule);
-        SHOW("Function", function);
+        function_attachFinalRule(function, nParams, params, body);
+        SHOW("Should show 'fun f(x) = x'", function);
     END
 
-    TEST(function_checkClose)
+    TEST(function_checkShow_2Rules)
+        struct Function* function = function_new(f);
+        count_t nParams = 2;
+        struct Object* params[] = {OBJ(x), OBJ(y)};
+        struct Object* body = OBJ(x);
+        function_attachFinalRule(function, nParams, params, body);
+        nParams = 1;
+        struct Object* params1[] = {OBJ(x)};
+        body = OBJ(x);
+        function_attachFinalRule(function, nParams, params1, body);
+        SHOW("Should show 'fun f(x, y) = y | b(x) = x'", function);
+    END
+
+    TEST(function_checkClose_1rule)
+        struct Function* function = function_new(f);
         count_t nParams = 1;
         struct Object* params[] = {OBJ(x)};
         struct Object* body = OBJ(y);
         struct Etor_rec* etor = etor_rec_new();
-        struct Function* function = function_new(f, nParams, params, body, g_emptyFunctionRule);
-        SHOW("Function 1", function);
-        ASSERT_EQ(g_emptyFunctionRule, function->closedRules);
-        SHOW("Function 2", function);
+        function_attachFinalRule(function, nParams, params, body);
         struct Integer* i100 = integer_new(100);
-        SHOW("Function 3", function);
         etor_rec_bind(etor, y, OBJ(i100));
-        SHOW("Function 4", function);
         struct Object* value;
         ASSERT_TRUE(function_close_rec(function, etor, &value));
         ASSERT_EQ(function, value);
-        EXPECT_EQ(i100, function->closedRules->body);
+        EXPECT_EQ(y, function->rules->body);
+        EXPECT_EQ(i100, function->rules->closedBody);
     END
 
     END_TESTS

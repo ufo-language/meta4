@@ -101,13 +101,12 @@ count_t vector_count(struct Vector* vector) {
 
 void vector_show(struct Vector* vector, FILE* stream) {
     fputs("{|", stream);
-    index_t index = vector->top - 1;
     struct Object** elems = vector->elems->elems;
     for (index_t n=0; n<vector->top; ++n) {
         if (n > 0) {
             fputs(", ", stream);
         }
-        show(elems[index--], stream);
+        show(elems[n], stream);
     }
     fputs("|}", stream);
 }

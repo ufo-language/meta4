@@ -22,7 +22,6 @@ struct Function {
     struct Object obj;
     struct Identifier* name;
     struct FunctionRule* rules;
-    struct FunctionRule* closedRules;
 };
 
 /* Forward declarations ******************************************************/
@@ -31,7 +30,7 @@ struct Function {
 
 /* Lifecycle functions *******************************************************/
 
-struct Function* function_new(struct Identifier* name, count_t nParams, struct Object* params[], struct Object* body, struct FunctionRule* nextRule);
+struct Function* function_new(struct Identifier* name);
 void function_attachFinalRule(struct Function* function, count_t nParams, struct Object* params[], struct Object* body);
 struct FunctionRule* function_emptyRule(void);
 
