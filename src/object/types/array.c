@@ -7,7 +7,9 @@
 #include "object/functions/close_rec.h"
 #include "object/functions/equal.h"
 #include "object/functions/eval_rec.h"
+#include "object/functions/match.h"
 #include "object/functions/show.h"
+#include "object/types/vector.h"
 
 /* Defines *******************************************************************/
 
@@ -72,6 +74,20 @@ bool_t array_close_rec(struct Array* array, struct Etor_rec* etor, struct Object
 
 bool_t array_eval_rec(struct Array* array, struct Etor_rec* etor, struct Object** value) {
     return _close_eval_aux(array, etor, value, eval_rec);
+}
+
+bool_t array_match(struct Array* array, struct Array* other, struct Vector* bindings) {
+    if (array->nElems != other->nElems) {
+        return false;
+    }
+    index_t savedTop = vector_top(bindings);
+    for (index_t n=0; n<array->nElems; n++) {
+        if (!match(array->elems[n], other->elems[n], bindings)) {
+            vector_setTop(bindings, savedTop);
+            return false;
+        }
+    }
+    return true;
 }
 
 void array_show(struct Array* array, FILE* stream) {

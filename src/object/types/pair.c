@@ -5,9 +5,11 @@
 #include "object/globals.h"
 #include "object/functions/close_rec.h"
 #include "object/functions/eval_rec.h"
+#include "object/functions/match.h"
 #include "object/functions/show.h"
 #include "object/evaluator/etor_rec.h"
 #include "object/types/pair.h"
+#include "object/types/vector.h"
 
 /* Defines *******************************************************************/
 
@@ -62,6 +64,18 @@ bool_t pair_close_rec(struct Pair* pair, struct Etor_rec* etor, struct Object** 
 
 bool_t pair_eval_rec(struct Pair* pair, struct Etor_rec* etor, struct Object** value) {
     return _close_eval_aux(pair, etor, value, eval_rec);
+}
+
+bool_t pair_match(struct Pair* pair, struct Pair* other, struct Vector* bindings) {
+    if (pair == g_emptyPair || other == g_emptyPair) {
+        return false;
+    }
+    index_t savedTop = vector_top(bindings);
+    if (!match(pair->first, other->first, bindings)) {
+        vector_setTop(bindings, savedTop);
+        return false;
+    }
+    return match(pair->rest, other->rest, bindings);
 }
 
 void pair_show(struct Pair* pair, FILE* stream) {

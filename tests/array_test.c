@@ -4,14 +4,19 @@
 #include "_typedefs.h"
 
 #include "object/evaluator/etor_rec.h"
+#include "object/functions/match.h"
 #include "object/typeids.h"
 #include "object/types/array.h"
 #include "object/types/identifier.h"
 #include "object/types/integer.h"
+#include "object/types/vector.h"
 
 int main(int argc, char* argv[]) {
     BEGIN_TESTS
 
+    struct Identifier* a = identifier_new("a");
+    struct Identifier* b = identifier_new("b");
+    struct Identifier* c = identifier_new("c");
     struct Integer* i0 = integer_new(0);
     struct Integer* i100 = integer_new(100);
     struct Integer* i200 = integer_new(200);
@@ -64,9 +69,6 @@ int main(int argc, char* argv[]) {
     END
 
     TEST(array_checkEval)
-        struct Identifier* a = identifier_new("a");
-        struct Identifier* b = identifier_new("b");
-        struct Identifier* c = identifier_new("c");
         struct Object* identElems[] = {OBJ(a), OBJ(b), OBJ(c)};
         struct Array* array = array_new_elems(3, identElems);
         struct Etor_rec* etor = etor_rec_new();
@@ -87,6 +89,25 @@ int main(int argc, char* argv[]) {
     TEST(array_checkShow)
         struct Array* array = array_new_elems(3, elems);
         SHOW("Should show '{100, 200, 300}'", array);
+    END
+
+    TEST(array_checkMatch)
+        struct Object* identElems[] = {OBJ(a), OBJ(b), OBJ(c)};
+        struct Array* array = array_new_elems(3, identElems);
+        struct Identifier* a = identifier_new("a");
+        struct Identifier* b = identifier_new("b");
+        struct Identifier* c = identifier_new("c");
+        struct Object* intElems[] = {OBJ(i100), OBJ(i200), OBJ(i300)};
+        struct Array* otherArray = array_new_elems(3, intElems);
+        struct Vector* bindings = vector_new();
+        ASSERT_TRUE(match(OBJ(array), OBJ(otherArray), bindings));
+        struct Object* value;
+        ASSERT_TRUE(vector_lookup(bindings, OBJ(a), &value));
+        EXPECT_EQ(i100, value);
+        ASSERT_TRUE(vector_lookup(bindings, OBJ(b), &value));
+        EXPECT_EQ(i200, value);
+        ASSERT_TRUE(vector_lookup(bindings, OBJ(c), &value));
+        EXPECT_EQ(i300, value);
     END
 
     END_TESTS

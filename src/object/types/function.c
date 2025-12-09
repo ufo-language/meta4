@@ -69,6 +69,11 @@ struct FunctionRule* function_emptyRule(void) {
 
 /* Object functions ******************/
 
+bool_t function_apply(struct Function* function, struct Etor_rec* etorRec, count_t nArgs, struct Object* args[], struct Object** value) {
+    /* Bind arguments to parameters */
+    // TODO this requires match() */
+}
+
 bool_t function_close_rec(struct Function* function, struct Etor_rec* etor, struct Object** value) {
     if (_closeRule(function->rules, etor)) {
         *value = (struct Object*)function;

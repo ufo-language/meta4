@@ -17,6 +17,7 @@ struct Pair {
 };
 
 struct Etor_rec;
+struct Vector;
 
 /* Forward declarations ******************************************************/
 
@@ -35,5 +36,6 @@ struct Pair* pair_new_empty(void);
 
 bool_t pair_close_rec(struct Pair* pair, struct Etor_rec* etor, struct Object** value);
 count_t pair_count(struct Pair* pair);
+bool_t pair_match(struct Pair* pair, struct Pair* other, struct Vector* bindings);
 bool_t pair_eval_rec(struct Pair* pair, struct Etor_rec* etor, struct Object** value);
 void pair_show(struct Pair* pair, FILE* stream);

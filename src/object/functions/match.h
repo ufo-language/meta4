@@ -1,13 +1,11 @@
-#pragma once
-
 #include "_typedefs.h"
 
 /* Defines *******************************************************************/
 
 /* Types *********************************************************************/
 
-struct Etor_rec;
 struct Object;
+struct Vector;
 
 /* Forward declarations ******************************************************/
 
@@ -21,4 +19,4 @@ struct Object;
 
 /* Object functions ******************/
 
-bool_t apply(struct Object* obj, struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value);
+bool_t match(struct Object* obj, struct Object* other, struct Vector* bindings);

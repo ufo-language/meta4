@@ -40,13 +40,18 @@ struct Vector* vector_new_withCapacity(count_t capacity) {
 
 /* Unique functions ******************/
 
-index_t vector_getTop(struct Vector* vector) {
+index_t vector_top(struct Vector* vector) {
     return vector->top;
 }
 
 void vector_setTop(struct Vector* vector, index_t newTop) {
     assert(newTop <= vector->top);
     vector->top = newTop;
+}
+
+void vector_bindPair(struct Vector* vector, struct Object* key, struct Object* value) {
+    vector_push(vector, key);
+    vector_push(vector, value);
 }
 
 /* This treats the vector as an association pair of [key, value, key, value...] */

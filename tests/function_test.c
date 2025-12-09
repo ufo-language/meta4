@@ -13,6 +13,7 @@ int main(int argc, char* argv[]) {
     struct Identifier* f = identifier_new("f");
     struct Identifier* x = identifier_new("x");
     struct Identifier* y = identifier_new("y");
+    struct Integer* i100 = integer_new(100);
 
     TEST(function_checkConstruction_0rules)
         struct Function* function = function_new(f);
@@ -60,13 +61,26 @@ int main(int argc, char* argv[]) {
         struct Object* body = OBJ(y);
         struct Etor_rec* etor = etor_rec_new();
         function_attachFinalRule(function, nParams, params, body);
-        struct Integer* i100 = integer_new(100);
         etor_rec_bind(etor, y, OBJ(i100));
         struct Object* value;
         ASSERT_TRUE(function_close_rec(function, etor, &value));
         ASSERT_EQ(function, value);
         EXPECT_EQ(y, function->rules->body);
         EXPECT_EQ(i100, function->rules->closedBody);
+    END
+
+    TEST(function_checkApply)
+        struct Function* function = function_new(f);
+        count_t nParams = 1;
+        struct Object* params[] = {OBJ(x)};
+        struct Object* body = OBJ(x);
+        struct Etor_rec* etor = etor_rec_new();
+        function_attachFinalRule(function, nParams, params, body);
+        count_t nArgs = 1;
+        struct Object* args[] = {OBJ(i100)};
+        struct Object* value;
+        ASSERT_TRUE(function_apply(function, etor, nArgs, args, &value));
+        EXPECT_EQ(i100, value);
     END
 
     END_TESTS

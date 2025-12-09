@@ -29,8 +29,7 @@ struct Etor_rec* etor_rec_new(void) {
 /* Unique functions ******************/
 
 void etor_rec_bind(struct Etor_rec* etor, struct Identifier* name, struct Object* value) {
-    vector_push(etor->env, (struct Object*)name);
-    vector_push(etor->env, value);
+    vector_bindPair(etor->env, (struct Object*)name, value);
 }
 
 void etor_rec_envRestore(struct Etor_rec* etor, index_t savedEnv) {
@@ -38,7 +37,7 @@ void etor_rec_envRestore(struct Etor_rec* etor, index_t savedEnv) {
 }
 
 index_t etor_rec_envSave(struct Etor_rec* etor) {
-    return vector_getTop(etor->env);
+    return vector_top(etor->env);
 }
 
 bool_t etor_rec_lookup(struct Etor_rec* etor, struct Identifier* name, struct Object** value) {

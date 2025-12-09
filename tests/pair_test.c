@@ -1,11 +1,13 @@
 #include "_test.h"
 #include "_typedefs.h"
 
-#include "object/functions/eval_rec.h"
 #include "object/evaluator/etor_rec.h"
+#include "object/functions/eval_rec.h"
+#include "object/functions/match.h"
 #include "object/types/identifier.h"
 #include "object/types/integer.h"
 #include "object/types/pair.h"
+#include "object/types/vector.h"
 
 int main(int argc, char* argv[]) {
     BEGIN_TESTS
@@ -34,6 +36,18 @@ int main(int argc, char* argv[]) {
         ASSERT_ISA(OT_Pair, value);
         EXPECT_EQ(i100, ((struct Pair*)value)->first);
         EXPECT_EQ(i200, ((struct Pair*)value)->rest);
+    END
+
+    TEST(pair_checkMatch)
+        struct Pair* pair = pair_new(OBJ(a), OBJ(b));
+        struct Pair* other = pair_new(OBJ(i100), OBJ(i200));
+        struct Vector* bindings = vector_new();
+        ASSERT_TRUE(match(OBJ(pair), OBJ(other), bindings));
+        struct Object* value;
+        ASSERT_TRUE(vector_lookup(bindings, OBJ(a), &value));
+        EXPECT_EQ(i100, value);
+        ASSERT_TRUE(vector_lookup(bindings, OBJ(b), &value));
+        EXPECT_EQ(i200, value);
     END
 
     END_TESTS
