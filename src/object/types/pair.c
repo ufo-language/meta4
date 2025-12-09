@@ -80,8 +80,6 @@ bool_t pair_match(struct Pair* pair, struct Pair* other, struct Vector* bindings
 
 void pair_show(struct Pair* pair, FILE* stream) {
     fputc('[', stream);
-    // bool_t firstIter = true;
-    // while (pair != g_emptyPair) {
     for (bool_t firstIter=true; pair!=g_emptyPair; firstIter=false) {
         if (!firstIter) {
             fputs(", ", stream);
@@ -95,7 +93,6 @@ void pair_show(struct Pair* pair, FILE* stream) {
             show(pair->rest, stream);
             break;
         }
-        // firstIter = false;
     }
     fputc(']', stream);
 }

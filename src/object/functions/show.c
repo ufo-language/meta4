@@ -36,7 +36,7 @@
 void show(struct Object* obj, FILE* stream) {
     switch(obj->typeId) {
         case OT_Application:   break;
-        case OT_Array:         array_show((struct Array*)obj, stream); return;  // CRASHES HERE Use of uninitialised value of size 8
+        case OT_Array:         array_show((struct Array*)obj, stream); return;
         case OT_BinOp:         break;
         case OT_Boolean:       boolean_show((struct Boolean*)obj, stream); return;
         case OT_ByteBuffer:    break;

@@ -55,7 +55,7 @@ void freeVars(struct Object* obj, struct Vector* freeVars_) {
         case OT_ByteBuffer:
             break;
         case OT_Dec:
-            //return dec_eval_rec((struct Dec*)obj, etor, value);
+            /* return dec_eval_rec((struct Dec*)obj, etor, value); */
             break;
         case OT_Etor_Rec:
             break;

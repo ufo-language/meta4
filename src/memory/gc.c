@@ -16,7 +16,7 @@
 
 struct GC* gc_new(void) {
     struct GC* gc = (struct GC*)malloc(sizeof(*gc));
-    // TODO initialize
+    /* TODO initialize */
     return gc;
 }
 

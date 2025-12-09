@@ -46,7 +46,7 @@ bool_t close_rec(struct Object* obj, struct Etor_rec* etor, struct Object** valu
         case OT_Array:      return array_close_rec((struct Array*)obj, etor, value);
         case OT_BinOp:      break;
         case OT_ByteBuffer: break;
-        // case OT_Dec:        return dec_close_rec((struct Dec*)obj, etor, value);
+        /* case OT_Dec:        return dec_close_rec((struct Dec*)obj, etor, value); */
         case OT_Etor_Rec:   break;
         case OT_Function:   break;
         case OT_HashTable:  break;

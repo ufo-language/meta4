@@ -79,7 +79,7 @@ address_t bumpAllocator_realloc(struct BumpAllocator* allocator, address_t addr,
             exit(1);
         }
         bump->nextFree = oldIndex + newNWords;
-        return addr;  // same pointer
+        return addr;  /* same pointer */
     }
     /* Case 2: Allocate a new block */
     address_t newAddr = bumpAllocator_allocate(bump, newNWords);
@@ -88,7 +88,7 @@ address_t bumpAllocator_realloc(struct BumpAllocator* allocator, address_t addr,
     count_t count = oldNWords < newNWords ? oldNWords : newNWords;
     /* Fast 64-bit copy */
     if (count <= 8) {
-        // Manual unroll for very small copies (avoids memcpy call overhead)
+        /* Manual unroll for very small copies (avoids memcpy call overhead) */
         switch (count) {
             case 8: out[7] = oldPtr[7];
             case 7: out[6] = oldPtr[6];

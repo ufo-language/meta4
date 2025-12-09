@@ -48,7 +48,7 @@ void eval_cps(struct Object* obj, struct Etor_CPS* etor) {
         case OT_Application:
             break;
         case OT_Array:
-            //array_eval_cps((struct Array*)obj, etor); return;
+            /* array_eval_cps((struct Array*)obj, etor); return; */
             break;
         case OT_BinOp:
             break;
@@ -61,7 +61,7 @@ void eval_cps(struct Object* obj, struct Etor_CPS* etor) {
         case OT_HashTable:
             break;
         case OT_Identifier:
-            //identifier_eval_cps((struct Symbolic*)obj, etor); return;
+            /* identifier_eval_cps((struct Symbolic*)obj, etor); return; */
             break;
         case OT_IfThen:
             return;
@@ -80,7 +80,7 @@ void eval_cps(struct Object* obj, struct Etor_CPS* etor) {
         case OT_Quote:
             break;
         case OT_Sequence:
-            //sequence_eval_cps((struct Sequence*)obj, etor); return;
+            /* sequence_eval_cps((struct Sequence*)obj, etor); return; */
             break;
         case OT_Test:
             break;

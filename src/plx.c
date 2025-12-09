@@ -19,13 +19,13 @@
 
 void plx_startup(void) {
     memory_init(DEFAULT_HEAP_SIZE);
-    // internTable_init();
+    /* internTable_init(); */
     globals_init();
 }
 
 void plx_shutdown(void) {
     globals_free();
-    // internTable_free();
+    /* internTable_free(); */
     memory_free();
 }
 
