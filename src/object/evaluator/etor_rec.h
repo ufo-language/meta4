@@ -33,7 +33,7 @@ void    etor_rec_bind      (struct Etor_rec* etor, struct Identifier* name, stru
 void    etor_rec_envRestore(struct Etor_rec* etor, index_t savedEnv);
 index_t etor_rec_envSave   (struct Etor_rec* etor);
 bool_t  etor_rec_lookup    (struct Etor_rec* etor, struct Identifier* name, struct Object** value);
-void    etor_rec_run       (struct Etor_rec* etor);
+bool_t  etor_rec_run       (struct Etor_rec* etor, struct Object* expr, struct Object** value);
 
 /* Object functions ******************/
 

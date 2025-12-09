@@ -2,9 +2,10 @@
 
 #include "_typedefs.h"
 
+#include "object/evaluator/etor_rec.h"
+#include "object/functions/eval_rec.h"
 #include "object/object.h"
 #include "object/typeids.h"
-#include "object/evaluator/etor_rec.h"
 #include "object/types/intvector.h"
 #include "object/types/vector.h"
 
@@ -44,8 +45,8 @@ bool_t etor_rec_lookup(struct Etor_rec* etor, struct Identifier* name, struct Ob
     return vector_lookup(etor->env, (struct Object*)name, value);
 }
 
-void etor_rec_run(struct Etor_rec* etor) {
-    /* TODO */
+bool_t etor_rec_run(struct Etor_rec* etor, struct Object* expr, struct Object** value) {
+    return eval_rec(expr, etor, value);
 }
 
 /* Object functions ******************/
