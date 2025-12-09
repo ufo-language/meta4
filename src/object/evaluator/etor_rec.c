@@ -18,8 +18,8 @@
 
 /* Lifecycle functions *******************************************************/
 
-struct Etor_Rec* etor_rec_new(void) {
-    struct Etor_Rec* etor = (struct Etor_Rec*)object_new(OT_Etor_Rec, NWORDS(*etor));
+struct Etor_rec* etor_rec_new(void) {
+    struct Etor_rec* etor = (struct Etor_rec*)object_new(OT_Etor_Rec, NWORDS(*etor));
     etor->env = vector_new();
     return etor;
 }
@@ -28,21 +28,29 @@ struct Etor_Rec* etor_rec_new(void) {
 
 /* Unique functions ******************/
 
-void etor_rec_bind(struct Etor_Rec* etor, struct Identifier* name, struct Object* value) {
+void etor_rec_bind(struct Etor_rec* etor, struct Identifier* name, struct Object* value) {
     vector_push(etor->env, (struct Object*)name);
     vector_push(etor->env, value);
 }
 
-bool_t etor_rec_lookup(struct Etor_Rec* etor, struct Identifier* name, struct Object** value) {
+void etor_rec_envRestore(struct Etor_rec* etor, index_t savedEnv) {
+    vector_setTop(etor->env, savedEnv);
+}
+
+index_t etor_rec_envSave(struct Etor_rec* etor) {
+    return vector_getTop(etor->env);
+}
+
+bool_t etor_rec_lookup(struct Etor_rec* etor, struct Identifier* name, struct Object** value) {
     return vector_lookup(etor->env, (struct Object*)name, value);
 }
 
-void etor_rec_run(struct Etor_Rec* etor) {
+void etor_rec_run(struct Etor_rec* etor) {
     /* TODO */
 }
 
 /* Object functions ******************/
 
-void etor_rec_show(struct Etor_Rec* etor, FILE* stream) {
+void etor_rec_show(struct Etor_rec* etor, FILE* stream) {
     /* TODO */
 }

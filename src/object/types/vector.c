@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <stdio.h>
 
 #include "_typedefs.h"
@@ -38,6 +39,15 @@ struct Vector* vector_new_withCapacity(count_t capacity) {
 /* Public functions **********************************************************/
 
 /* Unique functions ******************/
+
+index_t vector_getTop(struct Vector* vector) {
+    return vector->top;
+}
+
+void vector_setTop(struct Vector* vector, index_t newTop) {
+    assert(newTop <= vector->top);
+    vector->top = newTop;
+}
 
 /* This treats the vector as an association pair of [key, value, key, value...] */
 bool_t vector_lookup(struct Vector* vector, struct Object* key, struct Object** value) {

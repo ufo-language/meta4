@@ -4,6 +4,7 @@
 #include "_typedefs.h"
 
 #include "object/evaluator/etor_rec.h"
+#include "object/functions/close_rec.h"
 #include "object/functions/eval_rec.h"
 #include "object/types/identifier.h"
 #include "object/types/integer.h"
@@ -18,13 +19,16 @@ int main(int argc, char* argv[]) {
     TEST(identifier_checkConstruction)
         ASSERT_IEQ(OT_Identifier, a1->obj.typeId);
         ASSERT_IEQ(0, strcmp("a", a1->name));
+        count_t nChars = strlen("a") + 1;
         ASSERT_IEQ(a1->hashCode, a2->hashCode);
         ASSERT_INE(a1->hashCode, b->hashCode);
+        EXPECT_IEQ(NWORDS(struct Object) + 1 + NBYTES_TO_WORDS(nChars), a1->obj.nWords);
+        EXPECT_IEQ(NWORDS(struct Identifier) + NBYTES_TO_WORDS(nChars), a1->obj.nWords);
     END
 
     TEST(identifier_checkEval)
         struct Integer* i100 = integer_new(100);
-        struct Etor_Rec* etor = etor_rec_new();
+        struct Etor_rec* etor = etor_rec_new();
         etor_rec_bind(etor, a1, OBJ(i100));
         struct Object* value;
         /* Verify that the binding is correct */
@@ -37,19 +41,18 @@ int main(int argc, char* argv[]) {
 
     TEST(identifier_checkClose_bound)
         struct Integer* i100 = integer_new(100);
-        struct Etor_Rec* etor = etor_rec_new();
+        struct Etor_rec* etor = etor_rec_new();
         etor_rec_bind(etor, a1, OBJ(i100));
-        etor->evaluationType = Etor_Closing;
+;
         struct Object* value;
-        ASSERT_TRUE(eval_rec(OBJ(a1), etor, &value));
+        ASSERT_TRUE(close_rec(OBJ(a1), etor, &value));
         ASSERT_EQ(i100, value);
     END
 
     TEST(identifier_checkClose_unbound)
-        struct Etor_Rec* etor = etor_rec_new();
-        etor->evaluationType = Etor_Closing;
+        struct Etor_rec* etor = etor_rec_new();
         struct Object* value;
-        ASSERT_TRUE(eval_rec(OBJ(a1), etor, &value));
+        ASSERT_TRUE(close_rec(OBJ(a1), etor, &value));
         ASSERT_EQ(a1, value);
     END
 

@@ -19,9 +19,12 @@ int main(int argc, char* argv[]) {
     struct Object* elems[] = {OBJ(i100), OBJ(i200), OBJ(i300)};
 
     TEST(array_checkConstruction)
-        struct Array* array = array_new_noFill(3);
+        count_t nElems = 3;
+        struct Array* array = array_new_noFill(nElems);
         ASSERT_ISA(OT_Array, array);
-        EXPECT_IEQ(3, array->nElems);
+        EXPECT_IEQ(nElems, array->nElems);
+        EXPECT_IEQ(NWORDS(struct Object) + 1 + nElems, array->obj.nWords);
+        EXPECT_IEQ(NWORDS(struct Array) + nElems, array->obj.nWords);
         EXPECT_IEQ(0, strcmp("Array", typeName(array->obj.typeId)));
     END
 
@@ -66,7 +69,7 @@ int main(int argc, char* argv[]) {
         struct Identifier* c = identifier_new("c");
         struct Object* identElems[] = {OBJ(a), OBJ(b), OBJ(c)};
         struct Array* array = array_new_elems(3, identElems);
-        struct Etor_Rec* etor = etor_rec_new();
+        struct Etor_rec* etor = etor_rec_new();
         etor_rec_bind(etor, a, OBJ(i100));
         etor_rec_bind(etor, b, OBJ(i200));
         etor_rec_bind(etor, c, OBJ(i300));

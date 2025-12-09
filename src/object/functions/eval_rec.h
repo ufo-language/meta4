@@ -3,7 +3,7 @@
 #include "object/typeids.h"
 
 enum EvaluationType;
-struct Etor_Rec;
+struct Etor_rec;
 struct Object;
 
 /* Defines *******************************************************************/
@@ -22,4 +22,4 @@ struct Object;
 
 /* Object functions ******************/
 
-bool_t eval_rec(struct Object* obj, struct Etor_Rec* etor, struct Object** value);
+bool_t eval_rec(struct Object* obj, struct Etor_rec* etor, struct Object** value);

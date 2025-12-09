@@ -42,7 +42,7 @@ bool_t equal(struct Object* obj, struct Object* other) {
         return false;
     }
     switch(obj->typeId) {
-        case OT_Apply:         break;
+        case OT_Application:         break;
         case OT_Array:         break; /*return array_equal((struct Array*)obj, (struct Array*)(other));*/
         case OT_BinOp:         break;
         case OT_Boolean:       break; /*return boolean_equal((struct Boolean*)obj, stream);*/

@@ -51,7 +51,7 @@ void symbolic_show(struct _Symbolic* symbolic, FILE* stream) {
 
 static struct _Symbolic* _symbolic_new_aux(enum TypeId typeId, const string_t name, index_t hashCode) {
     count_t nChars = strlen(name);
-    struct _Symbolic* symbolic = (struct _Symbolic*)object_new(typeId, NWORDS(*symbolic) + NWORDS_FROM_BYTES(nChars + 1));
+    struct _Symbolic* symbolic = (struct _Symbolic*)object_new(typeId, NWORDS(*symbolic) + NBYTES_TO_WORDS(nChars + 1));
     symbolic->hashCode = hashCode;
     memcpy(symbolic->name, name, nChars + 1);
     return symbolic;

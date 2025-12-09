@@ -33,22 +33,21 @@ struct Identifier* identifier_new(const string_t name) {
 
 /* Object functions ******************/
 
-bool_t identifier_eval_rec(struct Identifier* ident, struct Etor_Rec* etor, struct Object** value) {
+bool_t identifier_close_rec(struct Identifier* ident, struct Etor_rec* etor, struct Object** value) {
     bool_t success = etor_rec_lookup(etor, ident, value);
-    switch (etor->evaluationType) {
-        case Etor_Closing:
-            if (!success) {
-                *value = (struct Object*)ident;
-            }
-            return true;
-        case Etor_Evaluating:
-            if (!success) {
-                fprintf(stderr, "ERROR: unbound identifier '%s'\n", ident->name);
-                assert(false);
-                exit(1);
-            }
-            return true;
+    if (!success) {
+        *value = (struct Object*)ident;
     }
+    return true;
+}
+
+bool_t identifier_eval_rec(struct Identifier* ident, struct Etor_rec* etor, struct Object** value) {
+    bool_t success = etor_rec_lookup(etor, ident, value);
+    if (!success) {
+        fprintf(stderr, "ERROR: unbound identifier '%s'\n", ident->name);
+        return false;
+    }
+    return true;
 }
 
 void identifier_show(struct Identifier* ident, FILE* stream) {

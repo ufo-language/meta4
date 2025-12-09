@@ -3,6 +3,7 @@
 #include "_typedefs.h"
 
 #include "object/globals.h"
+#include "object/functions/close_rec.h"
 #include "object/functions/eval_rec.h"
 #include "object/functions/show.h"
 #include "object/evaluator/etor_rec.h"
@@ -13,6 +14,8 @@
 /* Types *********************************************************************/
 
 /* Forward declarations ******************************************************/
+
+static bool_t _close_eval_aux(struct Pair* pair, struct Etor_rec* etor, struct Object** value, bool_t (*function)(struct Object*, struct Etor_rec*, struct Object**));
 
 /* Global variables **********************************************************/
 
@@ -53,23 +56,20 @@ count_t pair_count(struct Pair* pair) {
     return count;
 }
 
-bool_t pair_eval_rec(struct Pair* pair, struct Etor_Rec* etor, struct Object** value) {
-    struct Object* newFirst;
-    eval_rec(pair->first, etor, &newFirst);
-    struct Object* newRest;
-    eval_rec(pair->rest, etor, &newRest);
-    *value = (struct Object*)pair_new(newFirst, newRest);
-    return true;
+bool_t pair_close_rec(struct Pair* pair, struct Etor_rec* etor, struct Object** value) {
+    return _close_eval_aux(pair, etor, value, close_rec);
+}
+
+bool_t pair_eval_rec(struct Pair* pair, struct Etor_rec* etor, struct Object** value) {
+    return _close_eval_aux(pair, etor, value, eval_rec);
 }
 
 void pair_show(struct Pair* pair, FILE* stream) {
-    bool_t firstIter = true;
     fputc('[', stream);
-    while (pair != g_emptyPair) {
-        if (firstIter) {
-            firstIter = false;
-        }
-        else {
+    // bool_t firstIter = true;
+    // while (pair != g_emptyPair) {
+    for (bool_t firstIter=true; pair!=g_emptyPair; firstIter=false) {
+        if (!firstIter) {
             fputs(", ", stream);
         }
         show(pair->first, stream);
@@ -81,8 +81,26 @@ void pair_show(struct Pair* pair, FILE* stream) {
             show(pair->rest, stream);
             break;
         }
+        // firstIter = false;
     }
     fputc(']', stream);
 }
 
 /* Private functions *********************************************************/
+
+static bool_t _close_eval_aux(struct Pair* pair, struct Etor_rec* etor, struct Object** value, bool_t (*function)(struct Object*, struct Etor_rec*, struct Object**)) {
+    if (pair == g_emptyPair) {
+        *value = (struct Object*)pair;
+        return true;
+    }
+    struct Object* newFirst;
+    if (!function(pair->first, etor, &newFirst)) {
+        return false;
+    }
+    struct Object* newRest;
+    if (!function(pair->rest, etor, &newRest)) {
+        return false;
+    }
+    *value = (struct Object*)pair_new(newFirst, newRest);
+    return true;
+}

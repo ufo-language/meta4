@@ -1,13 +1,11 @@
-#pragma once
-
 #include "_typedefs.h"
 
 /* Defines *******************************************************************/
 
 /* Types *********************************************************************/
 
-struct Etor_Rec;
 struct Object;
+struct Vector;
 
 /* Forward declarations ******************************************************/
 
@@ -21,6 +19,4 @@ struct Object;
 
 /* Object functions ******************/
 
-bool_t close(struct Object* obj, struct Etor_Rec* etor, struct Object** value);
-
-/* Private functions *********************************************************/
+void freeVars(struct Object* obj, struct Vector* freeVars);

@@ -30,6 +30,9 @@ struct Vector* vector_new_withCapacity(count_t capacity);
 
 /* Unique functions ******************/
 
+index_t vector_getTop(struct Vector* vector);
+void vector_setTop(struct Vector* vector, index_t newTop);
+
 bool_t vector_lookup(struct Vector* vector, struct Object* key, struct Object** value);
 bool_t vector_get(struct Vector* vector, index_t index, struct Object** elem);
 bool_t vector_set(struct Vector* vector, index_t index, struct Object* elem);
@@ -38,7 +41,7 @@ void vector_push(struct Vector* vector, struct Object* elem);
 
 /* Object functions ******************/
 
-bool_t vector_close_rec(struct Vector* vector, struct Etor_Rec* etor, struct Object** value);
+bool_t vector_close_rec(struct Vector* vector, struct Etor_rec* etor, struct Object** value);
 count_t vector_count(struct Vector* vector);
-bool_t vector_eval_rec(struct Vector* vector, struct Etor_Rec* etor, struct Object** value);
+bool_t vector_eval_rec(struct Vector* vector, struct Etor_rec* etor, struct Object** value);
 void vector_show(struct Vector* vector, FILE* stream);

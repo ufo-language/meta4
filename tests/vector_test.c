@@ -23,6 +23,8 @@ int main(int argc, char* argv[]) {
         ASSERT_IEQ(0, vector_count(vector));
         ASSERT_IEQ(0, vector->nResizes);
         EXPECT_IEQ(0, strcmp("Vector", typeName(vector->obj.typeId)));
+        EXPECT_IEQ(NWORDS(struct Object) + 3, vector->obj.nWords);
+        EXPECT_IEQ(NWORDS(struct Vector), vector->obj.nWords);
     END
 
     TEST(vector_checkPushAndPop)

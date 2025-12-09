@@ -25,7 +25,7 @@
 
 /* Public functions **********************************************************/
 
-bool_t eval_rec(struct Object* obj, struct Etor_Rec* etor, struct Object** value) {
+bool_t eval_rec(struct Object* obj, struct Etor_rec* etor, struct Object** value) {
     switch(obj->typeId) {
         /* Constants */
         case OT_Boolean:
@@ -41,7 +41,7 @@ bool_t eval_rec(struct Object* obj, struct Etor_Rec* etor, struct Object** value
             return true;
 
         /* Non-constants */
-        case OT_Apply:      break;
+        case OT_Application:      break;
         case OT_Array:      return array_eval_rec((struct Array*)obj, etor, value);
         case OT_BinOp:      break;
         case OT_ByteBuffer: break;

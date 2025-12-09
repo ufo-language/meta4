@@ -16,7 +16,7 @@ struct Sequence {
     struct Object* exprs[];
 };
 
-struct Etor_Rec;
+struct Etor_rec;
 
 /* Forward declarations ******************************************************/
 
@@ -32,6 +32,6 @@ struct Sequence* sequence_new(count_t nExprs, struct Object* exprs[]);
 
 /* Object functions ******************/
 
-bool_t sequence_close_rec(struct Sequence* sequence, struct Etor_Rec* etor, struct Object** value);
-bool_t sequence_eval_rec(struct Sequence* sequence, struct Etor_Rec* etor, struct Object** value);
-void sequence_show(struct Sequence* sequence, FILE* stream);
+bool_t sequence_close_rec(struct Sequence* seq, struct Etor_rec* etor, struct Object** value);
+bool_t sequence_eval_rec(struct Sequence* seq, struct Etor_rec* etor, struct Object** value);
+void sequence_show(struct Sequence* seq, FILE* stream);

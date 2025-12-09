@@ -28,7 +28,7 @@ enum TypeId {
     OT_Vector,
     OT_Var,
     /* Expressions */
-    OT_Apply,
+    OT_Application,
     OT_BinOp,
     OT_Dec,
     OT_Function,

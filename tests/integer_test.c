@@ -17,6 +17,8 @@ int main(int argc, char* argv[]) {
         ASSERT_PTRNE(NULL, integer);
         ASSERT_ISA(OT_Integer, integer);
         EXPECT_IEQ(0, strcmp("Integer", typeName(integer->obj.typeId)));
+        EXPECT_IEQ(NWORDS(struct Object) + 1, integer->obj.nWords);
+        EXPECT_IEQ(NWORDS(struct Integer), integer->obj.nWords);
     END
 
     TEST(integer_checkEqual)
@@ -29,7 +31,7 @@ int main(int argc, char* argv[]) {
 
     TEST(integer_checkEval)
         struct Integer* integer = integer_new(123);
-        struct Etor_Rec* etor = etor_rec_new();
+        struct Etor_rec* etor = etor_rec_new();
         struct Object* value;
         ASSERT_TRUE(eval_rec(OBJ(integer), etor, &value))
         EXPECT_EQ(integer, value);

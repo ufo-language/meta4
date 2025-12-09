@@ -8,6 +8,7 @@
 #include "object/types/array.h"
 #include "object/types/boolean.h"
 #include "object/types/continuation.h"
+#include "object/types/function.h"
 #include "object/types/identifier.h"
 #include "object/types/intarray.h"
 #include "object/types/integer.h"
@@ -34,7 +35,7 @@
 
 void show(struct Object* obj, FILE* stream) {
     switch(obj->typeId) {
-        case OT_Apply:         break;
+        case OT_Application:   break;
         case OT_Array:         array_show((struct Array*)obj, stream); return;
         case OT_BinOp:         break;
         case OT_Boolean:       boolean_show((struct Boolean*)obj, stream); return;
@@ -45,7 +46,7 @@ void show(struct Object* obj, FILE* stream) {
         case OT_Device:        break;
         case OT_Etor_CPS:      break;
         case OT_Etor_Rec:      break;
-        case OT_Function:      break;
+        case OT_Function:      function_show((struct Function*)obj, stream); return;
         case OT_HashTable:     break;
         case OT_Identifier:    identifier_show((struct Identifier*)obj, stream); return;
         case OT_IfThen:        break;
@@ -57,7 +58,7 @@ void show(struct Object* obj, FILE* stream) {
         case OT_Let:           break;
         case OT_Pair:          pair_show((struct Pair*)obj, stream); return;
         case OT_Nil:           nil_show((struct Nil*)obj, stream); return;
-        case OT_Null:          break;
+        case OT_Null:          fputs("Null/Unique", stream); return;
         case OT_Primitive:     break;
         case OT_Quote:         break;
         case OT_Real:          break;

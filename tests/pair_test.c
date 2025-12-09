@@ -20,10 +20,12 @@ int main(int argc, char* argv[]) {
         EXPECT_ISA(OT_Pair, pair);
         ASSERT_EQ(i100, pair->first);
         ASSERT_EQ(i200, pair->rest);
+        EXPECT_IEQ(NWORDS(struct Object) + 2, pair->obj.nWords);
+        EXPECT_IEQ(NWORDS(struct Pair), pair->obj.nWords);
     END
 
     TEST(pair_checkEval)
-        struct Etor_Rec* etor = etor_rec_new();
+        struct Etor_rec* etor = etor_rec_new();
         etor_rec_bind(etor, a, OBJ(i100));
         etor_rec_bind(etor, b, OBJ(i200));
         struct Pair* pair = pair_new(OBJ(a), OBJ(b));

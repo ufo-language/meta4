@@ -14,7 +14,7 @@ struct Array {
     struct Object* elems[];
 };
 
-struct Etor_Rec;
+struct Etor_rec;
 
 /* Forward declarations ******************************************************/
 
@@ -37,6 +37,6 @@ void array_showElemsWith(count_t nElems, struct Object* elems[], const string_t 
 
 /* Object functions ******************/
 
-bool_t array_close_rec(struct Array* array, struct Etor_Rec* etor, struct Object** value);
-bool_t array_eval_rec(struct Array* array, struct Etor_Rec* etor, struct Object** value);
+bool_t array_close_rec(struct Array* array, struct Etor_rec* etor, struct Object** value);
+bool_t array_eval_rec(struct Array* array, struct Etor_rec* etor, struct Object** value);
 void array_show(struct Array* array, FILE* stream);

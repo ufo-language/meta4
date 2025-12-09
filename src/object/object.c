@@ -18,10 +18,10 @@
 /* Lifecycle functions *******************************************************/
 
 struct Object* object_new(enum TypeId typeId, count_t nWords) {
-    #if 0
-    fprintf(stderr, "object_new %s : %lu words\n", typeName(typeId), nWords);    
-    #endif
     struct Object* obj = memory_alloc(nWords);
+    #if 1
+    fprintf(stderr, "object_new %s : %lu words @ %p\n", typeName(typeId), nWords, obj);
+    #endif
     obj->typeId = typeId;
     obj->nWords = nWords;
     return obj;

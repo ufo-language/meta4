@@ -26,7 +26,7 @@ struct Nil* nil_new(void) {
 
 /* Object functions ******************/
 
-bool_t nil_eval_rec(struct Nil* nil, struct Etor_Rec* etor, struct Object** value) {
+bool_t nil_eval_rec(struct Nil* nil, struct Etor_rec* etor, struct Object** value) {
     *value = (struct Object*)nil;
     return true;
 }

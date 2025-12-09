@@ -15,11 +15,13 @@ int main(int argc, char* argv[]) {
         struct Dec* dec = dec_new(OBJ(i100));
         ASSERT_ISA(OT_Dec, dec);
         EXPECT_EQ(i100, dec->expr);
+        EXPECT_IEQ(NWORDS(struct Object) + 1, dec->obj.nWords);
+        EXPECT_IEQ(NWORDS(struct Dec), dec->obj.nWords);
     END
 
     TEST(dec_checkEval_integer)
         struct Dec* dec = dec_new(OBJ(i100));
-        struct Etor_Rec* etor = etor_rec_new();
+        struct Etor_rec* etor = etor_rec_new();
         struct Object* value;
         ASSERT_TRUE(eval_rec(OBJ(dec), etor, &value));
         ASSERT_ISA(OT_Integer, value);
@@ -29,7 +31,7 @@ int main(int argc, char* argv[]) {
     TEST(dec_checkEval_intVar)
         struct IntVar* iv100 = intVar_new(100);
         struct Dec* dec = dec_new(OBJ(iv100));
-        struct Etor_Rec* etor = etor_rec_new();
+        struct Etor_rec* etor = etor_rec_new();
         struct Object* value;
         ASSERT_TRUE(eval_rec(OBJ(dec), etor, &value));
         ASSERT_EQ(iv100, value);

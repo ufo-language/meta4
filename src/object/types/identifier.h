@@ -15,7 +15,7 @@ struct Identifier {
     #include "object/types/symbolic_fields.h"
 };
 
-struct Etor_Rec;
+struct Etor_rec;
 
 /* Forward declarations ******************************************************/
 
@@ -31,6 +31,6 @@ struct Identifier* identifier_new(const string_t name);
 
 /* Object functions ******************/
 
-bool_t identifier_close_rec(struct Identifier* ident, struct Etor_Rec* etor, struct Object** value);
-bool_t identifier_eval_rec(struct Identifier* ident, struct Etor_Rec* etor, struct Object** value);
+bool_t identifier_close_rec(struct Identifier* ident, struct Etor_rec* etor, struct Object** value);
+bool_t identifier_eval_rec(struct Identifier* ident, struct Etor_rec* etor, struct Object** value);
 void identifier_show(struct Identifier* ident, FILE* stream);

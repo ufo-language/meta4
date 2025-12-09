@@ -19,11 +19,13 @@ int main(int argc, char* argv[]) {
         EXPECT_EQ(OBJ(g_true), ifThen->cond);
         EXPECT_EQ(OBJ(i100), ifThen->conseq);
         EXPECT_EQ(OBJ(i200), ifThen->alt);
+        EXPECT_IEQ(NWORDS(struct Object) + 3, ifThen->obj.nWords);
+        EXPECT_IEQ(NWORDS(struct IfThen), ifThen->obj.nWords);
     END
 
     TEST(ifThen_checkEval_true)
         struct IfThen* ifThen = ifThen_new(OBJ(g_true), OBJ(i100), OBJ(i200));
-        struct Etor_Rec* etor = etor_rec_new();
+        struct Etor_rec* etor = etor_rec_new();
         struct Object* value;
         ASSERT_TRUE(eval_rec(OBJ(ifThen), etor, &value));
         EXPECT_EQ(i100, value);
@@ -31,7 +33,7 @@ int main(int argc, char* argv[]) {
 
     TEST(ifThen_checkEval_false)
         struct IfThen* ifThen = ifThen_new(OBJ(g_false), OBJ(i100), OBJ(i200));
-        struct Etor_Rec* etor = etor_rec_new();
+        struct Etor_rec* etor = etor_rec_new();
         struct Object* value;
         ASSERT_TRUE(eval_rec(OBJ(ifThen), etor, &value));
         EXPECT_EQ(i200, value);

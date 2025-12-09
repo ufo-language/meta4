@@ -7,7 +7,7 @@
 /* Types *********************************************************************/
 
 struct Boolean;
-struct Function;
+struct FunctionRule;
 struct GC;
 struct Identifier;
 struct Nil;
@@ -19,16 +19,16 @@ struct Vector;
 
 /* Global variables **********************************************************/
 
-extern struct Boolean*    g_false;
-extern struct Boolean*    g_true;
-extern struct Function*   g_emptyFunction;
-extern struct GC*         g_gc;
-extern struct Identifier* g_idNil;
-extern struct Nil*        g_nil;
-extern struct Object*     g_uniqueObject;
-extern struct Pair*       g_emptyPair;
-extern struct Vector*     g_identifierInternTable;
-extern struct Vector*     g_symbolInternTable;
+extern struct Boolean*      g_false;
+extern struct Boolean*      g_true;
+extern struct FunctionRule* g_emptyFunctionRule;
+extern struct GC*           g_gc;
+extern struct Identifier*   g_idNil;
+extern struct Nil*          g_nil;
+extern struct Object*       g_uniqueObject;
+extern struct Pair*         g_emptyPair;
+extern struct Vector*       g_identifierInternTable;
+extern struct Vector*       g_symbolInternTable;
 
 /* Lifecycle functions *******************************************************/
 

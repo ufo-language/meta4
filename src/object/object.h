@@ -15,7 +15,7 @@ struct Object {
     count_t nWords;
 };
 
-struct Etor_Rec;
+struct Etor_rec;
 
 /* Forward declarations ******************************************************/
 

@@ -26,7 +26,7 @@
 
 bool_t boolValue(struct Object* obj) {
     switch(obj->typeId) {
-        case OT_Apply:         return true;
+        case OT_Application:         return true;
         case OT_Array:         return ((struct Array*)obj)->nElems != 0;
         case OT_BinOp:         return true;
         case OT_Boolean:       return ((struct Boolean*)obj)->b;

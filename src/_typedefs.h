@@ -25,4 +25,4 @@ typedef int           bool_t;
 #define false 0
 
 #define NWORDS(type) (sizeof(type) / sizeof(word_t))
-#define NWORDS_FROM_BYTES(nBytes) (((nBytes) + sizeof(word_t) - 1) / sizeof(word_t))
+#define NBYTES_TO_WORDS(nBytes) (((nBytes) + sizeof(word_t) - 1) / sizeof(word_t))

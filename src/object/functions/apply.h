@@ -18,4 +18,4 @@
 
 /* Object functions ******************/
 
-bool_t apply(struct Object* obj, struct Etor_Rec* etorRec, count_t nArgs, struct Object* args[]) {
+bool_t apply(struct Object* obj, struct Etor_rec* etorRec, count_t nArgs, struct Object* args[]) {

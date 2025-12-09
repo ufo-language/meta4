@@ -1,31 +1,3 @@
-#include "_typedefs.h"
-
-#include "object/functions/eval_rec.h"
-#include "object/object.h"
-#include "object/evaluator/etor_rec.h"
-/* Defines *******************************************************************/
-
-/* Types *********************************************************************/
-
-/* Forward declarations ******************************************************/
-
-/* Global variables **********************************************************/
-
-/* Lifecycle functions *******************************************************/
-
-/* Public functions **********************************************************/
-
-/* Unique functions ******************/
-
-/* Object functions ******************/
-
-bool_t close(struct Object* obj, struct Etor_Rec* etor, struct Object** value) {
-    etor->evaluationType = Etor_Closing;
-    bool_t success = eval_rec(obj, etor, value);
-    etor->evaluationType = Etor_Evaluating;
-    return success;
-}
-
 #include <stdio.h>
 
 #include "_typedefs.h"
@@ -53,7 +25,7 @@ bool_t close(struct Object* obj, struct Etor_Rec* etor, struct Object** value) {
 
 /* Public functions **********************************************************/
 
-bool_t close_rec(struct Object* obj, struct Etor_Rec* etor, struct Object** value) {
+bool_t close_rec(struct Object* obj, struct Etor_rec* etor, struct Object** value) {
     switch(obj->typeId) {
         /* Constants */
         case OT_Boolean:
@@ -70,7 +42,7 @@ bool_t close_rec(struct Object* obj, struct Etor_Rec* etor, struct Object** valu
             return true;
 
         /* Non-constants */
-        case OT_Apply:      break;
+        case OT_Application:      break;
         case OT_Array:      return array_close_rec((struct Array*)obj, etor, value);
         case OT_BinOp:      break;
         case OT_ByteBuffer: break;

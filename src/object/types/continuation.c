@@ -17,7 +17,7 @@
 
 struct Continuation* contin_new(string_t name, void (*eval)(struct Continuation*, struct Etor_CPS)) {
     count_t nChars = strlen(name);
-    struct Continuation* contin = (struct Continuation*)object_new(OT_Continuation, NWORDS(*contin) + NWORDS_FROM_BYTES(nChars + 1));
+    struct Continuation* contin = (struct Continuation*)object_new(OT_Continuation, NWORDS(*contin) + NBYTES_TO_WORDS(nChars + 1));
     memcpy(contin->name, name, nChars + 1);
     contin->eval = eval;
     return contin;
