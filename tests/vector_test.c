@@ -95,7 +95,7 @@ int main(int argc, char* argv[]) {
         ASSERT_IEQ(capacity * 2, vector->capacity);
         struct Object* value;
         ASSERT_TRUE(vector_pop(vector, &value));
-        ASSERT_IEQ(OT_Integer, value->typeId);
+        ASSERT_ISA(OT_Integer, value);
         ASSERT_IEQ((capacity + 1) * 100, ((struct Integer*)value)->i);
     END
 

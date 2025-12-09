@@ -16,7 +16,7 @@ int main(int argc, char* argv[]) {
     struct Symbol* b = symbol_new("B");
 
     TEST(symbol_checkConstruction)
-        ASSERT_IEQ(OT_Symbol, a1->obj.typeId);
+        ASSERT_ISA(OT_Symbol, a1);
         ASSERT_IEQ(0, strcmp("A", a1->name));
         count_t nChars = strlen("A");
         ASSERT_IEQ(a1->hashCode, a2->hashCode);

@@ -17,7 +17,7 @@ int main(int argc, char* argv[]) {
     struct Identifier* b = identifier_new("b");
 
     TEST(identifier_checkConstruction)
-        ASSERT_IEQ(OT_Identifier, a1->obj.typeId);
+        ASSERT_ISA(OT_Identifier, a1);
         ASSERT_IEQ(0, strcmp("a", a1->name));
         count_t nChars = strlen("a") + 1;
         ASSERT_IEQ(a1->hashCode, a2->hashCode);

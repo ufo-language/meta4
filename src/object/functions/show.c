@@ -20,6 +20,7 @@
 #include "object/types/string.h"
 #include "object/types/symbol.h"
 #include "object/types/vector.h"
+#include "object/types/while.h"
 
 /* Defines *******************************************************************/
 
@@ -69,7 +70,7 @@ void show(struct Object* obj, FILE* stream) {
         case OT_User:          break;
         case OT_Var:           break;
         case OT_Vector:        vector_show((struct Vector*)obj, stream); return;
-        case OT_While:         break;
+        case OT_While:         while_show((struct While*)obj, stream); return;
         default:
             break;
     }

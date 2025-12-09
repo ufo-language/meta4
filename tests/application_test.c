@@ -19,7 +19,7 @@ int main(int argc, char* argv[]) {
         count_t nArgs = 0;
         struct Object* args[] = {};
         struct Application* app = application_new(OBJ(x), nArgs, args);
-        ASSERT_IEQ(OT_Application, app->obj.typeId);
+        ASSERT_ISA(OT_Application, app);
         ASSERT_IEQ(NWORDS(struct Application), app->obj.nWords);
         ASSERT_IEQ(0, app->nArgs);
     END

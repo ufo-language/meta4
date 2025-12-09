@@ -14,6 +14,7 @@
 #include "object/types/ifthen.h"
 #include "object/types/pair.h"
 #include "object/types/sequence.h"
+#include "object/types/while.h"
 
 /* Defines *******************************************************************/
 
@@ -64,7 +65,7 @@ bool_t eval_rec(struct Object* obj, struct Etor_rec* etor, struct Object** value
         case OT_User:        break;
         case OT_Var:         break;
         case OT_Vector:      break;
-        case OT_While:       break;
+        case OT_While:       return while_eval_rec((struct While*)obj, etor, value);
 
         /* Non-datatypes */
         case OT_ConstantLimit:
