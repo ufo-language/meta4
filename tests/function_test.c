@@ -6,7 +6,6 @@
 #include "object/types/identifier.h"
 #include "object/types/integer.h"
 
-#include <stdio.h>
 int main(int argc, char* argv[]) {
     BEGIN_TESTS
 
@@ -69,16 +68,17 @@ int main(int argc, char* argv[]) {
         EXPECT_EQ(i100, function->rules->closedBody);
     END
 
-    TEST(function_checkApply)
+    TEST(function_checkApply_1rule)
         struct Function* function = function_new(f);
         count_t nParams = 1;
         struct Object* params[] = {OBJ(x)};
         struct Object* body = OBJ(x);
         struct Etor_rec* etor = etor_rec_new();
         function_attachFinalRule(function, nParams, params, body);
+        struct Object* value;
+        ASSERT_TRUE(function_close_rec(function, etor, &value));
         count_t nArgs = 1;
         struct Object* args[] = {OBJ(i100)};
-        struct Object* value;
         ASSERT_TRUE(function_apply(function, etor, nArgs, args, &value));
         EXPECT_EQ(i100, value);
     END

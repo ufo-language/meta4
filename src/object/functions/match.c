@@ -84,4 +84,15 @@ bool_t match(struct Object* obj, struct Object* other, struct Vector* bindings) 
     return false;
 }
 
+bool_t matchObjs(count_t nObjs, struct Object* objs[], struct Object* other[], struct Vector* bindings) {
+    index_t savedTop = vector_top(bindings);
+    for (index_t n=0; n<nObjs; n++) {
+        if (!match(objs[n], other[n], bindings)) {
+            vector_setTop(bindings, savedTop);
+            return false;
+        }
+    }
+    return true;
+}
+
 /* Private functions *********************************************************/

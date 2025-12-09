@@ -6,8 +6,10 @@
 #include "object/functions/eval_rec.h"
 #include "object/object.h"
 #include "object/typeids.h"
+#include "object/types/application.h"
 #include "object/types/array.h"
 #include "object/types/dec.h"
+#include "object/types/function.h"
 #include "object/types/identifier.h"
 #include "object/types/ifthen.h"
 #include "object/types/pair.h"
@@ -41,28 +43,28 @@ bool_t eval_rec(struct Object* obj, struct Etor_rec* etor, struct Object** value
             return true;
 
         /* Non-constants */
-        case OT_Application:      break;
-        case OT_Array:      return array_eval_rec((struct Array*)obj, etor, value);
-        case OT_BinOp:      break;
-        case OT_ByteBuffer: break;
-        case OT_Dec:        return dec_eval_rec((struct Dec*)obj, etor, value);
-        case OT_Etor_Rec:   break;
-        case OT_Function:   break;
-        case OT_HashTable:  break;
-        case OT_Identifier: return identifier_eval_rec((struct Identifier*)obj, etor, value);
-        case OT_IfThen:     return ifThen_eval_rec((struct IfThen*)obj, etor, value);
-        case OT_Inc:        break;
-        case OT_IntArray:   break;
-        case OT_IntVector:  break;
-        case OT_Let:        break;
-        case OT_Pair:       return pair_eval_rec((struct Pair*)obj, etor, value);
-        case OT_Quote:      break;
-        case OT_Sequence:   return sequence_eval_rec((struct Sequence*)obj, etor, value);
-        case OT_Test:       break;
-        case OT_User:       break;
-        case OT_Var:        break;
-        case OT_Vector:     break;
-        case OT_While:      break;
+        case OT_Application: return application_eval((struct Application*)obj, etor, value);
+        case OT_Array:       return array_eval_rec((struct Array*)obj, etor, value);
+        case OT_BinOp:       break;
+        case OT_ByteBuffer:  break;
+        case OT_Dec:         return dec_eval_rec((struct Dec*)obj, etor, value);
+        case OT_Etor_Rec:    break;
+        case OT_Function:    return function_eval_rec((struct Function*)obj, etor, value);;
+        case OT_HashTable:   break;
+        case OT_Identifier:  return identifier_eval_rec((struct Identifier*)obj, etor, value);
+        case OT_IfThen:      return ifThen_eval_rec((struct IfThen*)obj, etor, value);
+        case OT_Inc:         break;
+        case OT_IntArray:    break;
+        case OT_IntVector:   break;
+        case OT_Let:         break;
+        case OT_Pair:        return pair_eval_rec((struct Pair*)obj, etor, value);
+        case OT_Quote:       break;
+        case OT_Sequence:    return sequence_eval_rec((struct Sequence*)obj, etor, value);
+        case OT_Test:        break;
+        case OT_User:        break;
+        case OT_Var:         break;
+        case OT_Vector:      break;
+        case OT_While:       break;
 
         /* Non-datatypes */
         case OT_ConstantLimit:

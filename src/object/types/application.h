@@ -1,11 +1,17 @@
 #include "_typedefs.h"
 
+#include "object/object.h"
+
 /* Defines *******************************************************************/
 
 /* Types *********************************************************************/
 
-struct Object;
-struct Vector;
+struct Application {
+    struct Object obj;
+    struct Object* abstraction;
+    count_t nArgs;
+    struct Object* args[];
+};
 
 /* Forward declarations ******************************************************/
 
@@ -13,11 +19,12 @@ struct Vector;
 
 /* Lifecycle functions *******************************************************/
 
+struct Application* application_new(struct Object* abstraction, count_t nArgs, struct Object* args[]);
+
 /* Public functions **********************************************************/
 
 /* Unique functions ******************/
 
 /* Object functions ******************/
 
-bool_t match(struct Object* obj, struct Object* other, struct Vector* bindings);
-bool_t matchObjs(count_t nObjs, struct Object* objs[], struct Object* other[], struct Vector* bindings);
+bool_t application_eval(struct Application* app, struct Etor_rec* etor, struct Object** value);

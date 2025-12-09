@@ -5,7 +5,9 @@
 #include "memory/memory.h"
 #include "object/types/function.h"
 #include "object/evaluator/etor_rec.h"
+#include "object/functions/eval_rec.h"
 #include "object/functions/freevars.h"
+#include "object/functions/match.h"
 #include "object/functions/show.h"
 #include "object/types/identifier.h"
 #include "object/types/vector.h"
@@ -69,17 +71,33 @@ struct FunctionRule* function_emptyRule(void) {
 
 /* Object functions ******************/
 
-bool_t function_apply(struct Function* function, struct Etor_rec* etorRec, count_t nArgs, struct Object* args[], struct Object** value) {
-    /* Bind arguments to parameters */
-    // TODO this requires match() */
+bool_t function_apply(struct Function* function, struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value) {
+    index_t savedEnv = etor_rec_envSave(etor);
+    /* Check each rule for a match */
+    struct FunctionRule* rule = function->rules;
+    while (rule != g_emptyFunctionRule) {
+        if (rule->nParams == nArgs) {
+            if (matchObjs(nArgs, rule->params, args, etor->env)) {
+                return eval_rec(rule->closedBody, etor, value);
+            }
+        }
+        etor_rec_envRestore(etor, savedEnv);
+        rule = rule->nextRule;
+    }
+    return false;
 }
 
 bool_t function_close_rec(struct Function* function, struct Etor_rec* etor, struct Object** value) {
-    if (_closeRule(function->rules, etor)) {
-        *value = (struct Object*)function;
-        return true;
+    index_t savedEnv = etor_rec_envSave(etor);
+    for (struct FunctionRule* rule=function->rules; rule!=g_emptyFunctionRule; rule=rule->nextRule) {
+        if (!_closeRule(rule, etor)) {
+            etor_rec_envRestore(etor, savedEnv);
+            return false;
+        }
     }
-    return false;
+    etor_rec_envRestore(etor, savedEnv);
+    *value = (struct Object*)function;
+    return true;
 }
 
 bool_t function_eval_rec(struct Function* function, struct Etor_rec* etor, struct Object** value) {
