@@ -1,6 +1,6 @@
-#include <stdio.h>
-
 #pragma once
+
+#include <stdio.h>
 
 #include "_typedefs.h"
 

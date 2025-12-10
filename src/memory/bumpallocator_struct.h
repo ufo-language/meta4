@@ -1,3 +1,5 @@
+#pragma once
+
 #include "_typedefs.h"
 
 #include "memory/memory.h"

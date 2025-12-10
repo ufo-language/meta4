@@ -1,3 +1,5 @@
+#pragma once
+
 #include <stdint.h>
 
 /* The two types count_t and index_t are inherently the same, but the
