@@ -17,8 +17,6 @@
 
 /* Forward declarations ******************************************************/
 
-static bool_t _close_eval_aux(struct Pair* pair, struct Etor_rec* etor, struct Object** value, bool_t (*function)(struct Object*, struct Etor_rec*, struct Object**));
-
 /* Global variables **********************************************************/
 
 /* Lifecycle functions *******************************************************/
@@ -59,11 +57,37 @@ count_t pair_count(struct Pair* pair) {
 }
 
 bool_t pair_close_rec(struct Pair* pair, struct Etor_rec* etor, struct Object** value) {
-    return _close_eval_aux(pair, etor, value, close_rec);
+    if (pair == g_emptyPair) {
+        *value = (struct Object*)pair;
+        return true;
+    }
+    struct Object* newFirst;
+    if (!close_rec(pair->first, etor, &newFirst)) {
+        return false;
+    }
+    struct Object* newRest;
+    if (!close_rec(pair->rest, etor, &newRest)) {
+        return false;
+    }
+    *value = (struct Object*)pair_new(newFirst, newRest);
+    return true;
 }
 
 bool_t pair_eval_rec(struct Pair* pair, struct Etor_rec* etor, struct Object** value) {
-    return _close_eval_aux(pair, etor, value, eval_rec);
+    if (pair == g_emptyPair) {
+        *value = (struct Object*)pair;
+        return true;
+    }
+    struct Object* newFirst;
+    if (!eval_rec(pair->first, etor, &newFirst)) {
+        return false;
+    }
+    struct Object* newRest;
+    if (!eval_rec(pair->rest, etor, &newRest)) {
+        return false;
+    }
+    *value = (struct Object*)pair_new(newFirst, newRest);
+    return true;
 }
 
 bool_t pair_match(struct Pair* pair, struct Pair* other, struct Vector* bindings) {
@@ -98,20 +122,3 @@ void pair_show(struct Pair* pair, FILE* stream) {
 }
 
 /* Private functions *********************************************************/
-
-static bool_t _close_eval_aux(struct Pair* pair, struct Etor_rec* etor, struct Object** value, bool_t (*function)(struct Object*, struct Etor_rec*, struct Object**)) {
-    if (pair == g_emptyPair) {
-        *value = (struct Object*)pair;
-        return true;
-    }
-    struct Object* newFirst;
-    if (!function(pair->first, etor, &newFirst)) {
-        return false;
-    }
-    struct Object* newRest;
-    if (!function(pair->rest, etor, &newRest)) {
-        return false;
-    }
-    *value = (struct Object*)pair_new(newFirst, newRest);
-    return true;
-}
