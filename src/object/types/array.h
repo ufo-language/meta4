@@ -34,7 +34,13 @@ struct Array* array_new_noFill(count_t nElems);
 
 struct Object* array_get_unsafe(struct Array* array, index_t index);
 void array_set_unsafe(struct Array* array, index_t index, struct Object* value);
-void array_showElemsWith(count_t nElems, struct Object* elems[], const string_t sep, FILE* stream);
+
+/* Per-element operations; also used by other types */
+bool_t array_closeElems_rec(count_t nElems, struct Object* elems[], struct Object* newElems[], struct Etor_rec* etor, struct Object** error);
+bool_t array_elemsEqual(count_t nElems, struct Object* elems[], struct Object* otherElems[]);
+bool_t array_evalElems_rec(count_t nElems, struct Object* elems[], struct Object* newElems[], struct Etor_rec* etor, struct Object** error);
+bool_t array_matchElems(count_t nElems, struct Object* elems[], struct Object* otherElems[], struct Vector* bindings);
+void array_showElems(count_t nElems, struct Object* elems[], const string_t sep, FILE* stream);
 
 /* Object functions ******************/
 

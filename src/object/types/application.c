@@ -37,11 +37,9 @@ struct Application* application_new(struct Object* abstraction, count_t nArgs, s
 /* Private functions *********************************************************/
 
 bool_t application_eval(struct Application* app, struct Etor_rec* etor, struct Object** value) {
-    index_t savedEnv = etor_rec_envSave(etor);
     /* Evaluate the abstraction */
     struct Object* abstrVal;
     if (!eval_rec(app->abstraction, etor, &abstrVal)) {
-        etor_rec_envRestore(etor, savedEnv);
         return false;
     }
     /* Evaluate the arguments */
@@ -49,7 +47,6 @@ bool_t application_eval(struct Application* app, struct Etor_rec* etor, struct O
     struct Object* argVal;
     for (index_t n=0; n<app->nArgs; n++) {
         if (!eval_rec(app->args[n], etor, &argVal)) {
-            etor_rec_envRestore(etor, savedEnv);
             return false;
         }
         argVals[n] = argVal;

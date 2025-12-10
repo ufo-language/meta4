@@ -20,4 +20,4 @@ struct Object;
 
 /* Object functions ******************/
 
-bool_t count(struct Object* obj, int_t* count);
+bool_t count(struct Object* obj, count_t* count);

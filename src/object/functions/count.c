@@ -4,6 +4,7 @@
 #include "object/object.h"
 #include "object/types/array.h"
 #include "object/types/pair.h"
+#include "object/types/term.h"
 #include "object/types/vector.h"
 
 /* Defines *******************************************************************/
@@ -38,6 +39,8 @@ bool_t count(struct Object* obj, int_t* count) {
             return pair_count((struct Pair*)obj);
         case OT_String:
             break;
+        case OT_Term:
+            return 1 + ((struct Term*)obj)->nArgs;
         case OT_Vector:
             return ((struct Vector*)obj)->top;
         default:

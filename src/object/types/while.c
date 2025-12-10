@@ -2,6 +2,7 @@
 
 #include "object/evaluator/etor_rec.h"
 #include "object/functions/boolvalue.h"
+#include "object/functions/close_rec.h"
 #include "object/functions/eval_rec.h"
 #include "object/functions/show.h"
 #include "object/globals.h"
@@ -32,19 +33,15 @@ struct While* while_new(struct Object* cond, struct Object* body) {
 /* Object functions ******************/
 
 bool_t while_close_rec(struct While* while_, struct Etor_rec* etor, struct Object** value) {
-    index_t savedEnv = etor_rec_envSave(etor);
     struct Object* closedCond;
-    if (!eval_rec(while_->cond, etor, &closedCond)) {
-        etor_rec_envRestore(etor, savedEnv);
+    if (!close_rec(while_->cond, etor, &closedCond)) {
         return false;
     }
     struct Object* closedBody;
-    if (!eval_rec(while_->body, etor, &closedBody)) {
-        etor_rec_envRestore(etor, savedEnv);
+    if (!close_rec(while_->body, etor, &closedBody)) {
         return false;
     }
     struct While* closedWhile = while_new(closedCond, closedBody);
-    etor_rec_envRestore(etor, savedEnv);
     *value = (struct Object*)closedWhile;
     return true;
 }
@@ -54,18 +51,14 @@ bool_t while_eval_rec(struct While* while_, struct Etor_rec* etor, struct Object
     struct Object* body = while_->body;
     struct Object* condValue;
     struct Object* bodyValue = (struct Object*)g_nil;
-    index_t savedEnv;
     while (true) {
-        savedEnv = etor_rec_envSave(etor);
         if (!eval_rec(cond, etor, &condValue)) {
-            etor_rec_envRestore(etor, savedEnv);
             return false;
         }
         if (!boolValue(condValue)) {
             break;
         }
         if (!eval_rec(body, etor, &bodyValue)) {
-            etor_rec_envRestore(etor, savedEnv);
             return false;
         }
     }

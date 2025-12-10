@@ -73,7 +73,7 @@ bool_t sequence_eval_rec(struct Sequence* seq, struct Etor_rec* etor, struct Obj
 
 void sequence_show(struct Sequence* seq, FILE* stream) {
     fputc('(', stream);
-    array_showElemsWith(seq->nExprs, seq->exprs, "; ", stream);
+    array_showElems(seq->nExprs, seq->exprs, "; ", stream);
     fputc(')', stream);
 }
 

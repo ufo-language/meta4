@@ -25,6 +25,7 @@ enum TypeId {
     OT_IntVector,
     OT_IntVar,
     OT_Pair,
+    OT_Term,
     OT_Vector,
     OT_Var,
     /* Expressions */

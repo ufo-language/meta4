@@ -5,6 +5,7 @@
 
 #include "object/evaluator/etor_rec.h"
 #include "object/functions/match.h"
+#include "object/globals.h"
 #include "object/typeids.h"
 #include "object/types/array.h"
 #include "object/types/identifier.h"
@@ -68,6 +69,21 @@ int main(int argc, char* argv[]) {
         ASSERT_EQ(i300, array_get_unsafe(array, 2));
     END
 
+    TEST(array_checkEvalElems_rec)
+        count_t nElems = 3;
+        struct Object* elems[] = {OBJ(a), OBJ(b), OBJ(c)};
+        struct Object* newElems[] = {g_uniqueObject, g_uniqueObject, g_uniqueObject};
+        struct Etor_rec* etor = etor_rec_new();
+        etor_rec_bind(etor, a, OBJ(i100));
+        etor_rec_bind(etor, b, OBJ(i200));
+        etor_rec_bind(etor, c, OBJ(i300));
+        struct Object* error = g_uniqueObject;
+        ASSERT_TRUE(array_evalElems_rec(nElems, elems, newElems, etor, &error));
+        EXPECT_EQ(i100, newElems[0]);
+        EXPECT_EQ(i200, newElems[1]);
+        EXPECT_EQ(i300, newElems[2]);
+    END
+
     TEST(array_checkEval)
         struct Object* identElems[] = {OBJ(a), OBJ(b), OBJ(c)};
         struct Array* array = array_new_elems(3, identElems);
@@ -81,9 +97,9 @@ int main(int argc, char* argv[]) {
         ASSERT_ISA(OT_Array, value);
         struct Array* arrayValue = (struct Array*)value;
         ASSERT_IEQ(3, arrayValue->nElems);
-        EXPECT_EQ(i100, array->elems[0]);
-        EXPECT_EQ(i200, array->elems[1]);
-        EXPECT_EQ(i300, array->elems[2]);
+        EXPECT_EQ(i100, arrayValue->elems[0]);
+        EXPECT_EQ(i200, arrayValue->elems[1]);
+        EXPECT_EQ(i300, arrayValue->elems[2]);
     END
 
     TEST(array_checkShow)

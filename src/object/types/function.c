@@ -81,6 +81,7 @@ bool_t function_apply(struct Function* function, struct Etor_rec* etor, count_t 
                 return eval_rec(rule->closedBody, etor, value);
             }
         }
+        /* Restore the environment because matchObjs creates new bindings */
         etor_rec_envRestore(etor, savedEnv);
         rule = rule->nextRule;
     }
@@ -155,7 +156,7 @@ static bool_t _closeRule(struct FunctionRule* rule, struct Etor_rec* etor) {
 
 static void _showRule(struct FunctionRule* rule, FILE* stream) {
     fputc('(', stream);
-    array_showElemsWith(rule->nParams, rule->params, ", ", stream);
+    array_showElems(rule->nParams, rule->params, ", ", stream);
     fputs(") = ", stream);
     show(rule->body, stream);
 }

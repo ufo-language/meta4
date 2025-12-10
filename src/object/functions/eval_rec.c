@@ -14,6 +14,7 @@
 #include "object/types/ifthen.h"
 #include "object/types/pair.h"
 #include "object/types/sequence.h"
+#include "object/types/term.h"
 #include "object/types/while.h"
 
 /* Defines *******************************************************************/
@@ -29,6 +30,7 @@
 /* Public functions **********************************************************/
 
 bool_t eval_rec(struct Object* obj, struct Etor_rec* etor, struct Object** value) {
+    index_t savedEnv = etor_rec_envSave(etor);
     switch(obj->typeId) {
         /* Constants */
         case OT_Boolean:
@@ -61,6 +63,7 @@ bool_t eval_rec(struct Object* obj, struct Etor_rec* etor, struct Object** value
         case OT_Pair:        return pair_eval_rec((struct Pair*)obj, etor, value);
         case OT_Quote:       break;
         case OT_Sequence:    return sequence_eval_rec((struct Sequence*)obj, etor, value);
+        case OT_Term:        return term_eval_rec((struct Term*)obj, etor, value);
         case OT_Test:        break;
         case OT_User:        break;
         case OT_Var:         break;
@@ -76,6 +79,7 @@ bool_t eval_rec(struct Object* obj, struct Etor_rec* etor, struct Object** value
         default:
             break;
     }
+    etor_rec_envRestore(etor, savedEnv);
     fprintf(stderr, "eval_rec: Unknown type ID %u (%s)\n", obj->typeId, typeName(obj->typeId));
     return false;
 }

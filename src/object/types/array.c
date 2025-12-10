@@ -17,8 +17,6 @@
 
 /* Forward declarations ******************************************************/
 
-static bool_t _close_eval_aux(struct Array* array, struct Etor_rec* etor, struct Object** value, bool_t (*function)(struct Object*, struct Etor_rec*, struct Object**));
-
 /* Global variables **********************************************************/
 
 /* Lifecycle functions *******************************************************/
@@ -58,6 +56,30 @@ struct Array* array_new_noFill(count_t nElems) {
 
 /* Unique functions ******************/
 
+bool_t array_closeElems_rec(count_t nElems, struct Object* elems[], struct Object* newElems[], struct Etor_rec* etor, struct Object** error) {
+    struct Object* value;
+    for (index_t n=0; n<nElems; n++) {
+        if (!close_rec(elems[n], etor, &value)) {
+            *error = value;
+            return false;
+        }
+        newElems[n] = value;
+    }
+    return true;
+}
+
+bool_t array_evalElems_rec(count_t nElems, struct Object* elems[], struct Object* newElems[], struct Etor_rec* etor, struct Object** error) {
+    struct Object* value;
+    for (index_t n=0; n<nElems; n++) {
+        if (!eval_rec(elems[n], etor, &value)) {
+            *error = value;
+            return false;
+        }
+        newElems[n] = value;
+    }
+    return true;
+}
+
 struct Object* array_get_unsafe(struct Array* array, index_t index) {
     return array->elems[index];
 }
@@ -66,14 +88,33 @@ void array_set_unsafe(struct Array* array, index_t index, struct Object* value) 
     array->elems[index] = value;
 }
 
+void array_showElems(count_t nElems, struct Object* elems[], const string_t sep, FILE* stream) {
+    for (index_t n=0; n<nElems; ++n) {
+        if (n > 0) {
+            fputs(sep, stream);
+        }
+        show(elems[n], stream);
+    }
+}
+
 /* Object functions ******************/
 
 bool_t array_close_rec(struct Array* array, struct Etor_rec* etor, struct Object** value) {
-    return _close_eval_aux(array, etor, value, close_rec);
+    struct Array* newArray = array_new_noFill(array->nElems);
+    if (!array_closeElems_rec(array->nElems, array->elems, newArray->elems, etor, value)) {
+        return false;
+    }
+    *value = (struct Object*)newArray;
+    return true;
 }
 
 bool_t array_eval_rec(struct Array* array, struct Etor_rec* etor, struct Object** value) {
-    return _close_eval_aux(array, etor, value, eval_rec);
+    struct Array* newArray = array_new_noFill(array->nElems);
+    if (!array_evalElems_rec(array->nElems, array->elems, newArray->elems, etor, value)) {
+        return false;
+    }
+    *value = (struct Object*)newArray;
+    return true;
 }
 
 bool_t array_match(struct Array* array, struct Array* other, struct Vector* bindings) {
@@ -92,35 +133,8 @@ bool_t array_match(struct Array* array, struct Array* other, struct Vector* bind
 
 void array_show(struct Array* array, FILE* stream) {
     fputc('{', stream);
-    array_showElemsWith(array->nElems, array->elems, ", ", stream);
+    array_showElems(array->nElems, array->elems, ", ", stream);
     fputc('}', stream);
 }
 
-void array_showElemsWith(count_t nElems, struct Object* elems[], const string_t sep, FILE* stream) {
-    for (index_t n=0; n<nElems; ++n) {
-        if (n > 0) {
-            fputs(sep, stream);
-        }
-        show(elems[n], stream);
-    }
-}
-
 /* Private functions *********************************************************/
-
-static bool_t _close_eval_aux(struct Array* array, struct Etor_rec* etor, struct Object** value, bool_t (*function)(struct Object*, struct Etor_rec*, struct Object**)) {
-    count_t nElems = array->nElems;
-    struct Array* newArray = array_new_noFill(nElems);
-    struct Object** elems = array->elems;
-    struct Object** newElems = array->elems;
-    struct Object* value1;
-    for (index_t n=0; n<nElems; ++n) {
-        if (function(elems[n], etor, &value1)) {
-            newElems[n] = value1;
-        }
-        else {
-            return false;
-        }
-    }
-    *value = (struct Object*)newArray;
-    return true;
-}
