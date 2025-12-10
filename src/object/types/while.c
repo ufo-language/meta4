@@ -67,9 +67,9 @@ bool_t while_eval_rec(struct While* while_, struct Etor_rec* etor, struct Object
 }
 
 void while_show(struct While* while_, FILE* stream) {
-    fputs("while (", stream);
+    fputs("while ", stream);
     show(while_->cond, stream);
-    fputs(") ", stream);
+    fputc(' ', stream);
     show(while_->body, stream);
 }
 
