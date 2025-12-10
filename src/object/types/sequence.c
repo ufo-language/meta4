@@ -36,29 +36,22 @@ struct Sequence* sequence_new(count_t nExprs, struct Object* exprs[]) {
 
 /* Object functions ******************/
 
-bool_t sequence_close_rec(struct Sequence* seq, struct Etor_rec* etor, struct Object** value) {
+struct Object* sequence_close_rec(struct Sequence* seq, struct Etor_rec* etor) {
     struct Vector* values = vector_new();
-    struct Object* value1;
     for (index_t n=0; n<seq->nExprs; ++n) {
-        if (!close_rec(seq->exprs[n], etor, &value1)) {
-            return false;
-        }
-        if (value1->typeId > OT_ConstantLimit) {
-            vector_push(values, value1);
+        struct Object* value = close_rec(seq->exprs[n], etor);
+        if (value->typeId > OT_ConstantLimit) {
+            vector_push(values, value);
         }
     }
     switch (values->top) {
         case 0:
-            *value = (struct Object*)g_nil;
-            break;
+            return (struct Object*)g_nil;
         case 1:
-            *value = values->elems->elems[0];
-            break;
+            return values->elems->elems[0];
         default:
-            *value = (struct Object*)sequence_new(values->top, values->elems->elems);
-            break;
+            return (struct Object*)sequence_new(values->top, values->elems->elems);
     }
-    return true;
 }
 
 bool_t sequence_eval_rec(struct Sequence* seq, struct Etor_rec* etor, struct Object** value) {

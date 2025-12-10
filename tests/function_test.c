@@ -61,8 +61,7 @@ int main(int argc, char* argv[]) {
         struct Etor_rec* etor = etor_rec_new();
         function_attachFinalRule(function, nParams, params, body);
         etor_rec_bind(etor, y, OBJ(i100));
-        struct Object* value;
-        ASSERT_TRUE(function_close_rec(function, etor, &value));
+        struct Object* value = function_close_rec(function, etor);
         ASSERT_EQ(function, value);
         EXPECT_EQ(y, function->rules->body);
         EXPECT_EQ(i100, function->rules->closedBody);
@@ -75,8 +74,7 @@ int main(int argc, char* argv[]) {
         struct Object* body = OBJ(x);
         struct Etor_rec* etor = etor_rec_new();
         function_attachFinalRule(function, nParams, params, body);
-        struct Object* value;
-        ASSERT_TRUE(function_close_rec(function, etor, &value));
+        struct Object* value = function_close_rec(function, etor);
         count_t nArgs = 1;
         struct Object* args[] = {OBJ(i100)};
         ASSERT_TRUE(function_apply(function, etor, nArgs, args, &value));

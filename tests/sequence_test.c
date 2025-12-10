@@ -31,9 +31,8 @@ int main(int argc, char* argv[]) {
 
     TEST(sequence_checkClose_3)
         struct Sequence* seq = sequence_new(3, exprs);
-        struct Object* closedSeq;
         struct Etor_rec* etor = etor_rec_new();
-        ASSERT_TRUE(sequence_close_rec(seq, etor, &closedSeq));
+        struct Object* closedSeq = sequence_close_rec(seq, etor);
         ASSERT_EQ(g_nil, closedSeq);
     END
 

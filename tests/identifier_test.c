@@ -43,16 +43,13 @@ int main(int argc, char* argv[]) {
         struct Integer* i100 = integer_new(100);
         struct Etor_rec* etor = etor_rec_new();
         etor_rec_bind(etor, a1, OBJ(i100));
-;
-        struct Object* value;
-        ASSERT_TRUE(close_rec(OBJ(a1), etor, &value));
+        struct Object* value = close_rec(OBJ(a1), etor);
         ASSERT_EQ(i100, value);
     END
 
     TEST(identifier_checkClose_unbound)
         struct Etor_rec* etor = etor_rec_new();
-        struct Object* value;
-        ASSERT_TRUE(close_rec(OBJ(a1), etor, &value));
+        struct Object* value = close_rec(OBJ(a1), etor);
         ASSERT_EQ(a1, value);
     END
 

@@ -31,6 +31,6 @@ struct Identifier* identifier_new(const string_t name);
 
 /* Object functions ******************/
 
-bool_t identifier_close_rec(struct Identifier* ident, struct Etor_rec* etor, struct Object** value);
+struct Object* identifier_close_rec(struct Identifier* ident, struct Etor_rec* etor);
 bool_t identifier_eval_rec(struct Identifier* ident, struct Etor_rec* etor, struct Object** value);
 void identifier_show(struct Identifier* ident, FILE* stream);

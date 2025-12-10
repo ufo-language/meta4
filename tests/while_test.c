@@ -21,7 +21,7 @@ int main(int argc, char* argv[]) {
 
     TEST(while_checkShow)
         struct While* while_ = while_new(OBJ(g_false), OBJ(g_nil));
-        SHOW("should be 'while (false) nil'", while_);
+        SHOW("should be 'while false nil'", while_);
     END
 
     TEST(while_checkEval_false)

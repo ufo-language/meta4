@@ -49,16 +49,10 @@ void array_init(struct Array* array, count_t nElems, struct Object* elems[]) {
 
 /* Unique functions ******************/
 
-bool_t array_closeElems_rec(count_t nElems, struct Object* elems[], struct Object* newElems[], struct Etor_rec* etor, struct Object** error) {
-    struct Object* value;
+void array_closeElems_rec(count_t nElems, struct Object* elems[], struct Object* newElems[], struct Etor_rec* etor) {
     for (index_t n=0; n<nElems; n++) {
-        if (!close_rec(elems[n], etor, &value)) {
-            *error = value;
-            return false;
-        }
-        newElems[n] = value;
+        newElems[n] = close_rec(elems[n], etor);
     }
-    return true;
 }
 
 bool_t array_evalElems_rec(count_t nElems, struct Object* elems[], struct Object* newElems[], struct Etor_rec* etor, struct Object** error) {
@@ -84,13 +78,10 @@ void array_showElems(count_t nElems, struct Object* elems[], const string_t sep,
 
 /* Object functions ******************/
 
-bool_t array_close_rec(struct Array* array, struct Etor_rec* etor, struct Object** value) {
+struct Object* array_close_rec(struct Array* array, struct Etor_rec* etor) {
     struct Array* newArray = array_new_noFill(array->nElems);
-    if (!array_closeElems_rec(array->nElems, array->elems, newArray->elems, etor, value)) {
-        return false;
-    }
-    *value = (struct Object*)newArray;
-    return true;
+    array_closeElems_rec(array->nElems, array->elems, newArray->elems, etor);
+    return (struct Object*)newArray;
 }
 
 bool_t array_eval_rec(struct Array* array, struct Etor_rec* etor, struct Object** value) {

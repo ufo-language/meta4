@@ -19,7 +19,7 @@
 
 /* Forward declarations ******************************************************/
 
-static bool_t _closeRule(struct FunctionRule* rule, struct Etor_rec* etor);
+static void _closeRule(struct FunctionRule* rule, struct Etor_rec* etor);
 static void _showRule(struct FunctionRule* rule, FILE* stream);
 
 /* Global variables **********************************************************/
@@ -88,21 +88,18 @@ bool_t function_apply(struct Function* function, struct Etor_rec* etor, count_t 
     return false;
 }
 
-bool_t function_close_rec(struct Function* function, struct Etor_rec* etor, struct Object** value) {
-    index_t savedEnv = etor_rec_envSave(etor);
+struct Object* function_close_rec(struct Function* function, struct Etor_rec* etor) {
     for (struct FunctionRule* rule=function->rules; rule!=g_emptyFunctionRule; rule=rule->nextRule) {
-        if (!_closeRule(rule, etor)) {
-            etor_rec_envRestore(etor, savedEnv);
-            return false;
-        }
+        index_t savedEnv = etor_rec_envSave(etor);
+        _closeRule(rule, etor);
+        etor_rec_envRestore(etor, savedEnv);
     }
-    etor_rec_envRestore(etor, savedEnv);
-    *value = (struct Object*)function;
-    return true;
+    return (struct Object*)function;
 }
 
 bool_t function_eval_rec(struct Function* function, struct Etor_rec* etor, struct Object** value) {
-    return function_close_rec(function, etor, value);
+    *value = function_close_rec(function, etor);
+    return true;
 }
 
 void function_show(struct Function* function, FILE* stream) {
@@ -122,9 +119,9 @@ void function_show(struct Function* function, FILE* stream) {
 
 /* Private functions *********************************************************/
 
-static bool_t _closeRule(struct FunctionRule* rule, struct Etor_rec* etor) {
+static void _closeRule(struct FunctionRule* rule, struct Etor_rec* etor) {
     if (rule == g_emptyFunctionRule) {
-        return true;
+        return;
     }
     /* Close current rule */
     /* Save the current environment */
@@ -140,18 +137,9 @@ static bool_t _closeRule(struct FunctionRule* rule, struct Etor_rec* etor) {
         }
     }
     /* Close the function body */
-    struct Object* closedBody;
-    if (!close_rec(rule->body, etor, &closedBody)) {
-        return false;
-    }
-    rule->closedBody = closedBody;
+    rule->closedBody = close_rec(rule->body, etor);
     /* Restore the environment */
     etor_rec_envRestore(etor, savedEnv);
-    /* Close next rule */
-    if (!_closeRule(rule->nextRule, etor)) {
-        return false;
-    }
-    return true;
 }
 
 static void _showRule(struct FunctionRule* rule, FILE* stream) {

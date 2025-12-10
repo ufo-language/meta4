@@ -28,6 +28,6 @@ struct While* while_new(struct Object* cond, struct Object* body);
 
 /* Object functions ******************/
 
-bool_t while_close_rec(struct While* while_, struct Etor_rec* etor, struct Object** value);
+struct Object* while_close_rec(struct While* while_, struct Etor_rec* etor);
 bool_t while_eval_rec(struct While* while_, struct Etor_rec* etor, struct Object** value);
 void while_show(struct While* while_, FILE* stream);

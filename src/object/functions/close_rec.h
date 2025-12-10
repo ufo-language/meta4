@@ -21,6 +21,6 @@ struct Object;
 
 /* Object functions ******************/
 
-bool_t close_rec(struct Object* obj, struct Etor_rec* etor, struct Object** value);
+struct Object* close_rec(struct Object* obj, struct Etor_rec* etor);
 
 /* Private functions *********************************************************/

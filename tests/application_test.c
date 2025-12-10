@@ -32,8 +32,7 @@ int main(int argc, char* argv[]) {
         struct Object* body = OBJ(x);
         struct Etor_rec* etor = etor_rec_new();
         function_attachFinalRule(function, nParams, params, body);
-        struct Object* value;
-        ASSERT_TRUE(function_close_rec(function, etor, &value));
+        struct Object* value = function_close_rec(function, etor);
         /* Create an application */
         count_t nArgs = 1;
         struct Object* args[] = {OBJ(i100)};

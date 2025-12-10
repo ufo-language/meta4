@@ -32,18 +32,11 @@ struct While* while_new(struct Object* cond, struct Object* body) {
 
 /* Object functions ******************/
 
-bool_t while_close_rec(struct While* while_, struct Etor_rec* etor, struct Object** value) {
-    struct Object* closedCond;
-    if (!close_rec(while_->cond, etor, &closedCond)) {
-        return false;
-    }
-    struct Object* closedBody;
-    if (!close_rec(while_->body, etor, &closedBody)) {
-        return false;
-    }
+struct Object* while_close_rec(struct While* while_, struct Etor_rec* etor) {
+    struct Object* closedCond = close_rec(while_->cond, etor);
+    struct Object* closedBody = close_rec(while_->body, etor);
     struct While* closedWhile = while_new(closedCond, closedBody);
-    *value = (struct Object*)closedWhile;
-    return true;
+    return (struct Object*)closedWhile;
 }
 
 bool_t while_eval_rec(struct While* while_, struct Etor_rec* etor, struct Object** value) {

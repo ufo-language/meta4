@@ -56,21 +56,13 @@ count_t pair_count(struct Pair* pair) {
     return count;
 }
 
-bool_t pair_close_rec(struct Pair* pair, struct Etor_rec* etor, struct Object** value) {
+struct Object* pair_close_rec(struct Pair* pair, struct Etor_rec* etor) {
     if (pair == g_emptyPair) {
-        *value = (struct Object*)pair;
-        return true;
+        return (struct Object*)pair;
     }
-    struct Object* newFirst;
-    if (!close_rec(pair->first, etor, &newFirst)) {
-        return false;
-    }
-    struct Object* newRest;
-    if (!close_rec(pair->rest, etor, &newRest)) {
-        return false;
-    }
-    *value = (struct Object*)pair_new(newFirst, newRest);
-    return true;
+    struct Object* newFirst = close_rec(pair->first, etor);
+    struct Object* newRest = close_rec(pair->rest, etor);
+    return (struct Object*)pair_new(newFirst, newRest);
 }
 
 bool_t pair_eval_rec(struct Pair* pair, struct Etor_rec* etor, struct Object** value) {

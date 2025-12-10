@@ -12,6 +12,7 @@
 #include "object/types/ifthen.h"
 #include "object/types/pair.h"
 #include "object/types/sequence.h"
+#include "object/types/while.h"
 
 /* Defines *******************************************************************/
 
@@ -25,7 +26,7 @@
 
 /* Public functions **********************************************************/
 
-bool_t close_rec(struct Object* obj, struct Etor_rec* etor, struct Object** value) {
+struct Object* close_rec(struct Object* obj, struct Etor_rec* etor) {
     switch(obj->typeId) {
         /* Constants */
         case OT_Boolean:
@@ -38,44 +39,43 @@ bool_t close_rec(struct Object* obj, struct Etor_rec* etor, struct Object** valu
         case OT_Real:
         case OT_String:
         case OT_Symbol:
-            *value = obj;
-            return true;
+            return obj;
 
         /* Non-constants */
         case OT_Application:      break;
-        case OT_Array:      return array_close_rec((struct Array*)obj, etor, value);
+        case OT_Array:      return array_close_rec((struct Array*)obj, etor);
         case OT_BinOp:      break;
         case OT_ByteBuffer: break;
-        /* case OT_Dec:        return dec_close_rec((struct Dec*)obj, etor, value); */
+        /* case OT_Dec:        return dec_close_rec((struct Dec*)obj, etor); */
         case OT_Etor_Rec:   break;
         case OT_Function:   break;
         case OT_HashTable:  break;
-        case OT_Identifier: return identifier_close_rec((struct Identifier*)obj, etor, value);
-        case OT_IfThen:     return ifThen_close_rec((struct IfThen*)obj, etor, value);
+        case OT_Identifier: return identifier_close_rec((struct Identifier*)obj, etor);
+        case OT_IfThen:     return ifThen_close_rec((struct IfThen*)obj, etor);
         case OT_Inc:        break;
         case OT_IntArray:   break;
         case OT_IntVector:  break;
         case OT_Let:        break;
-        case OT_Pair:       return pair_close_rec((struct Pair*)obj, etor, value);
+        case OT_Pair:       return pair_close_rec((struct Pair*)obj, etor);
         case OT_Quote:      break;
-        case OT_Sequence:   return sequence_close_rec((struct Sequence*)obj, etor, value);
+        case OT_Sequence:   return sequence_close_rec((struct Sequence*)obj, etor);
         case OT_Test:       break;
         case OT_User:       break;
         case OT_Var:        break;
         case OT_Vector:     break;
-        case OT_While:      break;
+        case OT_While:      return while_close_rec((struct While*)obj, etor);
 
         /* Non-datatypes */
         case OT_ConstantLimit:
         case OT_Null:
             fprintf(stderr, "Error closing object of type '%s'\n", typeName(obj->typeId));
-            return false;
+            return obj;
 
         default:
             break;
     }
     fprintf(stderr, "close_rec: Unknown type ID %u (%s)\n", obj->typeId, typeName(obj->typeId));
-    return false;
+    return obj;
 }
 
 /* Private functions *********************************************************/

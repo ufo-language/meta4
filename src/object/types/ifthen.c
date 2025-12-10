@@ -36,25 +36,11 @@ struct IfThen* ifThen_new(struct Object* cond, struct Object* conseq, struct Obj
 
 /* Private functions *********************************************************/
 
-bool_t ifThen_close_rec(struct IfThen* ifThen, struct Etor_rec* etor, struct Object** value) {
-    struct Object* closedCond;
-    if (!close_rec(ifThen->cond, etor, &closedCond)) {
-        return false;
-    }
-    if (closedCond->typeId < OT_ConstantLimit) {
-        bool_t b = boolValue(*value);
-        return close_rec(b ? ifThen->conseq : ifThen->alt, etor, value);
-    }
-    struct Object* closedConseq;
-    if (!close_rec(ifThen->conseq, etor, &closedConseq)) {
-        return false;
-    }
-    struct Object* closedAlt;
-    if (!close_rec(ifThen->alt, etor, &closedAlt)) {
-        return false;
-    }
-    *value = (struct Object*)ifThen_new(closedCond, closedConseq, closedAlt);
-    return true;
+struct Object* ifThen_close_rec(struct IfThen* ifThen, struct Etor_rec* etor) {
+    struct Object* closedCond = close_rec(ifThen->cond, etor);
+    struct Object* closedConseq = close_rec(ifThen->conseq, etor);
+    struct Object* closedAlt = close_rec(ifThen->alt, etor);
+    return (struct Object*)ifThen_new(closedCond, closedConseq, closedAlt);
 }
 
 bool_t ifThen_eval_rec(struct IfThen* ifThen, struct Etor_rec* etor, struct Object** value) {
