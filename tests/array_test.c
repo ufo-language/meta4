@@ -52,21 +52,21 @@ int main(int argc, char* argv[]) {
 
     TEST(array_checkSetAndGet)
         struct Array* array = array_new_elem(3, OBJ(i0));
-        ASSERT_EQ(i0, array_get_unsafe(array, 0));
-        ASSERT_EQ(i0, array_get_unsafe(array, 1));
-        ASSERT_EQ(i0, array_get_unsafe(array, 2));
-        array_set_unsafe(array, 0, OBJ(i100));
-        ASSERT_EQ(i100, array_get_unsafe(array, 0));
-        EXPECT_EQ(i0, array_get_unsafe(array, 1));
-        EXPECT_EQ(i0, array_get_unsafe(array, 2));
-        array_set_unsafe(array, 1, OBJ(i200));
-        EXPECT_EQ(i100, array_get_unsafe(array, 0));
-        ASSERT_EQ(i200, array_get_unsafe(array, 1));
-        EXPECT_EQ(i0, array_get_unsafe(array, 2));
-        array_set_unsafe(array, 2, OBJ(i300));
-        EXPECT_EQ(i100, array_get_unsafe(array, 0));
-        EXPECT_EQ(i200, array_get_unsafe(array, 1));
-        ASSERT_EQ(i300, array_get_unsafe(array, 2));
+        ASSERT_EQ(i0, array->elems[0]);
+        ASSERT_EQ(i0, array->elems[1]);
+        ASSERT_EQ(i0, array->elems[2]);
+        array->elems[0] = OBJ(i100);
+        ASSERT_EQ(i100, array->elems[0]);
+        EXPECT_EQ(i0, array->elems[1]);
+        EXPECT_EQ(i0, array->elems[2]);
+        array->elems[1] = OBJ(i200);
+        EXPECT_EQ(i100, array->elems[0]);
+        ASSERT_EQ(i200, array->elems[1]);
+        EXPECT_EQ(i0, array->elems[2]);
+        array->elems[2] = OBJ(i300);
+        EXPECT_EQ(i100, array->elems[0]);
+        EXPECT_EQ(i200, array->elems[1]);
+        ASSERT_EQ(i300, array->elems[2]);
     END
 
     TEST(array_checkEvalElems_rec)

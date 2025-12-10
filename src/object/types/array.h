@@ -32,9 +32,6 @@ struct Array* array_new_noFill(count_t nElems);
 
 /* Unique functions ******************/
 
-struct Object* array_get_unsafe(struct Array* array, index_t index);
-void array_set_unsafe(struct Array* array, index_t index, struct Object* value);
-
 /* Per-element operations; also used by other types */
 bool_t array_closeElems_rec(count_t nElems, struct Object* elems[], struct Object* newElems[], struct Etor_rec* etor, struct Object** error);
 bool_t array_elemsEqual(count_t nElems, struct Object* elems[], struct Object* otherElems[]);

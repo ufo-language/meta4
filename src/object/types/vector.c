@@ -71,7 +71,7 @@ bool_t vector_get(struct Vector* vector, index_t index, struct Object** elem) {
     if (index >= vector->top) {
         return false;
     }
-    *elem = array_get_unsafe(vector->elems, index);
+    *elem = vector->elems->elems[index];
     return true;
 }
 
@@ -79,7 +79,7 @@ bool_t vector_set(struct Vector* vector, index_t index, struct Object* elem) {
     if (index >= vector->top) {
         return false;
     }
-    array_set_unsafe(vector->elems, index, elem);
+    vector->elems->elems[index] = elem;
     return true;
 }
 

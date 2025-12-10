@@ -80,14 +80,6 @@ bool_t array_evalElems_rec(count_t nElems, struct Object* elems[], struct Object
     return true;
 }
 
-struct Object* array_get_unsafe(struct Array* array, index_t index) {
-    return array->elems[index];
-}
-
-void array_set_unsafe(struct Array* array, index_t index, struct Object* value) {
-    array->elems[index] = value;
-}
-
 void array_showElems(count_t nElems, struct Object* elems[], const string_t sep, FILE* stream) {
     for (index_t n=0; n<nElems; ++n) {
         if (n > 0) {
