@@ -78,7 +78,9 @@ bool_t function_apply(struct Function* function, struct Etor_rec* etor, count_t 
     while (rule != g_emptyFunctionRule) {
         if (rule->nParams == nArgs) {
             if (matchObjs(nArgs, rule->params, args, etor->env)) {
-                return eval_rec(rule->closedBody, etor, value);
+                bool_t success = eval_rec(rule->closedBody, etor, value);
+                etor_rec_envRestore(etor, savedEnv);
+                return success;
             }
         }
         /* Restore the environment because matchObjs creates new bindings */

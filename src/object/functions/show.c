@@ -14,6 +14,7 @@
 #include "object/types/integer.h"
 #include "object/types/intvar.h"
 #include "object/types/intvector.h"
+#include "object/types/let.h"
 #include "object/types/pair.h"
 #include "object/types/nil.h"
 #include "object/types/sequence.h"
@@ -57,7 +58,7 @@ void show(struct Object* obj, FILE* stream) {
         case OT_Integer:       integer_show((struct Integer*)obj, stream); return;
         case OT_IntVector:     intVector_show((struct IntVector*)obj, stream); return;
         case OT_IntVar:        intVar_show((struct IntVar*)obj, stream); return;
-        case OT_Let:           break;
+        case OT_Let:           let_show((struct Let*)obj, stream); return;
         case OT_Pair:          pair_show((struct Pair*)obj, stream); return;
         case OT_Nil:           nil_show((struct Nil*)obj, stream); return;
         case OT_Null:          fputs("Null/Unique", stream); return;

@@ -39,6 +39,7 @@ int main(int argc, char* argv[]) {
         struct Application* app = application_new((struct Object*)function, nArgs, args);
         ASSERT_TRUE(eval_rec((struct Object*)app, etor, &value));
         EXPECT_EQ(i100, value);
+        EXPECT_FALSE(etor_rec_lookup(etor, x, &value));
     END
 
     END_TESTS

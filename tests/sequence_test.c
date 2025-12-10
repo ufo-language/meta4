@@ -7,11 +7,13 @@
 #include "object/globals.h"
 #include "object/types/identifier.h"
 #include "object/types/integer.h"
+#include "object/types/let.h"
 #include "object/types/sequence.h"
 
 int main(int argc, char* argv[]) {
     BEGIN_TESTS
 
+    struct Identifier* a = identifier_new("a");
     struct Integer* i100 = integer_new(100);
     struct Integer* i200 = integer_new(200);
     struct Integer* i300 = integer_new(200);
@@ -54,6 +56,16 @@ int main(int argc, char* argv[]) {
     TEST(sequence_checkShow)
         struct Sequence* seq = sequence_new(3, exprs);
         SHOW("Should show '(100; 200; 300)'", seq);
+    END
+
+    TEST(sequence_checkEnvRestore)
+        struct Let* let = let_new(OBJ(a), OBJ(i100));
+        struct Object* exprs[] = {OBJ(let)};
+        struct Sequence* seq = sequence_new(1, exprs);
+        struct Object* value;
+        struct Etor_rec* etor = etor_rec_new();
+        ASSERT_TRUE(eval_rec(OBJ(seq), etor, &value));
+        EXPECT_FALSE(etor_rec_lookup(etor, a, &value));
     END
 
     END_TESTS

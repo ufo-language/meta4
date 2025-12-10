@@ -55,12 +55,15 @@ struct Object* sequence_close_rec(struct Sequence* seq, struct Etor_rec* etor) {
 }
 
 bool_t sequence_eval_rec(struct Sequence* seq, struct Etor_rec* etor, struct Object** value) {
+    index_t savedEnv = etor_rec_envSave(etor);
     *value = (struct Object*)g_nil;
     for (index_t n=0; n<seq->nExprs; ++n) {
         if (!eval_rec(seq->exprs[n], etor, value)) {
+            etor_rec_envRestore(etor, savedEnv);
             return false;
         }
     }
+    etor_rec_envRestore(etor, savedEnv);
     return true;
 }
 

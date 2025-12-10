@@ -12,6 +12,7 @@
 #include "object/types/function.h"
 #include "object/types/identifier.h"
 #include "object/types/ifthen.h"
+#include "object/types/let.h"
 #include "object/types/pair.h"
 #include "object/types/sequence.h"
 #include "object/types/term.h"
@@ -59,7 +60,7 @@ bool_t eval_rec(struct Object* obj, struct Etor_rec* etor, struct Object** value
         case OT_Inc:         break;
         case OT_IntArray:    break;
         case OT_IntVector:   break;
-        case OT_Let:         break;
+        case OT_Let:         return let_eval_rec((struct Let*)obj, etor, value);
         case OT_Pair:        return pair_eval_rec((struct Pair*)obj, etor, value);
         case OT_Quote:       break;
         case OT_Sequence:    return sequence_eval_rec((struct Sequence*)obj, etor, value);
