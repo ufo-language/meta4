@@ -30,7 +30,7 @@ struct Vector* vector_new(void) {
 struct Vector* vector_new_withCapacity(count_t capacity) {
     struct Vector* vector = (struct Vector*)object_new(OT_Vector, NWORDS(*vector));
     vector->top = 0;
-    vector->capacity = capacity;
+    // vector->capacity = capacity;
     vector->elems = array_new_noFill(capacity);
     vector->nResizes = 0;
     return vector;
@@ -39,6 +39,10 @@ struct Vector* vector_new_withCapacity(count_t capacity) {
 /* Public functions **********************************************************/
 
 /* Unique functions ******************/
+
+count_t vector_capacity(struct Vector* vector) {
+    return vector->elems->nElems;
+}
 
 index_t vector_top(struct Vector* vector) {
     return vector->top;
@@ -92,7 +96,7 @@ bool_t vector_pop(struct Vector* vector, struct Object** elem) {
 }
 
 void vector_push(struct Vector* vector, struct Object* elem) {
-    if (vector->top == vector->capacity) {
+    if (vector->top == vector->elems->nElems) {
         _resize(vector);
     }
     vector->elems->elems[vector->top++] = elem;
@@ -119,8 +123,9 @@ void vector_show(struct Vector* vector, FILE* stream) {
 /* Private functions *********************************************************/
 
 static void _resize(struct Vector* vector) {
-    vector->capacity *= 2;
-    struct Array* newElems = array_new_fromArray(vector->capacity, vector->elems);
+    count_t nElems = vector->elems->nElems;
+    struct Array* newElems = array_new_noFill(nElems * 2);
+    array_init(newElems, nElems, vector->elems->elems);
     vector->elems = newElems;
     ++vector->nResizes;
 }

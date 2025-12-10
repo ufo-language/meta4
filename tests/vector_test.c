@@ -23,7 +23,7 @@ int main(int argc, char* argv[]) {
         ASSERT_IEQ(0, vector_count(vector));
         ASSERT_IEQ(0, vector->nResizes);
         EXPECT_IEQ(0, strcmp("Vector", typeName(vector->obj.typeId)));
-        EXPECT_IEQ(NWORDS(struct Object) + 4, vector->obj.nWords);
+        EXPECT_IEQ(NWORDS(struct Object) + 3, vector->obj.nWords);
         EXPECT_IEQ(NWORDS(struct Vector), vector->obj.nWords);
     END
 
@@ -84,7 +84,7 @@ int main(int argc, char* argv[]) {
     TEST(vector_checkResize)
         struct Vector* vector = vector_new_withCapacity(4);
         ASSERT_IEQ(0, vector_count(vector));
-        count_t capacity = vector->capacity;
+        count_t capacity = vector_capacity(vector);
         ASSERT_IEQ(4, capacity);
         for (count_t n=0; n<capacity; n++) {
             vector_push(vector, OBJ(integer_new(n * 100)));
@@ -92,7 +92,7 @@ int main(int argc, char* argv[]) {
         ASSERT_IEQ(0, vector->nResizes);
         vector_push(vector, OBJ(integer_new((capacity + 1) * 100)));
         ASSERT_IEQ(1, vector->nResizes);
-        ASSERT_IEQ(capacity * 2, vector->capacity);
+        ASSERT_IEQ(capacity * 2, vector_capacity(vector));
         struct Object* value;
         ASSERT_TRUE(vector_pop(vector, &value));
         ASSERT_ISA(OT_Integer, value);

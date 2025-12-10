@@ -23,10 +23,10 @@ struct Vector;
 
 /* Lifecycle functions *******************************************************/
 
-struct Array* array_new_elem(count_t nElems, struct Object* elem);
-struct Array* array_new_elems(count_t nElems, struct Object* elems[]);
-struct Array* array_new_fromArray(count_t nElems, struct Array* oldArray);
+struct Array* array_new_withElem(count_t nElems, struct Object* elem);
+struct Array* array_new_withElems(count_t nElems, struct Object* elems[]);
 struct Array* array_new_noFill(count_t nElems);
+void array_init(struct Array* array, count_t nElems, struct Object* elems[]);
 
 /* Public functions **********************************************************/
 

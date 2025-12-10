@@ -21,7 +21,7 @@
 
 /* Lifecycle functions *******************************************************/
 
-struct Array* array_new_elem(count_t nElems, struct Object* elem) {
+struct Array* array_new_withElem(count_t nElems, struct Object* elem) {
     struct Array* array = array_new_noFill(nElems);
     for (index_t n=0; n<nElems; ++n) {
         array->elems[n] = elem;
@@ -29,20 +29,9 @@ struct Array* array_new_elem(count_t nElems, struct Object* elem) {
     return array;
 }
 
-struct Array* array_new_elems(count_t nElems, struct Object* elems[]) {
+struct Array* array_new_withElems(count_t nElems, struct Object* elems[]) {
     struct Array* array = array_new_noFill(nElems);
     memcpy(array->elems, elems, sizeof(struct Object*) * nElems);
-    return array;
-}
-
-struct Array* array_new_fromArray(count_t nElems, struct Array* oldArray) {
-    struct Array* array = array_new_noFill(nElems);
-    if (nElems > oldArray->nElems) {
-        nElems = oldArray->nElems;
-    }
-    for (index_t n=0; n<nElems; ++n) {
-        array->elems[n] = oldArray->elems[n];
-    }
     return array;
 }
 
@@ -50,6 +39,10 @@ struct Array* array_new_noFill(count_t nElems) {
     struct Array* array = (struct Array*)object_new(OT_Array, NWORDS(struct Array) + nElems);
     array->nElems = nElems;
     return array;
+}
+
+void array_init(struct Array* array, count_t nElems, struct Object* elems[]) {
+    memcpy(array->elems, elems, sizeof(struct Object*) * nElems);
 }
 
 /* Public functions **********************************************************/

@@ -35,7 +35,7 @@ int main(int argc, char* argv[]) {
     END
 
     TEST(array_checkConstruction_withElem)
-        struct Array* array = array_new_elem(3, OBJ(i100));
+        struct Array* array = array_new_withElem(3, OBJ(i100));
         ASSERT_IEQ(3, array->nElems);
         EXPECT_EQ(i100, array->elems[0]);
         EXPECT_EQ(i100, array->elems[1]);
@@ -43,7 +43,7 @@ int main(int argc, char* argv[]) {
     END
 
     TEST(array_checkConstruction_withElems)
-        struct Array* array = array_new_elems(3, elems);
+        struct Array* array = array_new_withElems(3, elems);
         ASSERT_IEQ(3, array->nElems);
         EXPECT_EQ(i100, array->elems[0]);
         EXPECT_EQ(i200, array->elems[1]);
@@ -51,7 +51,7 @@ int main(int argc, char* argv[]) {
     END
 
     TEST(array_checkSetAndGet)
-        struct Array* array = array_new_elem(3, OBJ(i0));
+        struct Array* array = array_new_withElem(3, OBJ(i0));
         ASSERT_EQ(i0, array->elems[0]);
         ASSERT_EQ(i0, array->elems[1]);
         ASSERT_EQ(i0, array->elems[2]);
@@ -86,7 +86,7 @@ int main(int argc, char* argv[]) {
 
     TEST(array_checkEval)
         struct Object* identElems[] = {OBJ(a), OBJ(b), OBJ(c)};
-        struct Array* array = array_new_elems(3, identElems);
+        struct Array* array = array_new_withElems(3, identElems);
         struct Etor_rec* etor = etor_rec_new();
         etor_rec_bind(etor, a, OBJ(i100));
         etor_rec_bind(etor, b, OBJ(i200));
@@ -103,18 +103,18 @@ int main(int argc, char* argv[]) {
     END
 
     TEST(array_checkShow)
-        struct Array* array = array_new_elems(3, elems);
+        struct Array* array = array_new_withElems(3, elems);
         SHOW("Should show '{100, 200, 300}'", array);
     END
 
     TEST(array_checkMatch)
         struct Object* identElems[] = {OBJ(a), OBJ(b), OBJ(c)};
-        struct Array* array = array_new_elems(3, identElems);
+        struct Array* array = array_new_withElems(3, identElems);
         struct Identifier* a = identifier_new("a");
         struct Identifier* b = identifier_new("b");
         struct Identifier* c = identifier_new("c");
         struct Object* intElems[] = {OBJ(i100), OBJ(i200), OBJ(i300)};
-        struct Array* otherArray = array_new_elems(3, intElems);
+        struct Array* otherArray = array_new_withElems(3, intElems);
         struct Vector* bindings = vector_new();
         ASSERT_TRUE(match(OBJ(array), OBJ(otherArray), bindings));
         struct Object* value;

@@ -12,7 +12,7 @@
 struct Vector {
     struct Object obj;
     count_t top;
-    count_t capacity;
+    // count_t capacity;
     count_t nResizes;
     struct Array* elems;
 };
@@ -32,6 +32,8 @@ struct Vector* vector_new_withCapacity(count_t capacity);
 
 index_t vector_top(struct Vector* vector);
 void vector_setTop(struct Vector* vector, index_t newTop);
+
+count_t vector_capacity(struct Vector* vector);
 
 void vector_bindPair(struct Vector* vector, struct Object* key, struct Object* value);
 bool_t vector_lookup(struct Vector* vector, struct Object* key, struct Object** value);
