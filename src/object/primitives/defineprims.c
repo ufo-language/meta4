@@ -26,7 +26,7 @@ void definePrims_init(struct Vector* env) {
 
     struct Primitive* prim = prim_newFunction("display");
     enum TypeId paramTypes[] = {};
-    prim_addlRule(prim, COUNT_MAX, paramTypes, _display);
+    prim_addRule(prim, COUNT_MAX, paramTypes, _display);
     vector_bindPair(env, (struct Object*)prim->name, (struct Object*)prim);
 
 }

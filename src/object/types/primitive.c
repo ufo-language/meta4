@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -57,8 +58,7 @@ struct PrimitiveRule* prim_newRule(count_t nParams, enum TypeId paramTypes[], Pr
     return rule;
 }
 
-#include "debug.h"
-void prim_addlRule(struct Primitive* prim, count_t nParams, enum TypeId paramTypes[], PrimFunction function) {
+void prim_addRule(struct Primitive* prim, count_t nParams, enum TypeId paramTypes[], PrimFunction function) {
     /* Create the new rule */
     struct PrimitiveRule* newRule = prim_newRule(nParams, paramTypes, function);
     /* Attach it to the list of rules */
@@ -105,7 +105,7 @@ bool_t prim_apply(struct Primitive* prim, struct Etor_rec* etor, count_t nArgs, 
     }
     else {
         argVals = args;
-    }    
+    }
     return function(etor, nArgs, argVals, value);
 }
 
@@ -120,7 +120,8 @@ static bool_t _checkArgs(struct Primitive* prim, count_t nArgs, struct Object* a
     struct PrimitiveRule* rule = prim->rules;
     while (rule != g_emptyPrimRule) {
         if (rule->nParams == COUNT_MAX) {
-            return true;
+            /* COUNT_MAX means "any number of arguments is accepted" */
+            goto RETURN_TRUE;
         }
         if (rule->nParams != nArgs) {
             continue;
@@ -130,6 +131,7 @@ static bool_t _checkArgs(struct Primitive* prim, count_t nArgs, struct Object* a
                 goto NEXT_RULE;
             }
         }
+    RETURN_TRUE:
         *function = rule->function;
         return true;
     NEXT_RULE:
