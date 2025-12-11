@@ -33,7 +33,7 @@ struct Function {
 /* Lifecycle functions *******************************************************/
 
 struct Function* function_new(struct Identifier* name);
-void function_attachFinalRule(struct Function* function, count_t nParams, struct Object* params[], struct Object* body);
+void function_addlRule(struct Function* function, count_t nParams, struct Object* params[], struct Object* body);
 struct FunctionRule* function_emptyRule(void);
 
 /* Public functions **********************************************************/

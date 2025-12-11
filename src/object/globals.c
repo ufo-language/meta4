@@ -7,6 +7,7 @@
 #include "object/types/identifier.h"
 #include "object/types/nil.h"
 #include "object/types/pair.h"
+#include "object/types/primitive.h"
 #include "object/types/vector.h"
 
 /* Defines *******************************************************************/
@@ -17,16 +18,17 @@
 
 /* Global variables **********************************************************/
 
-struct Boolean*      g_false;
-struct Boolean*      g_true;
-struct FunctionRule* g_emptyFunctionRule;
-struct GC*           g_gc;
-struct Identifier*   g_idNil;
-struct Nil*          g_nil;
-struct Object*       g_uniqueObject;
-struct Pair*         g_emptyPair;
-struct Vector*       g_identifierInternTable;
-struct Vector*       g_symbolInternTable;
+struct Boolean*       g_false;
+struct Boolean*       g_true;
+struct FunctionRule*  g_emptyFunctionRule;
+struct GC*            g_gc;
+struct Identifier*    g_idNil;
+struct Nil*           g_nil;
+struct Object*        g_uniqueObject;
+struct Pair*          g_emptyPair;
+struct PrimitiveRule* g_emptyPrimRule;
+struct Vector*        g_identifierInternTable;
+struct Vector*        g_symbolInternTable;
 
 /* Lifecycle functions *******************************************************/
 
@@ -50,6 +52,7 @@ void globals_init(void) {
     /* Data structures come last */
     g_emptyPair = pair_new_empty();
     g_emptyFunctionRule = function_emptyRule();
+    g_emptyPrimRule = prim_emptyRule();
 }
 
 /* Private functions *********************************************************/

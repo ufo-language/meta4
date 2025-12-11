@@ -33,7 +33,7 @@ struct Function* function_new(struct Identifier* name) {
     return function;
 }
 
-void function_attachFinalRule(struct Function* function, count_t nParams, struct Object* params[], struct Object* body) {
+void function_addlRule(struct Function* function, count_t nParams, struct Object* params[], struct Object* body) {
     /* Create the new rule */
     struct FunctionRule* newRule = (struct FunctionRule*)memory_alloc(NWORDS(struct FunctionRule) + nParams);
     newRule->nParams = nParams;

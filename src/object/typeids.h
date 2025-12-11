@@ -46,6 +46,7 @@ enum TypeId {
     OT_Continuation,
     OT_User,
     OT_Test,
+    OT_Any,
     OT_Max
 };
 

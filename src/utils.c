@@ -1,10 +1,10 @@
+#include <assert.h>
+#include <stdlib.h>
+#include <string.h>
+
 #include "_typedefs.h"
 
-#include "object/evaluator/etor_rec.h"
-#include "object/object.h"
-#include "object/typeids.h"
-#include "object/types/function.h"
-#include "object/types/primitive.h"
+#include "memory/memory.h"
 
 /* Defines *******************************************************************/
 
@@ -18,17 +18,19 @@
 
 /* Public functions **********************************************************/
 
+#if 0
+string_t strdup(const string_t chars) {
+    assert(chars);
+    count_t nChars = strlen(chars) + 1;
+    string_t newChars = memory_alloc(NBYTES_TO_WORDS(nChars));
+    assert(newChars);
+    memcpy(newChars, chars, nChars);
+    return newChars;
+}
+#endif
+
 /* Unique functions ******************/
 
 /* Object functions ******************/
-
-bool_t apply(struct Object* obj, struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value) {
-    switch (obj->typeId) {
-        case OT_Function: return function_apply((struct Function*)obj, etor, nArgs, args, value);
-        case OT_Primitive: return prim_apply((struct Primitive*)obj, etor, nArgs, args, value);
-        default:
-            return false;
-    }
-}
 
 /* Private functions *********************************************************/

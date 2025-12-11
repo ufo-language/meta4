@@ -31,7 +31,7 @@ int main(int argc, char* argv[]) {
         struct Object* params[] = {OBJ(x)};
         struct Object* body = OBJ(x);
         struct Etor_rec* etor = etor_rec_new();
-        function_attachFinalRule(function, nParams, params, body);
+        function_addlRule(function, nParams, params, body);
         struct Object* value = function_close_rec(function, etor);
         /* Create an application */
         count_t nArgs = 1;

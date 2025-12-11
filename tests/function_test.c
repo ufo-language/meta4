@@ -27,7 +27,7 @@ int main(int argc, char* argv[]) {
         count_t nParams = 2;
         struct Object* params[] = {OBJ(x), OBJ(y)};
         struct Object* body = OBJ(g_nil);
-        function_attachFinalRule(function, nParams, params, body);
+        function_addlRule(function, nParams, params, body);
         ASSERT_PTRNE(g_emptyFunctionRule, function->rules);
     END
 
@@ -36,7 +36,7 @@ int main(int argc, char* argv[]) {
         count_t nParams = 1;
         struct Object* params[] = {OBJ(x)};
         struct Object* body = OBJ(y);
-        function_attachFinalRule(function, nParams, params, body);
+        function_addlRule(function, nParams, params, body);
         SHOW("Should show 'fun f(x) = x'", function);
     END
 
@@ -46,7 +46,7 @@ int main(int argc, char* argv[]) {
         struct Object* params[] = {OBJ(x)};
         struct Object* body = OBJ(y);
         struct Etor_rec* etor = etor_rec_new();
-        function_attachFinalRule(function, nParams, params, body);
+        function_addlRule(function, nParams, params, body);
         etor_rec_bind(etor, y, OBJ(i100));
         struct Object* value = function_close_rec(function, etor);
         ASSERT_EQ(function, value);
@@ -60,7 +60,7 @@ int main(int argc, char* argv[]) {
         struct Object* params[] = {OBJ(x)};
         struct Object* body = OBJ(x);
         struct Etor_rec* etor = etor_rec_new();
-        function_attachFinalRule(function, nParams, params, body);
+        function_addlRule(function, nParams, params, body);
         struct Object* value = function_close_rec(function, etor);
         count_t nArgs = 1;
         struct Object* args[] = {OBJ(i100)};
@@ -73,11 +73,11 @@ int main(int argc, char* argv[]) {
         count_t nParams = 2;
         struct Object* params[] = {OBJ(x), OBJ(y)};
         struct Object* body = OBJ(x);
-        function_attachFinalRule(function, nParams, params, body);
+        function_addlRule(function, nParams, params, body);
         nParams = 1;
         struct Object* params1[] = {OBJ(x)};
         body = OBJ(x);
-        function_attachFinalRule(function, nParams, params1, body);
+        function_addlRule(function, nParams, params1, body);
         SHOW("Should show 'fun f(x, y) = y | b(x) = x'", function);
     END
 
