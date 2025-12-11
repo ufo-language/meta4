@@ -78,13 +78,15 @@ bool_t array_matchElems(count_t nElems, struct Object* elems[], struct Object* o
     return true;
 }
 
-void array_showElems(count_t nElems, struct Object* elems[], const string_t sep, FILE* stream) {
+void array_showElems(count_t nElems, struct Object* elems[], const string_t open, const string_t sep, const string_t close, FILE* stream) {
+    fputs(open, stream);
     for (index_t n=0; n<nElems; ++n) {
         if (n > 0) {
             fputs(sep, stream);
         }
         show(elems[n], stream);
     }
+    fputs(close, stream);
 }
 
 /* Object functions ******************/
@@ -112,9 +114,7 @@ bool_t array_match(struct Array* array, struct Array* other, struct Vector* bind
 }
 
 void array_show(struct Array* array, FILE* stream) {
-    fputc('{', stream);
-    array_showElems(array->nElems, array->elems, ", ", stream);
-    fputc('}', stream);
+    array_showElems(array->nElems, array->elems, "{", ", ", "}", stream);
 }
 
 /* Private functions *********************************************************/

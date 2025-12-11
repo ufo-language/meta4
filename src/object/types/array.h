@@ -37,7 +37,7 @@ void array_closeElems_rec(count_t nElems, struct Object* elems[], struct Object*
 bool_t array_elemsEqual(count_t nElems, struct Object* elems[], struct Object* otherElems[]);
 bool_t array_evalElems_rec(count_t nElems, struct Object* elems[], struct Object* newElems[], struct Etor_rec* etor, struct Object** error);
 bool_t array_matchElems(count_t nElems, struct Object* elems[], struct Object* otherElems[], struct Vector* bindings);
-void array_showElems(count_t nElems, struct Object* elems[], const string_t sep, FILE* stream);
+void array_showElems(count_t nElems, struct Object* elems[], const string_t open, const string_t sep, const string_t close, FILE* stream);
 
 /* Object functions ******************/
 

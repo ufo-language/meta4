@@ -5,6 +5,7 @@
 
 #include "object/object.h"
 #include "object/typeids.h"
+#include "object/types/array.h"
 #include "object/types/vector.h"
 #include "object/functions/equal.h"
 #include "object/functions/show.h"
@@ -109,15 +110,7 @@ count_t vector_count(struct Vector* vector) {
 }
 
 void vector_show(struct Vector* vector, FILE* stream) {
-    fputs("{|", stream);
-    struct Object** elems = vector->elems->elems;
-    for (index_t n=0; n<vector->top; ++n) {
-        if (n > 0) {
-            fputs(", ", stream);
-        }
-        show(elems[n], stream);
-    }
-    fputs("|}", stream);
+    array_showElems(vector->top, vector->elems->elems, "(|", ", ", "|}", stream);
 }
 
 /* Private functions *********************************************************/

@@ -90,9 +90,7 @@ bool_t term_match(struct Object* obj, struct Object* other, struct Vector* bindi
 
 void term_show(struct Term* term, FILE* stream) {
     show((struct Object*)term->name, stream);
-    fputc('{', stream);
-    array_showElems(term->nArgs, term->args, ", ", stream);
-    fputc('}', stream);
+    array_showElems(term->nArgs, term->args, "{", ", ", "}", stream);
 }
 
 /* Private functions *********************************************************/

@@ -20,6 +20,7 @@
 #include "object/types/intvector.h"
 #include "object/types/let.h"
 #include "object/types/pair.h"
+#include "object/types/quote.h"
 #include "object/types/nil.h"
 #include "object/types/sequence.h"
 #include "object/types/string.h"
@@ -67,7 +68,7 @@ void show(struct Object* obj, FILE* stream) {
         case OT_Nil:           nil_show((struct Nil*)obj, stream); return;
         case OT_Null:          fputs("Null/Unique", stream); return;
         case OT_Primitive:     break;
-        case OT_Quote:         break;
+        case OT_Quote:         quote_show((struct Quote*)obj, stream); return;
         case OT_Real:          break;
         case OT_Sequence:      sequence_show((struct Sequence*)obj, stream); return;
         case OT_String:        string_show((struct String*)obj, stream); return;

@@ -15,6 +15,7 @@
 #include "object/types/inc.h"
 #include "object/types/let.h"
 #include "object/types/pair.h"
+#include "object/types/quote.h"
 #include "object/types/sequence.h"
 #include "object/types/term.h"
 #include "object/types/while.h"
@@ -34,9 +35,10 @@
 bool_t eval_rec(struct Object* obj, struct Etor_rec* etor, struct Object** value) {
     index_t savedEnv = etor_rec_envSave(etor);
     switch(obj->typeId) {
-        /* Constants */
+        /* Constants, or at least treated like constants */
         case OT_Boolean:
         case OT_Device:
+        case OT_Etor_Rec:
         case OT_Integer:
         case OT_IntVar:
         case OT_Nil:
@@ -53,7 +55,6 @@ bool_t eval_rec(struct Object* obj, struct Etor_rec* etor, struct Object** value
         case OT_BinOp:       break;
         case OT_ByteBuffer:  break;
         case OT_Dec:         return dec_eval_rec((struct Dec*)obj, etor, value);
-        case OT_Etor_Rec:    break;
         case OT_Function:    return function_eval_rec((struct Function*)obj, etor, value);;
         case OT_HashTable:   break;
         case OT_Identifier:  return identifier_eval_rec((struct Identifier*)obj, etor, value);
@@ -63,7 +64,7 @@ bool_t eval_rec(struct Object* obj, struct Etor_rec* etor, struct Object** value
         case OT_IntVector:   break;
         case OT_Let:         return let_eval_rec((struct Let*)obj, etor, value);
         case OT_Pair:        return pair_eval_rec((struct Pair*)obj, etor, value);
-        case OT_Quote:       break;
+        case OT_Quote:       return quote_eval_rec((struct Quote*)obj, etor, value);
         case OT_Sequence:    return sequence_eval_rec((struct Sequence*)obj, etor, value);
         case OT_Term:        return term_eval_rec((struct Term*)obj, etor, value);
         case OT_Test:        break;
@@ -72,7 +73,7 @@ bool_t eval_rec(struct Object* obj, struct Etor_rec* etor, struct Object** value
         case OT_Vector:      break;
         case OT_While:       return while_eval_rec((struct While*)obj, etor, value);
 
-        /* Non-datatypes */
+        /* Non-datatypes; should never get here */
         case OT_ConstantLimit:
         case OT_Null:
             fprintf(stderr, "Error evaluating object of type '%s'\n", typeName(obj->typeId));

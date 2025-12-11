@@ -47,12 +47,9 @@ bool_t application_eval(struct Application* app, struct Etor_rec* etor, struct O
     }
     /* Evaluate the arguments */
     struct Object** argVals = memory_alloc(app->nArgs);
-    struct Object* argVal;
-    for (index_t n=0; n<app->nArgs; n++) {
-        if (!eval_rec(app->args[n], etor, &argVal)) {
-            return false;
-        }
-        argVals[n] = argVal;
+    struct Object* error;
+    if (!array_evalElems_rec(app->nArgs, app->args, argVals, etor, &error)) {
+        return false;
     }
     /* Apply the abstraction to the arguments */
     return apply(abstrVal, etor, app->nArgs, argVals, value);
@@ -68,7 +65,5 @@ void application_show(struct Application* app, FILE* stream) {
         show(abstr, stream);
         fputc(')', stream);
     }
-    fputc('(', stream);
-    array_showElems(app->nArgs, app->args, ", ", stream);
-    fputc(')', stream);
+    array_showElems(app->nArgs, app->args, "(", ", ", ")", stream);
 }

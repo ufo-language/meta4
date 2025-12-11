@@ -31,5 +31,5 @@ struct Quote* quote_new(struct Object* expr);
 
 /* Object functions ******************/
 
-bool_t quote_eval(struct Quote* quote, struct Etor_rec* etor, struct Object **value);
+bool_t quote_eval_rec(struct Quote* quote, struct Etor_rec* etor, struct Object **value);
 void quote_show(struct Quote* quote, FILE* stream);

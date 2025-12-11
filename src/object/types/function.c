@@ -145,8 +145,6 @@ static void _closeRule(struct FunctionRule* rule, struct Etor_rec* etor) {
 }
 
 static void _showRule(struct FunctionRule* rule, FILE* stream) {
-    fputc('(', stream);
-    array_showElems(rule->nParams, rule->params, ", ", stream);
-    fputs(") = ", stream);
+    array_showElems(rule->nParams, rule->params, "(", ", ", ") = ", stream);
     show(rule->body, stream);
 }
