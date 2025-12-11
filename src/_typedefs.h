@@ -9,8 +9,9 @@
    The two types will sometimes be mixed (usually summed).
 */
 typedef __SIZE_TYPE__ count_t;
+#define COUNT_MAX     SIZE_MAX
 typedef __SIZE_TYPE__ index_t;
-
+#define INDEX_MAX     SIZE_MAX
 /* These all have machine-word width. */
 typedef void*         address_t;
 typedef intptr_t      int_t;

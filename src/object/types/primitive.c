@@ -7,6 +7,7 @@
 
 #include "memory/memory.h"
 #include "object/globals.h"
+#include "object/types/array.h"
 #include "object/types/identifier.h"
 #include "object/types/primitive.h"
 #include "utils.h"
@@ -27,34 +28,48 @@ void _showRule(struct PrimitiveRule* rule);
 
 /* Lifecycle functions *******************************************************/
 
-struct Primitive* prim_new(const string_t name) {
+struct Primitive* prim_new(const string_t name, enum PrimType primType) {
     struct Primitive* prim = (struct Primitive*)object_new(OT_Primitive, NWORDS(*prim));
     prim->name = identifier_new(name);
     prim->rules = g_emptyPrimRule;
+    prim->primType = primType;
     return prim;
 }
 
-struct PrimitiveRule* prim_newRule(count_t nParams, enum TypeId paramTypes[]) {
-    struct PrimitiveRule* rule = (struct PrimitiveRule*)memory_alloc(NWORDS(*rule) + nParams);
+struct Primitive* prim_newFunction(const string_t name) {
+    return prim_new(name, PrimType_Function);
+}
+
+struct Primitive* prim_newMacro(const string_t name) {
+    return prim_new(name, PrimType_Macro);
+}
+
+struct PrimitiveRule* prim_newRule(count_t nParams, enum TypeId paramTypes[], PrimFunction function) {
+    count_t nParamsToAllocate = nParams;
+    if (nParams == COUNT_MAX) {
+        nParamsToAllocate = 0;
+    }
+    struct PrimitiveRule* rule = (struct PrimitiveRule*)memory_alloc(NWORDS(*rule) + NBYTES_TO_WORDS(sizeof(enum TypeId) * nParamsToAllocate));
+    rule->function = function;
+    rule->nextRule = g_emptyPrimRule;
     rule->nParams = nParams;
-    memcpy(rule->paramTypes, paramTypes, sizeof(enum TypeId) * nParams);
+    memcpy(rule->paramTypes, paramTypes, sizeof(enum TypeId) * nParamsToAllocate);
     return rule;
 }
 
+#include "debug.h"
 void prim_addlRule(struct Primitive* prim, count_t nParams, enum TypeId paramTypes[], PrimFunction function) {
     /* Create the new rule */
-    struct PrimitiveRule* newRule = prim_newRule(nParams, paramTypes);
-    newRule->nParams = nParams;
-    memcpy(newRule->paramTypes, paramTypes, nParams * sizeof(struct Object*));
-    newRule->function = function;
-    newRule->nextRule = g_emptyPrimRule;
+    struct PrimitiveRule* newRule = prim_newRule(nParams, paramTypes, function);
     /* Attach it to the list of rules */
     struct PrimitiveRule* previousRule = g_emptyPrimRule;
     struct PrimitiveRule* rule = prim->rules;
+    /* Locate the final rule */
     while (rule != g_emptyPrimRule) {
         previousRule = rule;
         rule = rule->nextRule;
     }
+    /* Attach the new rule to the list of rules */
     if (previousRule == g_emptyPrimRule) {
         prim->rules = newRule;
     }
@@ -65,9 +80,7 @@ void prim_addlRule(struct Primitive* prim, count_t nParams, enum TypeId paramTyp
 
 struct PrimitiveRule* prim_emptyRule(void) {
     enum TypeId paramTypes[] = {};
-    struct PrimitiveRule* rule = prim_newRule(0, paramTypes);
-    rule->function = _emptyPrimFunction;
-    rule->nParams = 0;
+    struct PrimitiveRule* rule = prim_newRule(0, paramTypes, _emptyPrimFunction);
     return rule;
 }
 
@@ -82,7 +95,18 @@ bool_t prim_apply(struct Primitive* prim, struct Etor_rec* etor, count_t nArgs, 
     if (!_checkArgs(prim, nArgs, args, &function)) {
         return false;
     }
-    return function(etor, nArgs, args, value);
+    struct Object** argVals;
+    if (prim->primType == PrimType_Function) {
+        argVals = memory_alloc(nArgs);
+        struct Object* error;
+        if (!array_evalElems_rec(nArgs, args, argVals, etor, &error)) {
+            return false;
+        }
+    }
+    else {
+        argVals = args;
+    }    
+    return function(etor, nArgs, argVals, value);
 }
 
 void prim_show(struct Primitive* prim, FILE* stream) {
@@ -95,6 +119,9 @@ void prim_show(struct Primitive* prim, FILE* stream) {
 static bool_t _checkArgs(struct Primitive* prim, count_t nArgs, struct Object* args[], PrimFunction* function) {
     struct PrimitiveRule* rule = prim->rules;
     while (rule != g_emptyPrimRule) {
+        if (rule->nParams == COUNT_MAX) {
+            return true;
+        }
         if (rule->nParams != nArgs) {
             continue;
         }

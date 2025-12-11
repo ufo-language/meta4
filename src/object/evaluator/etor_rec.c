@@ -4,6 +4,7 @@
 
 #include "object/evaluator/etor_rec.h"
 #include "object/functions/eval_rec.h"
+#include "object/globals.h"
 #include "object/object.h"
 #include "object/typeids.h"
 #include "object/types/intvector.h"
@@ -21,7 +22,7 @@
 
 struct Etor_rec* etor_rec_new(void) {
     struct Etor_rec* etor = (struct Etor_rec*)object_new(OT_Etor_Rec, NWORDS(*etor));
-    etor->env = vector_new();
+    etor->env = g_globalEnv;
     return etor;
 }
 

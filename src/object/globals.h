@@ -29,6 +29,7 @@ extern struct Nil*           g_nil;
 extern struct Object*        g_uniqueObject;
 extern struct Pair*          g_emptyPair;
 extern struct PrimitiveRule* g_emptyPrimRule;
+extern struct Vector*        g_globalEnv;
 extern struct Vector*        g_identifierInternTable;
 extern struct Vector*        g_symbolInternTable;
 

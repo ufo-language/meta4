@@ -5,6 +5,7 @@
 #include "memory/memory.h"
 #include "object/evaluator/etor_rec.h"
 #include "object/functions/apply.h"
+#include "object/functions/close_rec.h"
 #include "object/functions/eval_rec.h"
 #include "object/functions/show.h"
 #include "object/object.h"
@@ -38,6 +39,18 @@ struct Application* application_new(struct Object* abstraction, count_t nArgs, s
 /* Object functions ******************/
 
 /* Private functions *********************************************************/
+
+struct Object* application_close(struct Application* app, struct Etor_rec* etor) {
+    struct Object* closedAbstr = close_rec(app->abstraction, etor);
+    count_t nArgs = app->nArgs;
+    struct Object** args = app->args;
+    struct Object** closedArgs = memory_alloc(app->nArgs);
+    for (index_t n=0; n<nArgs; n++) {
+        closedArgs[n] = close_rec(args[n], etor);
+    }
+    struct Application* closedApp = application_new(closedAbstr, nArgs, closedArgs);
+    return (struct Object*)closedApp;
+}
 
 bool_t application_eval(struct Application* app, struct Etor_rec* etor, struct Object** value) {
     /* Evaluate the abstraction */

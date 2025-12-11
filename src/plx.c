@@ -5,7 +5,9 @@
 
 #include "memory/memory.h"
 #include "object/globals.h"
+#include "object/primitives/defineprims.h"
 #include "plx.h"
+
 
 /* Defines ------------------------------------------------------------------*/
 
@@ -31,6 +33,7 @@ void _program1(void);
 void plx_startup(void) {
     memory_init(DEFAULT_HEAP_SIZE);
     globals_init();
+    definePrims_init(g_globalEnv);
 }
 
 void plx_shutdown(void) {

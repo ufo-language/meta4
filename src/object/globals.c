@@ -27,6 +27,7 @@ struct Nil*           g_nil;
 struct Object*        g_uniqueObject;
 struct Pair*          g_emptyPair;
 struct PrimitiveRule* g_emptyPrimRule;
+struct Vector*        g_globalEnv;
 struct Vector*        g_identifierInternTable;
 struct Vector*        g_symbolInternTable;
 
@@ -40,19 +41,21 @@ void globals_free(void) {
 
 void globals_init(void) {
     /* Memory & GC first */
-    g_gc = gc_new();
+    g_gc                    = gc_new();
     g_identifierInternTable = vector_new();
-    g_symbolInternTable = vector_new();
+    g_symbolInternTable     = vector_new();
     /* Create constants next */
-    g_true = boolean_new(true);
-    g_false = boolean_new(false);
-    g_idNil = identifier_new("nil");
-    g_nil = nil_new();
-    g_uniqueObject = object_new(OT_Null, NWORDS(*g_uniqueObject));
-    /* Data structures come last */
-    g_emptyPair = pair_new_empty();
-    g_emptyFunctionRule = function_emptyRule();
-    g_emptyPrimRule = prim_emptyRule();
+    g_true                  = boolean_new(true);
+    g_false                 = boolean_new(false);
+    g_idNil                 = identifier_new("nil");
+    g_nil                   = nil_new();
+    g_uniqueObject          = object_new(OT_Null, NWORDS(*g_uniqueObject));
+    /* Data structures next */
+    g_emptyPair             = pair_new_empty();
+    g_emptyFunctionRule     = function_emptyRule();
+    g_emptyPrimRule         = prim_emptyRule();
+    /* Global environment last */
+    g_globalEnv             = vector_new();
 }
 
 /* Private functions *********************************************************/

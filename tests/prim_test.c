@@ -28,7 +28,7 @@ int main(int argc, char* argv[]) {
     struct Integer* i100 = integer_new(100);
 
     TEST(primitive_checkConstruction)
-        struct Primitive* prim = prim_new("foo");
+        struct Primitive* prim = prim_newFunction("foo");
         ASSERT_ISA(OT_Primitive, prim);
         ASSERT_IEQ(NWORDS(struct Primitive), prim->obj.nWords);
         EXPECT_EQ(foo, prim->name);
@@ -36,7 +36,7 @@ int main(int argc, char* argv[]) {
     END
 
     TEST(primitive_checkApply_1rule0params)
-        struct Primitive* prim = prim_new("foo");
+        struct Primitive* prim = prim_newFunction("foo");
         enum TypeId paramTypes[] = {};
         prim_addlRule(prim, 0, paramTypes, testFunction1);
         struct Etor_rec* etor = etor_rec_new();
@@ -51,7 +51,7 @@ int main(int argc, char* argv[]) {
     END
 
     TEST(primitive_checkApply_1rule1param)
-        struct Primitive* prim = prim_new("foo");
+        struct Primitive* prim = prim_newFunction("foo");
         enum TypeId paramTypes[] = {OT_Integer};
         prim_addlRule(prim, 1, paramTypes, testFunction1);
         struct Etor_rec* etor = etor_rec_new();
@@ -66,7 +66,7 @@ int main(int argc, char* argv[]) {
     END
 
     TEST(primitive_checkApply_2rules1param)
-        struct Primitive* prim = prim_new("foo");
+        struct Primitive* prim = prim_newFunction("foo");
         enum TypeId paramTypes1[] = {OT_Integer};
         prim_addlRule(prim, 1, paramTypes1, testFunction1);
         enum TypeId paramTypes2[] = {OT_Boolean};
@@ -89,7 +89,7 @@ int main(int argc, char* argv[]) {
     END
 
     TEST(primitive_show)
-        struct Primitive* prim = prim_new("foo");
+        struct Primitive* prim = prim_newFunction("foo");
         SHOW("Should show '@foo'", prim);
     END
 

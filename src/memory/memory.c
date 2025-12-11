@@ -29,8 +29,23 @@ void memory_free(void) {
 
 /* Public functions **********************************************************/
 
+#if 0
+#include <stdio.h>
+#include <stdlib.h>
+#endif
 address_t memory_alloc(count_t nWords) {
+    #if 1
     return bumpAllocator_allocate(g_bumpAllocator, nWords);
+    #elif 0
+    address_t address = bumpAllocator_allocate(g_bumpAllocator, nWords);
+    fprintf(stderr, "memory_alloc %2lu words @ %p\n", nWords, address);
+    return address;
+    #else  /* for valgrind */
+    count_t nBytes = nWords * sizeof(word_t);
+    address_t address = malloc(nBytes);
+    fprintf(stderr, "malloced %lu bytes @ %p\n", nBytes, address);
+    return address;
+    #endif
 }
 
 address_t memory_realloc(address_t addr, count_t oldNWords, count_t newNWords) {

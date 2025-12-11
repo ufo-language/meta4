@@ -1,3 +1,5 @@
+#pragma once
+
 #include <stdio.h>
 
 #include "_typedefs.h"
@@ -11,6 +13,10 @@
 
 typedef bool_t (*PrimFunction)(struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value);
 
+enum PrimType {
+    PrimType_Function, PrimType_Macro
+};
+
 struct PrimitiveRule {
     PrimFunction function;
     struct PrimitiveRule* nextRule;
@@ -22,6 +28,7 @@ struct Primitive {
     struct Object obj;
     struct Identifier* name;
     struct PrimitiveRule* rules;
+    enum PrimType primType;
 };
 
 /* Forward declarations ******************************************************/
@@ -34,7 +41,9 @@ struct Primitive {
 
 /* Unique functions ******************/
 
-struct Primitive* prim_new(const string_t name);
+struct Primitive* prim_new(const string_t name, enum PrimType primType);
+struct Primitive* prim_newFunction(const string_t name);
+struct Primitive* prim_newMacro(const string_t name);
 void prim_addlRule(struct Primitive* prim, count_t nParams, enum TypeId paramTypes[], PrimFunction function);
 struct PrimitiveRule* prim_emptyRule(void);
 
