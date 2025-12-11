@@ -12,6 +12,7 @@
 #include "object/types/function.h"
 #include "object/types/identifier.h"
 #include "object/types/ifthen.h"
+#include "object/types/inc.h"
 #include "object/types/let.h"
 #include "object/types/pair.h"
 #include "object/types/sequence.h"
@@ -57,7 +58,7 @@ bool_t eval_rec(struct Object* obj, struct Etor_rec* etor, struct Object** value
         case OT_HashTable:   break;
         case OT_Identifier:  return identifier_eval_rec((struct Identifier*)obj, etor, value);
         case OT_IfThen:      return ifThen_eval_rec((struct IfThen*)obj, etor, value);
-        case OT_Inc:         break;
+        case OT_Inc:         return inc_eval_rec((struct Inc*)obj, etor, value);
         case OT_IntArray:    break;
         case OT_IntVector:   break;
         case OT_Let:         return let_eval_rec((struct Let*)obj, etor, value);

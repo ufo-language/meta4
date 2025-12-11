@@ -5,7 +5,7 @@
 #include "object/functions/eval_rec.h"
 #include "object/functions/show.h"
 #include "object/typeids.h"
-#include "object/types/dec.h"
+#include "object/types/inc.h"
 #include "object/types/integer.h"
 #include "object/types/intvar.h"
 
@@ -13,16 +13,16 @@
 
 /* Types *********************************************************************/
 
-/* Forward declarations ******************************************************/
+/* Forward inclarations ******************************************************/
 
 /* Global variables **********************************************************/
 
 /* Lifecycle functions *******************************************************/
 
-struct Dec* dec_new(struct Object* expr) {
-    struct Dec* dec = (struct Dec*)object_new(OT_Dec, NWORDS(*dec));
-    dec->expr = expr;
-    return dec;
+struct Inc* inc_new(struct Object* expr) {
+    struct Inc* inc = (struct Inc*)object_new(OT_Inc, NWORDS(*inc));
+    inc->expr = expr;
+    return inc;
 }
 
 /* Public functions **********************************************************/
@@ -31,30 +31,31 @@ struct Dec* dec_new(struct Object* expr) {
 
 /* Object functions ******************/
 
-bool_t dec_eval_rec(struct Dec* dec, struct Etor_rec* etor, struct Object** value) {
+#include "debug.h"
+bool_t inc_eval_rec(struct Inc* inc, struct Etor_rec* etor, struct Object** value) {
     struct Object* exprValue;
-    if (!eval_rec(dec->expr, etor, &exprValue)) {
+    if (!eval_rec(inc->expr, etor, &exprValue)) {
         return false;
     }
     switch (exprValue->typeId) {
         case OT_Integer:
-            *value = (struct Object*)integer_new(((struct Integer*)exprValue)->i - 1);
+            *value = (struct Object*)integer_new(((struct Integer*)exprValue)->i + 1);
             return true;
         case OT_IntVar:
-            --((struct IntVar*)exprValue)->i;
+            ++((struct IntVar*)exprValue)->i;
             *value = exprValue;
             return true;
         default:
-            fputs("ERROR: dec_eval unable to dec object", stderr);
+            fputs("ERROR: inc_eval unable to inc object", stderr);
             show(exprValue, stderr);
             fputc('\n', stderr);
             return false;
     }
 }
 
-void dec_show(struct Dec* dec, FILE* stream) {
-    fputs("Dec(", stream);
-    show(dec->expr, stream);
+void inc_show(struct Inc* inc, FILE* stream) {
+    fputs("Inc(", stream);
+    show(inc->expr, stream);
     fputc(')', stream);
 }
 

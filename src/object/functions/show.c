@@ -8,8 +8,10 @@
 #include "object/types/array.h"
 #include "object/types/boolean.h"
 #include "object/types/continuation.h"
+#include "object/types/dec.h"
 #include "object/types/function.h"
 #include "object/types/identifier.h"
+#include "object/types/inc.h"
 #include "object/types/intarray.h"
 #include "object/types/integer.h"
 #include "object/types/intvar.h"
@@ -45,7 +47,7 @@ void show(struct Object* obj, FILE* stream) {
         case OT_ByteBuffer:    break;
         case OT_ConstantLimit: break;
         case OT_Continuation:  break;
-        case OT_Dec:           break;
+        case OT_Dec:           dec_show((struct Dec*)obj, stream); return;
         case OT_Device:        break;
         case OT_Etor_CPS:      break;
         case OT_Etor_Rec:      break;
@@ -53,7 +55,7 @@ void show(struct Object* obj, FILE* stream) {
         case OT_HashTable:     break;
         case OT_Identifier:    identifier_show((struct Identifier*)obj, stream); return;
         case OT_IfThen:        break;
-        case OT_Inc:           break;
+        case OT_Inc:           inc_show((struct Inc*)obj, stream); return;
         case OT_IntArray:      intArray_show((struct IntArray*)obj, stream); return;
         case OT_Integer:       integer_show((struct Integer*)obj, stream); return;
         case OT_IntVector:     intVector_show((struct IntVector*)obj, stream); return;

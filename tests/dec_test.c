@@ -38,5 +38,10 @@ int main(int argc, char* argv[]) {
         EXPECT_IEQ(99, ((struct IntVar*)value)->i);
     END
 
+    TEST(inc_checkShow)
+        struct Dec* dec = dec_new(OBJ(i100));
+        SHOW("Show show 'Dec(100)'", dec);
+    END
+
     END_TESTS
 }
