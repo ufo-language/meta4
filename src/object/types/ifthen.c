@@ -58,5 +58,4 @@ void ifThen_show(struct IfThen* ifThen, FILE* stream) {
     show(ifThen->conseq, stream);
     fputs(" else ", stream);
     show(ifThen->alt, stream);
-    fputs(" end", stream);
 }

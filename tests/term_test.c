@@ -30,15 +30,6 @@ int main(int argc, char* argv[]) {
         EXPECT_EQ(i200, term->args[1]);
     END
 
-    TEST(term_checkShow)
-        struct Symbol* name = symbol_new("Term1");
-        struct Object* attrib = (struct Object*)g_nil;
-        count_t nArgs = 2;
-        struct Object* args[] = {OBJ(i100), OBJ(i200)};
-        struct Term* term = term_new(name, attrib, nArgs, args);
-        SHOW("Should show 'Term1{100, 200}'", term);
-    END
-
     TEST(term_checkEval)
         struct Symbol* name = symbol_new("Term1");
         struct Object* attrib = (struct Object*)g_nil;
@@ -55,6 +46,15 @@ int main(int argc, char* argv[]) {
         ASSERT_IEQ(nArgs, newTerm->nArgs);
         EXPECT_EQ(i100, newTerm->args[0]);
         EXPECT_EQ(i200, newTerm->args[1]);
+    END
+
+    TEST(term_checkShow)
+        struct Symbol* name = symbol_new("Term1");
+        struct Object* attrib = (struct Object*)g_nil;
+        count_t nArgs = 2;
+        struct Object* args[] = {OBJ(i100), OBJ(i200)};
+        struct Term* term = term_new(name, attrib, nArgs, args);
+        SHOW("Should show 'Term1{100, 200}'", term);
     END
 
     END_TESTS

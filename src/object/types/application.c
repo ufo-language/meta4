@@ -6,9 +6,12 @@
 #include "object/evaluator/etor_rec.h"
 #include "object/functions/apply.h"
 #include "object/functions/eval_rec.h"
+#include "object/functions/show.h"
 #include "object/object.h"
 #include "object/typeids.h"
 #include "object/types/application.h"
+#include "object/types/identifier.h"
+#include "object/types/array.h"
 
 /* Defines *******************************************************************/
 
@@ -53,4 +56,19 @@ bool_t application_eval(struct Application* app, struct Etor_rec* etor, struct O
     }
     /* Apply the abstraction to the arguments */
     return apply(abstrVal, etor, app->nArgs, argVals, value);
+}
+
+void application_show(struct Application* app, FILE* stream) {
+    struct Object* abstr = app->abstraction;
+    if (abstr->typeId == OT_Identifier) {
+        identifier_show((struct Identifier*)abstr, stream);
+    }
+    else {
+        fputc('(', stream);
+        show(abstr, stream);
+        fputc(')', stream);
+    }
+    fputc('(', stream);
+    array_showElems(app->nArgs, app->args, ", ", stream);
+    fputc(')', stream);
 }

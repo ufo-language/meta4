@@ -40,19 +40,6 @@ int main(int argc, char* argv[]) {
         SHOW("Should show 'fun f(x) = x'", function);
     END
 
-    TEST(function_checkShow_2Rules)
-        struct Function* function = function_new(f);
-        count_t nParams = 2;
-        struct Object* params[] = {OBJ(x), OBJ(y)};
-        struct Object* body = OBJ(x);
-        function_attachFinalRule(function, nParams, params, body);
-        nParams = 1;
-        struct Object* params1[] = {OBJ(x)};
-        body = OBJ(x);
-        function_attachFinalRule(function, nParams, params1, body);
-        SHOW("Should show 'fun f(x, y) = y | b(x) = x'", function);
-    END
-
     TEST(function_checkClose_1rule)
         struct Function* function = function_new(f);
         count_t nParams = 1;
@@ -79,6 +66,19 @@ int main(int argc, char* argv[]) {
         struct Object* args[] = {OBJ(i100)};
         ASSERT_TRUE(function_apply(function, etor, nArgs, args, &value));
         EXPECT_EQ(i100, value);
+    END
+
+    TEST(function_checkShow_2Rules)
+        struct Function* function = function_new(f);
+        count_t nParams = 2;
+        struct Object* params[] = {OBJ(x), OBJ(y)};
+        struct Object* body = OBJ(x);
+        function_attachFinalRule(function, nParams, params, body);
+        nParams = 1;
+        struct Object* params1[] = {OBJ(x)};
+        body = OBJ(x);
+        function_attachFinalRule(function, nParams, params1, body);
+        SHOW("Should show 'fun f(x, y) = y | b(x) = x'", function);
     END
 
     END_TESTS

@@ -102,11 +102,6 @@ int main(int argc, char* argv[]) {
         EXPECT_EQ(i300, arrayValue->elems[2]);
     END
 
-    TEST(array_checkShow)
-        struct Array* array = array_new_withElems(3, elems);
-        SHOW("Should show '{100, 200, 300}'", array);
-    END
-
     TEST(array_checkMatch)
         struct Object* identElems[] = {OBJ(a), OBJ(b), OBJ(c)};
         struct Array* array = array_new_withElems(3, identElems);
@@ -124,6 +119,11 @@ int main(int argc, char* argv[]) {
         EXPECT_EQ(i200, value);
         ASSERT_TRUE(vector_lookup(bindings, OBJ(c), &value));
         EXPECT_EQ(i300, value);
+    END
+
+    TEST(array_checkShow)
+        struct Array* array = array_new_withElems(3, elems);
+        SHOW("Should show '{100, 200, 300}'", array);
     END
 
     END_TESTS

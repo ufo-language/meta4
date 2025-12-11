@@ -53,11 +53,6 @@ int main(int argc, char* argv[]) {
         EXPECT_EQ(i300, value);
     END
 
-    TEST(sequence_checkShow)
-        struct Sequence* seq = sequence_new(3, exprs);
-        SHOW("Should show '(100; 200; 300)'", seq);
-    END
-
     TEST(sequence_checkEnvRestore)
         struct Let* let = let_new(OBJ(a), OBJ(i100));
         struct Object* exprs[] = {OBJ(let)};
@@ -66,6 +61,11 @@ int main(int argc, char* argv[]) {
         struct Etor_rec* etor = etor_rec_new();
         ASSERT_TRUE(eval_rec(OBJ(seq), etor, &value));
         EXPECT_FALSE(etor_rec_lookup(etor, a, &value));
+    END
+
+    TEST(sequence_checkShow)
+        struct Sequence* seq = sequence_new(3, exprs);
+        SHOW("Should show '(100; 200; 300)'", seq);
     END
 
     END_TESTS

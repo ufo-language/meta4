@@ -42,5 +42,11 @@ int main(int argc, char* argv[]) {
         EXPECT_FALSE(etor_rec_lookup(etor, x, &value));
     END
 
+    TEST(application_checkShow)
+        struct Object* args[] = {OBJ(i100)};
+        struct Application* app = application_new((struct Object*)f, 1, args);
+        SHOW("Should show 'f(100)'", app);
+    END
+
     END_TESTS
 }

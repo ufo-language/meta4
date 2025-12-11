@@ -67,6 +67,17 @@ bool_t array_evalElems_rec(count_t nElems, struct Object* elems[], struct Object
     return true;
 }
 
+bool_t array_matchElems(count_t nElems, struct Object* elems[], struct Object* otherElems[], struct Vector* bindings) {
+    index_t savedTop = vector_top(bindings);
+    for (index_t n=0; n<nElems; n++) {
+        if (!match(elems[n], otherElems[n], bindings)) {
+            vector_setTop(bindings, savedTop);
+            return false;
+        }
+    }
+    return true;
+}
+
 void array_showElems(count_t nElems, struct Object* elems[], const string_t sep, FILE* stream) {
     for (index_t n=0; n<nElems; ++n) {
         if (n > 0) {
@@ -97,14 +108,7 @@ bool_t array_match(struct Array* array, struct Array* other, struct Vector* bind
     if (array->nElems != other->nElems) {
         return false;
     }
-    index_t savedTop = vector_top(bindings);
-    for (index_t n=0; n<array->nElems; n++) {
-        if (!match(array->elems[n], other->elems[n], bindings)) {
-            vector_setTop(bindings, savedTop);
-            return false;
-        }
-    }
-    return true;
+    return array_matchElems(array->nElems, array->elems, other->elems, bindings);
 }
 
 void array_show(struct Array* array, FILE* stream) {

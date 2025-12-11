@@ -19,11 +19,6 @@ int main(int argc, char* argv[]) {
         EXPECT_EQ(while_->body, g_nil);
     END
 
-    TEST(while_checkShow)
-        struct While* while_ = while_new(OBJ(g_false), OBJ(g_nil));
-        SHOW("should be 'while false nil'", while_);
-    END
-
     TEST(while_checkEval_false)
         struct While* while_ = while_new(OBJ(g_false), OBJ(g_nil));
         struct Object* value;
@@ -44,5 +39,10 @@ int main(int argc, char* argv[]) {
         EXPECT_IEQ(0, ((struct IntVar*)value)->i);
     END
     
+    TEST(while_checkShow)
+        struct While* while_ = while_new(OBJ(g_false), OBJ(g_nil));
+        SHOW("should be 'while false nil'", while_);
+    END
+
     END_TESTS
 }

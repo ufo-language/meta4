@@ -18,7 +18,7 @@
 
 string_t typeName(enum TypeId typeId) {
     switch (typeId) {
-        case OT_Application:         return "Apply";
+        case OT_Application:   return "Application";
         case OT_Array:         return "Array";
         case OT_BinOp:         return "BinOp";
         case OT_Boolean:       return "Boolean";

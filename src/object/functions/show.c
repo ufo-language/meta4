@@ -5,12 +5,14 @@
 #include "object/functions/show.h"
 #include "object/object.h"
 #include "object/typeids.h"
+#include "object/types/application.h"
 #include "object/types/array.h"
 #include "object/types/boolean.h"
 #include "object/types/continuation.h"
 #include "object/types/dec.h"
 #include "object/types/function.h"
 #include "object/types/identifier.h"
+#include "object/types/ifthen.h"
 #include "object/types/inc.h"
 #include "object/types/intarray.h"
 #include "object/types/integer.h"
@@ -40,7 +42,7 @@
 
 void show(struct Object* obj, FILE* stream) {
     switch(obj->typeId) {
-        case OT_Application:   break;
+        case OT_Application:   application_show((struct Application*)obj, stream); return;
         case OT_Array:         array_show((struct Array*)obj, stream); return;
         case OT_BinOp:         break;
         case OT_Boolean:       boolean_show((struct Boolean*)obj, stream); return;
@@ -54,7 +56,7 @@ void show(struct Object* obj, FILE* stream) {
         case OT_Function:      function_show((struct Function*)obj, stream); return;
         case OT_HashTable:     break;
         case OT_Identifier:    identifier_show((struct Identifier*)obj, stream); return;
-        case OT_IfThen:        break;
+        case OT_IfThen:        ifThen_show((struct IfThen*)obj, stream); return;
         case OT_Inc:           inc_show((struct Inc*)obj, stream); return;
         case OT_IntArray:      intArray_show((struct IntArray*)obj, stream); return;
         case OT_Integer:       integer_show((struct Integer*)obj, stream); return;
