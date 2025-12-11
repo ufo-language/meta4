@@ -34,14 +34,16 @@ void array_init(struct Array* array, count_t nElems, struct Object* elems[]);
 
 /* Per-element operations; also used by other types */
 void array_closeElems_rec(count_t nElems, struct Object* elems[], struct Object* newElems[], struct Etor_rec* etor);
-bool_t array_elemsEqual(count_t nElems, struct Object* elems[], struct Object* otherElems[]);
+bool_t array_equalElems(count_t nElems, struct Object* elems[], struct Object* otherElems[]);
 bool_t array_evalElems_rec(count_t nElems, struct Object* elems[], struct Object* newElems[], struct Etor_rec* etor, struct Object** error);
+bool_t array_lookupElems(count_t nElems, struct Object* elems[], struct Object* key, struct Object** value);
 bool_t array_matchElems(count_t nElems, struct Object* elems[], struct Object* otherElems[], struct Vector* bindings);
 void array_showElems(count_t nElems, struct Object* elems[], const string_t open, const string_t sep, const string_t close, FILE* stream);
 
 /* Object functions ******************/
 
 struct Object* array_close_rec(struct Array* array, struct Etor_rec* etor);
+bool_t array_equal(struct Array* array, struct Array* otherArray);
 bool_t array_eval_rec(struct Array* array, struct Etor_rec* etor, struct Object** value);
 bool_t array_match(struct Array* array, struct Array* other, struct Vector* bindings);
 void array_show(struct Array* array, FILE* stream);

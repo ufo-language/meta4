@@ -50,14 +50,23 @@ void array_init(struct Array* array, count_t nElems, struct Object* elems[]) {
 /* Unique functions ******************/
 
 void array_closeElems_rec(count_t nElems, struct Object* elems[], struct Object* newElems[], struct Etor_rec* etor) {
-    for (index_t n=0; n<nElems; n++) {
+    for (index_t n=0; n<nElems; ++n) {
         newElems[n] = close_rec(elems[n], etor);
     }
 }
 
+bool_t array_equalElems(count_t nElems, struct Object* elems[], struct Object* otherElems[]) {
+    for (index_t n=0; n<nElems; ++n) {
+        if (!equal(elems[n], otherElems[n])) {
+            return false;
+        }
+    }
+    return true;
+}
+
 bool_t array_evalElems_rec(count_t nElems, struct Object* elems[], struct Object* newElems[], struct Etor_rec* etor, struct Object** error) {
     struct Object* value;
-    for (index_t n=0; n<nElems; n++) {
+    for (index_t n=0; n<nElems; ++n) {
         if (!eval_rec(elems[n], etor, &value)) {
             *error = value;
             return false;
@@ -67,9 +76,20 @@ bool_t array_evalElems_rec(count_t nElems, struct Object* elems[], struct Object
     return true;
 }
 
+/* This treats the array as an association list of pairs: [key, value, key, value...] */
+bool_t array_lookupElems(count_t nElems, struct Object* elems[], struct Object* key, struct Object** value) {
+    for (index_t n=0; n<nElems; n+=2) {
+        if (equal(elems[n], key)) {
+            *value = elems[n+1];
+            return true;
+        }
+    }
+    return false;
+}
+
 bool_t array_matchElems(count_t nElems, struct Object* elems[], struct Object* otherElems[], struct Vector* bindings) {
     index_t savedTop = vector_top(bindings);
-    for (index_t n=0; n<nElems; n++) {
+    for (index_t n=0; n<nElems; ++n) {
         if (!match(elems[n], otherElems[n], bindings)) {
             vector_setTop(bindings, savedTop);
             return false;
@@ -95,6 +115,13 @@ struct Object* array_close_rec(struct Array* array, struct Etor_rec* etor) {
     struct Array* newArray = array_new_noFill(array->nElems);
     array_closeElems_rec(array->nElems, array->elems, newArray->elems, etor);
     return (struct Object*)newArray;
+}
+
+bool_t array_equal(struct Array* array, struct Array* otherArray) {
+    if (array->nElems != otherArray->nElems) {
+        return false;
+    }
+    return array_equalElems(array->nElems, array->elems, otherArray->elems);
 }
 
 bool_t array_eval_rec(struct Array* array, struct Etor_rec* etor, struct Object** value) {

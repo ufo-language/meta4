@@ -5,6 +5,7 @@
 #include "object/functions/equal.h"
 #include "object/object.h"
 #include "object/typeids.h"
+#include "object/types/array.h"
 #include "object/types/integer.h"
 #include "object/types/intvar.h"
 #include "object/types/string.h"
@@ -42,8 +43,8 @@ bool_t equal(struct Object* obj, struct Object* other) {
         return false;
     }
     switch(obj->typeId) {
-        case OT_Application:         break;
-        case OT_Array:         break; /*return array_equal((struct Array*)obj, (struct Array*)(other));*/
+        case OT_Application:   break;
+        case OT_Array:         return array_equal((struct Array*)obj, (struct Array*)(other));
         case OT_BinOp:         break;
         case OT_Boolean:       break; /*return boolean_equal((struct Boolean*)obj, stream);*/
         case OT_ByteBuffer:    break;

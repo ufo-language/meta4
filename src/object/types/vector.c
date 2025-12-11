@@ -59,17 +59,9 @@ void vector_bindPair(struct Vector* vector, struct Object* key, struct Object* v
     vector_push(vector, value);
 }
 
-/* This treats the vector as an association pair of [key, value, key, value...] */
+/* This treats the array as an association list of pairs: [key, value, key, value...] */
 bool_t vector_lookup(struct Vector* vector, struct Object* key, struct Object** value) {
-    struct Object** elems = vector->elems->elems;
-    count_t top = vector->top;
-    for (index_t n=0; n<top; n+=2) {
-        if (equal(elems[n], key)) {
-            *value = elems[n+1];
-            return true;
-        }
-    }
-    return false;
+    return array_lookupElems(vector->top, vector->elems->elems, key, value);
 }
 
 bool_t vector_get(struct Vector* vector, index_t index, struct Object** elem) {
