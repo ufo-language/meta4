@@ -11,8 +11,10 @@
 #include "object/object.h"
 #include "object/typeids.h"
 #include "object/types/application.h"
-#include "object/types/identifier.h"
 #include "object/types/array.h"
+#include "object/types/function.h"
+#include "object/types/identifier.h"
+#include "object/types/primitive.h"
 
 /* Defines *******************************************************************/
 
@@ -58,11 +60,22 @@ bool_t application_eval(struct Application* app, struct Etor_rec* etor, struct O
     if (!eval_rec(app->abstraction, etor, &abstrVal)) {
         return false;
     }
-    /* Evaluate the arguments */
-    struct Object** argVals = memory_alloc(app->nArgs);
-    struct Object* error;
-    if (!array_evalElems_rec(app->nArgs, app->args, argVals, etor, &error)) {
-        return false;
+
+    bool_t evalArgs =
+        (abstrVal->typeId == OT_Primitive && ((struct Primitive*)abstrVal)->primType == PrimType_Function)
+        ;
+
+    struct Object** argVals;
+    if (evalArgs) {
+        /* Evaluate the arguments */
+        argVals = memory_alloc(app->nArgs);
+        struct Object* error;
+        if (!array_evalElems_rec(app->nArgs, app->args, argVals, etor, &error)) {
+            return false;
+        }
+    }
+    else {
+        argVals = app->args;
     }
     /* Apply the abstraction to the arguments */
     return apply(abstrVal, etor, app->nArgs, argVals, value);

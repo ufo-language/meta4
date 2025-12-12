@@ -2,6 +2,7 @@
 #include "_typedefs.h"
 
 #include "object/evaluator/etor_rec.h"
+#include "object/types/application.h"
 #include "object/types/function.h"
 #include "object/types/identifier.h"
 #include "object/types/integer.h"
@@ -65,6 +66,21 @@ int main(int argc, char* argv[]) {
         count_t nArgs = 1;
         struct Object* args[] = {OBJ(i100)};
         ASSERT_TRUE(function_apply(function, etor, nArgs, args, &value));
+        EXPECT_EQ(i100, value);
+    END
+
+    TEST(function_checkApplicationEvalWithFunction)
+        struct Function* function = function_new(f);
+        count_t nParams = 1;
+        struct Object* params[] = {OBJ(x)};
+        struct Object* body = OBJ(x);
+        struct Etor_rec* etor = etor_rec_new();
+        function_addlRule(function, nParams, params, body);
+        struct Object* value = function_close_rec(function, etor);
+        count_t nArgs = 1;
+        struct Object* args[] = {OBJ(i100)};
+        struct Application* app = application_new(OBJ(function), nArgs, args);
+        ASSERT_TRUE(eval_rec(OBJ(app), etor, &value));
         EXPECT_EQ(i100, value);
     END
 

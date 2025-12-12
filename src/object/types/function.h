@@ -12,6 +12,10 @@
 
 /* Types *********************************************************************/
 
+enum ArgEvalType {
+    ArgEvalType_Function, ArgEvalType_Macro
+};
+
 struct FunctionRule {
     struct Object* body;
     struct Object* closedBody;
@@ -23,6 +27,7 @@ struct FunctionRule {
 struct Function {
     struct Object obj;
     struct Identifier* name;
+    enum ArgEvalType argEvalType;
     struct FunctionRule* rules;
 };
 
