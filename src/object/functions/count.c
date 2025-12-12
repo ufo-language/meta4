@@ -3,6 +3,7 @@
 #include "object/typeids.h"
 #include "object/object.h"
 #include "object/types/array.h"
+#include "object/types/bytebuffer.h"
 #include "object/types/pair.h"
 #include "object/types/term.h"
 #include "object/types/vector.h"
@@ -23,13 +24,14 @@
 
 /* Object functions ******************/
 
-bool_t count(struct Object* obj, int_t* nElems) {
+bool_t count(struct Object* obj, count_t* nElems) {
     switch(obj->typeId) {
         case OT_Array:
             *nElems = ((struct Array*)obj)->nElems;
             return true;
         case OT_ByteBuffer:
-            break;
+            *nElems = ((struct ByteBuffer*)obj)->nBytes;
+            return true;
         case OT_HashTable:
             break;
         case OT_IntArray:

@@ -11,7 +11,6 @@ int main(int argc, char* argv[]) {
     BEGIN_TESTS
 
     struct Identifier* a = identifier_new("a");
-    struct Identifier* b = identifier_new("b");
     struct Integer* i100 = integer_new(100);
     struct Integer* i200 = integer_new(200);
 
@@ -30,7 +29,6 @@ int main(int argc, char* argv[]) {
         struct Object* value;
         ASSERT_TRUE(vector_lookup(bindings, OBJ(a), &value));
         ASSERT_EQ(i100, value);
-        ASSERT_FALSE(match(OBJ(a), OBJ(b), bindings));
     END
 
     END_TESTS

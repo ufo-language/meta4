@@ -18,9 +18,15 @@
 
 struct String* string_new(const string_t chars) {
     count_t nChars = strlen(chars);
-    struct String* string = (struct String*)object_new(OT_String, NWORDS(*string) + NBYTES_TO_WORDS(nChars + 1));
+    struct String* string = string_new_empty(nChars);
     string->nChars = nChars;
     memcpy(string->chars, chars, nChars + 1);
+    return string;
+}
+
+struct String* string_new_empty(count_t nChars) {
+    struct String* string = (struct String*)object_new(OT_String, NWORDS(*string) + NBYTES_TO_WORDS(nChars + 1));
+    string->nChars = nChars;
     return string;
 }
 

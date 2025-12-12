@@ -1,19 +1,24 @@
-#pragma once
-
 #include <stdio.h>
 
 #include "_typedefs.h"
 
+#include "memory/gc.h"
+#include "memory/memory.h"
+#include "object/globals.h"
 #include "object/object.h"
 
 /* Defines *******************************************************************/
 
+#define DEFAULT_BYTE_BUFFER_SIZE 8
+
 /* Types *********************************************************************/
 
-struct String {
+struct ByteBuffer {
     struct Object obj;
-    count_t nChars;
-    char chars[];
+    count_t capacity;
+    count_t nBytes;
+    byte_t* bytes;
+    count_t nResizes;
 };
 
 /* Forward declarations ******************************************************/
@@ -22,17 +27,16 @@ struct String {
 
 /* Lifecycle functions *******************************************************/
 
-struct String* string_new(const string_t chars);
-struct String* string_new_empty(count_t nChars);
+struct ByteBuffer* byteBuffer_new(void);
 
 /* Public functions **********************************************************/
 
 /* Unique functions ******************/
 
-bool_t string_equal_chars(struct String* string, string_t chars);
+void byteBuffer_appendByte(struct ByteBuffer* byteBuffer, byte_t byte);
+void byteBuffer_appendBytes(struct ByteBuffer* byteBuffer, count_t nBytes, byte_t bytes[]);
+struct String* byteBuffer_toString(struct ByteBuffer* byteBuffer);
 
 /* Object functions ******************/
 
-void string_display(struct String* string, FILE* stream);
-bool_t string_equal(struct String* string, struct String* other);
-void string_show(struct String* string, FILE* stream);
+void byteBuffer_show(struct ByteBuffer* byteBuffer, FILE* stream);
