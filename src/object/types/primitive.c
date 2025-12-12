@@ -24,6 +24,7 @@ static bool_t _emptyPrimFunction(struct Etor_rec* etor, count_t nArgs, struct Ob
 #if 0
 void _showRule(struct PrimitiveRule* rule);
 #endif
+static struct PrimitiveRule* _vnewRule(PrimFunction function, count_t nParams, va_list paramTypes);
 
 /* Global variables **********************************************************/
 
@@ -45,61 +46,15 @@ struct Primitive* prim_newMacro(const string_t name) {
     return prim_new(name, PrimType_Macro);
 }
 
-/* TODO use va_list here */
-static struct PrimitiveRule* _newRule(count_t nParams, enum TypeId paramTypes[], PrimFunction function) {
-    count_t nParamsToAllocate = nParams;
-    if (nParams == COUNT_MAX) {
-        nParamsToAllocate = 0;
-    }
-    struct PrimitiveRule* rule = (struct PrimitiveRule*)memory_alloc(NWORDS(*rule) + NBYTES_TO_WORDS(sizeof(enum TypeId) * nParamsToAllocate));
-    rule->function = function;
-    rule->nextRule = g_emptyPrimRule;
-    rule->nParams = nParams;
-    memcpy(rule->paramTypes, paramTypes, sizeof(enum TypeId) * nParamsToAllocate);
-    return rule;
-}
-
-static struct PrimitiveRule* _vnewRule(PrimFunction function, count_t nParams, va_list paramTypes) {
-    count_t nParamsToAllocate = nParams;
-    if (nParams == COUNT_MAX) {
-        nParamsToAllocate = 0;
-    }
-    struct PrimitiveRule* rule = (struct PrimitiveRule*)memory_alloc(NWORDS(*rule) + NBYTES_TO_WORDS(sizeof(enum TypeId) * nParamsToAllocate));
-    rule->function = function;
-    rule->nextRule = g_emptyPrimRule;
-    rule->nParams = nParams;
-    for (index_t n=0; n<nParamsToAllocate; n++) {
-        rule->paramTypes[n] = va_arg(paramTypes, enum TypeId);
-    }
-    return rule;
-}
-
-void prim_addRule(struct Primitive* prim, count_t nParams, enum TypeId paramTypes[], PrimFunction function) {
-    /* Create the new rule */
-    struct PrimitiveRule* newRule = _newRule(nParams, paramTypes, function);
-    /* Attach it to the list of rules */
-    struct PrimitiveRule* previousRule = g_emptyPrimRule;
-    struct PrimitiveRule* rule = prim->rules;
-    /* Locate the final rule */
-    while (rule != g_emptyPrimRule) {
-        previousRule = rule;
-        rule = rule->nextRule;
-    }
-    /* Attach the new rule to the list of rules */
-    if (previousRule == g_emptyPrimRule) {
-        prim->rules = newRule;
-    }
-    else {
-        previousRule->nextRule = newRule;
-    }
-}
-
-void prim_addRule2(struct Primitive* prim, PrimFunction function, count_t nParams, ...) {
+void prim_addRule(struct Primitive* prim, PrimFunction function, count_t nParams, ...) {
     va_list paramTypes;
     va_start(paramTypes, nParams);
-    /* Create the new rule */
+    prim_vaddRule(prim, function, nParams, paramTypes);
+    va_end(paramTypes);
+}
+
+void prim_vaddRule(struct Primitive* prim, PrimFunction function, count_t nParams, va_list paramTypes) {
     struct PrimitiveRule* newRule = _vnewRule(function, nParams, paramTypes);
-    /* Attach it to the list of rules */
     struct PrimitiveRule* previousRule = g_emptyPrimRule;
     struct PrimitiveRule* rule = prim->rules;
     /* Locate the final rule */
@@ -117,8 +72,8 @@ void prim_addRule2(struct Primitive* prim, PrimFunction function, count_t nParam
 }
 
 struct PrimitiveRule* prim_emptyRule(void) {
-    enum TypeId paramTypes[] = {};
-    struct PrimitiveRule* rule = _newRule(0, paramTypes, _emptyPrimFunction);
+    va_list paramTypes;
+    struct PrimitiveRule* rule = _vnewRule(_emptyPrimFunction, 0, paramTypes);
     return rule;
 }
 
@@ -157,15 +112,15 @@ void prim_show(struct Primitive* prim, FILE* stream) {
 static bool_t _checkArgs(struct Primitive* prim, count_t nArgs, struct Object* args[], PrimFunction* function) {
     struct PrimitiveRule* rule = prim->rules;
     while (rule != g_emptyPrimRule) {
-        if (rule->nParams == COUNT_MAX) {
-            /* COUNT_MAX means "any number of arguments is accepted" */
+        if (rule->nParams == COUNT_MAX) {  /* COUNT_MAX means "any number of arguments is accepted" */
             goto RETURN_TRUE;
         }
         if (rule->nParams != nArgs) {
             continue;
         }
         for (index_t n=0; n<rule->nParams; n++) {
-            if (rule->paramTypes[n] != args[n]->typeId) {
+            enum TypeId paramTypeId = rule->paramTypes[n];
+            if (paramTypeId == OT_Any|| paramTypeId != args[n]->typeId) {
                 goto NEXT_RULE;
             }
         }
@@ -194,3 +149,19 @@ void _showRule(struct PrimitiveRule* rule) {
     fputc('\n', stderr);
 }
 #endif
+
+static struct PrimitiveRule* _vnewRule(PrimFunction function, count_t nParams, va_list paramTypes) {
+    count_t nParamsToAllocate = nParams;
+    if (nParams == COUNT_MAX) {
+        nParamsToAllocate = 0;
+    }
+    struct PrimitiveRule* rule = (struct PrimitiveRule*)memory_alloc(NWORDS(*rule) + NBYTES_TO_WORDS(sizeof(enum TypeId) * nParamsToAllocate));
+    rule->function = function;
+    rule->nextRule = g_emptyPrimRule;
+    rule->nParams = nParams;
+    for (index_t n=0; n<nParamsToAllocate; n++) {
+        enum TypeId paramTypeId = va_arg(paramTypes, enum TypeId);
+        rule->paramTypes[n] = paramTypeId;
+    }
+    return rule;
+}

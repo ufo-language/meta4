@@ -23,10 +23,11 @@
 
 /* Object functions ******************/
 
-bool_t count(struct Object* obj, int_t* count) {
+bool_t count(struct Object* obj, int_t* nElems) {
     switch(obj->typeId) {
         case OT_Array:
-            return ((struct Array*)obj)->nElems;
+            *nElems = ((struct Array*)obj)->nElems;
+            return true;
         case OT_ByteBuffer:
             break;
         case OT_HashTable:
@@ -36,13 +37,16 @@ bool_t count(struct Object* obj, int_t* count) {
         case OT_IntVector:
             break;
         case OT_Pair:
-            return pair_count((struct Pair*)obj);
+            *nElems = pair_count((struct Pair*)obj);
+            return true;
         case OT_String:
             break;
         case OT_Term:
-            return 1 + ((struct Term*)obj)->nArgs;
+            *nElems = 1 + ((struct Term*)obj)->nArgs;
+            return true;
         case OT_Vector:
-            return ((struct Vector*)obj)->top;
+            *nElems = ((struct Vector*)obj)->top;
+            return true;
         default:
             return false;
     }

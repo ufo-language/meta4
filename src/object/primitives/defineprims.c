@@ -2,9 +2,12 @@
 
 #include "_typedefs.h"
 
+#include "object/functions/count.h"
 #include "object/functions/display.h"
 #include "object/functions/show.h"
 #include "object/globals.h"
+#include "object/types/integer.h"
+#include "object/types/pair.h"
 #include "object/types/primitive.h"
 #include "object/types/vector.h"
 
@@ -14,7 +17,10 @@
 
 /* Forward declarations ******************************************************/
 
+static bool_t _count  (struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value);
 static bool_t _display(struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value);
+static bool_t _first  (struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value);
+static bool_t _rest   (struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value);
 static bool_t _show   (struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value);
 
 /* Global variables **********************************************************/
@@ -27,27 +33,47 @@ void definePrim(struct Vector* env, const string_t name, PrimFunction function, 
     va_list paramTypes;
     va_start(paramTypes, nParams);
     struct Primitive* prim = prim_newFunction(name);
-    prim_addRule2(prim, function, nParams, paramTypes);
+    prim_vaddRule(prim, function, nParams, paramTypes);
+    va_end(paramTypes);
     vector_bindPair(env, (struct Object*)prim->name, (struct Object*)prim);
 }
 
 void definePrims_init(struct Vector* env) {
-#if 0
-    struct Primitive* prim = prim_newFunction("display");
-    prim_addRule2(prim, _display, COUNT_MAX);
-    vector_bindPair(env, (struct Object*)prim->name, (struct Object*)prim);
-#endif
+    definePrim(env, "count",   _count,   1, OT_Any);
     definePrim(env, "display", _display, COUNT_MAX);
-    definePrim(env, "show", _show, COUNT_MAX);
+    definePrim(env, "first",   _first,   1, OT_Pair);
+    definePrim(env, "rest",    _rest,    1, OT_Pair);
+    definePrim(env, "show",    _show,    COUNT_MAX);
 }
 
 /* Private functions *********************************************************/
+
+static bool_t _count(struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value) {
+    count_t nElems;
+    if (!count(args[0], &nElems)) {
+        return false;
+    }
+    *value = (struct Object*)integer_new((int_t)nElems);
+    return true;
+}
 
 static bool_t _display(struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value) {
     for (index_t n=0; n<nArgs; n++) {
         display(args[n], stdout);
     }
     *value = (struct Object*)g_nil;
+    return true;
+}
+
+static bool_t _first(struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value) {
+    struct Pair* pair = (struct Pair*)args[0];
+    *value = pair->first;
+    return true;
+}
+
+static bool_t _rest(struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value) {
+    struct Pair* pair = (struct Pair*)args[0];
+    *value = pair->rest;
     return true;
 }
 

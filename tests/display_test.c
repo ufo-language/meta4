@@ -27,6 +27,7 @@ int main(int argc, char* argv[]) {
         SHOW("closed app", closedAppObj);
         struct Object* value;
         ASSERT_TRUE(eval_rec(OBJ(app), etor, &value));
+        EXPECT_EQ(g_nil, value);
     END
 
     END_TESTS

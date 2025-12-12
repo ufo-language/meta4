@@ -37,8 +37,7 @@ int main(int argc, char* argv[]) {
 
     TEST(primitive_checkApply_1rule0params)
         struct Primitive* prim = prim_newFunction("foo");
-        enum TypeId paramTypes[] = {};
-        prim_addRule(prim, 0, paramTypes, testFunction1);
+        prim_addRule(prim, testFunction1, 0);
         struct Etor_rec* etor = etor_rec_new();
         count_t nArgs = 0;
         struct Object* args[] = {};
@@ -52,8 +51,7 @@ int main(int argc, char* argv[]) {
 
     TEST(primitive_checkApply_1rule1param)
         struct Primitive* prim = prim_newFunction("foo");
-        enum TypeId paramTypes[] = {OT_Integer};
-        prim_addRule(prim, 1, paramTypes, testFunction1);
+        prim_addRule(prim, testFunction1, 1, OT_Integer);
         struct Etor_rec* etor = etor_rec_new();
         count_t nArgs = 1;
         struct Object* args[] = {OBJ(i100)};
@@ -67,10 +65,8 @@ int main(int argc, char* argv[]) {
 
     TEST(primitive_checkApply_2rules1param)
         struct Primitive* prim = prim_newFunction("foo");
-        enum TypeId paramTypes1[] = {OT_Integer};
-        prim_addRule(prim, 1, paramTypes1, testFunction1);
-        enum TypeId paramTypes2[] = {OT_Boolean};
-        prim_addRule(prim, 1, paramTypes2, testFunction2);
+        prim_addRule(prim, testFunction1, 1, OT_Integer);
+        prim_addRule(prim, testFunction2, 1, OT_Boolean);
         struct Etor_rec* etor = etor_rec_new();
         count_t nArgs = 1;
         struct Object* args1[] = {OBJ(i100)};
