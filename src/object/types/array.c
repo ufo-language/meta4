@@ -109,6 +109,19 @@ void array_showElems(count_t nElems, struct Object* elems[], const string_t open
     fputs(close, stream);
 }
 
+void array_showBindings(count_t nElems, struct Object* elems[], const string_t open, const string_t sep, const string_t close, FILE* stream) {
+    fputs(open, stream);
+    for (index_t n=0; n<nElems; n+=2) {
+        if (n > 0) {
+            fputs(sep, stream);
+        }
+        show(elems[n], stream);
+        fputc('=', stream);
+        show(elems[n + 1], stream);
+    }
+    fputs(close, stream);
+}
+
 /* Object functions ******************/
 
 struct Object* array_close_rec(struct Array* array, struct Etor_rec* etor) {

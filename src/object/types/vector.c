@@ -95,6 +95,10 @@ void vector_push(struct Vector* vector, struct Object* elem) {
     vector->elems->elems[vector->top++] = elem;
 }
 
+void vector_showBindings(struct Vector* vector, FILE* stream) {
+    array_showBindings(vector->top, vector->elems->elems, "(|", ", ", "|}", stream);
+}
+
 /* Object functions ******************/
 
 count_t vector_count(struct Vector* vector) {

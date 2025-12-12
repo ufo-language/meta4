@@ -6,8 +6,10 @@
 #include "object/evaluator/etor_rec.h"
 #include "object/functions/close_rec.h"
 #include "object/functions/eval_rec.h"
+#include "object/globals.h"
 #include "object/types/identifier.h"
 #include "object/types/integer.h"
+#include "object/types/vector.h"
 
 int main(int argc, char* argv[]) {
     BEGIN_TESTS

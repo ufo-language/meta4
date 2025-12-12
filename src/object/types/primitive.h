@@ -45,6 +45,7 @@ struct Primitive* prim_new(const string_t name, enum PrimType primType);
 struct Primitive* prim_newFunction(const string_t name);
 struct Primitive* prim_newMacro(const string_t name);
 void prim_addRule(struct Primitive* prim, count_t nParams, enum TypeId paramTypes[], PrimFunction function);
+void prim_addRule2(struct Primitive* prim, PrimFunction function, count_t nParams, ...);
 struct PrimitiveRule* prim_emptyRule(void);
 struct PrimitiveRule* prim_newRule(count_t nParams, enum TypeId paramTypes[], PrimFunction function);
 

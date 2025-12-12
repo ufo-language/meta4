@@ -3,6 +3,8 @@
 #include <stdio.h>
 
 #include "object/functions/show.h"
+#include "object/globals.h"
+#include "object/types/vector.h"
 #include "plx.h"
 
 #define RED "\033[31m"
@@ -14,17 +16,19 @@
 
 #define OBJ(obj) ((struct Object*)obj)
 
-size_t _TEST_NPASS_ = 0;
-size_t _TEST_NFAIL_ = 0;
+size_t  _TEST_NPASS_        = 0;
+size_t  _TEST_NFAIL_        = 0;
+index_t _SAVED_GLOBALS_TOP_ = 0;
 
 #define BEGIN_TESTS plx_startup();
 #define END_TESTS fprintf(stdout, "Passed %lu Failed %lu\n", _TEST_NPASS_, _TEST_NFAIL_); plx_shutdown();
 
 #define TEST(name) \
     fprintf(stderr, "[%sTEST%s] %s:\n", BLUE, NORMAL, #name); \
+    _SAVED_GLOBALS_TOP_ = vector_top(g_globalEnv); \
     do {
 
-#define END } while (0);
+#define END } while (0); vector_setTop(g_globalEnv, _SAVED_GLOBALS_TOP_);
 
 #define EXPECT_PTREQ(expected, actual) \
     if ((void*)(expected) == (void*)(actual)) { \

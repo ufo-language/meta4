@@ -41,6 +41,7 @@ bool_t vector_get(struct Vector* vector, index_t index, struct Object** elem);
 bool_t vector_set(struct Vector* vector, index_t index, struct Object* elem);
 bool_t vector_pop(struct Vector* vector, struct Object** elem);
 void vector_push(struct Vector* vector, struct Object* elem);
+void vector_showBindings(struct Vector* vector, FILE* stream);
 
 /* Object functions ******************/
 

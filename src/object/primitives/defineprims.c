@@ -1,3 +1,5 @@
+#include <stdarg.h>
+
 #include "_typedefs.h"
 
 #include "object/functions/display.h"
@@ -21,14 +23,22 @@ static bool_t _show   (struct Etor_rec* etor, count_t nArgs, struct Object* args
 
 /* Public functions **********************************************************/
 
+void definePrim(struct Vector* env, const string_t name, PrimFunction function, count_t nParams, ...) {
+    va_list paramTypes;
+    va_start(paramTypes, nParams);
+    struct Primitive* prim = prim_newFunction(name);
+    prim_addRule2(prim, function, nParams, paramTypes);
+    vector_bindPair(env, (struct Object*)prim->name, (struct Object*)prim);
+}
 
 void definePrims_init(struct Vector* env) {
-
+#if 0
     struct Primitive* prim = prim_newFunction("display");
-    enum TypeId paramTypes[] = {};
-    prim_addRule(prim, COUNT_MAX, paramTypes, _display);
+    prim_addRule2(prim, _display, COUNT_MAX);
     vector_bindPair(env, (struct Object*)prim->name, (struct Object*)prim);
-
+#endif
+    definePrim(env, "display", _display, COUNT_MAX);
+    definePrim(env, "show", _show, COUNT_MAX);
 }
 
 /* Private functions *********************************************************/
