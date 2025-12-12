@@ -5,16 +5,13 @@
 
 #include "_typedefs.h"
 
+#include "object/types/_argevaltype.h"
 #include "object/object.h"
 #include "object/globals.h"
 
 /* Defines *******************************************************************/
 
 /* Types *********************************************************************/
-
-enum ArgEvalType {
-    ArgEvalType_Function, ArgEvalType_Macro
-};
 
 struct FunctionRule {
     struct Object* body;
@@ -38,6 +35,7 @@ struct Function {
 /* Lifecycle functions *******************************************************/
 
 struct Function* function_new(struct Identifier* name);
+struct Function* function_newMacro(struct Identifier* name);
 void function_addlRule(struct Function* function, count_t nParams, struct Object* params[], struct Object* body);
 struct FunctionRule* function_emptyRule(void);
 

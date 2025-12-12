@@ -62,7 +62,8 @@ bool_t application_eval(struct Application* app, struct Etor_rec* etor, struct O
     }
 
     bool_t evalArgs =
-        (abstrVal->typeId == OT_Primitive && ((struct Primitive*)abstrVal)->primType == PrimType_Function)
+           (abstrVal->typeId == OT_Primitive && ((struct Primitive*)abstrVal)->argEvalType == ArgEvalType_Function)
+        || (abstrVal->typeId == OT_Function  && ((struct Function*)abstrVal)->argEvalType  == ArgEvalType_Function)
         ;
 
     struct Object** argVals;

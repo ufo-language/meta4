@@ -32,9 +32,6 @@ bool_t match(struct Object* obj, struct Object* other, struct Vector* bindings) 
         return true;
     }
     if (obj->typeId == OT_Identifier) {
-        if (other->typeId == OT_Identifier) {
-            return false;
-        }
         vector_bindPair(bindings, obj, other);
         return true;
     }

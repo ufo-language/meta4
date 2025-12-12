@@ -9,6 +9,7 @@
 #include "object/types/application.h"
 #include "object/types/array.h"
 #include "object/types/dec.h"
+#include "object/types/function.h"
 #include "object/types/identifier.h"
 #include "object/types/ifthen.h"
 #include "object/types/let.h"
@@ -50,7 +51,7 @@ struct Object* close_rec(struct Object* obj, struct Etor_rec* etor) {
         case OT_ByteBuffer:  break;
         /* case OT_Dec:        return dec_close_rec((struct Dec*)obj, etor); */
         case OT_Etor_Rec:    break;
-        case OT_Function:    break;
+        case OT_Function:    return function_close_rec((struct Function*)obj, etor);
         case OT_HashTable:   break;
         case OT_Identifier:  return identifier_close_rec((struct Identifier*)obj, etor);
         case OT_IfThen:      return ifThen_close_rec((struct IfThen*)obj, etor);

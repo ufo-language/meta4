@@ -21,6 +21,11 @@ bool_t testFunction2(struct Etor_rec* etor, count_t nArgs, struct Object* args[]
     return true;
 }
 
+bool_t testFunction3(struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value) {
+    *value = args[0];
+    return true;
+}
+
 int main(int argc, char* argv[]) {
     BEGIN_TESTS
 
@@ -82,6 +87,18 @@ int main(int argc, char* argv[]) {
         ASSERT_TRUE(apply(OBJ(prim), etor, nArgs, args2, &value));
         EXPECT_IEQ(0, testFunction1CallCount);
         EXPECT_IEQ(1, testFunction2CallCount);
+    END
+
+    TEST(primitive_checkApply_macro)
+        struct Primitive* prim = prim_newMacro("foo");
+        prim_addRule(prim, testFunction3, 1, OT_Any);
+        struct Etor_rec* etor = etor_rec_new();
+        struct Identifier* x = identifier_new("x");
+        count_t nArgs = 1;
+        struct Object* args1[] = {OBJ(x)};
+        struct Object* value;
+        ASSERT_TRUE(apply(OBJ(prim), etor, nArgs, args1, &value));
+        EXPECT_EQ(x, value);
     END
 
     TEST(primitive_show)

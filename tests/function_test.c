@@ -2,6 +2,8 @@
 #include "_typedefs.h"
 
 #include "object/evaluator/etor_rec.h"
+#include "object/functions/apply.h"
+#include "object/functions/close_rec.h"
 #include "object/types/application.h"
 #include "object/types/function.h"
 #include "object/types/identifier.h"
@@ -18,7 +20,7 @@ int main(int argc, char* argv[]) {
     TEST(function_checkConstruction_0rules)
         struct Function* function = function_new(f);
         ASSERT_ISA(OT_Function, function);
-        EXPECT_IEQ(NWORDS(struct Object) + 2, function->obj.nWords);
+        EXPECT_IEQ(NWORDS(struct Object) + 3, function->obj.nWords);
         EXPECT_IEQ(NWORDS(struct Function), function->obj.nWords);
         ASSERT_PTREQ(g_emptyFunctionRule, function->rules);
     END
@@ -30,15 +32,6 @@ int main(int argc, char* argv[]) {
         struct Object* body = OBJ(g_nil);
         function_addlRule(function, nParams, params, body);
         ASSERT_PTRNE(g_emptyFunctionRule, function->rules);
-    END
-
-    TEST(function_checkShow_1Rule)
-        struct Function* function = function_new(f);
-        count_t nParams = 1;
-        struct Object* params[] = {OBJ(x)};
-        struct Object* body = OBJ(y);
-        function_addlRule(function, nParams, params, body);
-        SHOW("Should show 'fun f(x) = x'", function);
     END
 
     TEST(function_checkClose_1rule)
@@ -82,6 +75,30 @@ int main(int argc, char* argv[]) {
         struct Application* app = application_new(OBJ(function), nArgs, args);
         ASSERT_TRUE(eval_rec(OBJ(app), etor, &value));
         EXPECT_EQ(i100, value);
+    END
+
+    TEST(function_checkApply_macro)
+        struct Function* function = function_new(f);
+        count_t nParams = 1;
+        struct Object* params[] = {OBJ(x)};
+        struct Object* body = OBJ(x);
+        function_addlRule(function, nParams, params, body);
+        struct Etor_rec* etor = etor_rec_new();
+        close_rec(OBJ(function), etor);
+        count_t nArgs = 1;
+        struct Object* args[] = {OBJ(y)};
+        struct Object* value;
+        ASSERT_TRUE(apply(OBJ(function), etor, nArgs, args, &value));
+        EXPECT_EQ(y, value);
+    END
+
+    TEST(function_checkShow_1Rule)
+        struct Function* function = function_new(f);
+        count_t nParams = 1;
+        struct Object* params[] = {OBJ(x)};
+        struct Object* body = OBJ(y);
+        function_addlRule(function, nParams, params, body);
+        SHOW("Should show 'fun f(x) = x'", function);
     END
 
     TEST(function_checkShow_2Rules)

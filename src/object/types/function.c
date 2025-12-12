@@ -29,7 +29,14 @@ static void _showRule(struct FunctionRule* rule, FILE* stream);
 struct Function* function_new(struct Identifier* name) {
     struct Function* function = (struct Function*)object_new(OT_Function, NWORDS(*function));
     function->name = name;
+    function->argEvalType = ArgEvalType_Function;
     function->rules = g_emptyFunctionRule;
+    return function;
+}
+
+struct Function* function_newMacro(struct Identifier* name) {
+    struct Function* function = function_new(name);
+    function->argEvalType = ArgEvalType_Macro;
     return function;
 }
 
@@ -105,7 +112,7 @@ bool_t function_eval_rec(struct Function* function, struct Etor_rec* etor, struc
 }
 
 void function_show(struct Function* function, FILE* stream) {
-    fputs("fun ", stream);
+    fputs(function->argEvalType == ArgEvalType_Function ? "fun " : "macro ", stream);
     if (function->name != g_idNil) {
         identifier_show(function->name, stream);
     }

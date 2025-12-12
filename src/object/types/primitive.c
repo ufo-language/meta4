@@ -30,20 +30,20 @@ static struct PrimitiveRule* _vnewRule(PrimFunction function, count_t nParams, v
 
 /* Lifecycle functions *******************************************************/
 
-struct Primitive* prim_new(const string_t name, enum PrimType primType) {
+struct Primitive* prim_new(const string_t name, enum ArgEvalType argEvalType) {
     struct Primitive* prim = (struct Primitive*)object_new(OT_Primitive, NWORDS(*prim));
     prim->name = identifier_new(name);
     prim->rules = g_emptyPrimRule;
-    prim->primType = primType;
+    prim->argEvalType = argEvalType;
     return prim;
 }
 
 struct Primitive* prim_newFunction(const string_t name) {
-    return prim_new(name, PrimType_Function);
+    return prim_new(name, ArgEvalType_Function);
 }
 
 struct Primitive* prim_newMacro(const string_t name) {
-    return prim_new(name, PrimType_Macro);
+    return prim_new(name, ArgEvalType_Macro);
 }
 
 void prim_addRule(struct Primitive* prim, PrimFunction function, count_t nParams, ...) {
@@ -86,11 +86,10 @@ struct PrimitiveRule* prim_emptyRule(void) {
 bool_t prim_apply(struct Primitive* prim, struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value) {
     PrimFunction function;
     if (!_checkArgs(prim, nArgs, args, &function)) {
-        fputs("prim_apply _checkArgs returned false\n", stderr);
         return false;
     }
     struct Object** argVals;
-    if (prim->primType == PrimType_Function) {
+    if (prim->argEvalType == ArgEvalType_Function) {
         argVals = memory_alloc(nArgs);
         struct Object* error;
         if (!array_evalElems_rec(nArgs, args, argVals, etor, &error)) {

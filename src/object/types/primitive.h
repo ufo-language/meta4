@@ -7,16 +7,13 @@
 
 #include "object/object.h"
 #include "object/typeids.h"
+#include "object/types/_argevaltype.h"
 
 /* Defines *******************************************************************/
 
 /* Types *********************************************************************/
 
 typedef bool_t (*PrimFunction)(struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value);
-
-enum PrimType {
-    PrimType_Function, PrimType_Macro
-};
 
 struct PrimitiveRule {
     PrimFunction function;
@@ -29,7 +26,7 @@ struct Primitive {
     struct Object obj;
     struct Identifier* name;
     struct PrimitiveRule* rules;
-    enum PrimType primType;
+    enum ArgEvalType argEvalType;
 };
 
 /* Forward declarations ******************************************************/
@@ -42,7 +39,7 @@ struct Primitive {
 
 /* Unique functions ******************/
 
-struct Primitive* prim_new(const string_t name, enum PrimType primType);
+struct Primitive* prim_new(const string_t name, enum ArgEvalType argEvalType);
 struct Primitive* prim_newFunction(const string_t name);
 struct Primitive* prim_newMacro(const string_t name);
 void prim_addRule(struct Primitive* prim, PrimFunction function, count_t nParams, ...);
