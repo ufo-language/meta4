@@ -14,7 +14,7 @@ int main(int argc, char* argv[]) {
 
     struct Etor_rec* etor = etor_rec_new();
 
-    TEST(display_checkEvaluation_paramTypeMatch)
+    TEST(first_checkEvaluation_paramTypeMatch)
         struct Integer* i100 = integer_new(100);
         struct Integer* i200 = integer_new(200);
         struct Identifier* first = identifier_new("first");
@@ -29,7 +29,7 @@ int main(int argc, char* argv[]) {
         EXPECT_EQ(i100, value);
     END
 
-    TEST(display_checkEvaluation_paramTypeNoMatch)
+    TEST(first_checkEvaluation_paramTypeNoMatch)
          struct Identifier* first = identifier_new("first");
         count_t nArgs = 1;
         struct Object* args[] = {OBJ(g_nil)};

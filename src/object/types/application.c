@@ -70,13 +70,16 @@ bool_t application_eval(struct Application* app, struct Etor_rec* etor, struct O
 
 void application_show(struct Application* app, FILE* stream) {
     struct Object* abstr = app->abstraction;
-    if (abstr->typeId == OT_Identifier) {
-        identifier_show((struct Identifier*)abstr, stream);
-    }
-    else {
-        fputc('(', stream);
-        show(abstr, stream);
-        fputc(')', stream);
+    switch (abstr->typeId) {
+        case OT_Identifier:
+        case OT_Primitive:
+            show(abstr, stream);
+            break;
+        default:
+            fputc('(', stream);
+            show(abstr, stream);
+            fputc(')', stream);
+            break;
     }
     array_showElems(app->nArgs, app->args, "(", ", ", ")", stream);
 }

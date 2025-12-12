@@ -18,9 +18,9 @@ int main(int argc, char* argv[]) {
         struct Integer* i100 = integer_new(100);
         etor_rec_bind(etor, x, OBJ(i100));
         struct Identifier* display = identifier_new("display");
-        count_t nArgs = 3;
         struct String* string = string_new("x = ");
         struct String* nl = string_new("\n");
+        count_t nArgs = 3;
         struct Object* args[] = {OBJ(string), OBJ(x), OBJ(nl)};
         struct Application* app = application_new(OBJ(display), nArgs, args);
         struct Object* closedAppObj = close_rec(OBJ(app), etor);

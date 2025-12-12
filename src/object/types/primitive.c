@@ -86,6 +86,7 @@ struct PrimitiveRule* prim_emptyRule(void) {
 bool_t prim_apply(struct Primitive* prim, struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value) {
     PrimFunction function;
     if (!_checkArgs(prim, nArgs, args, &function)) {
+        fputs("prim_apply _checkArgs returned false\n", stderr);
         return false;
     }
     struct Object** argVals;
@@ -112,7 +113,8 @@ void prim_show(struct Primitive* prim, FILE* stream) {
 static bool_t _checkArgs(struct Primitive* prim, count_t nArgs, struct Object* args[], PrimFunction* function) {
     struct PrimitiveRule* rule = prim->rules;
     while (rule != g_emptyPrimRule) {
-        if (rule->nParams == COUNT_MAX) {  /* COUNT_MAX means "any number of arguments is accepted" */
+          /* COUNT_MAX means "any number of arguments of any type is accepted" */
+        if (rule->nParams == COUNT_MAX) {
             goto RETURN_TRUE;
         }
         if (rule->nParams != nArgs) {
@@ -120,7 +122,7 @@ static bool_t _checkArgs(struct Primitive* prim, count_t nArgs, struct Object* a
         }
         for (index_t n=0; n<rule->nParams; n++) {
             enum TypeId paramTypeId = rule->paramTypes[n];
-            if (paramTypeId == OT_Any|| paramTypeId != args[n]->typeId) {
+            if (paramTypeId != OT_Any && paramTypeId != args[n]->typeId) {
                 goto NEXT_RULE;
             }
         }
