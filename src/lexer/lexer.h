@@ -4,6 +4,23 @@
 
 /* Types *********************************************************************/
 
+enum LexerTokenType {
+    TOK_INT,
+    TOK_FLOAT,
+    TOK_IDENT,
+    TOK_SYMBOL,
+    TOK_STRING,
+    TOK_OPERATOR,
+    TOK_SPECIAL,
+    TOK_EOF
+};
+
+struct LexerToken {
+    enum LexerTokenType type;
+    const char* start;
+    count_t length;
+};
+
 /* Forward declarations ******************************************************/
 
 /* Global variables **********************************************************/

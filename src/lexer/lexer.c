@@ -3,6 +3,8 @@
 
 #include "_typedefs.h"
 
+#include "lexer/lexer.h"
+
 /* Defines *******************************************************************/
 
 /* Types *********************************************************************/
@@ -80,40 +82,23 @@ int charType[256] = {
 
 /* Unique functions ******************/
 
-enum TokenType {
-    TOK_INT,
-    TOK_FLOAT,
-    TOK_IDENT,
-    TOK_SYMBOL,
-    TOK_STRING,
-    TOK_OPERATOR,
-    TOK_SPECIAL,
-    TOK_EOF
-};
-
-struct Token {
-    enum TokenType type;
-    const char* start;
-    count_t length;
-};
-
 /* static inline int isAlpha(int c) { return charType[c] == C_ALPHA; } */
-static inline int isDigit(int c) { return charType[c] == C_DIGIT; }
-static inline int isAlNum(int c) { return charType[c] == C_ALPHA || charType[c] == C_DIGIT; }
-static inline int isWs(int c)    { return charType[c] == C_WS; }
-static inline int isOper(int c) { return charType[c] == C_OPER; }
+static inline int _lexer_isDigit(int c) { return charType[c] == C_DIGIT; }
+static inline int _lexer_isAlNum(int c) { return charType[c] == C_ALPHA || charType[c] == C_DIGIT; }
+static inline int _lexer_isWs(int c)    { return charType[c] == C_WS; }
+static inline int _lexer_isOper(int c) { return charType[c] == C_OPER; }
 
-struct Token lexer_nextToken(const char** pcur) {
+struct LexerToken lexer_nextToken(const char** pcur) {
     const char* p = *pcur;
 
 restart:
     /* skip whitespace */
-    while (isWs(*p)) p++;
+    while (_lexer_isWs(*p)) p++;
 
     /* end of input */
     if (*p == 0) {
         *pcur = p;
-        return (struct Token){TOK_EOF, p, 0};
+        return (struct LexerToken){TOK_EOF, p, 0};
     }
 
     /* comments */
@@ -141,7 +126,7 @@ restart:
         }
         if (*p == '"') p++;
         *pcur = p;
-        return (struct Token){TOK_STRING, start, (int)(p - start)};
+        return (struct LexerToken){TOK_STRING, start, (int)(p - start)};
     }
 
     /* leading minus? */
@@ -152,7 +137,7 @@ restart:
     }
 
     /* number? */
-    if (isDigit(*p)) {
+    if (_lexer_isDigit(*p)) {
         const char* q = p;
 
         /* base prefixes */
@@ -161,68 +146,68 @@ restart:
             if (q[1] == 'x' || q[1] == 'X') {
                 base = 16;
                 q += 2;
-                while (isDigit(*q) || (*q >= 'a' && *q <= 'f') || (*q >= 'A' && *q <= 'F')) q++;
+                while (_lexer_isDigit(*q) || (*q >= 'a' && *q <= 'f') || (*q >= 'A' && *q <= 'F')) q++;
                 *pcur = q;
-                return (struct Token){TOK_INT, start, (int)(q - start), };
+                return (struct LexerToken){TOK_INT, start, (int)(q - start), };
             }
             if (q[1] == 'b' || q[1] == 'B') {
                 base = 2;
                 q += 2;
                 while (*q == '0' || *q == '1') q++;
                 *pcur = q;
-                return (struct Token){TOK_INT, start, (int)(q - start)};
+                return (struct LexerToken){TOK_INT, start, (int)(q - start)};
             }
         }
 
         /* decimal: int or float */
-        while (isDigit(*q)) q++;
+        while (_lexer_isDigit(*q)) q++;
 
         int is_float = 0;
 
         if (*q == '.') {
             is_float = 1;
             q++;
-            while (isDigit(*q)) q++;
+            while (_lexer_isDigit(*q)) q++;
         }
 
         *pcur = q;
-        return (struct Token){is_float ? TOK_FLOAT : TOK_INT, start, (int)(q - start)};
+        return (struct LexerToken){is_float ? TOK_FLOAT : TOK_INT, start, (int)(q - start)};
     }
 
     /* identifier: [a-z_] ... */
     if ((*start >= 'a' && *start <= 'z') || *start == '_') {
         p++;
-        while (isAlNum(*p) || *p == '_') p++;
+        while (_lexer_isAlNum(*p) || *p == '_') p++;
         *pcur = p;
-        return (struct Token){TOK_IDENT, start, p - start};
+        return (struct LexerToken){TOK_IDENT, start, p - start};
     }
 
     /* symbol: [A-Z] ... */
     if (*start >= 'A' && *start <= 'Z') {
         p++;
-        while (isAlNum(*p) || *p == '_') p++;
+        while (_lexer_isAlNum(*p) || *p == '_') p++;
         *pcur = p;
-        return (struct Token){TOK_SYMBOL, start, (int)(p - start)};
+        return (struct LexerToken){TOK_SYMBOL, start, (int)(p - start)};
     }
 
     /* operator: run of C_PUNCT chars */
-    if (isOper(*start)) {
+    if (_lexer_isOper(*start)) {
         p++;
-        while (isOper(*p)) p++;
+        while (_lexer_isOper(*p)) p++;
         *pcur = p;
-        return (struct Token){TOK_OPERATOR, start, (int)(p - start)};
+        return (struct LexerToken){TOK_OPERATOR, start, (int)(p - start)};
     }
 
     /* special: single C_OTHER */
     p++;
     *pcur = p;
-    return (struct Token){TOK_SPECIAL, start, 1};
+    return (struct LexerToken){TOK_SPECIAL, start, 1};
 }
 
 void lexer_lexAll(const char* src) {
     const char* p = src;
     for (;;) {
-        struct Token token = lexer_nextToken(&p);
+        struct LexerToken token = lexer_nextToken(&p);
         if (token.type == TOK_EOF) break;
         printf("Token type = %d, %.*s\n", token.type, (int)token.length, token.start);
     }
@@ -232,7 +217,7 @@ void lexer_lexAll(const char* src) {
 
 /* Private functions *********************************************************/
 
-static int_t _stringToInt(char* string, count_t len, int base) {
+static int_t _lexer_stringToInt(char* string, count_t len, int base) {
     int_t v = 0;
     for (index_t i=0; i<len; ++i) {
         int d;

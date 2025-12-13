@@ -23,7 +23,7 @@ typedef enum {
 
 typedef enum {
     T_NONE, T_INT, T_REAL, T_BOOL, T_WORD, T_IDENT, T_RESERVED, T_STRING, T_OPER, T_SPECIAL, T_SYMBOL, T_EOI
-} TokenType;
+} LexerTokenType;
 
 #define C_NUL ((char)0x00)
 #define C_ANY ((char)0xff)
@@ -41,7 +41,7 @@ typedef struct {
     int line;
     int col;
     TokenType type;
-} Token;
+} LexerToken;
 
 typedef struct {
     Transition** syntax;

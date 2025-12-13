@@ -18,7 +18,7 @@
 
 /* Forward declarations ******************************************************/
 
-static void _resize(struct Vector* vector);
+static void _vector_resize(struct Vector* vector);
 
 /* Global variables **********************************************************/
 
@@ -90,7 +90,7 @@ bool_t vector_pop(struct Vector* vector, struct Object** elem) {
 
 void vector_push(struct Vector* vector, struct Object* elem) {
     if (vector->top == vector->elems->nElems) {
-        _resize(vector);
+        _vector_resize(vector);
     }
     vector->elems->elems[vector->top++] = elem;
 }
@@ -111,7 +111,7 @@ void vector_show(struct Vector* vector, FILE* stream) {
 
 /* Private functions *********************************************************/
 
-static void _resize(struct Vector* vector) {
+static void _vector_resize(struct Vector* vector) {
     count_t nElems = vector->elems->nElems;
     struct Array* newElems = array_new_noFill(nElems * 2);
     array_init(newElems, nElems, vector->elems->elems);

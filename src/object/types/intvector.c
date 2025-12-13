@@ -14,7 +14,7 @@
 
 /* Forward declarations ******************************************************/
 
-static void _resize(struct IntVector* intVector);
+static void _intVector_resize(struct IntVector* intVector);
 
 /* Global variables **********************************************************/
 
@@ -63,7 +63,7 @@ bool_t intVector_pop(struct IntVector* intVector, int_t* elem) {
 
 void intVector_push(struct IntVector* intVector, int_t elem) {
     if (intVector->top == intVector->elems->nElems) {
-        _resize(intVector);
+        _intVector_resize(intVector);
     }
     intVector->elems->elems[intVector->top++] = elem;
 }
@@ -88,7 +88,7 @@ void intVector_show(struct IntVector* intVector, FILE* stream) {
 
 /* Private functions *********************************************************/
 
-static void _resize(struct IntVector* intVector) {
+static void _intVector_resize(struct IntVector* intVector) {
     intVector->capacity *= 2;
     struct IntArray* newElems = intArray_new_fromIntArray(intVector->capacity, intVector->elems);
     intVector->elems = newElems;

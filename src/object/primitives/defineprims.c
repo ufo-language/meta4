@@ -17,11 +17,11 @@
 
 /* Forward declarations ******************************************************/
 
-static bool_t _count  (struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value);
-static bool_t _display(struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value);
-static bool_t _first  (struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value);
-static bool_t _rest   (struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value);
-static bool_t _show   (struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value);
+static bool_t _prim_count  (struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value);
+static bool_t _prim_display(struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value);
+static bool_t _prim_first  (struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value);
+static bool_t _prim_rest   (struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value);
+static bool_t _prim_show   (struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value);
 
 /* Global variables **********************************************************/
 
@@ -39,16 +39,16 @@ void definePrim(struct Vector* env, const string_t name, PrimFunction function, 
 }
 
 void definePrims_init(struct Vector* env) {
-    definePrim(env, "count",   _count,   1, OT_Any);
-    definePrim(env, "display", _display, COUNT_MAX);
-    definePrim(env, "first",   _first,   1, OT_Pair);
-    definePrim(env, "rest",    _rest,    1, OT_Pair);
-    definePrim(env, "show",    _show,    COUNT_MAX);
+    definePrim(env, "count",   _prim_count,   1, OT_Any);
+    definePrim(env, "display", _prim_display, COUNT_MAX);
+    definePrim(env, "first",   _prim_first,   1, OT_Pair);
+    definePrim(env, "rest",    _prim_rest,    1, OT_Pair);
+    definePrim(env, "show",    _prim_show,    COUNT_MAX);
 }
 
 /* Private functions *********************************************************/
 
-static bool_t _count(struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value) {
+static bool_t _prim_count(struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value) {
     (void)etor;
     (void)nArgs;
     count_t nElems;
@@ -59,7 +59,7 @@ static bool_t _count(struct Etor_rec* etor, count_t nArgs, struct Object* args[]
     return true;
 }
 
-static bool_t _display(struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value) {
+static bool_t _prim_display(struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value) {
     (void)etor;
     for (index_t n=0; n<nArgs; n++) {
         display(args[n], stdout);
@@ -68,7 +68,7 @@ static bool_t _display(struct Etor_rec* etor, count_t nArgs, struct Object* args
     return true;
 }
 
-static bool_t _first(struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value) {
+static bool_t _prim_first(struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value) {
     (void)etor;
     (void)nArgs;
     struct Pair* pair = (struct Pair*)args[0];
@@ -76,7 +76,7 @@ static bool_t _first(struct Etor_rec* etor, count_t nArgs, struct Object* args[]
     return true;
 }
 
-static bool_t _rest(struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value) {
+static bool_t _prim_rest(struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value) {
     (void)etor;
     (void)nArgs;
     struct Pair* pair = (struct Pair*)args[0];
@@ -84,7 +84,7 @@ static bool_t _rest(struct Etor_rec* etor, count_t nArgs, struct Object* args[],
     return true;
 }
 
-static bool_t _show(struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value) {
+static bool_t _prim_show(struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value) {
     (void)etor;
     for (index_t n=0; n<nArgs; n++) {
         show(args[n], stdout);

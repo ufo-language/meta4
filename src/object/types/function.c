@@ -19,8 +19,8 @@
 
 /* Forward declarations ******************************************************/
 
-static void _closeRule(struct FunctionRule* rule, struct Etor_rec* etor);
-static void _showRule(struct FunctionRule* rule, FILE* stream);
+static void _function_closeRule(struct FunctionRule* rule, struct Etor_rec* etor);
+static void _function_showRule(struct FunctionRule* rule, FILE* stream);
 
 /* Global variables **********************************************************/
 
@@ -100,7 +100,7 @@ bool_t function_apply(struct Function* function, struct Etor_rec* etor, count_t 
 struct Object* function_close_rec(struct Function* function, struct Etor_rec* etor) {
     for (struct FunctionRule* rule=function->rules; rule!=g_emptyFunctionRule; rule=rule->nextRule) {
         index_t savedEnv = etor_rec_envSave(etor);
-        _closeRule(rule, etor);
+        _function_closeRule(rule, etor);
         etor_rec_envRestore(etor, savedEnv);
     }
     return (struct Object*)function;
@@ -118,17 +118,17 @@ void function_show(struct Function* function, FILE* stream) {
     }
     assert(function->rules != g_emptyFunctionRule);
     struct FunctionRule* rule = function->rules;
-    _showRule(rule, stream);
+    _function_showRule(rule, stream);
     for (rule = rule->nextRule; rule != g_emptyFunctionRule; rule = rule->nextRule) {
         fputs(" | ", stream);
-        _showRule(rule, stream);
+        _function_showRule(rule, stream);
     }
     fputs(" end", stream);
 }
 
 /* Private functions *********************************************************/
 
-static void _closeRule(struct FunctionRule* rule, struct Etor_rec* etor) {
+static void _function_closeRule(struct FunctionRule* rule, struct Etor_rec* etor) {
     if (rule == g_emptyFunctionRule) {
         return;
     }
@@ -151,7 +151,7 @@ static void _closeRule(struct FunctionRule* rule, struct Etor_rec* etor) {
     etor_rec_envRestore(etor, savedEnv);
 }
 
-static void _showRule(struct FunctionRule* rule, FILE* stream) {
+static void _function_showRule(struct FunctionRule* rule, FILE* stream) {
     array_showElems(rule->nParams, rule->params, "(", ", ", ") = ", stream);
     show(rule->body, stream);
 }

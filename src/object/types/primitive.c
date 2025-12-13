@@ -19,12 +19,12 @@
 
 /* Forward declarations ******************************************************/
 
-static bool_t _checkArgs(struct Primitive* prim, count_t nArgs, struct Object* args[], PrimFunction* function);
-static bool_t _emptyPrimFunction(struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value);
+static bool_t _prim_checkArgs(struct Primitive* prim, count_t nArgs, struct Object* args[], PrimFunction* function);
+static bool_t _prim_emptyPrimFunction(struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value);
 #if 0
 void _showRule(struct PrimitiveRule* rule);
 #endif
-static struct PrimitiveRule* _vnewRule(PrimFunction function, count_t nParams, va_list paramTypes);
+static struct PrimitiveRule* _prim_vnewRule(PrimFunction function, count_t nParams, va_list paramTypes);
 
 /* Global variables **********************************************************/
 
@@ -54,7 +54,7 @@ void prim_addRule(struct Primitive* prim, PrimFunction function, count_t nParams
 }
 
 void prim_vaddRule(struct Primitive* prim, PrimFunction function, count_t nParams, va_list paramTypes) {
-    struct PrimitiveRule* newRule = _vnewRule(function, nParams, paramTypes);
+    struct PrimitiveRule* newRule = _prim_vnewRule(function, nParams, paramTypes);
     struct PrimitiveRule* previousRule = g_emptyPrimRule;
     struct PrimitiveRule* rule = prim->rules;
     /* Locate the final rule */
@@ -73,7 +73,7 @@ void prim_vaddRule(struct Primitive* prim, PrimFunction function, count_t nParam
 
 struct PrimitiveRule* prim_emptyRule(void) {
     va_list paramTypes;
-    struct PrimitiveRule* rule = _vnewRule(_emptyPrimFunction, 0, paramTypes);
+    struct PrimitiveRule* rule = _prim_vnewRule(_prim_emptyPrimFunction, 0, paramTypes);
     return rule;
 }
 
@@ -85,7 +85,7 @@ struct PrimitiveRule* prim_emptyRule(void) {
 
 bool_t prim_apply(struct Primitive* prim, struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value) {
     PrimFunction function;
-    if (!_checkArgs(prim, nArgs, args, &function)) {
+    if (!_prim_checkArgs(prim, nArgs, args, &function)) {
         return false;
     }
     struct Object** argVals;
@@ -109,7 +109,7 @@ void prim_show(struct Primitive* prim, FILE* stream) {
 
 /* Private functions *********************************************************/
 
-static bool_t _checkArgs(struct Primitive* prim, count_t nArgs, struct Object* args[], PrimFunction* function) {
+static bool_t _prim_checkArgs(struct Primitive* prim, count_t nArgs, struct Object* args[], PrimFunction* function) {
     struct PrimitiveRule* rule = prim->rules;
     while (rule != g_emptyPrimRule) {
           /* COUNT_MAX means "any number of arguments of any type is accepted" */
@@ -134,7 +134,7 @@ static bool_t _checkArgs(struct Primitive* prim, count_t nArgs, struct Object* a
     return false;
 }
 
-static bool_t _emptyPrimFunction(struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value) {
+static bool_t _prim_emptyPrimFunction(struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value) {
     /* Do nothing */
     (void)etor;
     (void)nArgs;
@@ -155,7 +155,7 @@ void _showRule(struct PrimitiveRule* rule) {
 }
 #endif
 
-static struct PrimitiveRule* _vnewRule(PrimFunction function, count_t nParams, va_list paramTypes) {
+static struct PrimitiveRule* _prim_vnewRule(PrimFunction function, count_t nParams, va_list paramTypes) {
     count_t nParamsToAllocate = nParams;
     if (nParams == COUNT_MAX) {
         nParamsToAllocate = 0;

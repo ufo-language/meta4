@@ -8,7 +8,6 @@
 #include "memory/bumpallocator_struct.h"
 #include "memory/bumpallocator.h"
 #include "memory/gc.h"
-#include "memory/memory.h"
 #include "object/globals.h"
 
 /* Defines *******************************************************************/

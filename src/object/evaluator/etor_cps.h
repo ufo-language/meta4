@@ -34,7 +34,7 @@ struct Symbolic;
 
 /* Lifecycle functions *******************************************************/
 
-struct Etor_CPS* etor_rec_new(void);
+struct Etor_CPS* etor_cps_new(void);
 
 /* Public functions **********************************************************/
 

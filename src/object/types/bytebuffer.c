@@ -19,7 +19,7 @@
 
 /* Forward declarations ******************************************************/
 
-static void _resize(struct ByteBuffer* byteBuffer);
+static void _byteBuffer_resize(struct ByteBuffer* byteBuffer);
 
 /* Global variables **********************************************************/
 
@@ -39,14 +39,14 @@ struct ByteBuffer* byteBuffer_new(void) {
 
 void byteBuffer_appendByte(struct ByteBuffer* byteBuffer, byte_t byte) {
     if (byteBuffer->nBytes == byteBuffer->capacity) {
-        _resize(byteBuffer);
+        _byteBuffer_resize(byteBuffer);
     }
     byteBuffer->bytes[byteBuffer->nBytes++] = byte;
 }
 
 void byteBuffer_appendBytes(struct ByteBuffer* byteBuffer, count_t nBytes, byte_t bytes[]) {
     while (byteBuffer->nBytes + nBytes >= byteBuffer->capacity) {
-        _resize(byteBuffer);
+        _byteBuffer_resize(byteBuffer);
     }
     memcpy(byteBuffer->bytes + byteBuffer->nBytes, bytes, nBytes);
     byteBuffer->nBytes += nBytes;
@@ -87,7 +87,7 @@ void byteBuffer_show(struct ByteBuffer* byteBuffer, FILE* stream) {
 
 /* Private functions *********************************************************/
 
-static void _resize(struct ByteBuffer* byteBuffer) {
+static void _byteBuffer_resize(struct ByteBuffer* byteBuffer) {
     count_t nBytes = byteBuffer->nBytes;
     count_t newCapacity = byteBuffer->capacity * 2;
     byte_t* newBytes = memory_alloc(NBYTES_TO_WORDS(newCapacity));
