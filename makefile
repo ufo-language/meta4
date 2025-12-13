@@ -3,9 +3,12 @@ CC      := clang
 AR      := ar
 
 # Flags
-CFLAGS  := -std=c17 -Wall -Wextra -pedantic -MMD -MP
+CFLAGS_DEBUG := -DDEBUG -std=c17 -Wall -Wextra -pedantic -g -O0
+CFLAGS_SPEED := -DNDEBUG -std=c17 -Wall -O3 -ffast-math
+CFLAGS_SIZE  := -DNDEBUG -std=c17 -Wall -Os
+CFLAGS  := $(CFLAGS_DEBUG)
 CPPFLAGS:= -Isrc
-LDFLAGS :=
+LDFLAGS := -flto
 
 # Directories
 SRCDIR  := src
@@ -32,37 +35,38 @@ all: $(LIBPATH) $(BINDIR)/plx $(TEST_BIN)
 
 # Ensure directories exist
 $(OBJDIR) $(BINDIR) $(OBJDIR)/tests:
-	mkdir -p $@
+	@mkdir -p $@
 
 # ==============================
 # Unity Build
 # ==============================
 # Optional: comment out UNITY build if you want normal per-file compilation
 
-$(UNITY_C): $(SRC_C) | $(OBJDIR)
-	@echo "// Auto-generated unity build" > $@
-	$(foreach f,$(SRC_C), \
-	    echo '#include "'$(patsubst $(SRCDIR)/%,%,$f)'"' >> $@;)
+# $(UNITY_C): $(SRC_C) | $(OBJDIR)
+# 	@echo "// Auto-generated unity build" > $@
+# 	$(foreach f,$(SRC_C), \
+# 	    echo '#include "'$(patsubst $(SRCDIR)/%,%,$f)'"' >> $@;)
 
-$(UNITY_O): $(UNITY_C) | $(OBJDIR)
-	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
+# $(UNITY_O): $(UNITY_C) | $(OBJDIR)
+# 	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
 
-# Static library using unity build
-$(LIBPATH): $(UNITY_O)
-	$(AR) rcs $@ $^
+# # Static library using unity build
+# $(LIBPATH): $(UNITY_O)
+# 	$(AR) rcs $@ $^
 
 # ==============================
 # Normal per-file compilation (disabled if UNITY used)
 # ==============================
 # Uncomment to disable unity build
-#SRC_O := $(patsubst $(SRCDIR)/%.c,$(OBJDIR)/%.o,$(SRC_C))
-#
-#$(OBJDIR)/%.o: $(SRCDIR)/%.c | $(OBJDIR)
-#	mkdir -p $(dir $@)
-#	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
-#
-#$(LIBPATH): $(SRC_O)
-#	$(AR) rcs $@ $^
+
+SRC_O := $(patsubst $(SRCDIR)/%.c,$(OBJDIR)/%.o,$(SRC_C))
+
+$(OBJDIR)/%.o: $(SRCDIR)/%.c | $(OBJDIR)
+	@mkdir -p $(dir $@)
+	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
+
+$(LIBPATH): $(SRC_O)
+	$(AR) rcs $@ $^
 
 # ==============================
 # Main executable

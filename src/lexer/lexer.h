@@ -5,7 +5,9 @@
 /* Types *********************************************************************/
 
 enum LexerTokenType {
-    TOK_INT,
+    TOK_INT_DEC,
+    TOK_INT_HEX,
+    TOK_INT_BIN,
     TOK_FLOAT,
     TOK_IDENT,
     TOK_SYMBOL,
@@ -21,6 +23,8 @@ struct LexerToken {
     count_t length;
 };
 
+struct Vector;
+
 /* Forward declarations ******************************************************/
 
 /* Global variables **********************************************************/
@@ -31,6 +35,6 @@ struct LexerToken {
 
 /* Unique functions ******************/
 
-void lexer_lexAll(const char* src);
+bool_t lexer_lexAll(const char* sourceString, struct Vector* tokens);
 
 /* Object functions ******************/

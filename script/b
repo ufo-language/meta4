@@ -1,1 +1,1 @@
-build
+make -j 16

@@ -23,6 +23,7 @@
 #include "object/types/primitive.h"
 #include "object/types/quote.h"
 #include "object/types/nil.h"
+#include "object/types/real.h"
 #include "object/types/sequence.h"
 #include "object/types/string.h"
 #include "object/types/symbol.h"
@@ -70,7 +71,7 @@ void show(struct Object* obj, FILE* stream) {
         case OT_Null:          fputs("Null/Unique", stream); return;
         case OT_Primitive:     prim_show((struct Primitive*)obj, stream); return;
         case OT_Quote:         quote_show((struct Quote*)obj, stream); return;
-        case OT_Real:          break;
+        case OT_Real:          real_show((struct Real*)obj, stream); return;
         case OT_Sequence:      sequence_show((struct Sequence*)obj, stream); return;
         case OT_String:        string_show((struct String*)obj, stream); return;
         case OT_Symbol:        symbol_show((struct Symbol*)obj, stream); return;

@@ -1,9 +1,17 @@
+#include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "_typedefs.h"
 
+#include "lexer/chartypes.h"
 #include "lexer/lexer.h"
+#include "object/types/identifier.h"
+#include "object/types/integer.h"
+#include "object/types/real.h"
+#include "object/types/symbol.h"
+#include "object/types/vector.h"
 
 /* Defines *******************************************************************/
 
@@ -11,70 +19,13 @@
 
 /* Forward declarations ******************************************************/
 
-static int_t _stringToInt(char* string, count_t len, int base);
+static struct LexerToken _lexer_nextToken(const char** pcur);
+static int_t _lexer_stringToBinInt(char* string);
+static int_t _lexer_stringToDecInt(char* string);
+static int_t _lexer_stringToHexInt(char* string);
+static real_t _lexer_stringToReal(char* string);
 
 /* Global variables **********************************************************/
-
-enum {
-    C_OTHER = 0,
-    C_ALPHA,
-    C_DIGIT,
-    C_WS,
-    C_OPER
-};
-
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Winitializer-overrides"
-/* This warning is disabled because the charClassTable defines values twice:
-   Once with the '[0 ... 255] = C_OTHER' clause, and then below that it
-   re-defines specific values.
-*/
-
-int charType[256] = {
-    [0 ... 255] = C_OTHER,
-
-    /* whitespace */
-    [' ']  = C_WS,
-    ['\t'] = C_WS,
-    ['\n'] = C_WS,
-    ['\r'] = C_WS,
-    ['\f'] = C_WS,
-    ['\v'] = C_WS,
-
-    /* digits */
-    ['0'] = C_DIGIT, ['1'] = C_DIGIT, ['2'] = C_DIGIT, ['3'] = C_DIGIT,
-    ['4'] = C_DIGIT, ['5'] = C_DIGIT, ['6'] = C_DIGIT, ['7'] = C_DIGIT,
-    ['8'] = C_DIGIT, ['9'] = C_DIGIT,
-
-    /* uppercase alpha */
-    ['A'] = C_ALPHA, ['B'] = C_ALPHA, ['C'] = C_ALPHA, ['D'] = C_ALPHA,
-    ['E'] = C_ALPHA, ['F'] = C_ALPHA, ['G'] = C_ALPHA, ['H'] = C_ALPHA,
-    ['I'] = C_ALPHA, ['J'] = C_ALPHA, ['K'] = C_ALPHA, ['L'] = C_ALPHA,
-    ['M'] = C_ALPHA, ['N'] = C_ALPHA, ['O'] = C_ALPHA, ['P'] = C_ALPHA,
-    ['Q'] = C_ALPHA, ['R'] = C_ALPHA, ['S'] = C_ALPHA, ['T'] = C_ALPHA,
-    ['U'] = C_ALPHA, ['V'] = C_ALPHA, ['W'] = C_ALPHA, ['X'] = C_ALPHA,
-    ['Y'] = C_ALPHA, ['Z'] = C_ALPHA,
-
-    /* lowercase alpha */
-    ['a'] = C_ALPHA, ['b'] = C_ALPHA, ['c'] = C_ALPHA, ['d'] = C_ALPHA,
-    ['e'] = C_ALPHA, ['f'] = C_ALPHA, ['g'] = C_ALPHA, ['h'] = C_ALPHA,
-    ['i'] = C_ALPHA, ['j'] = C_ALPHA, ['k'] = C_ALPHA, ['l'] = C_ALPHA,
-    ['m'] = C_ALPHA, ['n'] = C_ALPHA, ['o'] = C_ALPHA, ['p'] = C_ALPHA,
-    ['q'] = C_ALPHA, ['r'] = C_ALPHA, ['s'] = C_ALPHA, ['t'] = C_ALPHA,
-    ['u'] = C_ALPHA, ['v'] = C_ALPHA, ['w'] = C_ALPHA, ['x'] = C_ALPHA,
-    ['y'] = C_ALPHA, ['z'] = C_ALPHA,
-
-    /* operators */
-    ['!'] = C_OPER, ['#'] = C_OPER, ['$'] = C_OPER,
-    ['%'] = C_OPER, ['&'] = C_OPER,
-    ['*'] = C_OPER, ['+'] = C_OPER, [','] = C_OPER,
-    ['-'] = C_OPER, ['.'] = C_OPER, ['/'] = C_OPER, [':'] = C_OPER,
-    ['<'] = C_OPER, ['='] = C_OPER, ['>'] = C_OPER,
-    ['?'] = C_OPER, ['@'] = C_OPER,
-    ['^'] = C_OPER, ['_'] = C_OPER,
-    ['|'] = C_OPER, ['~'] = C_OPER,
-};
-#pragma clang diagnostic pop
 
 /* Lifecycle functions *******************************************************/
 
@@ -88,10 +39,78 @@ static inline int _lexer_isAlNum(int c) { return charType[c] == C_ALPHA || charT
 static inline int _lexer_isWs(int c)    { return charType[c] == C_WS; }
 static inline int _lexer_isOper(int c) { return charType[c] == C_OPER; }
 
-struct LexerToken lexer_nextToken(const char** pcur) {
+/* The lexeme limit is LEXER_BUFFER_SIZE - 1 */
+enum { LEXER_BUFFER_SIZE = 512 };
+
+bool_t lexer_lexAll(const char* sourceString, struct Vector* tokens) {
+    const char* p = sourceString;
+    bool_t contin = true;
+    char buffer[LEXER_BUFFER_SIZE];
+    while (contin) {
+        struct LexerToken token = _lexer_nextToken(&p);
+        count_t nChars = token.length;
+        if (nChars >= LEXER_BUFFER_SIZE) {
+            nChars = LEXER_BUFFER_SIZE - 1;
+        }
+        strncpy(buffer, token.start, nChars);
+        buffer[nChars] = 0;
+        printf("Token type = %d, '%s'\n", token.type, buffer);
+        switch (token.type) {
+            case TOK_INT_DEC: {
+                    int_t i = _lexer_stringToDecInt(buffer);
+                    struct Integer* integer = integer_new(i);
+                    vector_push(tokens, (struct Object*)integer);
+                }
+                break;
+            case TOK_INT_HEX: {
+                    int_t i = _lexer_stringToHexInt(buffer);
+                    struct Integer* integer = integer_new(i);
+                    vector_push(tokens, (struct Object*)integer);
+                }
+                break;
+            case TOK_INT_BIN: {
+                    int_t i = _lexer_stringToBinInt(buffer);
+                    struct Integer* integer = integer_new(i);
+                    vector_push(tokens, (struct Object*)integer);
+                }
+                break;
+            case TOK_FLOAT: {
+                    real_t r = _lexer_stringToReal(buffer);
+                    struct Real* real = real_new(r);
+                    vector_push(tokens, (struct Object*)real);
+                }
+                break;
+            case TOK_IDENT: {
+                    struct Identifier* ident = identifier_new(buffer);
+                    vector_push(tokens, (struct Object*)ident);
+                }
+                break;
+            case TOK_SYMBOL: {
+                    struct Symbol* symbol = symbol_new(buffer);
+                    vector_push(tokens, (struct Object*)symbol);
+                }
+                break;
+            case TOK_STRING:
+                break;
+            case TOK_OPERATOR:
+                break;
+            case TOK_SPECIAL:
+                break;
+            case TOK_EOF:
+                contin = false;
+                break;
+        }
+    }
+}
+
+/* Object functions ******************/
+
+/* Private functions *********************************************************/
+
+struct LexerToken _lexer_nextToken(const char** pcur) {
     const char* p = *pcur;
 
-restart:
+RESTART:
     /* skip whitespace */
     while (_lexer_isWs(*p)) p++;
 
@@ -106,13 +125,13 @@ restart:
         p += 2;
         while (p[0] && !(p[0] == '*' && p[1] == '/')) p++;
         if (p[0]) p += 2;
-        goto restart;
+        goto RESTART;
     }
 
     if (p[0] == '/' && p[1] == '/') {
         p += 2;
         while (*p && *p != '\n') p++;
-        goto restart;
+        goto RESTART;
     }
 
     const char* start = p;
@@ -141,21 +160,18 @@ restart:
         const char* q = p;
 
         /* base prefixes */
-        int base = 10;
         if (*q == '0') {
             if (q[1] == 'x' || q[1] == 'X') {
-                base = 16;
                 q += 2;
                 while (_lexer_isDigit(*q) || (*q >= 'a' && *q <= 'f') || (*q >= 'A' && *q <= 'F')) q++;
                 *pcur = q;
-                return (struct LexerToken){TOK_INT, start, (int)(q - start), };
+                return (struct LexerToken){TOK_INT_HEX, start, (int)(q - start), };
             }
             if (q[1] == 'b' || q[1] == 'B') {
-                base = 2;
                 q += 2;
                 while (*q == '0' || *q == '1') q++;
                 *pcur = q;
-                return (struct LexerToken){TOK_INT, start, (int)(q - start)};
+                return (struct LexerToken){TOK_INT_BIN, start, (int)(q - start)};
             }
         }
 
@@ -171,7 +187,7 @@ restart:
         }
 
         *pcur = q;
-        return (struct LexerToken){is_float ? TOK_FLOAT : TOK_INT, start, (int)(q - start)};
+        return (struct LexerToken){is_float ? TOK_FLOAT : TOK_INT_DEC, start, (int)(q - start)};
     }
 
     /* identifier: [a-z_] ... */
@@ -204,32 +220,95 @@ restart:
     return (struct LexerToken){TOK_SPECIAL, start, 1};
 }
 
-void lexer_lexAll(const char* src) {
-    const char* p = src;
-    for (;;) {
-        struct LexerToken token = lexer_nextToken(&p);
-        if (token.type == TOK_EOF) break;
-        printf("Token type = %d, %.*s\n", token.type, (int)token.length, token.start);
+static int_t _lexer_stringToBinInt(char* string) {
+    int_t sign = 1;
+    switch (*string) {
+        case '-':
+            sign = -1;
+            ++string;
+            break;
+        case '+':
+            sign = 1;
+            ++string;
+            break;
+        case '0':
+            ++string;
+            break;
+        default:
+            break;
     }
-}
-
-/* Object functions ******************/
-
-/* Private functions *********************************************************/
-
-static int_t _lexer_stringToInt(char* string, count_t len, int base) {
+    ++string;  /* skip 'B' */
     int_t v = 0;
-    for (index_t i=0; i<len; ++i) {
+    while (*string) {
+        char c = *string++;
         int d;
-        char c = string[i];
-
         if (c >= '0' && c <= '9') d = c - '0';
         else if (c >= 'a' && c <= 'f') d = c - 'a' + 10;
         else if (c >= 'A' && c <= 'F') d = c - 'A' + 10;
         else break;
-
-        if (d >= base) break;
-        v = v * base + d;
+        v = v * 2 + d;
     }
-    return v;
+    return sign * v;
+}
+
+static int_t _lexer_stringToDecInt(char* string) {
+    int_t sign = 1;
+    switch (*string) {
+        case '-':
+            sign = -1;
+            ++string;
+            break;
+        case '+':
+            sign = 1;
+            ++string;
+            break;
+        default:
+            break;
+    }
+    int_t v = 0;
+    while (*string) {
+        char c = *string++;
+        int d;
+        if (c >= '0' && c <= '9') d = c - '0';
+        else break;
+        v = v * 10 + d;
+    }
+    return sign * v;
+}
+
+static int_t _lexer_stringToHexInt(char* string) {
+    int_t sign = 1;
+    switch (*string) {
+        case '-':
+            sign = -1;
+            ++string;
+            break;
+        case '+':
+            sign = 1;
+            ++string;
+            break;
+        case '0':
+            ++string;
+            break;
+        default:
+            break;
+    }
+    ++string;  /* skip 'X' */
+    int_t v = 0;
+    while (*string) {
+        char c = *string++;
+        int d;
+        if (c >= '0' && c <= '9') d = c - '0';
+        else if (c >= 'a' && c <= 'f') d = c - 'a' + 10;
+        else if (c >= 'A' && c <= 'F') d = c - 'A' + 10;
+        else break;
+        v = v * 16 + d;
+    }
+    return sign * v;
+}
+
+static real_t _lexer_stringToReal(char* string) {
+    real_t value = 0.0;
+    sscanf(string, "%lf", &value); // parse double
+    return value;
 }
