@@ -7,6 +7,7 @@
 /* Types *********************************************************************/
 
 struct GC {
+    int_t temp;  /* TODO add fields */
 };
 
 struct Object;

@@ -94,7 +94,7 @@ int main(int argc, char* argv[]) {
         intVector_push(intVector, 100);
         intVector_push(intVector, 200);
         intVector_push(intVector, 300);
-        SHOW("Should show '{\%|300, 200, 100|}'", intVector);
+        SHOW("Should show '{%|300, 200, 100|}'", intVector);
     END
 
     END_TESTS

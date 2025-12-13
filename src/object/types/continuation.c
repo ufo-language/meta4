@@ -30,9 +30,13 @@ struct Continuation* contin_new(string_t name, void (*eval)(struct Continuation*
 /* Object functions ******************/
 
 void contin_eval_cps(struct Continuation* contin, struct Etor_CPS etor) {
+    (void)contin;
+    (void)etor;
 }
 
 void contin_show(struct Continuation* contin, FILE* stream) {
+    (void)contin;
+    (void)stream;
 }
 
 /* Private functions *********************************************************/

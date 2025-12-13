@@ -49,6 +49,8 @@ void definePrims_init(struct Vector* env) {
 /* Private functions *********************************************************/
 
 static bool_t _count(struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value) {
+    (void)etor;
+    (void)nArgs;
     count_t nElems;
     if (!count(args[0], &nElems)) {
         return false;
@@ -58,6 +60,7 @@ static bool_t _count(struct Etor_rec* etor, count_t nArgs, struct Object* args[]
 }
 
 static bool_t _display(struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value) {
+    (void)etor;
     for (index_t n=0; n<nArgs; n++) {
         display(args[n], stdout);
     }
@@ -66,18 +69,23 @@ static bool_t _display(struct Etor_rec* etor, count_t nArgs, struct Object* args
 }
 
 static bool_t _first(struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value) {
+    (void)etor;
+    (void)nArgs;
     struct Pair* pair = (struct Pair*)args[0];
     *value = pair->first;
     return true;
 }
 
 static bool_t _rest(struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value) {
+    (void)etor;
+    (void)nArgs;
     struct Pair* pair = (struct Pair*)args[0];
     *value = pair->rest;
     return true;
 }
 
 static bool_t _show(struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value) {
+    (void)etor;
     for (index_t n=0; n<nArgs; n++) {
         show(args[n], stdout);
     }

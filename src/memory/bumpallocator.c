@@ -89,6 +89,8 @@ address_t bumpAllocator_realloc(struct BumpAllocator* allocator, address_t addr,
     /* Fast 64-bit copy */
     if (count <= 8) {
         /* Manual unroll for very small copies (avoids memcpy call overhead) */
+        #pragma clang diagnostic push
+        #pragma clang diagnostic ignored "-Wimplicit-fallthrough"
         switch (count) {
             case 8: out[7] = oldPtr[7];
             case 7: out[6] = oldPtr[6];
@@ -100,7 +102,9 @@ address_t bumpAllocator_realloc(struct BumpAllocator* allocator, address_t addr,
             case 1: out[0] = oldPtr[0];
             default: break;
         }
-    } else {
+        #pragma clang diagnostic pop
+    }
+    else {
         /* Larger blocks use memcpy (optimized through movsq or AVX) */
         memcpy(out, oldPtr, count * sizeof(word_t));
     }

@@ -31,7 +31,6 @@ struct Inc* inc_new(struct Object* expr) {
 
 /* Object functions ******************/
 
-#include "debug.h"
 bool_t inc_eval_rec(struct Inc* inc, struct Etor_rec* etor, struct Object** value) {
     struct Object* exprValue;
     if (!eval_rec(inc->expr, etor, &exprValue)) {

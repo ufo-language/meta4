@@ -53,7 +53,7 @@ bool_t etor_rec_run(struct Etor_rec* etor, struct Object* expr, struct Object** 
 /* Object functions ******************/
 
 void etor_rec_show(struct Etor_rec* etor, FILE* stream) {
-    fputs("Evaluator_rec:\n", stderr);
-    vector_showBindings(etor->env, stderr);
-    fputc('\n', stderr);
+    fputs("Evaluator_rec:\n", stream);
+    vector_showBindings(etor->env, stream);
+    fputc('\n', stream);
 }

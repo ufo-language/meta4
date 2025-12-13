@@ -27,16 +27,26 @@ void gc_free(struct GC* gc) {
 /* Public functions **********************************************************/
 
 bool_t gc_doGC(struct GC* gc) {
+    /* TODO */
+    (void)gc;
     return false;
 }
 
 void gc_pushRoot(struct GC* gc, struct Object* obj) {
+    /* TODO */
+    (void)gc;
+    (void)obj;
 }
 
 void gc_popRoot(struct GC* gc) {
+    /* TODO */
+    (void)gc;
 }
 
 void gc_popRoots(struct GC* gc, count_t nRoots) {
+    /* TODO */
+    (void)gc;
+    (void)nRoots;
 }
 
 /* Private functions *********************************************************/

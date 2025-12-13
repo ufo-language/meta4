@@ -20,7 +20,7 @@ size_t  _TEST_NPASS_        = 0;
 size_t  _TEST_NFAIL_        = 0;
 index_t _SAVED_GLOBALS_TOP_ = 0;
 
-#define BEGIN_TESTS plx_startup();
+#define BEGIN_TESTS (void)argc; (void)argv; plx_startup();
 #define END_TESTS fprintf(stdout, "Passed %lu Failed %lu\n", _TEST_NPASS_, _TEST_NFAIL_); plx_shutdown();
 
 #define TEST(name) \
@@ -42,32 +42,32 @@ index_t _SAVED_GLOBALS_TOP_ = 0;
 
 #define ASSERT_PTREQ(expected, actual) \
     if ((void*)(expected) == (void*)(actual)) { \
-        fprintf(stderr, "[%sPASS%s] ✅ [%s:%d] %s == %s (%p == %p)\n", GREEN, NORMAL, __FILE__, __LINE__, (#expected), (#actual), (expected), (actual)); \
+        fprintf(stderr, "[%sPASS%s] ✅ [%s:%d] %s == %s (%p == %p)\n", GREEN, NORMAL, __FILE__, __LINE__, (#expected), (#actual), ((void*)expected), ((void*)actual)); \
         ++_TEST_NPASS_; \
     } \
     else { \
-        fprintf(stderr, "[%sFAIL%s] ❌ [%s:%d] %s == %s (%p == %p)\n", RED, NORMAL, __FILE__, __LINE__, (#expected), (#actual), (expected), (actual)); \
+        fprintf(stderr, "[%sFAIL%s] ❌ [%s:%d] %s == %s (%p == %p)\n", RED, NORMAL, __FILE__, __LINE__, (#expected), (#actual), ((void*)expected), ((void*)actual)); \
         ++_TEST_NFAIL_; \
         break; \
     }
 
 #define EXPECT_PTRNE(expected, actual) \
     if ((void*)(expected) != (void*)(actual)) { \
-        fprintf(stderr, "[%sPASS%s] ✅ [%s:%d] %s != %s (%p != %p)\n", GREEN, NORMAL, __FILE__, __LINE__, (#expected), (#actual), (expected), (actual)); \
+        fprintf(stderr, "[%sPASS%s] ✅ [%s:%d] %s != %s (%p != %p)\n", GREEN, NORMAL, __FILE__, __LINE__, (#expected), (#actual), ((void*)expected), ((void*)actual)); \
         ++_TEST_NPASS_; \
     } \
     else { \
-        fprintf(stderr, "[%sFAIL%s] ❌ [%s:%d] %s != %s (%p != %p)\n", RED, NORMAL, __FILE__, __LINE__, (#expected), (#actual), (expected), (actual)); \
+        fprintf(stderr, "[%sFAIL%s] ❌ [%s:%d] %s != %s (%p != %p)\n", RED, NORMAL, __FILE__, __LINE__, (#expected), (#actual), ((void*)expected), ((void*)actual)); \
         ++_TEST_NFAIL_; \
     }
 
 #define ASSERT_PTRNE(expected, actual) \
     if ((void*)(expected) != (void*)(actual)) { \
-        fprintf(stderr, "[%sPASS%s] ✅ [%s:%d] %s != %s (%p != %p)\n", GREEN, NORMAL, __FILE__, __LINE__, (#expected), (#actual), (expected), (actual)); \
+        fprintf(stderr, "[%sPASS%s] ✅ [%s:%d] %s != %s (%p != %p)\n", GREEN, NORMAL, __FILE__, __LINE__, (#expected), (#actual), ((void*)expected), ((void*)actual)); \
         ++_TEST_NPASS_; \
     } \
     else { \
-        fprintf(stderr, "[%sFAIL%s] ❌ [%s:%d] %s != %s (%p != %p)\n", RED, NORMAL, __FILE__, __LINE__, (#expected), (#actual), (expected), (actual)); \
+        fprintf(stderr, "[%sFAIL%s] ❌ [%s:%d] %s != %s (%p != %p)\n", RED, NORMAL, __FILE__, __LINE__, (#expected), (#actual), ((void*)expected), ((void*)actual)); \
         ++_TEST_NFAIL_; \
         break; \
     }

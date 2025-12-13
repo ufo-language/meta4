@@ -75,7 +75,7 @@ count_t intVector_count(struct IntVector* intVector) {
 }
 
 void intVector_show(struct IntVector* intVector, FILE* stream) {
-    fputs("{\%|", stream);
+    fputs("{%|", stream);
     int_t* elems = intVector->elems->elems;
     for (index_t n=0; n<intVector->top; ++n) {
         if (n > 0) {

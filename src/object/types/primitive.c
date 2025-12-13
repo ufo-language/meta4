@@ -136,6 +136,10 @@ static bool_t _checkArgs(struct Primitive* prim, count_t nArgs, struct Object* a
 
 static bool_t _emptyPrimFunction(struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value) {
     /* Do nothing */
+    (void)etor;
+    (void)nArgs;
+    (void)args;
+    (void)value;
     return true;
 }
 

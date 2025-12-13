@@ -50,9 +50,12 @@ struct Term* term_new(struct Symbol* name, struct Object* attrib, count_t nArgs,
 /* Object functions ******************/
 
 bool_t term_close(struct Term* term, struct Etor_rec* etor, struct Object** value) {
-    /* Change the array_close function. Add array_closeElems, and then call that
+    /* TODO Change the array_close function. Add array_closeElems, and then call that
        function from this one.
     */
+    (void)term;
+    (void)etor;
+    (void)value;
     return false;
 }
 

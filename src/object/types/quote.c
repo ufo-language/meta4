@@ -34,6 +34,7 @@ struct Quote* quote_new(struct Object* expr) {
 /* Object functions ******************/
 
 bool_t quote_eval_rec(struct Quote* quote, struct Etor_rec* etor, struct Object **value) {
+    (void)etor;
     *value = quote->expr;
     return true;
 }

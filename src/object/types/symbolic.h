@@ -14,7 +14,6 @@ struct _Symbolic {
     char name[];
 };
 
-enum TypeId;
 struct Vector;
 
 /* Forward declarations ******************************************************/

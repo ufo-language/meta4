@@ -12,16 +12,28 @@ count_t testFunction1CallCount = 0;
 count_t testFunction2CallCount = 0;
 
 bool_t testFunction1(struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value) {
+    (void)etor;
+    (void)nArgs;
+    (void)args;
+    (void)value;
     ++testFunction1CallCount;
     return true;
 }
 
 bool_t testFunction2(struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value) {
+    (void)etor;
+    (void)nArgs;
+    (void)args;
+    (void)value;
     ++testFunction2CallCount;
     return true;
 }
 
 bool_t testFunction3(struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value) {
+    (void)etor;
+    (void)nArgs;
+    (void)args;
+    (void)value;
     *value = args[0];
     return true;
 }
@@ -45,7 +57,7 @@ int main(int argc, char* argv[]) {
         prim_addRule(prim, testFunction1, 0);
         struct Etor_rec* etor = etor_rec_new();
         count_t nArgs = 0;
-        struct Object* args[] = {};
+        struct Object* args[] = {OBJ(g_nil)};  /* Compiler wants at least one value in any array */
         struct Object* value;
         testFunction1CallCount = 0;
         testFunction2CallCount = 0;

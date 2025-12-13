@@ -27,11 +27,13 @@ struct Nil* nil_new(void) {
 /* Object functions ******************/
 
 bool_t nil_eval_rec(struct Nil* nil, struct Etor_rec* etor, struct Object** value) {
+    (void)etor;
     *value = (struct Object*)nil;
     return true;
 }
 
 void nil_show(struct Nil* nil, FILE* stream) {
+    (void)nil;
     fputs("nil", stream);
 }
 

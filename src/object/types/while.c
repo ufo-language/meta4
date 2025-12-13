@@ -44,7 +44,7 @@ bool_t while_eval_rec(struct While* while_, struct Etor_rec* etor, struct Object
     struct Object* body = while_->body;
     struct Object* condValue;
     struct Object* bodyValue = (struct Object*)g_nil;
-    while (true) {
+    for (;;) {
         if (!eval_rec(cond, etor, &condValue)) {
             return false;
         }

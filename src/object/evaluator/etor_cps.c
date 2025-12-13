@@ -51,10 +51,13 @@ bool_t etor_cps_lookup(struct Etor_CPS* etor, struct Symbolic* name, struct Obje
 
 void etor_cps_run(struct Etor_CPS* etor) {
     /* TODO */
+    (void)etor;
 }
 
 /* Object functions ******************/
 
 void etor_cps_show(struct Etor_CPS* etor, FILE* stream) {
     /* TODO */
+    (void)etor;
+    (void)stream;
 }

@@ -17,7 +17,7 @@ int main(int argc, char* argv[]) {
 
     TEST(application_checkConstruction)
         count_t nArgs = 0;
-        struct Object* args[] = {};
+        struct Object* args[] = {OBJ(g_nil)};  /* Compiler wants at least one value in any array */
         struct Application* app = application_new(OBJ(x), nArgs, args);
         ASSERT_ISA(OT_Application, app);
         ASSERT_IEQ(NWORDS(struct Application), app->obj.nWords);

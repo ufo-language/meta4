@@ -8,6 +8,7 @@
 #include "object/types/vector.h"
 
 int main(int argc, char* argv[]) {
+
     BEGIN_TESTS
 
     struct Identifier* a = identifier_new("a");
