@@ -4,33 +4,23 @@
 
 /* Types *********************************************************************/
 
-enum LexerTokenType {
-    TOK_INT_DEC,
-    TOK_INT_HEX,
-    TOK_INT_BIN,
-    TOK_FLOAT,
-    TOK_IDENT,
-    TOK_SYMBOL,
-    TOK_STRING,
-    TOK_OPERATOR,
-    TOK_SPECIAL,
-    TOK_EOF
-};
-
-struct LexerToken {
-    enum LexerTokenType type;
-    const char* start;
-    count_t length;
-    index_t index;
-    index_t line;
-    index_t col;
-};
-
-struct Vector;
-
 /* Forward declarations ******************************************************/
 
 /* Global variables **********************************************************/
+
+const string_t reservedWords[] = {
+    "async",
+    "catch",
+    "cobegin",
+    "else",
+    "end",
+    "fun",
+    "if",
+    "macro",
+    "then",
+    "try",
+    "while",
+};
 
 /* Lifecycle functions *******************************************************/
 
@@ -38,6 +28,7 @@ struct Vector;
 
 /* Unique functions ******************/
 
-bool_t lexer_lexAll(const char* sourceString, struct Vector* tokens);
-
 /* Object functions ******************/
+
+/* Private functions *********************************************************/
+

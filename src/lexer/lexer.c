@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -7,10 +8,13 @@
 
 #include "lexer/chartypes.h"
 #include "lexer/lexer.h"
+#include "lexer/reservedwords.h"
 #include "object/types/identifier.h"
+#include "object/types/intarray.h"
 #include "object/types/integer.h"
 #include "object/types/real.h"
 #include "object/types/symbol.h"
+#include "object/types/term.h"
 #include "object/types/vector.h"
 
 /* Defines *******************************************************************/
@@ -19,7 +23,7 @@
 
 /* Forward declarations ******************************************************/
 
-static struct LexerToken _lexer_nextToken(const char** pcur);
+static struct LexerToken _lexer_nextToken(const char** pcur, index_t* index, index_t* line, index_t* col);
 static int_t _lexer_stringToBinInt(char* string);
 static int_t _lexer_stringToDecInt(char* string);
 static int_t _lexer_stringToHexInt(char* string);
@@ -37,17 +41,33 @@ static real_t _lexer_stringToReal(char* string);
 static inline int _lexer_isDigit(int c) { return charType[c] == C_DIGIT; }
 static inline int _lexer_isAlNum(int c) { return charType[c] == C_ALPHA || charType[c] == C_DIGIT; }
 static inline int _lexer_isWs(int c)    { return charType[c] == C_WS; }
-static inline int _lexer_isOper(int c) { return charType[c] == C_OPER; }
+static inline int _lexer_isOper(int c)  { return charType[c] == C_OPER; }
 
 /* The lexeme limit is LEXER_BUFFER_SIZE - 1 */
 enum { LEXER_BUFFER_SIZE = 512 };
+
+/* This is 3 memory allocations for each token: Symbol, IntArray, Term.
+   Can it be improved somehow?
+*/
+struct Term* _lexer_termToken(const string_t name, struct Object* value, index_t index, index_t line, index_t col) {
+    struct Symbol* tokenName = symbol_new(name);
+    int_t posInts[] = {index, line, col};
+    struct IntArray* pos = intArray_new_elems(3, posInts);
+    struct Object* args[] = {value};
+    return term_new(tokenName,
+                    (struct Object*)pos,
+                    1, args);
+}
 
 bool_t lexer_lexAll(const char* sourceString, struct Vector* tokens) {
     const char* p = sourceString;
     bool_t contin = true;
     char buffer[LEXER_BUFFER_SIZE];
+    index_t index = 0;
+    index_t line = 1;
+    index_t col = 1;
     while (contin) {
-        struct LexerToken token = _lexer_nextToken(&p);
+        struct LexerToken token = _lexer_nextToken(&p, &index, &line, &col);
         count_t nChars = token.length;
         if (nChars >= LEXER_BUFFER_SIZE) {
             nChars = LEXER_BUFFER_SIZE - 1;
@@ -59,7 +79,8 @@ bool_t lexer_lexAll(const char* sourceString, struct Vector* tokens) {
             case TOK_INT_DEC: {
                     int_t i = _lexer_stringToDecInt(buffer);
                     struct Integer* integer = integer_new(i);
-                    vector_push(tokens, (struct Object*)integer);
+                    struct Term* termToken = _lexer_termToken("Integer", (struct Object*)integer, index, line, col);
+                    vector_push(tokens, (struct Object*)termToken);
                 }
                 break;
             case TOK_INT_HEX: {
@@ -101,13 +122,14 @@ bool_t lexer_lexAll(const char* sourceString, struct Vector* tokens) {
                 break;
         }
     }
+    return true;
 }
 
 /* Object functions ******************/
 
 /* Private functions *********************************************************/
 
-struct LexerToken _lexer_nextToken(const char** pcur) {
+static struct LexerToken _lexer_nextToken(const char** pcur, index_t* index, index_t* line, index_t* col) {
     const char* p = *pcur;
 
 RESTART:
@@ -117,7 +139,7 @@ RESTART:
     /* end of input */
     if (*p == 0) {
         *pcur = p;
-        return (struct LexerToken){TOK_EOF, p, 0};
+        return (struct LexerToken){TOK_EOF, p, 0, *index, *line, *col};
     }
 
     /* comments */
@@ -145,7 +167,7 @@ RESTART:
         }
         if (*p == '"') p++;
         *pcur = p;
-        return (struct LexerToken){TOK_STRING, start, (int)(p - start)};
+        return (struct LexerToken){TOK_STRING, start, (int)(p - start), *index, *line, *col};
     }
 
     /* leading minus? */
@@ -165,13 +187,13 @@ RESTART:
                 q += 2;
                 while (_lexer_isDigit(*q) || (*q >= 'a' && *q <= 'f') || (*q >= 'A' && *q <= 'F')) q++;
                 *pcur = q;
-                return (struct LexerToken){TOK_INT_HEX, start, (int)(q - start), };
+                return (struct LexerToken){TOK_INT_HEX, start, (int)(q - start), *index, *line, *col};
             }
             if (q[1] == 'b' || q[1] == 'B') {
                 q += 2;
                 while (*q == '0' || *q == '1') q++;
                 *pcur = q;
-                return (struct LexerToken){TOK_INT_BIN, start, (int)(q - start)};
+                return (struct LexerToken){TOK_INT_BIN, start, (int)(q - start), *index, *line, *col};
             }
         }
 
@@ -187,7 +209,7 @@ RESTART:
         }
 
         *pcur = q;
-        return (struct LexerToken){is_float ? TOK_FLOAT : TOK_INT_DEC, start, (int)(q - start)};
+        return (struct LexerToken){is_float ? TOK_FLOAT : TOK_INT_DEC, start, (int)(q - start), *index, *line, *col};
     }
 
     /* identifier: [a-z_] ... */
@@ -195,7 +217,8 @@ RESTART:
         p++;
         while (_lexer_isAlNum(*p) || *p == '_') p++;
         *pcur = p;
-        return (struct LexerToken){TOK_IDENT, start, p - start};
+        /* TODO identify reserved words */
+        return (struct LexerToken){TOK_IDENT, start, p - start, *index, *line, *col};
     }
 
     /* symbol: [A-Z] ... */
@@ -203,7 +226,7 @@ RESTART:
         p++;
         while (_lexer_isAlNum(*p) || *p == '_') p++;
         *pcur = p;
-        return (struct LexerToken){TOK_SYMBOL, start, (int)(p - start)};
+        return (struct LexerToken){TOK_SYMBOL, start, (int)(p - start), *index, *line, *col};
     }
 
     /* operator: run of C_PUNCT chars */
@@ -211,13 +234,13 @@ RESTART:
         p++;
         while (_lexer_isOper(*p)) p++;
         *pcur = p;
-        return (struct LexerToken){TOK_OPERATOR, start, (int)(p - start)};
+        return (struct LexerToken){TOK_OPERATOR, start, (int)(p - start), *index, *line, *col};
     }
 
     /* special: single C_OTHER */
     p++;
     *pcur = p;
-    return (struct LexerToken){TOK_SPECIAL, start, 1};
+    return (struct LexerToken){TOK_SPECIAL, start, 1, *index, *line, *col};
 }
 
 static int_t _lexer_stringToBinInt(char* string) {
@@ -237,6 +260,7 @@ static int_t _lexer_stringToBinInt(char* string) {
         default:
             break;
     }
+    assert(*string == 'b' || *string == 'B');
     ++string;  /* skip 'B' */
     int_t v = 0;
     while (*string) {
@@ -293,6 +317,7 @@ static int_t _lexer_stringToHexInt(char* string) {
         default:
             break;
     }
+    assert(*string == 'x' || *string == 'X');
     ++string;  /* skip 'X' */
     int_t v = 0;
     while (*string) {

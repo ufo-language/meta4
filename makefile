@@ -1,34 +1,34 @@
 # Toolchain
-CC      := clang
-AR      := ar
+CC       := clang
+AR       := ar
 
 # Flags
 CFLAGS_DEBUG := -DDEBUG -std=c17 -Wall -Wextra -pedantic -g -O0
 CFLAGS_SPEED := -DNDEBUG -std=c17 -Wall -O3 -ffast-math
 CFLAGS_SIZE  := -DNDEBUG -std=c17 -Wall -Os
-CFLAGS  := $(CFLAGS_DEBUG)
-CPPFLAGS:= -Isrc
-LDFLAGS := -flto
+CFLAGS   := $(CFLAGS_DEBUG)
+CPPFLAGS := -Isrc
+LDFLAGS  := -flto
 
 # Directories
-SRCDIR  := src
-TESTDIR := tests
-OBJDIR  := lib
-BINDIR  := bin
-UNITY_C := $(OBJDIR)/unity_build.c
-UNITY_O := $(OBJDIR)/unity_build.o
+SRCDIR   := src
+TESTDIR  := tests
+OBJDIR   := lib
+BINDIR   := bin
+UNITY_C  := $(OBJDIR)/unity_build.c
+UNITY_O  := $(OBJDIR)/unity_build.o
 
-LIBNAME := libplx.a
-LIBPATH := $(OBJDIR)/$(LIBNAME)
+LIBNAME  := libplx.a
+LIBPATH  := $(OBJDIR)/$(LIBNAME)
 
 # Source discovery
-SRC_C   := $(shell find $(SRCDIR) -name '*.c' ! -name 'main.c')
-MAIN_C  := $(SRCDIR)/main.c
+SRC_C    := $(shell find $(SRCDIR) -name '*.c' ! -name 'main.c')
+MAIN_C   := $(SRCDIR)/main.c
 
 # Test files
-TEST_C  := $(wildcard $(TESTDIR)/*_test.c)
-TEST_O  := $(patsubst $(TESTDIR)/%.c,$(OBJDIR)/tests/%.o,$(TEST_C))
-TEST_BIN:= $(patsubst $(TESTDIR)/%.c,$(BINDIR)/%,$(TEST_C))
+TEST_C   := $(wildcard $(TESTDIR)/*_test.c)
+TEST_O   := $(patsubst $(TESTDIR)/%.c,$(OBJDIR)/tests/%.o,$(TEST_C))
+TEST_BIN := $(patsubst $(TESTDIR)/%.c,$(BINDIR)/%,$(TEST_C))
 
 # Default target
 all: $(LIBPATH) $(BINDIR)/plx $(TEST_BIN)

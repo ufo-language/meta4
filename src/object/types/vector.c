@@ -12,7 +12,8 @@
 
 /* Defines *******************************************************************/
 
-#define DEFAULT_STACK_SIZE 8
+#define VECTOR_OPEN "{|"
+#define VECTOR_CLOSE "|}"
 
 /* Types *********************************************************************/
 
@@ -25,7 +26,7 @@ static void _vector_resize(struct Vector* vector);
 /* Lifecycle functions *******************************************************/
 
 struct Vector* vector_new(void) {
-    return vector_new_withCapacity(DEFAULT_STACK_SIZE);
+    return vector_new_withCapacity(DEFAULT_VECTOR_CAPACITY);
 }
 
 struct Vector* vector_new_withCapacity(count_t capacity) {
@@ -96,7 +97,7 @@ void vector_push(struct Vector* vector, struct Object* elem) {
 }
 
 void vector_showBindings(struct Vector* vector, FILE* stream) {
-    array_showBindings(vector->top, vector->elems->elems, "(|", ", ", "|}", stream);
+    array_showBindings(vector->top, vector->elems->elems, VECTOR_OPEN, ", ", VECTOR_CLOSE, stream);
 }
 
 /* Object functions ******************/
@@ -106,7 +107,7 @@ count_t vector_count(struct Vector* vector) {
 }
 
 void vector_show(struct Vector* vector, FILE* stream) {
-    array_showElems(vector->top, vector->elems->elems, "(|", ", ", "|}", stream);
+    array_showElems(vector->top, vector->elems->elems, VECTOR_OPEN, ", ", VECTOR_CLOSE, stream);
 }
 
 /* Private functions *********************************************************/

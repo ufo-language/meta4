@@ -9,6 +9,10 @@
 
 /* Types *********************************************************************/
 
+enum {
+    DEFAULT_VECTOR_CAPACITY = 8
+};
+
 struct Vector {
     struct Object obj;
     count_t top;

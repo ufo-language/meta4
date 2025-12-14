@@ -11,9 +11,11 @@
 
 /* Defines *******************************************************************/
 
-#define DEFAULT_BYTE_BUFFER_SIZE 8
-
 /* Types *********************************************************************/
+
+enum {
+    DEFAULT_BYTE_BUFFER_SIZE = 8
+};
 
 struct ByteBuffer {
     struct Object obj;

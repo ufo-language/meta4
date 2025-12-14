@@ -8,8 +8,6 @@
 
 /* Defines *******************************************************************/
 
-#define DEFAULT_STACK_SIZE 8
-
 /* Types *********************************************************************/
 
 /* Forward declarations ******************************************************/
@@ -21,7 +19,7 @@ static void _intVector_resize(struct IntVector* intVector);
 /* Lifecycle functions *******************************************************/
 
 struct IntVector* intVector_new(void) {
-    return intVector_new_withCapacity(DEFAULT_STACK_SIZE);
+    return intVector_new_withCapacity(DEFAULT_INTVECTOR_CAPACITY);
 }
 
 struct IntVector* intVector_new_withCapacity(count_t capacity) {

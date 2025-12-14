@@ -9,7 +9,7 @@ compileForSize="-DNDEBUG -std=c17 -Wall -Os"
 # compileForDebug="-DDEBUG -std=c17  -Wextra -Wswitch-enum -pedantic -g -O0"
 compileForDebug="-DDEBUG -std=c17 -Wall -Wextra -pedantic -g -O0"
 compileForDebugWithMemCheck="-DDEBUG -std=c17 -Wall -fsanitize=address -g -O0"  # must also use clang
-# the -fsanitize=address option is currently not useful because memory is managed manually
+# the -fsanitize=address option is currently not useful because memory is managed internally
 
 options="$compileForDebug"
 
@@ -18,7 +18,8 @@ CC=clang
 # CC=tcc
 
 mkdir -p bin lib
-#rm -f bin/* lib/*
+rm bin/*
+rm -rf lib/*
 
 # compile all the source files into .o files
 cd lib
@@ -45,7 +46,7 @@ for sourceFile in tests/*.c; do
 
 # This doesn't work if the .a file is newer than the source files
 #    if [ $sourceFile -nt $exeFile ] || [ ! -e $exeFile ]; then
-        echo $CC $options -o $exeFile -I src $sourceFile -Llib -lplx
+        #echo $CC $options -o $exeFile -I src $sourceFile -Llib -lplx
         $CC $options -o $exeFile -I src $sourceFile -Llib -lplx &
 #    fi
 done
