@@ -28,6 +28,7 @@ static int_t _lexer_stringToBinInt(char* string);
 static int_t _lexer_stringToDecInt(char* string);
 static int_t _lexer_stringToHexInt(char* string);
 static real_t _lexer_stringToReal(char* string);
+struct Term* _lexer_termToken(const string_t name, struct Object* value, index_t index, count_t len, index_t line, index_t col);
 
 /* Global variables **********************************************************/
 
@@ -49,10 +50,10 @@ enum { LEXER_BUFFER_SIZE = 512 };
 /* This is 3 memory allocations for each token: Symbol, IntArray, Term.
    Can it be improved somehow?
 */
-struct Term* _lexer_termToken(const string_t name, struct Object* value, index_t index, index_t line, index_t col) {
+struct Term* _lexer_termToken(const string_t name, struct Object* value, index_t index, count_t len, index_t line, index_t col) {
     struct Symbol* tokenName = symbol_new(name);
-    int_t posInts[] = {index, line, col};
-    struct IntArray* pos = intArray_new_elems(3, posInts);
+    int_t posInts[] = {index, len, line, col};
+    struct IntArray* pos = intArray_new_elems(4, posInts);
     struct Object* args[] = {value};
     return term_new(tokenName,
                     (struct Object*)pos,
