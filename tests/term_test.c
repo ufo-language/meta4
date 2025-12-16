@@ -21,7 +21,7 @@ int main(int argc, char* argv[]) {
         struct Object* attrib = (struct Object*)g_nil;
         count_t nArgs = 2;
         struct Object* args[] = {OBJ(i100), OBJ(i200)};
-        struct Term* term = term_new(name, attrib, nArgs, args);
+        struct Term* term = term_new(name, nArgs, args, attrib);
         ASSERT_ISA(OT_Term, term);
         ASSERT_IEQ(NWORDS(struct Term) + nArgs, term->obj.nWords);
         EXPECT_EQ(name, term->name);
@@ -35,7 +35,7 @@ int main(int argc, char* argv[]) {
         struct Object* attrib = (struct Object*)g_nil;
         count_t nArgs = 2;
         struct Object* args[] = {OBJ(a), OBJ(b)};
-        struct Term* term = term_new(name, attrib, nArgs, args);
+        struct Term* term = term_new(name, nArgs, args, attrib);
         struct Etor_rec* etor = etor_rec_new();
         etor_rec_bind(etor, a, OBJ(i100));
         etor_rec_bind(etor, b, OBJ(i200));
@@ -53,7 +53,7 @@ int main(int argc, char* argv[]) {
         struct Object* attrib = (struct Object*)g_nil;
         count_t nArgs = 2;
         struct Object* args[] = {OBJ(i100), OBJ(i200)};
-        struct Term* term = term_new(name, attrib, nArgs, args);
+        struct Term* term = term_new(name, nArgs, args, attrib);
         SHOW("Should show 'Term1{100, 200}'", term);
     END
 

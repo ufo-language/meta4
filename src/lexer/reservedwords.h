@@ -14,10 +14,13 @@ const string_t reservedWords[] = {
     "cobegin",
     "else",
     "end",
+    "false",
     "fun",
     "if",
     "macro",
+    "nil",
     "then",
+    "true",
     "try",
     "while",
 };

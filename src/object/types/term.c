@@ -36,7 +36,8 @@ struct Term {
 
 /* Public functions **********************************************************/
 
-struct Term* term_new(struct Symbol* name, struct Object* attrib, count_t nArgs, struct Object* args[]) {
+// struct Term* term_new(struct Symbol* name, struct Object* attrib, count_t nArgs, struct Object* args[]) {
+struct Term* term_new(struct Symbol* name, count_t nArgs, struct Object* args[], struct Object* attrib) {
     struct Term* term = (struct Term*)object_new(OT_Term, NWORDS(*term) + nArgs);
     term->name = name;
     term->nArgs = nArgs;
@@ -44,6 +45,12 @@ struct Term* term_new(struct Symbol* name, struct Object* attrib, count_t nArgs,
     term->attrib = attrib;
     return term;
 }
+
+struct Term* term_new_1arg(struct Symbol* name, struct Object* arg, struct Object* attrib) {
+    struct Object* args[] = {arg};
+    return term_new(name, 1, args, attrib);
+}
+
 
 /* Unique functions ******************/
 

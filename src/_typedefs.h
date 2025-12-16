@@ -21,6 +21,7 @@ typedef double        real_t;
 
 typedef uint8_t       byte_t;
 
+typedef int           ichar_t;
 typedef char*         string_t;
 
 typedef int           bool_t;

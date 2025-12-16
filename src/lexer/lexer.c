@@ -28,7 +28,7 @@ static int_t _lexer_stringToBinInt(char* string);
 static int_t _lexer_stringToDecInt(char* string);
 static int_t _lexer_stringToHexInt(char* string);
 static real_t _lexer_stringToReal(char* string);
-struct Term* _lexer_termToken(const string_t name, struct Object* value, index_t index, count_t len, index_t line, index_t col);
+struct Term* _lexer_termToken(const string_t name, struct Object* value, index_t index, count_t nChars, index_t line, index_t col);
 
 /* Global variables **********************************************************/
 
@@ -50,14 +50,12 @@ enum { LEXER_BUFFER_SIZE = 512 };
 /* This is 3 memory allocations for each token: Symbol, IntArray, Term.
    Can it be improved somehow?
 */
-struct Term* _lexer_termToken(const string_t name, struct Object* value, index_t index, count_t len, index_t line, index_t col) {
+struct Term* _lexer_termToken(const string_t name, struct Object* value, index_t index, count_t nChars, index_t line, index_t col) {
     struct Symbol* tokenName = symbol_new(name);
-    int_t posInts[] = {index, len, line, col};
+    int_t posInts[] = {index, nChars, line, col};
     struct IntArray* pos = intArray_new_elems(4, posInts);
     struct Object* args[] = {value};
-    return term_new(tokenName,
-                    (struct Object*)pos,
-                    1, args);
+    return term_new(tokenName, 1, args, (struct Object*)pos);
 }
 
 bool_t lexer_lexAll(const char* sourceString, struct Vector* tokens) {
@@ -80,7 +78,7 @@ bool_t lexer_lexAll(const char* sourceString, struct Vector* tokens) {
             case TOK_INT_DEC: {
                     int_t i = _lexer_stringToDecInt(buffer);
                     struct Integer* integer = integer_new(i);
-                    struct Term* termToken = _lexer_termToken("Integer", (struct Object*)integer, index, line, col);
+                    struct Term* termToken = _lexer_termToken("Integer", (struct Object*)integer, nChars, index, line, col);
                     vector_push(tokens, (struct Object*)termToken);
                 }
                 break;
