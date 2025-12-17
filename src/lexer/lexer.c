@@ -29,24 +29,9 @@ extern char* ReservedWords[];
 extern char* BoolWords[];
 extern char* NilWord;
 
+#if 0
 char* lexerStateNames[] = {
     "Init", "Int", "HexInt", "BinInt", "Sign", "Point", "Real", "Word", "Str", "Oper", "Sym", "Zero"
-};
-
-#if 0
-/* There must be a 1:1 correspondence between this and the StateName enum */
-static string_t S_Names[] = {
-    "Init", "Integer", "Point", "Real", "Word", "String", "Operator", "Symbol"
-};
-
-/* There must be a 1:1 correspondence between this and the Action enum */
-static string_t A_Names[] = {
-    "Keep", "Reuse", "Skip", "Err", "ErrReal", "ErrString", "ErrComment"
-};
-
-/* There must be a 1:1 correspondence between this and the TokenType enum */
-static string_t T_Names[] = {
-    "None", "Int", "Real", "Bool", "Nil", "Word", "Ident", "Reserved", "String", "Operator", "Special", "Symbol", "EOI"
 };
 #endif
 

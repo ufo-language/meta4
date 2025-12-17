@@ -58,6 +58,7 @@ static struct Transition syntax_binInt[] = {
 };
 
 static struct Transition syntax_sign[] = {
+    {iszero,       S_Zero,   A_Keep,      T_None},
     {isdigit,      S_Int,    A_Keep,      T_None},
     {isany,        S_Oper,   A_Keep,      T_None}
 };

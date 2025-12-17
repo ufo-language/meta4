@@ -95,6 +95,22 @@ int main(int argc, char* argv[]) {
         ASSERT_TRUE(tokenTypeIs("EOI", (struct Term*)tokens->elems->elems[1]));
     END
 
+    TEST(lexer_checkNegativeHexInt)
+        const string_t src = "-0x1FF";
+        struct Vector* tokens = vector_new();
+        lexer_lexAll(syntax, src, tokens);
+        ASSERT_IEQ(2, vector_count(tokens));
+        /* First token */
+        struct Term* token = (struct Term*)tokens->elems->elems[0];
+        ASSERT_TRUE(tokenTypeIs("Int", token));
+        ASSERT_IEQ(1, token->nArgs);
+        struct Object* arg = token->args[0];
+        ASSERT_ISA(OT_Integer, arg);
+        ASSERT_IEQ(-511, ((struct Integer*)arg)->i);
+        /* Second token */
+        ASSERT_TRUE(tokenTypeIs("EOI", (struct Term*)tokens->elems->elems[1]));
+    END
+
     TEST(lexer_checkBinInt)
         const string_t src = "0b1000";
         struct Vector* tokens = vector_new();
@@ -107,6 +123,22 @@ int main(int argc, char* argv[]) {
         struct Object* arg = token->args[0];
         ASSERT_ISA(OT_Integer, arg);
         ASSERT_IEQ(8, ((struct Integer*)arg)->i);
+        /* Second token */
+        ASSERT_TRUE(tokenTypeIs("EOI", (struct Term*)tokens->elems->elems[1]));
+    END
+
+    TEST(lexer_checkNegativeBinInt)
+        const string_t src = "-0b1000";
+        struct Vector* tokens = vector_new();
+        lexer_lexAll(syntax, src, tokens);
+        ASSERT_IEQ(2, vector_count(tokens));
+        /* First token */
+        struct Term* token = (struct Term*)tokens->elems->elems[0];
+        ASSERT_TRUE(tokenTypeIs("Int", token));
+        ASSERT_IEQ(1, token->nArgs);
+        struct Object* arg = token->args[0];
+        ASSERT_ISA(OT_Integer, arg);
+        ASSERT_IEQ(-8, ((struct Integer*)arg)->i);
         /* Second token */
         ASSERT_TRUE(tokenTypeIs("EOI", (struct Term*)tokens->elems->elems[1]));
     END
