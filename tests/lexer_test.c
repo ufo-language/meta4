@@ -160,6 +160,40 @@ int main(int argc, char* argv[]) {
         ASSERT_TRUE(tokenTypeIs("EOI", (struct Term*)tokens->elems->elems[1]));
     END
 
+    TEST(lexer_checkPositiveReal)
+        /* Make sure that this is a number that can be represented exactly in binary */
+        const string_t src = "+1234.5";
+        struct Vector* tokens = vector_new();
+        lexer_lexAll(syntax, src, tokens);
+        ASSERT_IEQ(2, vector_count(tokens));
+        /* First token */
+        struct Term* token = (struct Term*)tokens->elems->elems[0];
+        ASSERT_TRUE(tokenTypeIs("Real", token));
+        ASSERT_IEQ(1, token->nArgs);
+        struct Object* arg = token->args[0];
+        ASSERT_ISA(OT_Real, arg);
+        EXPECT_REQ(1234.5, ((struct Real*)arg)->r);
+        /* Second token */
+        ASSERT_TRUE(tokenTypeIs("EOI", (struct Term*)tokens->elems->elems[1]));
+    END
+
+    TEST(lexer_checkNegativeReal)
+        /* Make sure that this is a number that can be represented exactly in binary */
+        const string_t src = "-1234.5";
+        struct Vector* tokens = vector_new();
+        lexer_lexAll(syntax, src, tokens);
+        ASSERT_IEQ(2, vector_count(tokens));
+        /* First token */
+        struct Term* token = (struct Term*)tokens->elems->elems[0];
+        ASSERT_TRUE(tokenTypeIs("Real", token));
+        ASSERT_IEQ(1, token->nArgs);
+        struct Object* arg = token->args[0];
+        ASSERT_ISA(OT_Real, arg);
+        EXPECT_REQ(-1234.5, ((struct Real*)arg)->r);
+        /* Second token */
+        ASSERT_TRUE(tokenTypeIs("EOI", (struct Term*)tokens->elems->elems[1]));
+    END
+
     TEST(lexer_checkString)
         /* Make sure that this is a number that can be represented exactly in binary */
         const string_t src = "\"abc\"";
