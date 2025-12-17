@@ -1,5 +1,5 @@
 #pragma once
 
-#include "lexer2/lexer2.h"
+#include "lexer/lexer.h"
 
 extern struct Transition* syntax[];

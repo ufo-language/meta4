@@ -1,18 +1,16 @@
 #include <assert.h>
-#include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include "_typedefs.h"
 
-#include "lexer/chartypes.h"
 #include "lexer/lexer.h"
-#include "lexer/reservedwords.h"
+#include "object/globals.h"
 #include "object/types/identifier.h"
-#include "object/types/intarray.h"
 #include "object/types/integer.h"
 #include "object/types/real.h"
+#include "object/types/string.h"
 #include "object/types/symbol.h"
 #include "object/types/term.h"
 #include "object/types/vector.h"
@@ -23,14 +21,31 @@
 
 /* Forward declarations ******************************************************/
 
-static struct LexerToken _lexer_nextToken(const char** pcur, index_t* index, index_t* line, index_t* col);
-static int_t _lexer_stringToBinInt(char* string);
-static int_t _lexer_stringToDecInt(char* string);
-static int_t _lexer_stringToHexInt(char* string);
-static real_t _lexer_stringToReal(char* string);
-struct Term* _lexer_termToken(const string_t name, struct Object* value, index_t index, count_t nChars, index_t line, index_t col);
+// static void _lexError(struct LexerState* lexerState, char* message);
+struct Object* _lexemeToObject(enum TokenType tokenType, string_t lexeme);
 
 /* Global variables **********************************************************/
+
+extern char* ReservedWords[];
+extern char* BoolWords[];
+extern char* NilWord;
+
+#if 0
+/* There must be a 1:1 correspondence between this and the StateName enum */
+static string_t S_Names[] = {
+    "Init", "Integer", "Point", "Real", "Word", "String", "Operator", "Symbol"
+};
+
+/* There must be a 1:1 correspondence between this and the Action enum */
+static string_t A_Names[] = {
+    "Keep", "Reuse", "Skip", "Err", "ErrReal", "ErrString", "ErrComment"
+};
+
+/* There must be a 1:1 correspondence between this and the TokenType enum */
+static string_t T_Names[] = {
+    "None", "Int", "Real", "Bool", "Nil", "Word", "Ident", "Reserved", "String", "Operator", "Special", "Symbol", "EOI"
+};
+#endif
 
 /* Lifecycle functions *******************************************************/
 
@@ -38,301 +53,178 @@ struct Term* _lexer_termToken(const string_t name, struct Object* value, index_t
 
 /* Unique functions ******************/
 
-/* static inline int isAlpha(int c) { return charType[c] == C_ALPHA; } */
-static inline int _lexer_isDigit(int c) { return charType[c] == C_DIGIT; }
-static inline int _lexer_isAlNum(int c) { return charType[c] == C_ALPHA || charType[c] == C_DIGIT; }
-static inline int _lexer_isWs(int c)    { return charType[c] == C_WS; }
-static inline int _lexer_isOper(int c)  { return charType[c] == C_OPER; }
-
-/* The lexeme limit is LEXER_BUFFER_SIZE - 1 */
-enum { LEXER_BUFFER_SIZE = 512 };
-
-/* This is 3 memory allocations for each token: Symbol, IntArray, Term.
-   Can it be improved somehow?
-*/
-struct Term* _lexer_termToken(const string_t name, struct Object* value, index_t index, count_t nChars, index_t line, index_t col) {
-    struct Symbol* tokenName = symbol_new(name);
-    int_t posInts[] = {index, nChars, line, col};
-    struct IntArray* pos = intArray_new_elems(4, posInts);
-    struct Object* args[] = {value};
-    return term_new(tokenName, 1, args, (struct Object*)pos);
-}
-
-bool_t lexer_lexAll(const char* sourceString, struct Vector* tokens) {
-    const char* p = sourceString;
-    bool_t contin = true;
-    char buffer[LEXER_BUFFER_SIZE];
-    index_t index = 0;
-    index_t line = 1;
-    index_t col = 1;
-    while (contin) {
-        struct LexerToken token = _lexer_nextToken(&p, &index, &line, &col);
-        count_t nChars = token.length;
-        if (nChars >= LEXER_BUFFER_SIZE) {
-            nChars = LEXER_BUFFER_SIZE - 1;
-        }
-        strncpy(buffer, token.start, nChars);
-        buffer[nChars] = 0;
-        printf("Token type = %d, '%s'\n", token.type, buffer);
-        switch (token.type) {
-            case TOK_INT_DEC: {
-                    int_t i = _lexer_stringToDecInt(buffer);
-                    struct Integer* integer = integer_new(i);
-                    struct Term* termToken = _lexer_termToken("Integer", (struct Object*)integer, nChars, index, line, col);
-                    vector_push(tokens, (struct Object*)termToken);
-                }
-                break;
-            case TOK_INT_HEX: {
-                    int_t i = _lexer_stringToHexInt(buffer);
-                    struct Integer* integer = integer_new(i);
-                    vector_push(tokens, (struct Object*)integer);
-                }
-                break;
-            case TOK_INT_BIN: {
-                    int_t i = _lexer_stringToBinInt(buffer);
-                    struct Integer* integer = integer_new(i);
-                    vector_push(tokens, (struct Object*)integer);
-                }
-                break;
-            case TOK_FLOAT: {
-                    real_t r = _lexer_stringToReal(buffer);
-                    struct Real* real = real_new(r);
-                    vector_push(tokens, (struct Object*)real);
-                }
-                break;
-            case TOK_IDENT: {
-                    struct Identifier* ident = identifier_new(buffer);
-                    vector_push(tokens, (struct Object*)ident);
-                }
-                break;
-            case TOK_SYMBOL: {
-                    struct Symbol* symbol = symbol_new(buffer);
-                    vector_push(tokens, (struct Object*)symbol);
-                }
-                break;
-            case TOK_STRING:
-                break;
-            case TOK_OPERATOR:
-                break;
-            case TOK_SPECIAL:
-                break;
-            case TOK_EOF:
-                contin = false;
-                break;
-        }
-    }
-    return true;
-}
-
 /* Object functions ******************/
 
 /* Private functions *********************************************************/
 
-static struct LexerToken _lexer_nextToken(const char** pcur, index_t* index, index_t* line, index_t* col) {
-    const char* p = *pcur;
-
-RESTART:
-    /* skip whitespace */
-    while (_lexer_isWs(*p)) p++;
-
-    /* end of input */
-    if (*p == 0) {
-        *pcur = p;
-        return (struct LexerToken){TOK_EOF, p, 0, *index, *line, *col};
-    }
-
-    /* comments */
-    if (p[0] == '/' && p[1] == '*') {
-        p += 2;
-        while (p[0] && !(p[0] == '*' && p[1] == '/')) p++;
-        if (p[0]) p += 2;
-        goto RESTART;
-    }
-
-    if (p[0] == '/' && p[1] == '/') {
-        p += 2;
-        while (*p && *p != '\n') p++;
-        goto RESTART;
-    }
-
-    const char* start = p;
-
-    /* strings */
-    if (*p == '"') {
-        p++;
-        while (*p && *p != '"') {
-            if (*p == '\\' && p[1]) p += 2;
-            else p++;
+static enum TokenType lexer_classifyWord(char* s) {
+    for (char** w=ReservedWords; *w; ++w) {
+        if (!strcmp(*w, s)) {
+            return T_Reserved;
         }
-        if (*p == '"') p++;
-        *pcur = p;
-        return (struct LexerToken){TOK_STRING, start, (int)(p - start), *index, *line, *col};
     }
-
-    /* leading minus? */
-    /* int neg = 0; */
-    if (*p == '-') {
-        /*neg = 1;*/
-        p++;
+    for (char** w = BoolWords; *w; ++w) {
+        if (!strcmp(*w, s)) {
+            return T_Bool;
+        }
     }
+    if (!strcmp(NilWord, s)) {
+        return T_Nil;
+    }
+    return T_Ident;
+}
 
-    /* number? */
-    if (_lexer_isDigit(*p)) {
-        const char* q = p;
-
-        /* base prefixes */
-        if (*q == '0') {
-            if (q[1] == 'x' || q[1] == 'X') {
-                q += 2;
-                while (_lexer_isDigit(*q) || (*q >= 'a' && *q <= 'f') || (*q >= 'A' && *q <= 'F')) q++;
-                *pcur = q;
-                return (struct LexerToken){TOK_INT_HEX, start, (int)(q - start), *index, *line, *col};
-            }
-            if (q[1] == 'b' || q[1] == 'B') {
-                q += 2;
-                while (*q == '0' || *q == '1') q++;
-                *pcur = q;
-                return (struct LexerToken){TOK_INT_BIN, start, (int)(q - start), *index, *line, *col};
+enum Lexer_LexResult lexer_next(struct Transition** syntax, string_t* inputString, enum TokenType* tokenType, count_t* lexemeLen, string_t lexemeBuffer) {
+    index_t lexemeBufferIndex = 0;
+    enum StateName state = S_Init;
+    struct Transition* t;
+    for (;;) {
+        ichar_t c = **inputString;
+        ++(*inputString);
+        t = syntax[state];
+        /* find matching transition */
+        for (;; ++t) {
+            if (t->charClassPredicate(c)) {
+                break;  /* TODO place in 'for' header? */
             }
         }
-
-        /* decimal: int or float */
-        while (_lexer_isDigit(*q)) q++;
-
-        int is_float = 0;
-
-        if (*q == '.') {
-            is_float = 1;
-            q++;
-            while (_lexer_isDigit(*q)) q++;
+        switch (t->action) {
+            case A_Keep:
+                lexemeBuffer[lexemeBufferIndex++] = (char)c;
+                break;
+            case A_Skip:
+                break;
+            case A_Reuse:
+                --(*inputString);
+                break;
+            case A_Err:
+                return Lexer_UnknownError;
+            case A_RealErr:
+                return Lexer_RealError;
+            case A_StringErr:
+                return Lexer_StringError;
+            case A_CommentErr:
+                return Lexer_StringError;
+            default:
+                fprintf(stderr, "lexer_next got unhandled action %d\n", t->action);
+                assert(false);
+                exit(1);
         }
-
-        *pcur = q;
-        return (struct LexerToken){is_float ? TOK_FLOAT : TOK_INT_DEC, start, (int)(q - start), *index, *line, *col};
+        state = t->nextState;
+        switch (t->tokenType) {
+            case T_None:
+                break;
+            case T_EOI:
+                strcpy(lexemeBuffer, "EOI");
+                lexemeBufferIndex = 3;
+                goto EMIT_TOKEN;
+            default:
+                goto EMIT_TOKEN;
+        }
     }
-
-    /* identifier: [a-z_] ... */
-    if ((*start >= 'a' && *start <= 'z') || *start == '_') {
-        p++;
-        while (_lexer_isAlNum(*p) || *p == '_') p++;
-        *pcur = p;
-        /* TODO identify reserved words */
-        return (struct LexerToken){TOK_IDENT, start, p - start, *index, *line, *col};
-    }
-
-    /* symbol: [A-Z] ... */
-    if (*start >= 'A' && *start <= 'Z') {
-        p++;
-        while (_lexer_isAlNum(*p) || *p == '_') p++;
-        *pcur = p;
-        return (struct LexerToken){TOK_SYMBOL, start, (int)(p - start), *index, *line, *col};
-    }
-
-    /* operator: run of C_PUNCT chars */
-    if (_lexer_isOper(*start)) {
-        p++;
-        while (_lexer_isOper(*p)) p++;
-        *pcur = p;
-        return (struct LexerToken){TOK_OPERATOR, start, (int)(p - start), *index, *line, *col};
-    }
-
-    /* special: single C_OTHER */
-    p++;
-    *pcur = p;
-    return (struct LexerToken){TOK_SPECIAL, start, 1, *index, *line, *col};
+EMIT_TOKEN:
+    lexemeBuffer[lexemeBufferIndex] = 0;
+    *tokenType = t->tokenType;
+    if (*tokenType == T_Word)
+        *tokenType = lexer_classifyWord(lexemeBuffer);
+    *lexemeLen = lexemeBufferIndex;
+    return Lexer_Success;
 }
 
-static int_t _lexer_stringToBinInt(char* string) {
-    int_t sign = 1;
-    switch (*string) {
-        case '-':
-            sign = -1;
-            ++string;
-            break;
-        case '+':
-            sign = 1;
-            ++string;
-            break;
-        case '0':
-            ++string;
-            break;
+static bool_t tokenTypeNamesCreated = false;
+static struct Symbol* tokenTypeNames[T_Final];
+
+static void _createTokenTypeNames(void) {
+    tokenTypeNames[T_None]     = symbol_new("None");
+    tokenTypeNames[T_Int]      = symbol_new("Int");
+    tokenTypeNames[T_Real]     = symbol_new("Real");
+    tokenTypeNames[T_Bool]     = symbol_new("Bool");
+    tokenTypeNames[T_Nil]      = symbol_new("Nil");
+    tokenTypeNames[T_Word]     = symbol_new("Word");
+    tokenTypeNames[T_Ident]    = symbol_new("Ident");
+    tokenTypeNames[T_Reserved] = symbol_new("Reserved");
+    tokenTypeNames[T_String]   = symbol_new("String");
+    tokenTypeNames[T_Oper]     = symbol_new("Oper");
+    tokenTypeNames[T_Special]  = symbol_new("Special");
+    tokenTypeNames[T_Symbol]   = symbol_new("Symbol");
+    tokenTypeNames[T_EOI]      = symbol_new("EOI");
+}
+
+void lexer_lexAll(struct Transition** syntax, const string_t sourceString, struct Vector* tokens) {
+    if (!tokenTypeNamesCreated) {
+        _createTokenTypeNames();
+        tokenTypeNamesCreated = true;
+    }
+    string_t inputString = sourceString;
+    char lexemeBuffer[Lexer_LexemeSize];
+    for (;;) {
+        enum TokenType tokenType;
+        count_t lexemeLen;
+        enum Lexer_LexResult res = lexer_next(syntax, &inputString, &tokenType, &lexemeLen, lexemeBuffer);
+        #if 0
+        fprintf(stderr, "lexer_lexAll got token %d '%s'\n", tokenType, lexemeBuffer);
+        #endif
+        switch (res) {
+            case Lexer_Success: {
+                    struct Symbol* tokenTermName = tokenTypeNames[tokenType];
+                    struct Object* lexemeObj = _lexemeToObject(tokenType, lexemeBuffer);
+                    struct Object* attrib = (struct Object*)g_nil;
+                    struct Term* tokenTerm = term_new_1arg(tokenTermName, lexemeObj, attrib);
+                    vector_push(tokens, (struct Object*)tokenTerm);
+                    if (tokenType == T_EOI) {
+                        return;
+                    }
+                }
+                break;
+            case Lexer_UnknownError:
+                fprintf(stderr, "lexer_lexAll got an unknown error %d\n", res);
+                return;
+            case Lexer_StringError:
+                fprintf(stderr, "lexer_lexAll got a string error %d\n", res);
+                return;
+            case Lexer_RealError:
+                fprintf(stderr, "lexer_lexAll got an real-number error %d\n", res);
+                return;
+            case Lexer_CommentError:
+                fprintf(stderr, "lexer_lexAll got a comment error %d\n", res);
+                return;
+            default:
+                fprintf(stderr, "lexer_lexAll unhandled lex result %d\n", res);
+                assert(false);
+                return;
+        }
+    }
+}
+
+/* Private functions *********************************************************/
+
+struct Object* _lexemeToObject(enum TokenType tokenType, string_t lexeme) {
+    switch (tokenType) {
+        case T_Int:
+            return (struct Object*)integer_new(atol(lexeme));
+        case T_Real:
+            return (struct Object*)real_new(atof(lexeme));
+        case T_Bool:
+            return (struct Object*)(strcmp("true", lexeme) ? g_false : g_true);
+        case T_Nil:
+            return (struct Object*)g_nil;
+        case T_Ident:
+            return (struct Object*)identifier_new(lexeme);
+        case T_Reserved:
+            return (struct Object*)string_new(lexeme);
+        case T_String:
+            return (struct Object*)string_new(lexeme);
+        case T_Oper:
+            return (struct Object*)identifier_new(lexeme);
+        case T_Special:
+            return (struct Object*)string_new(lexeme);
+        case T_Symbol:
+            return (struct Object*)symbol_new(lexeme);
+        case T_EOI:
+            return (struct Object*)symbol_new(lexeme);
         default:
-            break;
+            fprintf(stderr, "ERROR: unhandled token type in tokenToObject: %d\n", tokenType);
+            assert(false);
+            exit(1);
     }
-    assert(*string == 'b' || *string == 'B');
-    ++string;  /* skip 'B' */
-    int_t v = 0;
-    while (*string) {
-        char c = *string++;
-        int d;
-        if (c >= '0' && c <= '9') d = c - '0';
-        else if (c >= 'a' && c <= 'f') d = c - 'a' + 10;
-        else if (c >= 'A' && c <= 'F') d = c - 'A' + 10;
-        else break;
-        v = v * 2 + d;
-    }
-    return sign * v;
-}
-
-static int_t _lexer_stringToDecInt(char* string) {
-    int_t sign = 1;
-    switch (*string) {
-        case '-':
-            sign = -1;
-            ++string;
-            break;
-        case '+':
-            sign = 1;
-            ++string;
-            break;
-        default:
-            break;
-    }
-    int_t v = 0;
-    while (*string) {
-        char c = *string++;
-        int d;
-        if (c >= '0' && c <= '9') d = c - '0';
-        else break;
-        v = v * 10 + d;
-    }
-    return sign * v;
-}
-
-static int_t _lexer_stringToHexInt(char* string) {
-    int_t sign = 1;
-    switch (*string) {
-        case '-':
-            sign = -1;
-            ++string;
-            break;
-        case '+':
-            sign = 1;
-            ++string;
-            break;
-        case '0':
-            ++string;
-            break;
-        default:
-            break;
-    }
-    assert(*string == 'x' || *string == 'X');
-    ++string;  /* skip 'X' */
-    int_t v = 0;
-    while (*string) {
-        char c = *string++;
-        int d;
-        if (c >= '0' && c <= '9') d = c - '0';
-        else if (c >= 'a' && c <= 'f') d = c - 'a' + 10;
-        else if (c >= 'A' && c <= 'F') d = c - 'A' + 10;
-        else break;
-        v = v * 16 + d;
-    }
-    return sign * v;
-}
-
-static real_t _lexer_stringToReal(char* string) {
-    real_t value = 0.0;
-    sscanf(string, "%lf", &value); // parse double
-    return value;
 }

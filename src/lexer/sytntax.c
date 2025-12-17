@@ -1,7 +1,7 @@
 #include <ctype.h>
 #include <string.h>
 
-#include "lexer2/lexer2.h"
+#include "lexer/lexer.h"
 
 char* ReservedWords[] = {
   "do", "else", "end", "fun", "if", "in", "let", "letrec", "nothing", "then", "while",
@@ -16,11 +16,13 @@ char* BoolWords[] = {
 char* NilWord = "nil";
 
 static inline bool_t isany(ichar_t c)        { (void)c; return true; }
+#if 0
 static inline bool_t isdash(ichar_t c)       { return c == '-'; }
+#endif
 static inline bool_t isdot(ichar_t c)        { return c == '.'; }
 static inline bool_t isdquote(ichar_t c)     { return c == '"'; }
 static inline bool_t isnull(ichar_t c)       { return c == 0; }
-static inline bool_t isoperator(ichar_t c)   { return *strchr("+-*/%<>!.:&", c) == 0 ? false : true; }
+static inline bool_t isoperator(ichar_t c)   { return (c != 0 && strchr("+-*/%<>!.:&", c)) ? true : false; }
 static inline bool_t isunderscore(ichar_t c) { return c == '_'; }
 
 #if 0
