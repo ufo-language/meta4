@@ -51,7 +51,6 @@ struct Term* term_new_1arg(struct Symbol* name, struct Object* arg, struct Objec
     return term_new(name, 1, args, attrib);
 }
 
-
 /* Unique functions ******************/
 
 /* Object functions ******************/
@@ -101,7 +100,7 @@ bool_t term_match(struct Object* obj, struct Object* other, struct Vector* bindi
 void term_show(struct Term* term, FILE* stream) {
     show((struct Object*)term->name, stream);
     array_showElems(term->nArgs, term->args, "{", ", ", "}", stream);
-    fputc('/', stream);
+    fputc('%', stream);
     show(term->attrib, stream);
 }
 

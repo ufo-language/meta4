@@ -12,16 +12,16 @@ enum {
     Lexer_LexemeSize = 512
 };
 
-enum StateName {
-    S_Init, S_Int, S_Point, S_Real, S_Word, S_Str, S_Oper, S_Sym
+enum Lexer_State {
+    S_Init, S_Int, S_HexInt, S_BinInt, S_Sign, S_Point, S_Real, S_Word, S_Str, S_Oper, S_Sym, S_Zero
 };
 
-enum Action {
+enum Lexer_Action {
     A_Keep, A_Reuse, A_Skip, A_Err, A_RealErr, A_StringErr, A_CommentErr
 } ;
 
-enum TokenType {
-    T_None, T_Int, T_Real, T_Bool, T_Nil, T_Word, T_Ident, T_Reserved, T_String, T_Oper, T_Special, T_Symbol, T_EOI, T_Final
+enum Lexer_TokenType {
+    T_None, T_Int, T_HexInt, T_BinInt, T_Real, T_Bool, T_Nil, T_Word, T_Ident, T_Reserved, T_String, T_Oper, T_Special, T_Symbol, T_EOI, T_Final
 };
 
 enum Lexer_LexResult {
@@ -34,9 +34,9 @@ enum Lexer_LexResult {
 
 struct Transition {
     bool_t (*charClassPredicate)(ichar_t c);
-    enum StateName nextState;
-    enum Action    action;
-    enum TokenType tokenType;
+    enum Lexer_State nextState;
+    enum Lexer_Action    action;
+    enum Lexer_TokenType tokenType;
 } ;
 
 struct Lexer {
@@ -48,31 +48,11 @@ struct Lexer {
 
 struct Vector;
 
-#if 0
-struct Token {
-    enum TokenType type;
-    index_t pos;
-    count_t len;
-    index_t line;
-    index_t col;
-};
-
-struct LexerState {
-    struct Transition** syntax;
-    string_t inputString;
-    index_t  pos;
-    index_t  line;
-    index_t  col;
-    count_t  lexemeLen;
-    char     lexeme[Lexer_LexemeSize];
-};
-
-struct Vector;
-
 /* Forward declarations ******************************************************/
 
 /* Global variables **********************************************************/
 
+#if 0
 /* The reserved and bool_t words are defined in syntax.h */
 extern char* RESERVED_WORDS[];
 extern char* BOOL_WORDS[];
@@ -81,21 +61,11 @@ extern char* BOOL_WORDS[];
 extern char* S_NAMES[];
 extern char* A_NAMES[];
 extern char* T_NAMES[];
+#endif
 
 /* Lifecycle functions *******************************************************/
 
-void lexer_init(struct LexerState* lexerState, struct Transition** syntax, string_t inputString);
-
 /* Public functions **********************************************************/
 
-/* Unique functions ******************/
-
-bool_t lexer_lexAll(const string_t sourceString, struct Vector* tokens, struct Transition** syntax);
-struct Transition* lexer_findTransition(struct Transition** syntax, enum StateName stateName, char_t c);
-enum Lexer_LexTokenResult lexer_lexToken(struct LexerState* lexerState, struct Token* token);
-
-/* Object functions ******************/
-#endif
-
 void lexer_lexAll(struct Transition** syntax, const string_t sourceString, struct Vector* tokens);
-enum Lexer_LexResult lexer_next(struct Transition** syntax, string_t* inputString, enum TokenType* tokenType, count_t* lexemeLen, string_t lexemeBuffer);
+enum Lexer_LexResult lexer_next(struct Transition** syntax, string_t* inputString, enum Lexer_TokenType* tokenType, count_t* lexemeLen, string_t lexemeBuffer);

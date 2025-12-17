@@ -21,14 +21,17 @@
 
 /* Forward declarations ******************************************************/
 
-// static void _lexError(struct LexerState* lexerState, char* message);
-struct Object* _lexemeToObject(enum TokenType tokenType, string_t lexeme);
+struct Object* _lexemeToObject(enum Lexer_TokenType tokenType, string_t lexeme);
 
 /* Global variables **********************************************************/
 
 extern char* ReservedWords[];
 extern char* BoolWords[];
 extern char* NilWord;
+
+char* lexerStateNames[] = {
+    "Init", "Int", "HexInt", "BinInt", "Sign", "Point", "Real", "Word", "Str", "Oper", "Sym", "Zero"
+};
 
 #if 0
 /* There must be a 1:1 correspondence between this and the StateName enum */
@@ -57,7 +60,7 @@ static string_t T_Names[] = {
 
 /* Private functions *********************************************************/
 
-static enum TokenType lexer_classifyWord(char* s) {
+static enum Lexer_TokenType lexer_classifyWord(char* s) {
     for (char** w=ReservedWords; *w; ++w) {
         if (!strcmp(*w, s)) {
             return T_Reserved;
@@ -74,9 +77,9 @@ static enum TokenType lexer_classifyWord(char* s) {
     return T_Ident;
 }
 
-enum Lexer_LexResult lexer_next(struct Transition** syntax, string_t* inputString, enum TokenType* tokenType, count_t* lexemeLen, string_t lexemeBuffer) {
+enum Lexer_LexResult lexer_next(struct Transition** syntax, string_t* inputString, enum Lexer_TokenType* tokenType, count_t* lexemeLen, string_t lexemeBuffer) {
     index_t lexemeBufferIndex = 0;
-    enum StateName state = S_Init;
+    enum Lexer_State state = S_Init;
     struct Transition* t;
     for (;;) {
         ichar_t c = **inputString;
@@ -137,6 +140,8 @@ static struct Symbol* tokenTypeNames[T_Final];
 static void _createTokenTypeNames(void) {
     tokenTypeNames[T_None]     = symbol_new("None");
     tokenTypeNames[T_Int]      = symbol_new("Int");
+    tokenTypeNames[T_HexInt]   = symbol_new("Int");
+    tokenTypeNames[T_BinInt]   = symbol_new("Int");
     tokenTypeNames[T_Real]     = symbol_new("Real");
     tokenTypeNames[T_Bool]     = symbol_new("Bool");
     tokenTypeNames[T_Nil]      = symbol_new("Nil");
@@ -158,7 +163,7 @@ void lexer_lexAll(struct Transition** syntax, const string_t sourceString, struc
     string_t inputString = sourceString;
     char lexemeBuffer[Lexer_LexemeSize];
     for (;;) {
-        enum TokenType tokenType;
+        enum Lexer_TokenType tokenType;
         count_t lexemeLen;
         enum Lexer_LexResult res = lexer_next(syntax, &inputString, &tokenType, &lexemeLen, lexemeBuffer);
         #if 0
@@ -198,10 +203,14 @@ void lexer_lexAll(struct Transition** syntax, const string_t sourceString, struc
 
 /* Private functions *********************************************************/
 
-struct Object* _lexemeToObject(enum TokenType tokenType, string_t lexeme) {
+struct Object* _lexemeToObject(enum Lexer_TokenType tokenType, string_t lexeme) {
     switch (tokenType) {
         case T_Int:
             return (struct Object*)integer_new(atol(lexeme));
+        case T_HexInt:
+            return (struct Object*)integer_new(strtol(lexeme, NULL, 16));
+        case T_BinInt:
+            return (struct Object*)integer_new(strtol(lexeme, NULL, 2));
         case T_Real:
             return (struct Object*)real_new(atof(lexeme));
         case T_Bool:

@@ -51,7 +51,6 @@ int main(int argc, char* argv[]) {
         const string_t src = "-123";
         struct Vector* tokens = vector_new();
         lexer_lexAll(syntax, src, tokens);
-        SHOW("Tokens", tokens);
         ASSERT_IEQ(2, vector_count(tokens));
         /* First token */
         struct Term* token = (struct Term*)tokens->elems->elems[0];
@@ -60,6 +59,54 @@ int main(int argc, char* argv[]) {
         struct Object* arg = token->args[0];
         ASSERT_ISA(OT_Integer, arg);
         ASSERT_IEQ(-123, ((struct Integer*)arg)->i);
+        /* Second token */
+        ASSERT_TRUE(tokenTypeIs("EOI", (struct Term*)tokens->elems->elems[1]));
+    END
+
+    TEST(lexer_checkInteger_withPlus)
+        const string_t src = "+123";
+        struct Vector* tokens = vector_new();
+        lexer_lexAll(syntax, src, tokens);
+        ASSERT_IEQ(2, vector_count(tokens));
+        /* First token */
+        struct Term* token = (struct Term*)tokens->elems->elems[0];
+        ASSERT_TRUE(tokenTypeIs("Int", token));
+        ASSERT_IEQ(1, token->nArgs);
+        struct Object* arg = token->args[0];
+        ASSERT_ISA(OT_Integer, arg);
+        ASSERT_IEQ(123, ((struct Integer*)arg)->i);
+        /* Second token */
+        ASSERT_TRUE(tokenTypeIs("EOI", (struct Term*)tokens->elems->elems[1]));
+    END
+
+    TEST(lexer_checkHexInt)
+        const string_t src = "0x1FF";
+        struct Vector* tokens = vector_new();
+        lexer_lexAll(syntax, src, tokens);
+        ASSERT_IEQ(2, vector_count(tokens));
+        /* First token */
+        struct Term* token = (struct Term*)tokens->elems->elems[0];
+        ASSERT_TRUE(tokenTypeIs("Int", token));
+        ASSERT_IEQ(1, token->nArgs);
+        struct Object* arg = token->args[0];
+        ASSERT_ISA(OT_Integer, arg);
+        ASSERT_IEQ(511, ((struct Integer*)arg)->i);
+        /* Second token */
+        ASSERT_TRUE(tokenTypeIs("EOI", (struct Term*)tokens->elems->elems[1]));
+    END
+
+    TEST(lexer_checkBinInt)
+        const string_t src = "0b1000";
+        struct Vector* tokens = vector_new();
+        lexer_lexAll(syntax, src, tokens);
+        ASSERT_IEQ(2, vector_count(tokens));
+        /* First token */
+        struct Term* token = (struct Term*)tokens->elems->elems[0];
+        ASSERT_TRUE(tokenTypeIs("Int", token));
+        ASSERT_IEQ(1, token->nArgs);
+        struct Object* arg = token->args[0];
+        ASSERT_ISA(OT_Integer, arg);
+        ASSERT_IEQ(8, ((struct Integer*)arg)->i);
         /* Second token */
         ASSERT_TRUE(tokenTypeIs("EOI", (struct Term*)tokens->elems->elems[1]));
     END
@@ -102,7 +149,6 @@ int main(int argc, char* argv[]) {
         const string_t src = "abc";
         struct Vector* tokens = vector_new();
         lexer_lexAll(syntax, src, tokens);
-        SHOW("tokens", tokens);
         ASSERT_IEQ(2, vector_count(tokens));
         /* First token */
         struct Term* token = (struct Term*)tokens->elems->elems[0];
@@ -119,7 +165,6 @@ int main(int argc, char* argv[]) {
         const string_t src = "end";
         struct Vector* tokens = vector_new();
         lexer_lexAll(syntax, src, tokens);
-        SHOW("tokens", tokens);
         ASSERT_IEQ(2, vector_count(tokens));
         /* First token */
         struct Term* token = (struct Term*)tokens->elems->elems[0];
@@ -183,16 +228,13 @@ int main(int argc, char* argv[]) {
     /* Check multiple tokens */
 
     TEST(lexer_checkLexAll)
-        // const string_t src = "abc Abc 123 \"Hello\"";
         const string_t src = "abc 123 +-* \"def\" Gji";
         struct Vector* tokens = vector_new();
-        //void lexer_lexAll(struct Transition** syntax, const string_t sourceString,
-//                               struct Vector* tokens) {
-
         lexer_lexAll(syntax, src, tokens);
+        ASSERT_IEQ(6, vector_count(tokens));
         SHOW("tokens", tokens);
+        /* TODO check the type of each token */
     END
-
 
     END_TESTS
 }
