@@ -22,6 +22,7 @@ struct IntArray {
 
 /* Lifecycle functions *******************************************************/
 
+struct IntArray* intArray_new3(int i1, int i2, int i3);
 struct IntArray* intArray_new_elem(count_t nElems, int_t elems);
 struct IntArray* intArray_new_elems(count_t nElems, int_t elems[]);
 struct IntArray* intArray_new_fromIntArray(count_t nElems, struct IntArray* oldArray);

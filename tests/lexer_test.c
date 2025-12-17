@@ -294,7 +294,7 @@ int main(int argc, char* argv[]) {
     /* Check multiple tokens */
 
     TEST(lexer_checkLexAll)
-        const string_t src = "abc 123 +-* \"def\" Gji";
+        const string_t src = "abc 123 +-* \"def\" Ghi";
         struct Vector* tokens = vector_new();
         lexer_lexAll(syntax, src, tokens);
         ASSERT_IEQ(6, vector_count(tokens));

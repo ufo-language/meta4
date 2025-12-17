@@ -46,6 +46,7 @@ struct Lexer {
     count_t lexemeLen;
 };
 
+struct LexerFields;
 struct Vector;
 
 /* Forward declarations ******************************************************/
@@ -68,4 +69,4 @@ extern char* T_NAMES[];
 /* Public functions **********************************************************/
 
 void lexer_lexAll(struct Transition** syntax, const string_t sourceString, struct Vector* tokens);
-enum Lexer_LexResult lexer_next(struct Transition** syntax, string_t* inputString, enum Lexer_TokenType* tokenType, count_t* lexemeLen, string_t lexemeBuffer);
+enum Lexer_LexResult lexer_next(struct LexerFields* lexerFields);

@@ -17,6 +17,14 @@
 
 /* Lifecycle functions *******************************************************/
 
+struct IntArray* intArray_new3(int i1, int i2, int i3) {
+    struct IntArray* intArray = intArray_new_noFill(3);
+    intArray->elems[0] = i1;
+    intArray->elems[1] = i2;
+    intArray->elems[2] = i3;
+    return intArray;
+}
+
 struct IntArray* intArray_new_elem(count_t nElems, int_t elem) {
     struct IntArray* intArray = intArray_new_noFill(nElems);
     for (index_t n=0; n<nElems; ++n) {
