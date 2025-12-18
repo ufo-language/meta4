@@ -26,7 +26,7 @@ extern struct FunctionRule*  g_emptyFunctionRule;
 extern struct GC*            g_gc;
 extern struct Identifier*    g_idNil;
 extern struct Nil*           g_nil;
-extern struct Object*        g_uniqueObject;
+extern struct Object*        g_uniqueObject;  /* Used in testing and parsing */
 extern struct Pair*          g_emptyPair;
 extern struct PrimitiveRule* g_emptyPrimRule;
 extern struct Vector*        g_globalEnv;

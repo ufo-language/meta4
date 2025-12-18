@@ -4,8 +4,12 @@
 
 /* Types *********************************************************************/
 
+struct Object;
 struct Symbol;
 struct Vector;
+
+typedef bool_t (*ParserFunction)(struct Vector* tokens, index_t* tokenIndex, struct Object** result);
+
 
 /* Forward declarations ******************************************************/
 
@@ -15,7 +19,11 @@ struct Vector;
 
 /* Public functions **********************************************************/
 
-bool_t pSpot(struct Symbol* tokenType, struct Vector* tokens, index_t* tokenIndex, struct Vector* results);
-bool_t pStrip(struct Vector* tokens, index_t* tokenIndex, struct Vector* results);
+bool_t pSequence(count_t nParsers, ParserFunction parsers[], struct Vector* tokens, index_t* tokenIndex, struct Object** result);
+bool_t pSpot(struct Symbol* tokenType, struct Vector* tokens, index_t* tokenIndex, struct Object** result);
+
+/* Composable parsers */
+
+bool_t pStrip(struct Vector* tokens, index_t* tokenIndex, struct Object** result);
 
 /* Private functions *********************************************************/

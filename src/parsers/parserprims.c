@@ -1,5 +1,7 @@
 #include "_typedefs.h"
 
+#include "parsers/parserprims.h"
+#include "object/globals.h"
 #include "object/types/symbol.h"
 #include "object/types/term.h"
 #include "object/types/vector.h"
@@ -17,27 +19,50 @@
 /* Public functions **********************************************************/
 
 #include "debug.h"
-bool_t pSpot(struct Symbol* tokenType, struct Vector* tokens, index_t* tokenIndex, struct Vector* results) {
+
+bool_t pSequence(count_t nParsers, ParserFunction parsers[], struct Vector* tokens, index_t* tokenIndex, struct Object** result) {
+    index_t savedIndex = *tokenIndex;
+    struct Object* innerResult;
+    struct Vector* results = vector_new();
+    for (index_t n=0; n<nParsers; n++) {
+        if (parsers[n](tokens, tokenIndex, &innerResult)) {
+            if (innerResult != g_uniqueObject) {
+                vector_push(results, innerResult);
+            }
+        }
+        else {
+            *tokenIndex = savedIndex;
+            return false;
+        }
+    }
+    switch (vector_count(results)) {
+        case 0:
+            *result = (struct Object*)g_nil;
+            break;
+        case 1:
+            *result = vector_pop_unsafe(results);
+            break;
+        default:
+            *result = (struct Object*)results;
+            break;
+    }
+    return true;
+}
+
+bool_t pSpot(struct Symbol* tokenType, struct Vector* tokens, index_t* tokenIndex, struct Object** result) {
     struct Object* tokenObj = tokens->elems->elems[*tokenIndex];
     if (((struct Term*)tokenObj)->name == tokenType) {
         ++(*tokenIndex);
-        vector_push(results, tokenObj);
+        *result = tokenObj;
         return true;
     }
     return false;
 }
 
-bool_t pStrip(struct Vector* tokens, index_t* tokenIndex, struct Vector* results) {
+bool_t pStrip(struct Vector* tokens, index_t* tokenIndex, struct Object** result) {
     (void)tokens;
     (void)tokenIndex;
-#if 0
-    struct Object* tokenObj = vector_pop_unsafe(results);
-    struct Term* token = (struct Term*)tokenObj;
-    struct Object* arg = token->args[0];
-    vector_push(results, arg);
-#else
-    vector_push(results, ((struct Term*)vector_pop_unsafe(results))->args[0]);
-#endif
+    *result = ((struct Term*)*result)->args[0];
     return true;
 }
 
