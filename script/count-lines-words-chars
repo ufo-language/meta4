@@ -1,3 +1,8 @@
-#!/bin/sh
+#!/bin/bash
 
-find src -type f -exec cat {} + | wc
+dirName=$1
+if [ "$dirName" == "" ]; then
+    echo "Please supply a directory name"
+    exit -1
+fi
+find ${dirName} -type f -exec cat {} + | wc
