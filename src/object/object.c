@@ -17,10 +17,11 @@
 
 /* Lifecycle functions *******************************************************/
 
+#include <assert.h>
 struct Object* object_new(enum TypeId typeId, count_t nWords) {
     struct Object* obj = memory_alloc(nWords);
     #if 0
-    fprintf(stderr, "object_new %-10s : %2lu words @ %p\n", typeName(typeId), nWords, obj);
+    fprintf(stderr, "object_new %-10s : %2lu words @ %p\n", typeName(typeId), nWords, (void*)obj);
     #endif
     obj->typeId = typeId;
     obj->nWords = nWords;

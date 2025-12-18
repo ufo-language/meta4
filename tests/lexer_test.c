@@ -6,6 +6,7 @@
 #include "lexer/lexer.h"
 #include "lexer/syntax.h"
 #include "object/types/identifier.h"
+#include "object/types/intarray.h"
 #include "object/types/integer.h"
 #include "object/types/real.h"
 #include "object/types/string.h"
@@ -294,12 +295,44 @@ int main(int argc, char* argv[]) {
     /* Check multiple tokens */
 
     TEST(lexer_checkLexAll)
-        const string_t src = "abc 123 +-* \"def\" Ghi";
+        const count_t nTokens = 8;
+        const string_t src = "abc (123)\n+-* \"def\" Ghi";
+        /*                    000000000 01111 1111 112222 */
+        /*                    012345678 90123 4567 890123 */
         struct Vector* tokens = vector_new();
         lexer_lexAll(syntax, src, tokens);
-        ASSERT_IEQ(6, vector_count(tokens));
+        ASSERT_IEQ(nTokens, vector_count(tokens));
         SHOW("tokens", tokens);
-        /* TODO check the type of each token */
+        /*
+        Ident{abc}    % IntArray{0, 1, 1}
+        Special{"("}  % IntArray{0, 1, 1}
+        Int{123}      % IntArray{5, 1, 6}
+        Special{")"}  % IntArray{5, 1, 6}
+        Oper{+-*}     % IntArray{10, 2, 1}
+        String{"def"} % IntArray{14, 2, 5}
+        Symbol{Ghi}   % IntArray{20, 2, 11}
+        EOI{EOI}      % IntArray{20, 2, 11}
+        */
+        /* Check the position of each token */
+        index_t indexes[] = {0, 4, 5, 8, 10, 14, 20, 23};
+        index_t lines[] = {1, 1, 1, 1, 2, 2, 2, 2};
+        index_t cols[] = {1, 5, 6, 9, 1, 5, 11, 14};
+        for (index_t n=0; n<nTokens; ++n) {
+            struct Object* tokenObj;
+            vector_get(tokens, n, &tokenObj);
+            struct Object* attribObj = ((struct Term*)tokenObj)->attrib;
+            struct IntArray* attrib = (struct IntArray*)attribObj;
+            index_t expectedIndex = indexes[n];
+            index_t expectedLine = lines[n];
+            index_t expectedCol = cols[n];
+            index_t tokenIndex = attrib->elems[0];
+            index_t tokenLine = attrib->elems[1];
+            index_t tokenCol = attrib->elems[2];
+            SHOW("Token", tokenObj);
+            EXPECT_IEQ(expectedIndex, tokenIndex);
+            EXPECT_IEQ(expectedLine, tokenLine);
+            EXPECT_IEQ(expectedCol, tokenCol);
+        }
     END
 
     END_TESTS

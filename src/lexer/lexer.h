@@ -13,7 +13,7 @@ enum {
 };
 
 enum Lexer_State {
-    S_Init, S_Int, S_HexInt, S_BinInt, S_Sign, S_Point, S_Real, S_Word, S_Str, S_Oper, S_Sym, S_Zero
+    S_Init, S_EOI, S_Special, S_Int, S_HexInt, S_BinInt, S_Sign, S_Point, S_Real, S_Word, S_Str, S_Oper, S_Sym, S_Zero
 };
 
 enum Lexer_Action {
@@ -69,4 +69,3 @@ extern char* T_NAMES[];
 /* Public functions **********************************************************/
 
 void lexer_lexAll(struct Transition** syntax, const string_t sourceString, struct Vector* tokens);
-enum Lexer_LexResult lexer_next(struct LexerFields* lexerFields);
