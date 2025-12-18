@@ -19,14 +19,17 @@
 string_t typeName(enum TypeId typeId) {
     switch (typeId) {
         case OT_Application:   return "Application";
+        case OT_Any:           return "Any";
         case OT_Array:         return "Array";
         case OT_BinOp:         return "BinOp";
         case OT_Boolean:       return "Boolean";
         case OT_ByteBuffer:    return "ByteBuffer";
         case OT_ConstantLimit: return "ConstantLimit";
+        case OT_Continuation:  return "Continuation";
         case OT_Dec:           return "Dec";
         case OT_Device:        return "Device";
-        case OT_Etor_Rec:      return "Evaluator";
+        case OT_Etor_CPS:      return "EvaluatorCPS";
+        case OT_Etor_Rec:      return "EvaluatorRec";
         case OT_Function:      return "Function";
         case OT_HashTable:     return "HashTable";
         case OT_Identifier:    return "Identifier";
@@ -47,6 +50,7 @@ string_t typeName(enum TypeId typeId) {
         case OT_Vector:        return "Vector";
         case OT_String:        return "String";
         case OT_Symbol:        return "Symbol";
+        case OT_Term:          return "Term";
         case OT_Test:          return "Test";
         case OT_User:          return "User";
         case OT_Var:           return "Var";
