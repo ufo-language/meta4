@@ -8,8 +8,13 @@ struct Object;
 struct Symbol;
 struct Vector;
 
-typedef bool_t (*ParserFunction)(struct Vector* tokens, index_t* tokenIndex, struct Object** result);
+enum ParseStatus {
+    PS_Success,
+    PS_Fail,
+    PS_Error
+};
 
+typedef enum ParseStatus (*ParserFunction)(struct Vector* tokens, index_t* tokenIndex, struct Object** result);
 
 /* Forward declarations ******************************************************/
 
@@ -19,11 +24,13 @@ typedef bool_t (*ParserFunction)(struct Vector* tokens, index_t* tokenIndex, str
 
 /* Public functions **********************************************************/
 
-bool_t pSequence(count_t nParsers, ParserFunction parsers[], struct Vector* tokens, index_t* tokenIndex, struct Object** result);
-bool_t pSpot(struct Symbol* tokenType, struct Vector* tokens, index_t* tokenIndex, struct Object** result);
+enum ParseStatus pIgnore(ParserFunction parser, struct Vector* tokens, index_t* tokenIndex, struct Object** result);
+enum ParseStatus pOneOf(count_t nParsers, ParserFunction parsers[], struct Vector* tokens, index_t* tokenIndex, struct Object** result);
+enum ParseStatus pSequence(count_t nParsers, ParserFunction parsers[], struct Vector* tokens, index_t* tokenIndex, struct Object** result);
+enum ParseStatus pSpot(struct Symbol* tokenType, struct Vector* tokens, index_t* tokenIndex, struct Object** result);
 
 /* Composable parsers */
 
-bool_t pStrip(struct Vector* tokens, index_t* tokenIndex, struct Object** result);
+enum ParseStatus pStrip(struct Vector* tokens, index_t* tokenIndex, struct Object** result);
 
 /* Private functions *********************************************************/

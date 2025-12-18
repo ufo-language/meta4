@@ -20,19 +20,48 @@
 
 #include "debug.h"
 
-bool_t pSequence(count_t nParsers, ParserFunction parsers[], struct Vector* tokens, index_t* tokenIndex, struct Object** result) {
+enum ParseStatus pIgnore(ParserFunction parser, struct Vector* tokens, index_t* tokenIndex, struct Object** result) {
+    enum ParseStatus parseStatus = parser(tokens, tokenIndex, result);
+    if (parseStatus == PS_Success) {
+        *result = g_uniqueObject;
+    }
+    return parseStatus;
+}
+
+enum ParseStatus pOneOf(count_t nParsers, ParserFunction parsers[], struct Vector* tokens, index_t* tokenIndex, struct Object** result) {
+    index_t savedIndex = *tokenIndex;
+    for (index_t n=0; n<nParsers; n++) {
+        enum ParseStatus parseStatus = parsers[n](tokens, tokenIndex, result);
+        switch (parseStatus) {
+            case PS_Fail:
+                break;
+            case PS_Success:
+            case PS_Error:
+                return parseStatus;
+        }
+        *tokenIndex = savedIndex;
+    }
+    return PS_Fail;
+}
+
+enum ParseStatus pSequence(count_t nParsers, ParserFunction parsers[], struct Vector* tokens, index_t* tokenIndex, struct Object** result) {
     index_t savedIndex = *tokenIndex;
     struct Object* innerResult;
     struct Vector* results = vector_new();
     for (index_t n=0; n<nParsers; n++) {
-        if (parsers[n](tokens, tokenIndex, &innerResult)) {
-            if (innerResult != g_uniqueObject) {
-                vector_push(results, innerResult);
-            }
-        }
-        else {
-            *tokenIndex = savedIndex;
-            return false;
+        enum ParseStatus parseStatus = parsers[n](tokens, tokenIndex, &innerResult);
+        switch (parseStatus) {
+            case PS_Success:
+                if (innerResult != g_uniqueObject) {
+                    vector_push(results, innerResult);
+                }
+                break;
+            case PS_Fail:
+                *tokenIndex = savedIndex;
+                return PS_Fail;
+            case PS_Error:
+                *result = innerResult;
+                return PS_Error;
         }
     }
     switch (vector_count(results)) {
@@ -46,24 +75,24 @@ bool_t pSequence(count_t nParsers, ParserFunction parsers[], struct Vector* toke
             *result = (struct Object*)results;
             break;
     }
-    return true;
+    return PS_Success;
 }
 
-bool_t pSpot(struct Symbol* tokenType, struct Vector* tokens, index_t* tokenIndex, struct Object** result) {
+enum ParseStatus pSpot(struct Symbol* tokenType, struct Vector* tokens, index_t* tokenIndex, struct Object** result) {
     struct Object* tokenObj = tokens->elems->elems[*tokenIndex];
     if (((struct Term*)tokenObj)->name == tokenType) {
         ++(*tokenIndex);
         *result = tokenObj;
-        return true;
+        return PS_Success;
     }
-    return false;
+    return PS_Fail;
 }
 
-bool_t pStrip(struct Vector* tokens, index_t* tokenIndex, struct Object** result) {
+enum ParseStatus pStrip(struct Vector* tokens, index_t* tokenIndex, struct Object** result) {
     (void)tokens;
     (void)tokenIndex;
     *result = ((struct Term*)*result)->args[0];
-    return true;
+    return PS_Success;
 }
 
 /* Private functions *********************************************************/
