@@ -39,14 +39,12 @@ echo $CC $options -o bin/plx -I src -Llib src/main.c -lplx
 $CC $options -o bin/plx -I src -Llib src/main.c -lplx &
 
 # build each test executable concurrently
-for sourceFile in tests/*.c; do
+testDir=tests
+testSources=$(find ${testDir} -name *.c ! -name main.c)
+for sourceFile in ${testSources}; do
     f=$(basename $sourceFile .c)
     s="${f%_test}"
     exeFile=bin/$f
-
-# This doesn't work if the .a file is newer than the source files
-#    if [ $sourceFile -nt $exeFile ] || [ ! -e $exeFile ]; then
-        #echo $CC $options -o $exeFile -I src $sourceFile -Llib -lplx
-        $CC $options -o $exeFile -I src $sourceFile -Llib -lplx &
-#    fi
+    # echo $CC $options -o $exeFile -I src -I ${testDir} $sourceFile -Llib -lplx
+    $CC $options -o $exeFile -I src -I ${testDir} $sourceFile -Llib -lplx &
 done

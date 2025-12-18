@@ -15,10 +15,12 @@ char* BoolWords[] = {
 
 char* NilWord = "nil";
 
+char* OperatorChars = "+-*/%<>!.:&";
+
 static inline bool_t isany(ichar_t c)        { (void)c; return true; }
 static inline bool_t isdquote(ichar_t c)     { return c == '"'; }
 static inline bool_t isnull(ichar_t c)       { return c == 0; }
-static inline bool_t isoperator(ichar_t c)   { return (c != 0 && strchr("+-*/%<>!.:&", c)) ? true : false; }
+static inline bool_t isoperator(ichar_t c)   { return (c != 0 && strchr(OperatorChars, c)) ? true : false; }
 static inline bool_t isunderscore(ichar_t c) { return c == '_'; }
 /* numbers */
 static inline bool_t isb(ichar_t c)          { return c == 'b' || c == 'B'; }
@@ -45,8 +47,8 @@ static struct Transition syntax_init[] = {
     {isspace,      S_Init,    A_Skip,      T_None},
     {issign,       S_Sign,    A_Keep,      T_None},
     {isoperator,   S_Oper,    A_Keep,      T_None},
-    {isnull,       S_EOI,     A_Reuse,     T_None},  /* C_NUL is end of input */
-    {isany,        S_Special, A_Reuse,     T_None}   /* C_ANY is wildcard */
+    {isnull,       S_EOI,     A_Reuse,     T_None},  /* isnull means end of input */
+    {isany,        S_Special, A_Reuse,     T_None}   /* isany is a wildcard */
 };
 
 static struct Transition syntax_eoi[] = {
