@@ -1,12 +1,10 @@
 #include "_test.h"
 #include "_typedefs.h"
 
-#include "object/evaluator/etor_rec.h"
-
 int main(int argc, char* argv[]) {
     BEGIN_TESTS
 
-    TEST(structName_checkConstruction)
+    TEST(structName_check1)
         FORCE_FAIL();
     END
 

@@ -25,8 +25,7 @@ int main(int argc, char* argv[]) {
 
     TEST(lexer_checkEmptyString)
         const string_t src = "";
-        struct Vector* tokens = vector_new();
-        lexer_lexAll(syntax, src, tokens);
+        struct Vector* tokens = lexer_lexAll(syntax, src);
         ASSERT_IEQ(1, vector_count(tokens));
         /* First token */
         ASSERT_TRUE(tokenTypeIs("EOI", (struct Term*)tokens->elems->elems[0]));
@@ -34,8 +33,7 @@ int main(int argc, char* argv[]) {
 
     TEST(lexer_checkInteger_positive)
         const string_t src = "123";
-        struct Vector* tokens = vector_new();
-        lexer_lexAll(syntax, src, tokens);
+        struct Vector* tokens = lexer_lexAll(syntax, src);
         ASSERT_IEQ(2, vector_count(tokens));
         /* First token */
         struct Term* token = (struct Term*)tokens->elems->elems[0];
@@ -50,8 +48,7 @@ int main(int argc, char* argv[]) {
 
     TEST(lexer_checkInteger_negative)
         const string_t src = "-123";
-        struct Vector* tokens = vector_new();
-        lexer_lexAll(syntax, src, tokens);
+        struct Vector* tokens = lexer_lexAll(syntax, src);
         ASSERT_IEQ(2, vector_count(tokens));
         /* First token */
         struct Term* token = (struct Term*)tokens->elems->elems[0];
@@ -66,8 +63,7 @@ int main(int argc, char* argv[]) {
 
     TEST(lexer_checkInteger_withPlus)
         const string_t src = "+123";
-        struct Vector* tokens = vector_new();
-        lexer_lexAll(syntax, src, tokens);
+        struct Vector* tokens = lexer_lexAll(syntax, src);
         ASSERT_IEQ(2, vector_count(tokens));
         /* First token */
         struct Term* token = (struct Term*)tokens->elems->elems[0];
@@ -82,8 +78,7 @@ int main(int argc, char* argv[]) {
 
     TEST(lexer_checkHexInt)
         const string_t src = "0x1FF";
-        struct Vector* tokens = vector_new();
-        lexer_lexAll(syntax, src, tokens);
+        struct Vector* tokens = lexer_lexAll(syntax, src);
         ASSERT_IEQ(2, vector_count(tokens));
         /* First token */
         struct Term* token = (struct Term*)tokens->elems->elems[0];
@@ -98,8 +93,7 @@ int main(int argc, char* argv[]) {
 
     TEST(lexer_checkNegativeHexInt)
         const string_t src = "-0x1FF";
-        struct Vector* tokens = vector_new();
-        lexer_lexAll(syntax, src, tokens);
+        struct Vector* tokens = lexer_lexAll(syntax, src);
         ASSERT_IEQ(2, vector_count(tokens));
         /* First token */
         struct Term* token = (struct Term*)tokens->elems->elems[0];
@@ -114,8 +108,7 @@ int main(int argc, char* argv[]) {
 
     TEST(lexer_checkBinInt)
         const string_t src = "0b1000";
-        struct Vector* tokens = vector_new();
-        lexer_lexAll(syntax, src, tokens);
+        struct Vector* tokens = lexer_lexAll(syntax, src);
         ASSERT_IEQ(2, vector_count(tokens));
         /* First token */
         struct Term* token = (struct Term*)tokens->elems->elems[0];
@@ -130,8 +123,7 @@ int main(int argc, char* argv[]) {
 
     TEST(lexer_checkNegativeBinInt)
         const string_t src = "-0b1000";
-        struct Vector* tokens = vector_new();
-        lexer_lexAll(syntax, src, tokens);
+        struct Vector* tokens = lexer_lexAll(syntax, src);
         ASSERT_IEQ(2, vector_count(tokens));
         /* First token */
         struct Term* token = (struct Term*)tokens->elems->elems[0];
@@ -147,8 +139,7 @@ int main(int argc, char* argv[]) {
     TEST(lexer_checkReal)
         /* Make sure that this is a number that can be represented exactly in binary */
         const string_t src = "1234.5";
-        struct Vector* tokens = vector_new();
-        lexer_lexAll(syntax, src, tokens);
+        struct Vector* tokens = lexer_lexAll(syntax, src);
         ASSERT_IEQ(2, vector_count(tokens));
         /* First token */
         struct Term* token = (struct Term*)tokens->elems->elems[0];
@@ -164,8 +155,7 @@ int main(int argc, char* argv[]) {
     TEST(lexer_checkPositiveReal)
         /* Make sure that this is a number that can be represented exactly in binary */
         const string_t src = "+1234.5";
-        struct Vector* tokens = vector_new();
-        lexer_lexAll(syntax, src, tokens);
+        struct Vector* tokens = lexer_lexAll(syntax, src);
         ASSERT_IEQ(2, vector_count(tokens));
         /* First token */
         struct Term* token = (struct Term*)tokens->elems->elems[0];
@@ -181,8 +171,7 @@ int main(int argc, char* argv[]) {
     TEST(lexer_checkNegativeReal)
         /* Make sure that this is a number that can be represented exactly in binary */
         const string_t src = "-1234.5";
-        struct Vector* tokens = vector_new();
-        lexer_lexAll(syntax, src, tokens);
+        struct Vector* tokens = lexer_lexAll(syntax, src);
         ASSERT_IEQ(2, vector_count(tokens));
         /* First token */
         struct Term* token = (struct Term*)tokens->elems->elems[0];
@@ -198,8 +187,7 @@ int main(int argc, char* argv[]) {
     TEST(lexer_checkString)
         /* Make sure that this is a number that can be represented exactly in binary */
         const string_t src = "\"abc\"";
-        struct Vector* tokens = vector_new();
-        lexer_lexAll(syntax, src, tokens);
+        struct Vector* tokens = lexer_lexAll(syntax, src);
         ASSERT_IEQ(2, vector_count(tokens));
         /* First token */
         struct Term* token = (struct Term*)tokens->elems->elems[0];
@@ -214,8 +202,7 @@ int main(int argc, char* argv[]) {
 
     TEST(lexer_checkIdentifier)
         const string_t src = "abc";
-        struct Vector* tokens = vector_new();
-        lexer_lexAll(syntax, src, tokens);
+        struct Vector* tokens = lexer_lexAll(syntax, src);
         ASSERT_IEQ(2, vector_count(tokens));
         /* First token */
         struct Term* token = (struct Term*)tokens->elems->elems[0];
@@ -230,8 +217,7 @@ int main(int argc, char* argv[]) {
 
     TEST(lexer_checkReservedWord)
         const string_t src = "end";
-        struct Vector* tokens = vector_new();
-        lexer_lexAll(syntax, src, tokens);
+        struct Vector* tokens = lexer_lexAll(syntax, src);
         ASSERT_IEQ(2, vector_count(tokens));
         /* First token */
         struct Term* token = (struct Term*)tokens->elems->elems[0];
@@ -246,8 +232,7 @@ int main(int argc, char* argv[]) {
 
     TEST(lexer_checkOperator)
         const string_t src = "++";
-        struct Vector* tokens = vector_new();
-        lexer_lexAll(syntax, src, tokens);
+        struct Vector* tokens = lexer_lexAll(syntax, src);
         ASSERT_IEQ(2, vector_count(tokens));
         /* First token */
         struct Term* token = (struct Term*)tokens->elems->elems[0];
@@ -262,8 +247,7 @@ int main(int argc, char* argv[]) {
 
     TEST(lexer_checkSymbol)
         const string_t src = "Abc";
-        struct Vector* tokens = vector_new();
-        lexer_lexAll(syntax, src, tokens);
+        struct Vector* tokens = lexer_lexAll(syntax, src);
         ASSERT_IEQ(2, vector_count(tokens));
         /* First token */
         struct Term* token = (struct Term*)tokens->elems->elems[0];
@@ -278,8 +262,7 @@ int main(int argc, char* argv[]) {
 
     TEST(lexer_checkSpecialChar)
         const string_t src = "{";
-        struct Vector* tokens = vector_new();
-        lexer_lexAll(syntax, src, tokens);
+        struct Vector* tokens = lexer_lexAll(syntax, src);
         ASSERT_IEQ(2, vector_count(tokens));
         /* First token */
         struct Term* token = (struct Term*)tokens->elems->elems[0];
@@ -299,19 +282,18 @@ int main(int argc, char* argv[]) {
         const string_t src = "abc (123)\n+-* \"def\" Ghi";
         /*                    000000000 01111 1111 112222 */
         /*                    012345678 90123 4567 890123 */
-        struct Vector* tokens = vector_new();
-        lexer_lexAll(syntax, src, tokens);
+        struct Vector* tokens = lexer_lexAll(syntax, src);
         ASSERT_IEQ(nTokens, vector_count(tokens));
         SHOW("tokens", tokens);
         /*
-        Ident{abc}    % IntArray{0, 1, 1}
-        Special{"("}  % IntArray{0, 1, 1}
-        Int{123}      % IntArray{5, 1, 6}
-        Special{")"}  % IntArray{5, 1, 6}
-        Oper{+-*}     % IntArray{10, 2, 1}
-        String{"def"} % IntArray{14, 2, 5}
-        Symbol{Ghi}   % IntArray{20, 2, 11}
-        EOI{EOI}      % IntArray{20, 2, 11}
+        Ident{abc}   %IntArray{0, 1, 1}
+        Special{"("} %IntArray{4, 1, 5}
+        Int{123}     %IntArray{5, 1, 6}
+        Special{")"} %IntArray{8, 1, 9}
+        Oper{+-*}    %IntArray{10, 2, 1}
+        String{"def"}%IntArray{14, 2, 5}
+        Symbol{Ghi}  %IntArray{20, 2, 11}
+        EOI{EOI}     %IntArray{23, 2, 14}|}
         */
         /* Check the position of each token */
         index_t indexes[] = {0, 4, 5, 8, 10, 14, 20, 23};

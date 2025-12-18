@@ -62,9 +62,13 @@ char* lexerStateNames[] = {
 /* Public functions **********************************************************/
 
 /* Unique functions ******************/
+struct Vector* lexer_lexAll(struct Transition** syntax, const string_t sourceString) {
+    struct Vector* tokens = vector_new();
+    lexer_lexAll_withVector(syntax, sourceString, tokens);
+    return tokens;
+}
 
-#include "debug.h"
-void lexer_lexAll(struct Transition** syntax, const string_t sourceString, struct Vector* tokens) {
+void lexer_lexAll_withVector(struct Transition** syntax, const string_t sourceString, struct Vector* tokens) {
     if (!tokenTypeNamesCreated) {
         _createTokenTypeNames();
     }

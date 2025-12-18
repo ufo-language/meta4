@@ -47,6 +47,14 @@ bool_t vector_pop(struct Vector* vector, struct Object** elem);
 void vector_push(struct Vector* vector, struct Object* elem);
 void vector_showBindings(struct Vector* vector, FILE* stream);
 
+static inline struct Object* vector_get_unsafe(struct Vector* vector, index_t index) {
+    return vector->elems->elems[index];
+}
+
+static inline struct Object* vector_pop_unsafe(struct Vector* vector) {
+    return vector->elems->elems[--vector->top];
+}
+
 /* Object functions ******************/
 
 bool_t vector_close_rec(struct Vector* vector, struct Etor_rec* etor, struct Object** value);

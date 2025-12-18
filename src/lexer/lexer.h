@@ -68,4 +68,5 @@ extern char* T_NAMES[];
 
 /* Public functions **********************************************************/
 
-void lexer_lexAll(struct Transition** syntax, const string_t sourceString, struct Vector* tokens);
+struct Vector* lexer_lexAll(struct Transition** syntax, const string_t sourceString);
+void lexer_lexAll_withVector(struct Transition** syntax, const string_t sourceString, struct Vector* tokens);
