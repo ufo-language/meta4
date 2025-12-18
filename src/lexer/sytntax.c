@@ -4,7 +4,8 @@
 #include "lexer/lexer.h"
 
 char* ReservedWords[] = {
-  "do", "else", "end", "fun", "if", "in", "let", "letrec", "nothing", "then", "while",
+  "catch", "do", "else", "end", "fun", "if", "in", "let",
+  "letrec", "nothing", "then", "try", "while",
   0
 };
 
