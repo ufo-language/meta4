@@ -7,6 +7,7 @@
 /* Types *********************************************************************/
 
 struct Boolean;
+struct Triple;
 struct FunctionRule;
 struct GC;
 struct Identifier;
@@ -22,6 +23,7 @@ struct Vector;
 
 extern struct Boolean*       g_false;
 extern struct Boolean*       g_true;
+extern struct Triple*        g_emptyTriple;
 extern struct FunctionRule*  g_emptyFunctionRule;
 extern struct GC*            g_gc;
 extern struct Identifier*    g_idNil;
@@ -29,6 +31,7 @@ extern struct Nil*           g_nil;
 extern struct Object*        g_uniqueObject;  /* Used in testing and parsing */
 extern struct Pair*          g_emptyPair;
 extern struct PrimitiveRule* g_emptyPrimRule;
+extern struct Triple*        g_emptyTriple;
 extern struct Vector*        g_globalEnv;
 extern struct Vector*        g_identifierInternTable;
 extern struct Vector*        g_symbolInternTable;

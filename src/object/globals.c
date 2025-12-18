@@ -8,6 +8,7 @@
 #include "object/types/nil.h"
 #include "object/types/pair.h"
 #include "object/types/primitive.h"
+#include "object/types/triple.h"
 #include "object/types/vector.h"
 
 /* Defines *******************************************************************/
@@ -27,6 +28,7 @@ struct Nil*           g_nil;
 struct Object*        g_uniqueObject;
 struct Pair*          g_emptyPair;
 struct PrimitiveRule* g_emptyPrimRule;
+struct Triple*        g_emptyTriple;
 struct Vector*        g_globalEnv;
 struct Vector*        g_identifierInternTable;
 struct Vector*        g_symbolInternTable;
@@ -54,6 +56,7 @@ void globals_init(void) {
     g_emptyPair             = pair_new_empty();
     g_emptyFunctionRule     = function_emptyRule();
     g_emptyPrimRule         = prim_emptyRule();
+    g_emptyTriple           = triple_new_empty();
     /* Global environment last */
     g_globalEnv             = vector_new();
 }

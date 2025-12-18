@@ -52,6 +52,7 @@ string_t typeName(enum TypeId typeId) {
         case OT_Symbol:        return "Symbol";
         case OT_Term:          return "Term";
         case OT_Test:          return "Test";
+        case OT_Triple:        return "Triple";
         case OT_User:          return "User";
         case OT_Var:           return "Var";
         case OT_While:         return "While";

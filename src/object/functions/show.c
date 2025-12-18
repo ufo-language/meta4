@@ -28,6 +28,7 @@
 #include "object/types/string.h"
 #include "object/types/symbol.h"
 #include "object/types/term.h"
+#include "object/types/triple.h"
 #include "object/types/vector.h"
 #include "object/types/while.h"
 
@@ -77,6 +78,7 @@ void show(struct Object* obj, FILE* stream) {
         case OT_Symbol:        symbol_show((struct Symbol*)obj, stream); return;
         case OT_Term:          term_show((struct Term*)obj, stream); return;
         case OT_Test:          break;
+        case OT_Triple:        triple_show((struct Triple*)obj, stream); return;
         case OT_User:          break;
         case OT_Var:           break;
         case OT_Vector:        vector_show((struct Vector*)obj, stream); return;
