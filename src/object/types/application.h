@@ -17,6 +17,8 @@ struct Application {
     struct Object* args[];
 };
 
+struct OutStream;
+
 /* Forward declarations ******************************************************/
 
 /* Global variables **********************************************************/
@@ -33,4 +35,4 @@ struct Application* application_new(struct Object* abstraction, count_t nArgs, s
 
 struct Object* application_close(struct Application* app, struct Etor_rec* etor);
 bool_t application_eval(struct Application* app, struct Etor_rec* etor, struct Object** value);
-void application_show(struct Application* app, FILE* stream);
+void application_show(struct Application* app, struct OutStream* outStream);

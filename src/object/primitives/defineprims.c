@@ -62,7 +62,7 @@ static bool_t _prim_count(struct Etor_rec* etor, count_t nArgs, struct Object* a
 static bool_t _prim_display(struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value) {
     (void)etor;
     for (index_t n=0; n<nArgs; ++n) {
-        display(args[n], stdout);
+        display(args[n], g_stdout);
     }
     *value = (struct Object*)g_nil;
     return true;
@@ -87,7 +87,7 @@ static bool_t _prim_rest(struct Etor_rec* etor, count_t nArgs, struct Object* ar
 static bool_t _prim_show(struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value) {
     (void)etor;
     for (index_t n=0; n<nArgs; ++n) {
-        show(args[n], stdout);
+        show(args[n], g_stdout);
     }
     *value = (struct Object*)g_nil;
     return true;

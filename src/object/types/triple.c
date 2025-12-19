@@ -3,6 +3,7 @@
 #include "object/functions/show.h"
 #include "object/globals.h"
 #include "object/object.h"
+#include "object/types/outstream.h"
 #include "object/types/triple.h"
 
 /* Defines *******************************************************************/
@@ -39,8 +40,11 @@ struct Triple* triple_new_empty(void) {
 
 /* Private functions *********************************************************/
 
-void triple_show(struct Triple* triple, FILE* stream) {
-    show(triple->key, stream);
-    fputc('=', stream);
-    show(triple->value, stream);
+void triple_show(struct Triple* triple, struct OutStream* outStream) {
+    outStream_fwrite(outStream,
+        'O', triple->key,
+        'C', '=',
+        'O', triple->value,
+        0
+    );
 }

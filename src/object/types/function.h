@@ -28,6 +28,8 @@ struct Function {
     struct FunctionRule* rules;
 };
 
+struct OutStream;
+
 /* Forward declarations ******************************************************/
 
 /* Global variables **********************************************************/
@@ -48,4 +50,4 @@ struct FunctionRule* function_emptyRule(void);
 bool_t function_apply(struct Function* function, struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value);
 struct Object* function_close_rec(struct Function* function, struct Etor_rec* etor);
 bool_t function_eval_rec(struct Function* function, struct Etor_rec* etor, struct Object** value);
-void function_show(struct Function* function, FILE* stream);
+void function_show(struct Function* function, struct OutStream* outStream);

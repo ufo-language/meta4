@@ -4,6 +4,7 @@
 
 #include "object/typeids.h"
 #include "object/types/hashtable.h"
+#include "object/types/outstream.h"
 #include "object/types/string.h"
 #include "object/types/symbolic.h"
 
@@ -36,8 +37,8 @@ struct Symbolic* symbolic_new_aux(enum TypeId typeId, count_t nChars, const stri
 
 /* Object functions ******************/
 
-void symbolic_show(struct Symbolic* symbolic, FILE* stream) {
-    fputs(symbolic->name, stream);
+void symbolic_show(struct Symbolic* symbolic, struct OutStream* outStream) {
+    outStream_writeString(outStream, symbolic->name);
 }
 
 /* Private functions *********************************************************/

@@ -15,6 +15,7 @@ struct Symbolic {
 };
 
 struct HashTable;
+struct OutStream;
 
 /* Forward declarations ******************************************************/
 
@@ -31,6 +32,6 @@ struct Symbolic* symbolic_new_aux(enum TypeId typeId, count_t nChars, const stri
 
 /* Object functions ******************/
 
-void symbolic_show(struct Symbolic* symbolic, FILE* stream);
+void symbolic_show(struct Symbolic* symbolic, struct OutStream* outStream);
 
 /* Private functions *********************************************************/

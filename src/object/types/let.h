@@ -17,6 +17,7 @@ struct Let {
 };
 
 struct Etor_rec;
+struct OutStream;
 
 /* Forward declarations ******************************************************/
 
@@ -36,4 +37,4 @@ struct Let* let_new(struct Object* lhs, struct Object* rhs);
 
 struct Object* let_close_rec(struct Let* let, struct Etor_rec* etor);
 bool_t let_eval_rec(struct Let* let, struct Etor_rec* etor, struct Object** value);
-void let_show(struct Let* let, FILE* stream);
+void let_show(struct Let* let, struct OutStream* outStream);

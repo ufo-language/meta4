@@ -4,6 +4,7 @@
 #include "_typedefs.h"
 
 #include "object/object.h"
+#include "object/types/outstream.h"
 #include "object/types/string.h"
 
 /* Defines *******************************************************************/
@@ -51,8 +52,8 @@ bool_t string_equal_chars(struct String* string, string_t chars) {
 
 /* Object functions ******************/
 
-void string_display(struct String* string, FILE* stream) {
-    fputs(string->chars, stream);
+void string_display(struct String* string, struct OutStream* outStream) {
+    outStream_writeString(outStream, string->chars);
 }
 
 bool_t string_equal(struct String* string, struct String* other) {
@@ -75,25 +76,25 @@ bool_t string_hash_chars(enum TypeId typeId, count_t nChars, const string_t char
     return true;
 }
 
-void string_show(struct String* string, FILE* stream) {
-    fputc('"', stream);
+void string_show(struct String* string, struct OutStream* outStream) {
+    outStream_writeChar(outStream, '"');
     for (char *p=string->chars; *p; ++p) {
         char c = *p;
         switch (c) {
-            case '\n': fputs("\\n", stream); break;
-            case '\r': fputs("\\r", stream); break;
-            case '\t': fputs("\\t", stream); break;
-            case '\\': fputs("\\\\", stream); break;
-            case '"':  fputs("\\\"", stream); break;
+            case '\n': outStream_writeString(outStream, "\\n"); break;
+            case '\r': outStream_writeString(outStream, "\\r"); break;
+            case '\t': outStream_writeString(outStream, "\\t"); break;
+            case '\\': outStream_writeString(outStream, "\\\\"); break;
+            case '"':  outStream_writeString(outStream, "\\\""); break;
             default:
                 if ((unsigned char)c < 0x20 || c == 0x7F)
-                    fprintf(stream, "\\x%02X", (unsigned char)c);
+                    outStream_writeHexInt(outStream, c);
                 else
-                    fputc(c, stream);
+                    outStream_writeChar(outStream, c);
                 break;
         }
     }
-    fputc('"', stream);
+    outStream_writeChar(outStream, '"');
 }
 
 /* Private functions *********************************************************/

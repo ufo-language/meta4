@@ -5,6 +5,7 @@
 #include "object/object.h"
 #include "object/typeids.h"
 #include "object/types/intvar.h"
+#include "object/types/outstream.h"
 
 /* Defines *******************************************************************/
 
@@ -28,8 +29,13 @@ struct IntVar* intVar_new(int_t i) {
 
 /* Object functions ******************/
 
-void intVar_show(struct IntVar* intVar, FILE* stream) {
-    fprintf(stream, "IntVar{%ld}", intVar->i);
+void intVar_show(struct IntVar* intVar, struct OutStream* outStream) {
+    outStream_fwrite(outStream,
+        'S', "IntVar{",
+        'I', intVar->i,
+        'C', '}',
+        0
+    );
 }
 
 /* Private functions *********************************************************/

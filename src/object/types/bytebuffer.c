@@ -12,6 +12,7 @@
 #include "object/object.h"
 #include "object/typeids.h"
 #include "object/types/bytebuffer.h"
+#include "object/types/outstream.h"
 #include "object/types/string.h"
 
 /* Defines *******************************************************************/
@@ -73,17 +74,17 @@ count_t byteBuffer_count(struct ByteBuffer* byteBuffer) {
     return byteBuffer->nBytes;
 }
 
-void byteBuffer_show(struct ByteBuffer* byteBuffer, FILE* stream) {
-    fputs("ByteBuffer{", stream);
+void byteBuffer_show(struct ByteBuffer* byteBuffer, struct OutStream* outStream) {
+    outStream_writeString(outStream, "ByteBuffer{");
     count_t nBytes = byteBuffer->nBytes;
     byte_t* bytes = byteBuffer->bytes;
     for (count_t n=0; n<nBytes; ++n) {
         if (n > 0) {
-            fputs(", ", stream);
+            outStream_writeString(outStream, ":");
         }
-        fprintf(stream, "%2X", bytes[n]);
+        outStream_writeHexInt(outStream, bytes[n]);
     }
-    fputc('}', stream);
+    outStream_writeChar(outStream, '}');
 }
 
 /* Private functions *********************************************************/

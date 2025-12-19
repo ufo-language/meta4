@@ -18,6 +18,8 @@ struct Real {
     real_t r;
 };
 
+struct OutStream;
+
 /* Forward declarations ******************************************************/
 
 /* Global variables **********************************************************/
@@ -33,4 +35,4 @@ struct Real* real_new(real_t i);
 /* Object functions ******************/
 
 bool_t real_equal(struct Real* real, struct Real* other);
-void real_show(struct Real* real, FILE* stream);
+void real_show(struct Real* real, struct OutStream* outStream);

@@ -4,8 +4,9 @@
 #include "_typedefs.h"
 
 #include "object/object.h"
-#include "object/types/intarray.h"
 #include "object/typeids.h"
+#include "object/types/intarray.h"
+#include "object/types/outstream.h"
 
 /* Defines *******************************************************************/
 
@@ -70,15 +71,15 @@ void intArray_set_unsafe(struct IntArray* intArray, index_t index, int_t elem) {
 
 /* Object functions ******************/
 
-void intArray_show(struct IntArray* intArray, FILE* stream) {
-    fputs("IntArray{", stream);
+void intArray_show(struct IntArray* intArray, struct OutStream* outStream) {
+    outStream_writeString(outStream, "IntArray{");
     for (index_t n=0; n<intArray->nElems; ++n) {
         if (n > 0) {
-            fputs(", ", stream);
+            outStream_writeString(outStream, ", ");
         }
-        fprintf(stream, "%ld", intArray->elems[n]);
+        outStream_writeInt(outStream, intArray->elems[n]);
     }
-    fputc('}', stream);
+    outStream_writeChar(outStream, '}');
 }
 
 /* Private functions *********************************************************/

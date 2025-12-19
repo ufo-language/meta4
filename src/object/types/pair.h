@@ -17,6 +17,7 @@ struct Pair {
 };
 
 struct Etor_rec;
+struct OutStream;
 struct Vector;
 
 /* Forward declarations ******************************************************/
@@ -32,7 +33,7 @@ struct Pair* pair_new_empty(void);
 
 /* Unique functions ******************/
 
-void pair_showWith(struct Pair* pair, const string_t open, const string_t close, FILE* stream);
+void pair_showWith(struct Pair* pair, const string_t open, const string_t close, struct OutStream* outStream);
 
 /* Object functions ******************/
 
@@ -40,4 +41,4 @@ struct Object* pair_close_rec(struct Pair* pair, struct Etor_rec* etor);
 count_t pair_count(struct Pair* pair);
 bool_t pair_match(struct Pair* pair, struct Pair* other, struct Vector* bindings);
 bool_t pair_eval_rec(struct Pair* pair, struct Etor_rec* etor, struct Object** value);
-void pair_show(struct Pair* pair, FILE* stream);
+void pair_show(struct Pair* pair, struct OutStream* outStream);

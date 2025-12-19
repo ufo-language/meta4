@@ -16,6 +16,7 @@ struct Etor_rec {
 };
 
 struct Identifier;
+struct OutStream;
 
 /* Forward declarations ******************************************************/
 
@@ -37,4 +38,4 @@ bool_t  etor_rec_run       (struct Etor_rec* etor, struct Object* expr, struct O
 
 /* Object functions ******************/
 
-void etor_rec_show(struct Etor_rec* etor, FILE* stream);
+void etor_rec_show(struct Etor_rec* etor, struct OutStream* outStream);

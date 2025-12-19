@@ -5,6 +5,7 @@
 #include "object/functions/show.h"
 #include "object/object.h"
 #include "object/typeids.h"
+#include "object/types/outstream.h"
 #include "object/types/var.h"
 
 /* Defines *******************************************************************/
@@ -29,10 +30,13 @@ struct Var* var_new(struct Object* value) {
 
 /* Object functions ******************/
 
-void var_show(struct Var* var, FILE* stream) {
-    fputs("Var{", stream);
-    show(var->value, stream);
-    fputc('}', stream);
+void var_show(struct Var* var, struct OutStream* outStream) {
+    outStream_fwrite(outStream,
+        'S', "Var{",
+        'O', var->value,
+        'C', '}',
+        0
+    );
 }
 
 /* Private functions *********************************************************/

@@ -22,6 +22,8 @@ struct ByteBuffer {
     count_t nResizes;
 };
 
+struct OutStream;
+
 /* Forward declarations ******************************************************/
 
 /* Global variables **********************************************************/
@@ -40,4 +42,4 @@ struct String* byteBuffer_toString(struct ByteBuffer* byteBuffer);
 
 /* Object functions ******************/
 
-void byteBuffer_show(struct ByteBuffer* byteBuffer, FILE* stream);
+void byteBuffer_show(struct ByteBuffer* byteBuffer, struct OutStream* outStream);

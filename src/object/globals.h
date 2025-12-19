@@ -7,14 +7,15 @@
 /* Types *********************************************************************/
 
 struct Boolean;
-struct Triple;
 struct FunctionRule;
 struct GC;
 struct Identifier;
 struct Nil;
 struct Object;
+struct OutStream;
 struct Pair;
 struct PrimitiveRule;
+struct Triple;
 struct Vector;
 
 /* Forward declarations ******************************************************/
@@ -35,6 +36,8 @@ extern struct Triple*        g_emptyTriple;
 extern struct Vector*        g_globalEnv;
 extern struct HashTable*     g_identifierInternTable;
 extern struct HashTable*     g_symbolInternTable;
+extern struct OutStream*     g_stdout;
+extern struct OutStream*     g_stderr;
 
 /* Lifecycle functions *******************************************************/
 

@@ -79,11 +79,11 @@ index_t _SAVED_GLOBALS_TOP_ = 0;
     } \
     else { \
         fprintf(stderr, "[%sFAIL%s] ❌ [%s:%d] %s == %s, expected = ", RED, NORMAL, __FILE__, __LINE__, (#expected), (#actual)); \
-        show((struct Object*)expected, stderr); \
+        show((struct Object*)expected, g_stderr); \
         fputs(" :: ", stderr); \
         fputs(typeName(((struct Object*)expected)->typeId), stderr); \
         fputs(", actual = ", stderr); \
-        show((struct Object*)actual, stderr); \
+        show((struct Object*)actual, g_stderr); \
         fputs(" :: ", stderr); \
         fputs(typeName(((struct Object*)actual)->typeId), stderr); \
         fputc('\n', stderr); \
@@ -97,11 +97,11 @@ index_t _SAVED_GLOBALS_TOP_ = 0;
     } \
     else { \
         fprintf(stderr, "[%sFAIL%s] ❌ [%s:%d] %s == %s, expected = ", RED, NORMAL, __FILE__, __LINE__, (#expected), (#actual)); \
-        show((struct Object*)expected, stderr); \
+        show((struct Object*)expected, g_stderr); \
         fputs(" :: ", stderr); \
         fputs(typeName(((struct Object*)expected)->typeId), stderr); \
         fputs(", actual = ", stderr); \
-        show((struct Object*)actual, stderr); \
+        show((struct Object*)actual, g_stderr); \
         fputs(" :: ", stderr); \
         fputs(typeName(((struct Object*)actual)->typeId), stderr); \
         fputc('\n', stderr); \
@@ -297,5 +297,5 @@ index_t _SAVED_GLOBALS_TOP_ = 0;
     fprintf(stderr, "[%sSHOW%s] ⏩ [%s:%d] ", CYAN, NORMAL, __FILE__, __LINE__); \
     fputs(message, stderr); \
     fputs(":\n       ⏩ ", stderr); \
-    show((struct Object*)obj, stderr); \
+    show((struct Object*)obj, g_stderr); \
     fputs("\n", stderr);

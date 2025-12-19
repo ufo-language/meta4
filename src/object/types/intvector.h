@@ -21,6 +21,8 @@ struct IntVector {
     struct IntArray* elems;
 };
 
+struct OutStream;
+
 /* Forward declarations ******************************************************/
 
 /* Global variables **********************************************************/
@@ -42,4 +44,4 @@ void intVector_push(struct IntVector* intVector, int_t elem);
 /* Object functions ******************/
 
 count_t intVector_count(struct IntVector* intVector);
-void intVector_show(struct IntVector* intVector, FILE* stream);
+void intVector_show(struct IntVector* intVector, struct OutStream* outStream);

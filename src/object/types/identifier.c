@@ -9,9 +9,10 @@
 #include "object/object.h"
 #include "object/typeids.h"
 #include "object/types/identifier.h"
+#include "object/types/outstream.h"
 #include "object/types/string.h"
-#include "object/types/vector.h"
 #include "object/types/symbolic.h"
+#include "object/types/vector.h"
 
 /* Defines *******************************************************************/
 
@@ -48,8 +49,8 @@ bool_t identifier_eval_rec(struct Identifier* ident, struct Etor_rec* etor, stru
     return true;
 }
 
-void identifier_show(struct Identifier* ident, FILE* stream) {
-    fputs(ident->name, stream);
+void identifier_show(struct Identifier* ident, struct OutStream* outStream) {
+    outStream_writeString(outStream, ident->name);
 }
 
 /* Private functions *********************************************************/

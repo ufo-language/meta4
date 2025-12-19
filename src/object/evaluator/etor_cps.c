@@ -56,8 +56,10 @@ void etor_cps_run(struct Etor_CPS* etor) {
 
 /* Object functions ******************/
 
-void etor_cps_show(struct Etor_CPS* etor, FILE* stream) {
+#include <assert.h>
+void etor_cps_show(struct Etor_CPS* etor, struct OutStream* outStream) {
     /* TODO */
     (void)etor;
-    (void)stream;
+    (void)outStream;
+    assert(false);
 }

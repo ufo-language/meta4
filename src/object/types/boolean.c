@@ -4,6 +4,7 @@
 
 #include "object/typeids.h"
 #include "object/types/boolean.h"
+#include "object/types/outstream.h"
 
 /* Defines *******************************************************************/
 
@@ -27,8 +28,8 @@ struct Boolean* boolean_new(bool_t b) {
 
 /* Object functions ******************/
 
-void boolean_show(struct Boolean* boolean, FILE* stream) {
-    fputs(boolean->b ? "true" : "false", stream);
+void boolean_show(struct Boolean* boolean, struct OutStream* outStream) {
+    outStream_writeString(outStream, boolean->b ? "true" : "false");
 }
 
 /* Private functions *********************************************************/

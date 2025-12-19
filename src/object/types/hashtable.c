@@ -9,6 +9,7 @@
 #include "object/functions/hash.h"
 #include "object/globals.h"
 #include "object/types/hashtable.h"
+#include "object/types/outstream.h"
 #include "object/types/string.h"
 #include "object/types/symbolic.h"
 #include "object/types/triple.h"
@@ -135,21 +136,21 @@ count_t hashTable_count(struct HashTable* hashTable) {
     return hashTable->nElems;
 }
 
-void hashTable_show(struct HashTable* hashTable, FILE* stream) {
-    fputs("#{", stream);
+void hashTable_show(struct HashTable* hashTable, struct OutStream* outStream) {
+    outStream_writeString(outStream, "#{");
     bool_t firstShown = false;
     for (index_t n=0; n<hashTable->nBuckets; ++n) {
         struct Triple* binding = hashTable->buckets[n];
         while (binding != g_emptyTriple) {
             if (firstShown) {
-                fputs(", ", stream);
+                outStream_writeString(outStream, ", ");
             }
-            triple_show(binding, stream);
+            triple_show(binding, outStream);
             binding = binding->next;
             firstShown = true;
         }
     }
-    fputc('}', stream);
+    outStream_writeChar(outStream, '}');
 }
 
 /* Private functions *********************************************************/

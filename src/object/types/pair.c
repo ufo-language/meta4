@@ -8,6 +8,7 @@
 #include "object/functions/match.h"
 #include "object/functions/show.h"
 #include "object/evaluator/etor_rec.h"
+#include "object/types/outstream.h"
 #include "object/types/pair.h"
 #include "object/types/vector.h"
 
@@ -39,23 +40,23 @@ struct Pair* pair_new_empty(void) {
 
 /* Unique functions ******************/
 
-void pair_showWith(struct Pair* pair, const string_t open, const string_t close, FILE* stream) {
-    fputs(open, stream);
+void pair_showWith(struct Pair* pair, const string_t open, const string_t close, struct OutStream* outStream) {
+    outStream_writeString(outStream, open);
     for (bool_t firstIter=true; pair!=g_emptyPair; firstIter=false) {
         if (!firstIter) {
-            fputs(", ", stream);
+            outStream_writeString(outStream, ", ");
         }
-        show(pair->first, stream);
+        show(pair->first, outStream);
         if (pair->rest->typeId == OT_Pair) {
             pair = (struct Pair*)pair->rest;
         }
         else {
-            fputs(" | ", stream);
-            show(pair->rest, stream);
+            outStream_writeString(outStream, " | ");
+            show(pair->rest, outStream);
             break;
         }
     }
-    fputs(close, stream);
+    outStream_writeString(outStream, close);
 }
 
 /* Object functions ******************/
@@ -113,8 +114,8 @@ bool_t pair_match(struct Pair* pair, struct Pair* other, struct Vector* bindings
     return match(pair->rest, other->rest, bindings);
 }
 
-void pair_show(struct Pair* pair, FILE* stream) {
-    pair_showWith(pair, "[", "]", stream);
+void pair_show(struct Pair* pair, struct OutStream* outStream) {
+    pair_showWith(pair, "[", "]", outStream);
 }
 
 /* Private functions *********************************************************/

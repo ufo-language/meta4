@@ -16,6 +16,8 @@ struct IntArray {
     int_t elems[];
 };
 
+struct OutStream;
+
 /* Forward declarations ******************************************************/
 
 /* Global variables **********************************************************/
@@ -37,4 +39,4 @@ void intArray_set_unsafe(struct IntArray* intArray, index_t index, int_t elem);
 
 /* Object functions ******************/
 
-void intArray_show(struct IntArray* intArray, FILE* stream);
+void intArray_show(struct IntArray* intArray, struct OutStream* outStream);

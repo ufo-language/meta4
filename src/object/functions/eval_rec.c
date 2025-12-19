@@ -37,11 +37,11 @@ bool_t eval_rec(struct Object* obj, struct Etor_rec* etor, struct Object** value
     switch(obj->typeId) {
         /* Constants, or at least treated like constants */
         case OT_Boolean:
-        case OT_Device:
         case OT_Etor_Rec:
         case OT_Integer:
         case OT_IntVar:
         case OT_Nil:
+        case OT_OutStream:
         case OT_Primitive:
         case OT_Real:
         case OT_String:

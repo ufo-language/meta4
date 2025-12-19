@@ -15,6 +15,8 @@ struct Boolean {
     bool_t b;
 };
 
+struct OutStream;
+
 /* Forward declarations ******************************************************/
 
 /* Global variables **********************************************************/
@@ -29,4 +31,4 @@ struct Boolean* boolean_new(bool_t b);
 
 /* Object functions ******************/
 
-void boolean_show(struct Boolean* boolean, FILE* stream);
+void boolean_show(struct Boolean* boolean, struct OutStream* outStream);

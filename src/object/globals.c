@@ -7,6 +7,7 @@
 #include "object/types/hashtable.h"
 #include "object/types/identifier.h"
 #include "object/types/nil.h"
+#include "object/types/outstream.h"
 #include "object/types/pair.h"
 #include "object/types/primitive.h"
 #include "object/types/triple.h"
@@ -33,6 +34,8 @@ struct Triple*        g_emptyTriple;
 struct Vector*        g_globalEnv;
 struct HashTable*     g_identifierInternTable;
 struct HashTable*     g_symbolInternTable;
+struct OutStream*     g_stdout;
+struct OutStream*     g_stderr;
 
 /* Lifecycle functions *******************************************************/
 
@@ -55,6 +58,8 @@ void globals_init(void) {
     g_idNil                 = identifier_new("nil");
     g_nil                   = nil_new();
     g_uniqueObject          = object_new(OT_Null, NWORDS(*g_uniqueObject));
+    g_stdout                = outStream_new_file(stdout);
+    g_stderr                = outStream_new_file(stderr);
     /* Data structures next */
     g_emptyPair             = pair_new_empty();
     g_emptyFunctionRule     = function_emptyRule();

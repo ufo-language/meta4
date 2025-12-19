@@ -15,6 +15,8 @@ struct IntVar {
     int_t i;
 };
 
+struct OutStream;
+
 /* Forward declarations ******************************************************/
 
 /* Global variables **********************************************************/
@@ -29,4 +31,4 @@ struct IntVar* intVar_new(int_t i);
 
 /* Object functions ******************/
 
-void intVar_show(struct IntVar* intVar, FILE* stream);
+void intVar_show(struct IntVar* intVar, struct OutStream* outStream);

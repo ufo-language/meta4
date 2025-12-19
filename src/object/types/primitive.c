@@ -10,6 +10,7 @@
 #include "object/globals.h"
 #include "object/types/array.h"
 #include "object/types/identifier.h"
+#include "object/types/outstream.h"
 #include "object/types/primitive.h"
 #include "utils.h"
 
@@ -102,9 +103,9 @@ bool_t prim_apply(struct Primitive* prim, struct Etor_rec* etor, count_t nArgs, 
     return function(etor, nArgs, argVals, value);
 }
 
-void prim_show(struct Primitive* prim, FILE* stream) {
-    fputc('@', stream);
-    identifier_show(prim->name, stream);
+void prim_show(struct Primitive* prim, struct OutStream* outStream) {
+    outStream_writeChar(outStream, '@');
+    identifier_show(prim->name, outStream);
 }
 
 /* Private functions *********************************************************/

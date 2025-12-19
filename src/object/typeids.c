@@ -27,7 +27,6 @@ string_t typeName(enum TypeId typeId) {
         case OT_ConstantLimit: return "ConstantLimit";
         case OT_Continuation:  return "Continuation";
         case OT_Dec:           return "Dec";
-        case OT_Device:        return "Device";
         case OT_Etor_CPS:      return "EvaluatorCPS";
         case OT_Etor_Rec:      return "EvaluatorRec";
         case OT_Function:      return "Function";
@@ -40,6 +39,7 @@ string_t typeName(enum TypeId typeId) {
         case OT_IntVector:     return "IntVector";
         case OT_IntVar:        return "IntVar";
         case OT_Let:           return "Let";
+        case OT_OutStream:     return "OutStream";
         case OT_Pair:          return "Pair";
         case OT_Nil:           return "Nil";
         case OT_Null:          return "Null";

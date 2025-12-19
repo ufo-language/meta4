@@ -21,6 +21,8 @@ struct Vector {
     struct Array* elems;
 };
 
+struct OutStream;
+
 /* Forward declarations ******************************************************/
 
 /* Global variables **********************************************************/
@@ -45,7 +47,7 @@ bool_t vector_get(struct Vector* vector, index_t index, struct Object** elem);
 bool_t vector_set(struct Vector* vector, index_t index, struct Object* elem);
 bool_t vector_pop(struct Vector* vector, struct Object** elem);
 void vector_push(struct Vector* vector, struct Object* elem);
-void vector_showBindings(struct Vector* vector, FILE* stream);
+void vector_showBindings(struct Vector* vector, struct OutStream* outStream);
 
 static inline struct Object* vector_get_unsafe(struct Vector* vector, index_t index) {
     return vector->elems->elems[index];
@@ -60,4 +62,4 @@ static inline struct Object* vector_pop_unsafe(struct Vector* vector) {
 bool_t vector_close_rec(struct Vector* vector, struct Etor_rec* etor, struct Object** value);
 count_t vector_count(struct Vector* vector);
 bool_t vector_eval_rec(struct Vector* vector, struct Etor_rec* etor, struct Object** value);
-void vector_show(struct Vector* vector, FILE* stream);
+void vector_show(struct Vector* vector, struct OutStream* outStream);

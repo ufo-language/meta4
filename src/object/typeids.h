@@ -9,9 +9,9 @@
 enum TypeId {
     OT_Null,  /* Should never be used */
     OT_Boolean,
-    OT_Device,
     OT_Integer,
     OT_Nil,
+    OT_OutStream,
     OT_Primitive,
     OT_Real,
     OT_String,

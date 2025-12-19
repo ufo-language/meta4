@@ -18,6 +18,8 @@ struct Var {
     struct Object* value;
 };
 
+struct OutStream;
+
 /* Forward declarations ******************************************************/
 
 /* Global variables **********************************************************/
@@ -32,4 +34,4 @@ struct Var* var_new(struct Object* value);
 
 /* Object functions ******************/
 
-void var_show(struct Var* var, FILE* stream);
+void var_show(struct Var* var, struct OutStream* outStream);

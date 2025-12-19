@@ -27,6 +27,7 @@ struct Etor_CPS {
 };
 
 struct Symbolic;
+struct OutStream;
 
 /* Forward declarations ******************************************************/
 
@@ -55,4 +56,4 @@ void etor_cps_run(struct Etor_CPS* etor);
 
 /* Object functions ******************/
 
-void etor_cps_show(struct Etor_CPS* etor, FILE* stream);
+void etor_cps_show(struct Etor_CPS* etor, struct OutStream* outStream);

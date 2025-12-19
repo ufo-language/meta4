@@ -8,6 +8,7 @@
 #include "object/object.h"
 #include "object/typeids.h"
 #include "object/types/intvector.h"
+#include "object/types/outstream.h"
 #include "object/types/vector.h"
 
 /* Defines *******************************************************************/
@@ -52,8 +53,8 @@ bool_t etor_rec_run(struct Etor_rec* etor, struct Object* expr, struct Object** 
 
 /* Object functions ******************/
 
-void etor_rec_show(struct Etor_rec* etor, FILE* stream) {
-    fputs("Evaluator_rec:\n", stream);
-    vector_showBindings(etor->env, stream);
-    fputc('\n', stream);
+void etor_rec_show(struct Etor_rec* etor, struct OutStream* outStream) {
+    outStream_writeString(outStream, "Evaluator_rec:\n");
+    vector_showBindings(etor->env, outStream);
+    outStream_writeChar(outStream, '\n');
 }

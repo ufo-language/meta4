@@ -1,11 +1,12 @@
 #include "_typedefs.h"
 
-#include "object/globals.h"
 #include "object/functions/show.h"
+#include "object/globals.h"
 #include "object/object.h"
+#include "object/typeids.h"
+#include "object/types/outstream.h"
 #include "object/types/set.h"
 #include "object/types/triple.h"
-#include "object/typeids.h"
 
 /* Defines *******************************************************************/
 
@@ -47,21 +48,21 @@ count_t set_count(struct Set* set) {
     return hashTable_count(&set->hashTable);
 }
 
-void set_show(struct Set* set, FILE* stream) {
-    fputs("${", stream);
+void set_show(struct Set* set, struct OutStream* outStream) {
+    outStream_writeString(outStream, "${");
     bool_t firstShown = false;
     for (index_t n=0; n<set->hashTable.nBuckets; ++n) {
         struct Triple* binding = set->hashTable.buckets[n];
         while (binding != g_emptyTriple) {
             if (firstShown) {
-                fputs(", ", stream);
+                outStream_writeString(outStream, ", ");
             }
-            show(binding->key, stream);
+            show(binding->key, outStream);
             binding = binding->next;
             firstShown = true;
         }
     }
-    fputc('}', stream);
+    outStream_writeChar(outStream, '}');
 }
 
 /* Private functions *********************************************************/
