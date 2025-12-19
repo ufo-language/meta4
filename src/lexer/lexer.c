@@ -37,10 +37,10 @@ struct LexerFields {
 
 /* Forward declarations ******************************************************/
 
-static enum Lexer_TokenType _classifyWord(char* s);
-static void _createTokenTypeNames(void);
-static struct Object* _lexemeToObject(enum Lexer_TokenType tokenType, string_t lexeme);
-static enum Lexer_LexResult _nextToken(struct LexerFields* lexerFields);
+static enum Lexer_TokenType _lexer_classifyWord(char* s);
+static void _lexer_createTokenTypeNames(void);
+static struct Object* _lexer_lexemeToObject(enum Lexer_TokenType tokenType, string_t lexeme);
+static enum Lexer_LexResult _lexer_nextToken(struct LexerFields* lexerFields);
 
 /* Global variables **********************************************************/
 
@@ -70,7 +70,7 @@ struct Vector* lexer_lexAll(struct Transition** syntax, const string_t sourceStr
 
 void lexer_lexAll_withVector(struct Transition** syntax, const string_t sourceString, struct Vector* tokens) {
     if (!tokenTypeNamesCreated) {
-        _createTokenTypeNames();
+        _lexer_createTokenTypeNames();
     }
     struct LexerFields lexerFields = {
         .syntax        = syntax,
@@ -86,14 +86,14 @@ void lexer_lexAll_withVector(struct Transition** syntax, const string_t sourceSt
         .lexemeLen     = 0
     };
     for (;;) {
-        enum Lexer_LexResult res = _nextToken(&lexerFields);
+        enum Lexer_LexResult res = _lexer_nextToken(&lexerFields);
         #if 0
         fprintf(stderr, "lexer_lexAll got token %d '%s'\n", tokenType, lexemeBuffer);
         #endif
         switch (res) {
             case Lexer_Success: {
                     struct Symbol* tokenTermName = tokenTypeNames[lexerFields.tokenType];
-                    struct Object* lexemeObj = _lexemeToObject(lexerFields.tokenType, lexerFields.lexemeBuffer);
+                    struct Object* lexemeObj = _lexer_lexemeToObject(lexerFields.tokenType, lexerFields.lexemeBuffer);
                     struct Object* attrib = (struct Object*)intArray_new3(lexerFields.startIndexPos, lexerFields.startLinePos, lexerFields.startColPos);
                     struct Term* tokenTerm = term_new_1arg(tokenTermName, lexemeObj, attrib);
                     vector_push(tokens, (struct Object*)tokenTerm);
@@ -126,7 +126,7 @@ void lexer_lexAll_withVector(struct Transition** syntax, const string_t sourceSt
 
 /* Private functions *********************************************************/
 
-static enum Lexer_TokenType _classifyWord(char* s) {
+static enum Lexer_TokenType _lexer_classifyWord(char* s) {
     for (char** w=ReservedWords; *w; ++w) {
         if (!strcmp(*w, s)) {
             return T_Reserved;
@@ -143,7 +143,7 @@ static enum Lexer_TokenType _classifyWord(char* s) {
     return T_Ident;
 }
 
-static void _createTokenTypeNames(void) {
+static void _lexer_createTokenTypeNames(void) {
     tokenTypeNames[T_None]     = symbol_new("None");
     tokenTypeNames[T_Int]      = symbol_new("Int");
     tokenTypeNames[T_HexInt]   = symbol_new("Int");
@@ -162,7 +162,7 @@ static void _createTokenTypeNames(void) {
     tokenTypeNamesCreated      = true;
 }
 
-static enum Lexer_LexResult _nextToken(struct LexerFields* lexerFields) {
+static enum Lexer_LexResult _lexer_nextToken(struct LexerFields* lexerFields) {
     index_t lexemeBufferIndex = 0;
     enum Lexer_State state = S_Init;
     struct Transition* t;
@@ -224,12 +224,12 @@ EMIT_TOKEN:
     lexerFields->lexemeBuffer[lexemeBufferIndex] = 0;
     lexerFields->tokenType = t->tokenType;
     if (t->tokenType == T_Word)
-        lexerFields->tokenType = _classifyWord(lexerFields->lexemeBuffer);
+        lexerFields->tokenType = _lexer_classifyWord(lexerFields->lexemeBuffer);
     lexerFields->lexemeLen = lexemeBufferIndex;
     return Lexer_Success;
 }
 
-static struct Object* _lexemeToObject(enum Lexer_TokenType tokenType, string_t lexeme) {
+static struct Object* _lexer_lexemeToObject(enum Lexer_TokenType tokenType, string_t lexeme) {
     switch (tokenType) {
         case T_Int:
             return (struct Object*)integer_new(atol(lexeme));
