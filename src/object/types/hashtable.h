@@ -13,6 +13,7 @@
 
 /* Types *********************************************************************/
 
+struct Symbolic;
 struct Triple;
 
 struct HashTable {
@@ -37,8 +38,11 @@ struct HashTable* hashTable_new(void);
 /* Unique functions ******************/
 
 bool_t hashTable_get(struct HashTable* hashTable, struct Object* key, struct Object** value);
+bool_t hashTable_get_withHashCode(struct HashTable* hashTable, struct Object* key, word_t hashCode, struct Object** value);
 bool_t hashTable_put(struct HashTable* hashTable, struct Object* key, struct Object* value);
 bool_t hashTable_remove(struct HashTable* hashTable, struct Object* key);
+
+struct Symbolic* hashTable_intern(struct HashTable* internTable, count_t nChars, const string_t chars, enum TypeId typeId);
 
 /* Object functions ******************/
 

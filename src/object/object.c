@@ -17,7 +17,6 @@
 
 /* Lifecycle functions *******************************************************/
 
-#include <assert.h>
 struct Object* object_new(enum TypeId typeId, count_t nWords) {
     struct Object* obj = memory_alloc(nWords);
     #if 0
@@ -26,6 +25,11 @@ struct Object* object_new(enum TypeId typeId, count_t nWords) {
     obj->typeId = typeId;
     obj->nWords = nWords;
     return obj;
+}
+
+void object_init(struct Object* obj, enum TypeId typeId, count_t nWords) {
+    obj->typeId = typeId;
+    obj->nWords = nWords;
 }
 
 /* Public functions **********************************************************/

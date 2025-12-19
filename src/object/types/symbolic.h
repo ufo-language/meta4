@@ -8,13 +8,13 @@
 
 /* Types *********************************************************************/
 
-struct _Symbolic {
+struct Symbolic {
     struct Object obj;
     word_t hashCode;
     char name[];
 };
 
-struct Vector;
+struct HashTable;
 
 /* Forward declarations ******************************************************/
 
@@ -22,7 +22,8 @@ struct Vector;
 
 /* Lifecycle functions *******************************************************/
 
-struct _Symbolic* symbolic_new(const string_t name, enum TypeId typeId, struct Vector* internTable);
+struct Symbolic* symbolic_new(const string_t name, enum TypeId typeId, struct HashTable* internTable);
+struct Symbolic* symbolic_new_aux(enum TypeId typeId, count_t nChars, const string_t name, word_t hashCode);
 
 /* Public functions **********************************************************/
 
@@ -30,6 +31,6 @@ struct _Symbolic* symbolic_new(const string_t name, enum TypeId typeId, struct V
 
 /* Object functions ******************/
 
-void symbolic_show(struct _Symbolic* symbolic, FILE* stream);
+void symbolic_show(struct Symbolic* symbolic, FILE* stream);
 
 /* Private functions *********************************************************/

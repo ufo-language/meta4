@@ -26,6 +26,8 @@ int main(int argc, char* argv[]) {
         ASSERT_INE(a1->hashCode, b->hashCode);
         EXPECT_IEQ(NWORDS(struct Object) + 1 + NBYTES_TO_WORDS(nChars), a1->obj.nWords);
         EXPECT_IEQ(NWORDS(struct Identifier) + NBYTES_TO_WORDS(nChars), a1->obj.nWords);
+        EXPECT_EQ(a1, a2);
+        EXPECT_NE(a1, b);
     END
 
     TEST(identifier_checkEval)

@@ -33,8 +33,8 @@ extern struct Pair*          g_emptyPair;
 extern struct PrimitiveRule* g_emptyPrimRule;
 extern struct Triple*        g_emptyTriple;
 extern struct Vector*        g_globalEnv;
-extern struct Vector*        g_identifierInternTable;
-extern struct Vector*        g_symbolInternTable;
+extern struct HashTable*     g_identifierInternTable;
+extern struct HashTable*     g_symbolInternTable;
 
 /* Lifecycle functions *******************************************************/
 

@@ -24,5 +24,6 @@ struct Etor_rec;
 /* Lifecycle functions *******************************************************/
 
 struct Object* object_new(enum TypeId typeId, count_t nWords);
+void object_init(struct Object* obj, enum TypeId typeId, count_t nWords);
 
 /* Public functions **********************************************************/

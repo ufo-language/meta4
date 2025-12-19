@@ -4,6 +4,7 @@
 #include "object/globals.h"
 #include "object/types/boolean.h"
 #include "object/types/function.h"
+#include "object/types/hashtable.h"
 #include "object/types/identifier.h"
 #include "object/types/nil.h"
 #include "object/types/pair.h"
@@ -30,8 +31,8 @@ struct Pair*          g_emptyPair;
 struct PrimitiveRule* g_emptyPrimRule;
 struct Triple*        g_emptyTriple;
 struct Vector*        g_globalEnv;
-struct Vector*        g_identifierInternTable;
-struct Vector*        g_symbolInternTable;
+struct HashTable*     g_identifierInternTable;
+struct HashTable*     g_symbolInternTable;
 
 /* Lifecycle functions *******************************************************/
 
@@ -44,8 +45,10 @@ void globals_free(void) {
 void globals_init(void) {
     /* Memory & GC first */
     g_gc                    = gc_new();
-    g_identifierInternTable = vector_new();
-    g_symbolInternTable     = vector_new();
+    /* Prepare intern tables */
+    g_emptyTriple           = triple_new_empty();
+    g_identifierInternTable = hashTable_new();  /* Depends on g_emptyTriple */
+    g_symbolInternTable     = hashTable_new();  /* Depends on g_emptyTriple */
     /* Create constants next */
     g_true                  = boolean_new(true);
     g_false                 = boolean_new(false);
@@ -56,7 +59,6 @@ void globals_init(void) {
     g_emptyPair             = pair_new_empty();
     g_emptyFunctionRule     = function_emptyRule();
     g_emptyPrimRule         = prim_emptyRule();
-    g_emptyTriple           = triple_new_empty();
     /* Global environment last */
     g_globalEnv             = vector_new();
 }

@@ -104,5 +104,29 @@ int main(int argc, char* argv[]) {
         SHOW("Should show '#{A=100, B=200, C=300}'", hashTable);
     END
 
+    TEST(hashTable_checkIntern)
+        struct HashTable* internTable = hashTable_new();
+        const string_t symName1 = "Abc";
+        count_t nChars = strlen(symName1);
+        /* Do it once */
+        struct Symbol* sym1 = (struct Symbol*)hashTable_intern(internTable, nChars, symName1, OT_Symbol);
+        ASSERT_ISA(OT_Symbol, sym1);
+        ASSERT_IEQ(0, strcmp(symName1, sym1->name));
+        /* Do it again with the same name */
+        struct Symbol* sym2 = (struct Symbol*)hashTable_intern(internTable, nChars, symName1, OT_Symbol);
+        ASSERT_ISA(OT_Symbol, sym2);
+        ASSERT_IEQ(0, strcmp(symName1, sym2->name));
+        /* Both symbols should be the same object */
+        EXPECT_EQ(sym1, sym2);
+        /* Intern a different symbol */
+        const string_t symName2 = "Def";
+        nChars = strlen(symName2);
+        struct Symbol* sym3 = (struct Symbol*)hashTable_intern(internTable, nChars, symName2, OT_Symbol);
+        ASSERT_ISA(OT_Symbol, sym3);
+        ASSERT_IEQ(0, strcmp(symName2, sym3->name));
+        /* This symbol should be a different object from the others */
+        ASSERT_NE(sym1, sym3);
+    END
+
     END_TESTS
 }
