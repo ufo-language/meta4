@@ -39,6 +39,25 @@ struct Pair* pair_new_empty(void) {
 
 /* Unique functions ******************/
 
+void pair_showWith(struct Pair* pair, const string_t open, const string_t close, FILE* stream) {
+    fputs(open, stream);
+    for (bool_t firstIter=true; pair!=g_emptyPair; firstIter=false) {
+        if (!firstIter) {
+            fputs(", ", stream);
+        }
+        show(pair->first, stream);
+        if (pair->rest->typeId == OT_Pair) {
+            pair = (struct Pair*)pair->rest;
+        }
+        else {
+            fputs(" | ", stream);
+            show(pair->rest, stream);
+            break;
+        }
+    }
+    fputs(close, stream);
+}
+
 /* Object functions ******************/
 
 count_t pair_count(struct Pair* pair) {
@@ -95,22 +114,7 @@ bool_t pair_match(struct Pair* pair, struct Pair* other, struct Vector* bindings
 }
 
 void pair_show(struct Pair* pair, FILE* stream) {
-    fputc('[', stream);
-    for (bool_t firstIter=true; pair!=g_emptyPair; firstIter=false) {
-        if (!firstIter) {
-            fputs(", ", stream);
-        }
-        show(pair->first, stream);
-        if (pair->rest->typeId == OT_Pair) {
-            pair = (struct Pair*)pair->rest;
-        }
-        else {
-            fputs(" | ", stream);
-            show(pair->rest, stream);
-            break;
-        }
-    }
-    fputc(']', stream);
+    pair_showWith(pair, "[", "]", stream);
 }
 
 /* Private functions *********************************************************/

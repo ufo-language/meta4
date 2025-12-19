@@ -1,5 +1,3 @@
-#pragma once
-
 #include <stdio.h>
 
 #include "_typedefs.h"
@@ -10,14 +8,14 @@
 
 /* Types *********************************************************************/
 
-struct Pair {
-    struct Object obj;
-    struct Object* first;
-    struct Object* rest;
-};
+struct Pair;
 
-struct Etor_rec;
-struct Vector;
+struct Queue {
+    struct Object obj;
+    struct Pair* first;
+    struct Pair* last;
+    count_t nElems;
+};
 
 /* Forward declarations ******************************************************/
 
@@ -25,19 +23,16 @@ struct Vector;
 
 /* Lifecycle functions *******************************************************/
 
-struct Pair* pair_new(struct Object* first, struct Object* rest);
-struct Pair* pair_new_empty(void);
+struct Queue* queue_new(void);
 
 /* Public functions **********************************************************/
 
 /* Unique functions ******************/
 
-void pair_showWith(struct Pair* pair, const string_t open, const string_t close, FILE* stream);
+void queue_enq(struct Queue* q, struct Object* elem);
+bool_t queue_deq(struct Queue* q, struct Object** elem);
 
 /* Object functions ******************/
 
-struct Object* pair_close_rec(struct Pair* pair, struct Etor_rec* etor);
-count_t pair_count(struct Pair* pair);
-bool_t pair_match(struct Pair* pair, struct Pair* other, struct Vector* bindings);
-bool_t pair_eval_rec(struct Pair* pair, struct Etor_rec* etor, struct Object** value);
-void pair_show(struct Pair* pair, FILE* stream);
+count_t queue_count(struct Queue* q);
+void queue_show(struct Queue* q, FILE* stream);

@@ -50,5 +50,24 @@ int main(int argc, char* argv[]) {
         EXPECT_EQ(i200, value);
     END
 
+    TEST(pair_checkShow_empty)
+        SHOW("Show show '[]'", g_emptyPair);
+    END
+
+    TEST(pair_checkShow_single)
+        struct Pair* pair = pair_new(OBJ(i100), (struct Object*)g_emptyPair);
+        SHOW("Show show '[100]'", pair);
+    END
+
+    TEST(pair_checkShow_improper)
+        struct Pair* pair = pair_new(OBJ(i100), OBJ(i200));
+        SHOW("Show show '[100 | 200]'", pair);
+    END
+
+    TEST(pair_checkShow_two)
+        struct Pair* pair = pair_new(OBJ(i100), (struct Object*)pair_new(OBJ(i200), (struct Object*)g_emptyPair));
+        SHOW("Show show '[100, 200]'", pair);
+    END
+
     END_TESTS
 }
