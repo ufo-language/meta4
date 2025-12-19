@@ -70,7 +70,7 @@ bool_t equal(struct Object* obj, struct Object* other) {
         case OT_Real:          break;
         case OT_Sequence:      break; /*return sequence_equal((struct Sequence*)obj, stream);*/
         case OT_String:        return string_equal((struct String*)obj, (struct String*)other);
-        case OT_Symbol:        break;
+        case OT_Symbol:        return obj == other;
         case OT_Test:          break;
         case OT_User:          break;
         case OT_Var:           break;

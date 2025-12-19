@@ -11,6 +11,7 @@
 #include "object/types/continuation.h"
 #include "object/types/dec.h"
 #include "object/types/function.h"
+#include "object/types/hashtable.h"
 #include "object/types/identifier.h"
 #include "object/types/ifthen.h"
 #include "object/types/inc.h"
@@ -58,7 +59,7 @@ void show(struct Object* obj, FILE* stream) {
         case OT_Etor_CPS:      break;
         case OT_Etor_Rec:      break;
         case OT_Function:      function_show((struct Function*)obj, stream); return;
-        case OT_HashTable:     break;
+        case OT_HashTable:     hashTable_show((struct HashTable*)obj, stream); return;
         case OT_Identifier:    identifier_show((struct Identifier*)obj, stream); return;
         case OT_IfThen:        ifThen_show((struct IfThen*)obj, stream); return;
         case OT_Inc:           inc_show((struct Inc*)obj, stream); return;
