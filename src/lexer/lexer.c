@@ -171,7 +171,7 @@ static enum Lexer_LexResult _nextToken(struct LexerFields* lexerFields) {
         consume = true;
         ichar_t c = *(lexerFields->currentString);
         /* Find the next syntax rule */
-        for (t = lexerFields->syntax[state]; !t->charClassPredicate(c); t++); /* This is the whole loop */
+        for (t = lexerFields->syntax[state]; !t->charClassPredicate(c); ++t); /* This is the whole loop */
         switch (t->action) {
             case A_Keep:
                 lexerFields->lexemeBuffer[lexemeBufferIndex++] = (char)c;

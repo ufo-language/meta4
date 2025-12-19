@@ -9,7 +9,7 @@ int main(int argc, char* argv[]) {
     BEGIN_TESTS
 
     TEST(typeId_checkNames)
-        for (int n=0; n<OT_Max; n++) {
+        for (int n=0; n<OT_Max; ++n) {
             string_t name = typeName(n);
             // fprintf(stderr, "Type name %d = '%s'\n", n, name);
             ASSERT_PTRNE(0, name);

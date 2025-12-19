@@ -67,13 +67,33 @@ int main(int argc, char* argv[]) {
         vector_push(values, (struct Object*)value);
         ASSERT_IEQ(hashTableInitialNBuckets * 2, hashTable->nBuckets);
         /* Verify that the bindings are still the same */
-        for (index_t n=0; n<vector_count(keys); n++) {
+        for (index_t n=0; n<vector_count(keys); ++n) {
             struct Object* key = vector_get_unsafe(keys, n);
             struct Object* value = vector_get_unsafe(values, n);
             struct Object* value1;
             ASSERT_TRUE(hashTable_get(hashTable, key, &value1));
             EXPECT_EQ(value, value1);
         }
+    END
+
+    TEST(hashTable_checkRemove)
+        struct HashTable* hashTable = hashTable_new();
+        struct Symbol* a = symbol_new("A");
+        struct Symbol* b = symbol_new("B");
+        struct Symbol* c = symbol_new("C");
+        struct Integer* i100 = integer_new(100);
+        struct Integer* i200 = integer_new(200);
+        struct Integer* i300 = integer_new(300);
+        hashTable_put(hashTable, OBJ(a), OBJ(i100));
+        hashTable_put(hashTable, OBJ(b), OBJ(i200));
+        hashTable_put(hashTable, OBJ(c), OBJ(i300));
+        ASSERT_IEQ(3, hashTable->nElems);
+        ASSERT_TRUE(hashTable_remove(hashTable, OBJ(b)));
+        ASSERT_IEQ(2, hashTable->nElems);
+        struct Object* value;
+        EXPECT_TRUE(hashTable_get(hashTable, OBJ(a), &value));
+        EXPECT_FALSE(hashTable_get(hashTable, OBJ(b), &value));
+        EXPECT_TRUE(hashTable_get(hashTable, OBJ(c), &value));
     END
 
     TEST(hashTable_checkShow)

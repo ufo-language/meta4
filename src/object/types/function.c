@@ -136,11 +136,11 @@ static void _function_closeRule(struct FunctionRule* rule, struct Etor_rec* etor
     /* Save the current environment */
     index_t savedEnv = etor_rec_envSave(etor);
     /* Prebind each parameter to itself */
-    for (index_t n=0; n<rule->nParams; n++) {
+    for (index_t n=0; n<rule->nParams; ++n) {
         struct Object* param = rule->params[n];
         struct Vector* freeVars_ = vector_new();
         freeVars(param, freeVars_);
-        for (index_t m=0; m<freeVars_->top; m++) {
+        for (index_t m=0; m<freeVars_->top; ++m) {
             struct Identifier* freeVar = (struct Identifier*)freeVars_->elems->elems[m];
             etor_rec_bind(etor, freeVar, (struct Object*)freeVar);
         }

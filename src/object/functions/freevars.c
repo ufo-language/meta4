@@ -45,7 +45,7 @@ void freeVars(struct Object* obj, struct Vector* freeVars_) {
             break;
         case OT_Array: {
                 struct Array* array = (struct Array*)obj;
-                for (index_t n=0; n<array->nElems; n++) {
+                for (index_t n=0; n<array->nElems; ++n) {
                     freeVars(array->elems[n], freeVars_);
                 }
             }
@@ -94,7 +94,7 @@ void freeVars(struct Object* obj, struct Vector* freeVars_) {
             break;
         case OT_Sequence: {
                 struct Sequence* seq = (struct Sequence*)obj;
-                for (index_t n=0; n<seq->nExprs; n++) {
+                for (index_t n=0; n<seq->nExprs; ++n) {
                     freeVars(seq->exprs[n], freeVars_);
                 }
             }

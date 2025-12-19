@@ -30,7 +30,7 @@ enum ParseStatus pIgnore(ParserFunction parser, struct Vector* tokens, index_t* 
 
 enum ParseStatus pOneOf(count_t nParsers, ParserFunction parsers[], struct Vector* tokens, index_t* tokenIndex, struct Object** result) {
     index_t savedIndex = *tokenIndex;
-    for (index_t n=0; n<nParsers; n++) {
+    for (index_t n=0; n<nParsers; ++n) {
         enum ParseStatus parseStatus = parsers[n](tokens, tokenIndex, result);
         switch (parseStatus) {
             case PS_Fail:
@@ -48,7 +48,7 @@ enum ParseStatus pSequence(count_t nParsers, ParserFunction parsers[], struct Ve
     index_t savedIndex = *tokenIndex;
     struct Object* innerResult;
     struct Vector* results = vector_new();
-    for (index_t n=0; n<nParsers; n++) {
+    for (index_t n=0; n<nParsers; ++n) {
         enum ParseStatus parseStatus = parsers[n](tokens, tokenIndex, &innerResult);
         switch (parseStatus) {
             case PS_Success:

@@ -119,7 +119,7 @@ static bool_t _prim_checkArgs(struct Primitive* prim, count_t nArgs, struct Obje
         if (rule->nParams != nArgs) {
             continue;
         }
-        for (index_t n=0; n<rule->nParams; n++) {
+        for (index_t n=0; n<rule->nParams; ++n) {
             enum TypeId paramTypeId = rule->paramTypes[n];
             if (paramTypeId != OT_Any && paramTypeId != args[n]->typeId) {
                 goto NEXT_RULE;
@@ -148,7 +148,7 @@ void _showRule(struct PrimitiveRule* rule) {
     fprintf(stderr, "PrimitiveRule @ %p:\n", rule);
     fprintf(stderr, "  function = %p\n", rule->function);
     fprintf(stderr, "  nParams = %lu ", rule->nParams);
-    for (index_t n=0; n<rule->nParams; n++) {
+    for (index_t n=0; n<rule->nParams; ++n) {
         fprintf(stderr, " %lu:(%u)%s", n, rule->paramTypes[n], typeName(rule->paramTypes[n]));
     }
     fputc('\n', stderr);
@@ -164,7 +164,7 @@ static struct PrimitiveRule* _prim_vnewRule(PrimFunction function, count_t nPara
     rule->function = function;
     rule->nextRule = g_emptyPrimRule;
     rule->nParams = nParams;
-    for (index_t n=0; n<nParamsToAllocate; n++) {
+    for (index_t n=0; n<nParamsToAllocate; ++n) {
         enum TypeId paramTypeId = va_arg(paramTypes, enum TypeId);
         rule->paramTypes[n] = paramTypeId;
     }

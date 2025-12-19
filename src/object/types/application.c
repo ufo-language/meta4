@@ -47,7 +47,7 @@ struct Object* application_close(struct Application* app, struct Etor_rec* etor)
     count_t nArgs = app->nArgs;
     struct Object** args = app->args;
     struct Object** closedArgs = memory_alloc(app->nArgs);
-    for (index_t n=0; n<nArgs; n++) {
+    for (index_t n=0; n<nArgs; ++n) {
         closedArgs[n] = close_rec(args[n], etor);
     }
     struct Application* closedApp = application_new(closedAbstr, nArgs, closedArgs);

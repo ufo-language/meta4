@@ -84,7 +84,28 @@ bool_t hashTable_put(struct HashTable* hashTable, struct Object* key, struct Obj
 
 #include <assert.h>
 bool_t hashTable_remove(struct HashTable* hashTable, struct Object* key) {
-    assert(false);
+    word_t hashCode;
+    if (!hash(key, &hashCode)) {
+        return false;
+    }
+    index_t bucketNum = hashCode % hashTable->nBuckets;
+    struct Triple* binding = hashTable->buckets[bucketNum];
+    struct Triple* prev = g_emptyTriple;
+    while (binding != g_emptyTriple) {
+        if (equal(key, binding->key)) {
+            if (prev == g_emptyTriple) {
+                hashTable->buckets[bucketNum] = binding->next;
+            }
+            else {
+                prev->next = binding->next;
+            }
+            --hashTable->nElems;
+            return true;
+        }
+        prev = binding;
+        binding = binding->next;
+    }
+    return false;
 }
 
 /* Object functions ******************/
@@ -100,7 +121,7 @@ bool_t hashTable_eval_rec(struct HashTable* hashTable, struct Etor_rec* etor, st
 void hashTable_show(struct HashTable* hashTable, FILE* stream) {
     fputs("#{", stream);
     bool_t firstShown = false;
-    for (index_t n=0; n<hashTable->nBuckets; n++) {
+    for (index_t n=0; n<hashTable->nBuckets; ++n) {
         struct Triple* binding = hashTable->buckets[n];
         while (binding != g_emptyTriple) {
             if (firstShown) {
@@ -119,7 +140,7 @@ void hashTable_show(struct HashTable* hashTable, FILE* stream) {
 static struct Triple** _createNBuckets(count_t nBuckets) {
     count_t nWords = NBYTES_TO_WORDS(sizeof(struct Triple*) * nBuckets);
     struct Triple** buckets = memory_alloc(nWords);
-    for (index_t n=0; n<nBuckets; n++) {
+    for (index_t n=0; n<nBuckets; ++n) {
         buckets[n] = g_emptyTriple;
     }
     return buckets;
@@ -145,7 +166,7 @@ static void _resize(struct HashTable* hashTable) {
     /* Allocate new buckets */
     struct Triple** newBuckets = _createNBuckets(newNBuckets);
     /* Rehash each pair */
-    for (index_t n=0; n<hashTable->nBuckets; n++) {
+    for (index_t n=0; n<hashTable->nBuckets; ++n) {
         struct Triple* binding = hashTable->buckets[n];
         while (binding != g_emptyTriple) {
             word_t hashCode;

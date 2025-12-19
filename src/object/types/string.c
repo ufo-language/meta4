@@ -50,7 +50,7 @@ bool_t string_equal(struct String* string, struct String* other) {
 
 void string_show(struct String* string, FILE* stream) {
     fputc('"', stream);
-    for (char *p=string->chars; *p; p++) {
+    for (char *p=string->chars; *p; ++p) {
         char c = *p;
         switch (c) {
             case '\n': fputs("\\n", stream); break;

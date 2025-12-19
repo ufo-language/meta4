@@ -77,7 +77,7 @@ int main(int argc, char* argv[]) {
         ASSERT_IEQ(0, intVector_count(intVector));
         count_t capacity = intVector->capacity;
         ASSERT_IEQ(4, capacity);
-        for (count_t n=0; n<capacity; n++) {
+        for (count_t n=0; n<capacity; ++n) {
             intVector_push(intVector, n * 100);
         }
         ASSERT_IEQ(0, intVector->nResizes);
