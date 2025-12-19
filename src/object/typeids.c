@@ -44,9 +44,11 @@ string_t typeName(enum TypeId typeId) {
         case OT_Nil:           return "Nil";
         case OT_Null:          return "Null";
         case OT_Primitive:     return "Primitive";
+        case OT_Queue:         return "Queue";
         case OT_Quote:         return "Quote";
         case OT_Real:          return "Real";
         case OT_Sequence:      return "Sequence";
+        case OT_Set:           return "Set";
         case OT_Vector:        return "Vector";
         case OT_String:        return "String";
         case OT_Symbol:        return "Symbol";

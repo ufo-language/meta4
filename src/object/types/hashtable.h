@@ -32,6 +32,7 @@ struct HashTable {
 /* Lifecycle functions *******************************************************/
 
 struct HashTable* hashTable_new(void);
+void hashTable_init(struct HashTable* hashTable);
 
 /* Public functions **********************************************************/
 
@@ -46,6 +47,5 @@ struct Symbolic* hashTable_intern(struct HashTable* internTable, count_t nChars,
 
 /* Object functions ******************/
 
-struct Object* hashTable_close_rec(struct HashTable* hashTable, struct Etor_rec* etor);
-bool_t hashTable_eval_rec(struct HashTable* hashTable, struct Etor_rec* etor, struct Object** value);
+count_t hashTable_count(struct HashTable* hashTable);
 void hashTable_show(struct HashTable* hashTable, FILE* stream);

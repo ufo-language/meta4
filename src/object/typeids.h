@@ -25,6 +25,8 @@ enum TypeId {
     OT_IntVector,
     OT_IntVar,
     OT_Pair,
+    OT_Queue,
+    OT_Set,
     OT_Term,
     OT_Triple,
     OT_Vector,

@@ -28,7 +28,12 @@ static void _putUsingBuckets(count_t nBuckets, struct Triple** buckets, struct O
 /* Lifecycle functions *******************************************************/
 
 struct HashTable* hashTable_new(void) {
-    struct HashTable* hashTable = (struct HashTable*)object_new(OT_HashTable, sizeof(struct HashTable));
+    struct HashTable* hashTable = (struct HashTable*)object_new(OT_HashTable, NWORDS(struct HashTable));
+    hashTable_init(hashTable);
+    return hashTable;
+}
+
+void hashTable_init(struct HashTable* hashTable) {
     hashTable->loadFactor = DEFAULT_HASHTABLE_LOAD_FACTOR;
     hashTable->nElems = 0;
     hashTable->maxLoad = (count_t)(DEFAULT_HASHTABLE_LOAD_FACTOR * (real_t)DEFAULT_HASHTABLE_NBUCKETS);
@@ -36,7 +41,6 @@ struct HashTable* hashTable_new(void) {
     gc_pushRoot(g_gc, (struct Object*)hashTable);
     hashTable->buckets = _createNBuckets(hashTable->nBuckets);
     gc_popRoot(g_gc);
-    return hashTable;
 }
 
 /* Public functions **********************************************************/
@@ -100,7 +104,6 @@ bool_t hashTable_put(struct HashTable* hashTable, struct Object* key, struct Obj
     return true;
 }
 
-#include <assert.h>
 bool_t hashTable_remove(struct HashTable* hashTable, struct Object* key) {
     word_t hashCode;
     if (!hash(key, &hashCode)) {
@@ -128,14 +131,8 @@ bool_t hashTable_remove(struct HashTable* hashTable, struct Object* key) {
 
 /* Object functions ******************/
 
-struct Object* hashTable_close_rec(struct HashTable* hashTable, struct Etor_rec* etor) {
-    assert(false);
-    return (struct Object*)hashTable;
-}
-
-bool_t hashTable_eval_rec(struct HashTable* hashTable, struct Etor_rec* etor, struct Object** value) {
-    assert(false);
-    return false;
+count_t hashTable_count(struct HashTable* hashTable) {
+    return hashTable->nElems;
 }
 
 void hashTable_show(struct HashTable* hashTable, FILE* stream) {

@@ -15,6 +15,8 @@ int main(int argc, char* argv[]) {
     TEST(hashTable_checkConstruction)
         struct HashTable* hashTable = hashTable_new();
         ASSERT_ISA(OT_HashTable, hashTable);
+        ASSERT_IEQ(NWORDS(struct Object) + 5, hashTable->obj.nWords);
+        ASSERT_IEQ(NWORDS(struct HashTable), hashTable->obj.nWords);
         EXPECT_IEQ(DEFAULT_HASHTABLE_NBUCKETS, hashTable->nBuckets);
         EXPECT_REQ(DEFAULT_HASHTABLE_LOAD_FACTOR, hashTable->loadFactor);
         EXPECT_IEQ(0, hashTable->nElems);
