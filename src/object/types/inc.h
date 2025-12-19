@@ -15,6 +15,8 @@ struct Inc {
     struct Object* expr;
 };
 
+struct OutStream;
+
 /* Forward inclarations ******************************************************/
 
 /* Global variables **********************************************************/
@@ -30,4 +32,4 @@ struct Inc* inc_new(struct Object* expr);
 /* Object functions ******************/
 
 bool_t inc_eval_rec(struct Inc* inc, struct Etor_rec* etor, struct Object** value);
-void inc_show(struct Inc* inc, FILE* stream);
+void inc_show(struct Inc* inc, struct OutStream* outStream);

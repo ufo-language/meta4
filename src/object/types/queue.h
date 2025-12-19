@@ -17,6 +17,8 @@ struct Queue {
     count_t nElems;
 };
 
+struct OutStream;
+
 /* Forward declarations ******************************************************/
 
 /* Global variables **********************************************************/
@@ -35,4 +37,4 @@ bool_t queue_deq(struct Queue* q, struct Object** elem);
 /* Object functions ******************/
 
 count_t queue_count(struct Queue* q);
-void queue_show(struct Queue* q, FILE* stream);
+void queue_show(struct Queue* q, struct OutStream* outStream);

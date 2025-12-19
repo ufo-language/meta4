@@ -19,6 +19,7 @@ struct Term {
 };
 
 struct Etor_rec;
+struct OutStream;
 struct Symbol;
 struct Vector;
 
@@ -43,4 +44,4 @@ bool_t term_equal(struct Term* term, struct Term* other);
 bool_t term_eval_rec(struct Term* term, struct Etor_rec* etor, struct Object** value);
 void term_freeVars(struct Object* obj, struct Vector* freeVars);
 bool_t term_match(struct Object* obj, struct Object* other, struct Vector* bindings);
-void term_show(struct Term* term, FILE* stream);
+void term_show(struct Term* term, struct OutStream* outStream);

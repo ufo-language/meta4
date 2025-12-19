@@ -6,6 +6,7 @@
 #include "object/types/quote.h"
 #include "object/functions/eval_rec.h"
 #include "object/functions/show.h"
+#include "object/types/outstream.h"
 
 /* Defines *******************************************************************/
 
@@ -35,8 +36,12 @@ bool_t quote_eval_rec(struct Quote* quote, struct Etor_rec* etor, struct Object 
     return true;
 }
 
-void quote_show(struct Quote* quote, FILE* stream) {
-    fputc('\'', stream);
-    show(quote->expr, stream);
-    fputc('\'', stream);
+void quote_show(struct Quote* quote, struct OutStream* outStream) {
+    static char q = '\'';
+    outStream_fwrite(outStream,
+        'C', q,
+        'O', quote->expr,
+        'C', q,
+        0
+    );
 }

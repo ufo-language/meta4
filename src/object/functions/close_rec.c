@@ -34,10 +34,10 @@ struct Object* close_rec(struct Object* obj, struct Etor_rec* etor) {
         /* Constants */
         case OT_Boolean:
         case OT_Dec:
-        case OT_Device:
         case OT_Integer:
         case OT_IntVar:
         case OT_Nil:
+        case OT_OutStream:
         case OT_Primitive:
         case OT_Real:
         case OT_String:

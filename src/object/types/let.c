@@ -8,6 +8,7 @@
 #include "object/globals.h"
 #include "object/object.h"
 #include "object/types/let.h"
+#include "object/types/outstream.h"
 
 /* Defines *******************************************************************/
 
@@ -46,22 +47,27 @@ bool_t let_eval_rec(struct Let* let, struct Etor_rec* etor, struct Object** valu
         return false;
     }
     if (!match(let->lhs, rhsVal, etor->env)) {
-        fputs("ERROR: Let match bind error, lhs = ", stderr);
-        show(let->lhs, stderr);
-        fputs(", rhs = ", stderr);
-        show(rhsVal, stderr);
-        fputc('\n', stderr);
+        outStream_fwriteLn(g_stderr,
+            'S', "ERROR: Let match bind error, lhs = ",
+            'O', let->lhs,
+            'S', ", rhs = ",
+            'O', rhsVal,
+            0
+        );
         return false;
     }
     *value = (struct Object*)g_nil;
     return true;
 }
 
-void let_show(struct Let* let, FILE* stream) {
-    fputs("let ", stream);
-    show(let->lhs, stream);
-    fputs(" = ", stream);
-    show(let->rhs, stream);
+void let_show(struct Let* let, struct OutStream* outStream) {
+    outStream_fwrite(outStream,
+        'S', "let ",
+        'O', let->lhs,
+        'S', " = ",
+        'O', let->rhs,
+        0
+    );
 }
 
 /* Private functions *********************************************************/

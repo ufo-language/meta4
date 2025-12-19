@@ -19,6 +19,7 @@ struct IfThen {
 
 struct Etor_CPS;
 struct Etor_rec;
+struct OutStream;
 
 /* Forward declarations ******************************************************/
 
@@ -36,4 +37,4 @@ struct IfThen* ifThen_new(struct Object* cond, struct Object* conseq, struct Obj
 
 struct Object* ifThen_close_rec(struct IfThen* ifThen, struct Etor_rec* etor);
 bool_t ifThen_eval_rec(struct IfThen* ifThen, struct Etor_rec* etor, struct Object** value);
-void ifThen_show(struct IfThen* ifThen, FILE* stream);
+void ifThen_show(struct IfThen* ifThen, struct OutStream* outStream);

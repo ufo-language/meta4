@@ -5,6 +5,7 @@
 #include "object/object.h"
 #include "object/typeids.h"
 #include "object/types/intvector.h"
+#include "object/types/outstream.h"
 
 /* Defines *******************************************************************/
 
@@ -72,16 +73,16 @@ count_t intVector_count(struct IntVector* intVector) {
     return intVector->top;
 }
 
-void intVector_show(struct IntVector* intVector, FILE* stream) {
-    fputs("{%|", stream);
+void intVector_show(struct IntVector* intVector, struct OutStream* outStream) {
+    outStream_writeString(outStream, "{i|");
     int_t* elems = intVector->elems->elems;
     for (index_t n=0; n<intVector->top; ++n) {
         if (n > 0) {
-            fputs(", ", stream);
+            outStream_writeString(outStream, ", ");
         }
-        fprintf(stream, "%ld", elems[n]);
+        outStream_writeUInt(outStream, elems[n]);
     }
-    fputs("|}", stream);
+    outStream_writeString(outStream, "|}");
 }
 
 /* Private functions *********************************************************/

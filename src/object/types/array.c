@@ -9,6 +9,7 @@
 #include "object/functions/eval_rec.h"
 #include "object/functions/match.h"
 #include "object/functions/show.h"
+#include "object/types/outstream.h"
 #include "object/types/vector.h"
 
 /* Defines *******************************************************************/
@@ -98,28 +99,28 @@ bool_t array_matchElems(count_t nElems, struct Object* elems[], struct Object* o
     return true;
 }
 
-void array_showElems(count_t nElems, struct Object* elems[], const string_t open, const string_t sep, const string_t close, FILE* stream) {
-    fputs(open, stream);
+void array_showElems(count_t nElems, struct Object* elems[], const string_t open, const string_t sep, const string_t close, struct OutStream* outStream) {
+    outStream_writeString(outStream, open);
     for (index_t n=0; n<nElems; ++n) {
         if (n > 0) {
-            fputs(sep, stream);
+            outStream_writeString(outStream, sep);
         }
-        show(elems[n], stream);
+        show(elems[n], outStream);
     }
-    fputs(close, stream);
+    outStream_writeString(outStream, close);
 }
 
-void array_showBindings(count_t nElems, struct Object* elems[], const string_t open, const string_t sep, const string_t close, FILE* stream) {
-    fputs(open, stream);
+void array_showBindings(count_t nElems, struct Object* elems[], const string_t open, const string_t sep, const string_t close, struct OutStream* outStream) {
+    outStream_writeString(outStream, open);
     for (index_t n=0; n<nElems; n+=2) {
         if (n > 0) {
-            fputs(sep, stream);
+            outStream_writeString(outStream, sep);
         }
-        show(elems[n], stream);
-        fputc('=', stream);
-        show(elems[n + 1], stream);
+        show(elems[n], outStream);
+        outStream_writeChar(outStream, '=');
+        show(elems[n + 1], outStream);
     }
-    fputs(close, stream);
+    outStream_writeString(outStream, close);
 }
 
 /* Object functions ******************/
@@ -153,8 +154,8 @@ bool_t array_match(struct Array* array, struct Array* other, struct Vector* bind
     return array_matchElems(array->nElems, array->elems, other->elems, bindings);
 }
 
-void array_show(struct Array* array, FILE* stream) {
-    array_showElems(array->nElems, array->elems, "{", ", ", "}", stream);
+void array_show(struct Array* array, struct OutStream* outStream) {
+    array_showElems(array->nElems, array->elems, "{", ", ", "}", outStream);
 }
 
 /* Private functions *********************************************************/

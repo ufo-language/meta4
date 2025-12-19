@@ -9,12 +9,15 @@
 /* Types *********************************************************************/
 
 struct Etor_CPS;
+struct OutStream;
 
 struct Continuation {
     struct Object obj;
     void (*eval)(struct Continuation*, struct Etor_CPS);
     char name[];
 };
+
+struct OutStream;
 
 /* Forward declarations ******************************************************/
 
@@ -31,4 +34,4 @@ struct Continuation* contin_new(string_t name, void (*eval)(struct Continuation*
 /* Object functions ******************/
 
 void contin_eval_cps(struct Continuation* contin, struct Etor_CPS etor);
-void contin_show(struct Continuation* contin, FILE* stream);
+void contin_show(struct Continuation* contin, struct OutStream* outStream);

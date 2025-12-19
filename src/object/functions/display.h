@@ -9,6 +9,7 @@
 /* Types *********************************************************************/
 
 struct Object;
+struct OutStream;
 
 /* Forward declarations ******************************************************/
 
@@ -22,4 +23,4 @@ struct Object;
 
 /* Object functions ******************/
 
-void display(struct Object* obj, FILE* stream);
+void display(struct Object* obj, struct OutStream* outStream);

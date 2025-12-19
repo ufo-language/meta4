@@ -3,13 +3,14 @@
 
 #include "_typedefs.h"
 
+#include "object/evaluator/etor_rec.h"
 #include "object/functions/close_rec.h"
 #include "object/functions/eval_rec.h"
 #include "object/globals.h"
 #include "object/object.h"
 #include "object/typeids.h"
 #include "object/types/array.h"
-#include "object/evaluator/etor_rec.h"
+#include "object/types/outstream.h"
 #include "object/types/sequence.h"
 #include "object/types/vector.h"
 
@@ -67,8 +68,8 @@ bool_t sequence_eval_rec(struct Sequence* seq, struct Etor_rec* etor, struct Obj
     return true;
 }
 
-void sequence_show(struct Sequence* seq, FILE* stream) {
-    array_showElems(seq->nExprs, seq->exprs, "(", "; ", ")", stream);
+void sequence_show(struct Sequence* seq, struct OutStream* outStream) {
+    array_showElems(seq->nExprs, seq->exprs, "(", "; ", ")", outStream);
 }
 
 /* Private functions *********************************************************/

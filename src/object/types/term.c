@@ -8,8 +8,10 @@
 #include "object/functions/close_rec.h"
 #include "object/functions/eval_rec.h"
 #include "object/functions/show.h"
+#include "object/globals.h"
 #include "object/object.h"
 #include "object/types/array.h"
+#include "object/types/outstream.h"
 #include "object/types/symbol.h"
 #include "object/types/term.h"
 #include "object/types/vector.h"
@@ -76,11 +78,13 @@ bool_t term_eval_rec(struct Term* term, struct Etor_rec* etor, struct Object** v
         return false;
     }
     if (newName->typeId != OT_Symbol) {
-        fputs("ERROR: Term name must be a symbol: ", stderr);
-        show(newName, stderr);
-        fputs(" :: ", stderr);
-        fputs(typeName(newName->typeId), stderr);
-        fputc('\n', stderr);
+        outStream_fwriteLn(g_stderr,
+            'S', "ERROR: Term name must be a symbol: ",
+            'O', newName,
+            'S', " :: ",
+            'S', typeName(newName->typeId),
+            0
+        );
         return false;
     }
     newTerm->name = (struct Symbol*)newName;
@@ -97,11 +101,11 @@ bool_t term_eval_rec(struct Term* term, struct Etor_rec* etor, struct Object** v
 void term_freeVars(struct Object* obj, struct Vector* freeVars);
 bool_t term_match(struct Object* obj, struct Object* other, struct Vector* bindings);
 
-void term_show(struct Term* term, FILE* stream) {
-    show((struct Object*)term->name, stream);
-    array_showElems(term->nArgs, term->args, "{", ", ", "}", stream);
-    fputc('%', stream);
-    show(term->attrib, stream);
+void term_show(struct Term* term, struct OutStream* outStream) {
+    show((struct Object*)term->name, outStream);
+    array_showElems(term->nArgs, term->args, "{", ", ", "}", outStream);
+    outStream_writeChar(outStream, '%');
+    show(term->attrib, outStream);
 }
 
 /* Private functions *********************************************************/

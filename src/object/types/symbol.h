@@ -28,5 +28,3 @@ struct Symbol* symbol_new(const string_t name);
 /* Unique functions ******************/
 
 /* Object functions ******************/
-
-void symbol_show(struct Symbol* symbol, FILE* stream);

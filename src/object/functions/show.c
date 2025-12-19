@@ -8,11 +8,11 @@
 #include "object/types/application.h"
 #include "object/types/array.h"
 #include "object/types/boolean.h"
+#include "object/types/bytebuffer.h"
 #include "object/types/continuation.h"
 #include "object/types/dec.h"
 #include "object/types/function.h"
 #include "object/types/hashtable.h"
-#include "object/types/identifier.h"
 #include "object/types/ifthen.h"
 #include "object/types/inc.h"
 #include "object/types/intarray.h"
@@ -20,6 +20,7 @@
 #include "object/types/intvar.h"
 #include "object/types/intvector.h"
 #include "object/types/let.h"
+#include "object/types/outstream.h"
 #include "object/types/pair.h"
 #include "object/types/primitive.h"
 #include "object/types/quote.h"
@@ -27,7 +28,7 @@
 #include "object/types/real.h"
 #include "object/types/sequence.h"
 #include "object/types/string.h"
-#include "object/types/symbol.h"
+#include "object/types/symbolic.h"
 #include "object/types/term.h"
 #include "object/types/triple.h"
 #include "object/types/vector.h"
@@ -45,50 +46,50 @@
 
 /* Public functions **********************************************************/
 
-void show(struct Object* obj, FILE* stream) {
+void show(struct Object* obj, struct OutStream* outStream) {
     switch(obj->typeId) {
-        case OT_Application:   application_show((struct Application*)obj, stream); return;
-        case OT_Array:         array_show((struct Array*)obj, stream); return;
+        case OT_Application:   application_show((struct Application*)obj, outStream); return;
+        case OT_Array:         array_show((struct Array*)obj, outStream); return;
         case OT_BinOp:         break;
-        case OT_Boolean:       boolean_show((struct Boolean*)obj, stream); return;
-        case OT_ByteBuffer:    break;
+        case OT_Boolean:       boolean_show((struct Boolean*)obj, outStream); return;
+        case OT_ByteBuffer:    byteBuffer_show((struct ByteBuffer*)obj, outStream); return;
         case OT_ConstantLimit: break;
         case OT_Continuation:  break;
-        case OT_Dec:           dec_show((struct Dec*)obj, stream); return;
-        case OT_Device:        break;
+        case OT_Dec:           dec_show((struct Dec*)obj, outStream); return;
         case OT_Etor_CPS:      break;
         case OT_Etor_Rec:      break;
-        case OT_Function:      function_show((struct Function*)obj, stream); return;
-        case OT_HashTable:     hashTable_show((struct HashTable*)obj, stream); return;
-        case OT_Identifier:    identifier_show((struct Identifier*)obj, stream); return;
-        case OT_IfThen:        ifThen_show((struct IfThen*)obj, stream); return;
-        case OT_Inc:           inc_show((struct Inc*)obj, stream); return;
-        case OT_IntArray:      intArray_show((struct IntArray*)obj, stream); return;
-        case OT_Integer:       integer_show((struct Integer*)obj, stream); return;
-        case OT_IntVector:     intVector_show((struct IntVector*)obj, stream); return;
-        case OT_IntVar:        intVar_show((struct IntVar*)obj, stream); return;
-        case OT_Let:           let_show((struct Let*)obj, stream); return;
-        case OT_Pair:          pair_show((struct Pair*)obj, stream); return;
-        case OT_Nil:           nil_show((struct Nil*)obj, stream); return;
-        case OT_Null:          fputs("Null/Unique", stream); return;
-        case OT_Primitive:     prim_show((struct Primitive*)obj, stream); return;
-        case OT_Quote:         quote_show((struct Quote*)obj, stream); return;
-        case OT_Real:          real_show((struct Real*)obj, stream); return;
-        case OT_Sequence:      sequence_show((struct Sequence*)obj, stream); return;
-        case OT_String:        string_show((struct String*)obj, stream); return;
-        case OT_Symbol:        symbol_show((struct Symbol*)obj, stream); return;
-        case OT_Term:          term_show((struct Term*)obj, stream); return;
+        case OT_Function:      function_show((struct Function*)obj, outStream); return;
+        case OT_HashTable:     hashTable_show((struct HashTable*)obj, outStream); return;
+        case OT_Identifier:    symbolic_show((struct Symbolic*)obj, outStream); return;
+        case OT_IfThen:        ifThen_show((struct IfThen*)obj, outStream); return;
+        case OT_Inc:           inc_show((struct Inc*)obj, outStream); return;
+        case OT_IntArray:      intArray_show((struct IntArray*)obj, outStream); return;
+        case OT_Integer:       integer_show((struct Integer*)obj, outStream); return;
+        case OT_IntVector:     intVector_show((struct IntVector*)obj, outStream); return;
+        case OT_IntVar:        intVar_show((struct IntVar*)obj, outStream); return;
+        case OT_Let:           let_show((struct Let*)obj, outStream); return;
+        case OT_Pair:          pair_show((struct Pair*)obj, outStream); return;
+        case OT_Nil:           nil_show((struct Nil*)obj, outStream); return;
+        case OT_Null:          outStream_writeString(outStream, "Null/Unique"); return;
+        case OT_OutStream:     outStream_show((struct OutStream*)obj, outStream); return;
+        case OT_Primitive:     prim_show((struct Primitive*)obj, outStream); return;
+        case OT_Quote:         quote_show((struct Quote*)obj, outStream); return;
+        case OT_Real:          real_show((struct Real*)obj, outStream); return;
+        case OT_Sequence:      sequence_show((struct Sequence*)obj, outStream); return;
+        case OT_String:        string_show((struct String*)obj, outStream); return;
+        case OT_Symbol:        symbolic_show((struct Symbolic*)obj, outStream); return;
+        case OT_Term:          term_show((struct Term*)obj, outStream); return;
         case OT_Test:          break;
-        case OT_Triple:        triple_show((struct Triple*)obj, stream); return;
+        case OT_Triple:        triple_show((struct Triple*)obj, outStream); return;
         case OT_User:          break;
         case OT_Var:           break;
-        case OT_Vector:        vector_show((struct Vector*)obj, stream); return;
-        case OT_While:         while_show((struct While*)obj, stream); return;
+        case OT_Vector:        vector_show((struct Vector*)obj, outStream); return;
+        case OT_While:         while_show((struct While*)obj, outStream); return;
         default:
             break;
     }
     fprintf(stderr, "show: Unknown type ID %u (%s)\n", obj->typeId, typeName(obj->typeId));
-    fputs("UNKNOWN", stream);
+    outStream_writeString(outStream, "UNKNOWN");
 }
 
 /* Private functions *********************************************************/

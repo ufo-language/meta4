@@ -17,6 +17,7 @@ struct Sequence {
 };
 
 struct Etor_rec;
+struct OutStream;
 
 /* Forward declarations ******************************************************/
 
@@ -34,4 +35,4 @@ struct Sequence* sequence_new(count_t nExprs, struct Object* exprs[]);
 
 struct Object* sequence_close_rec(struct Sequence* seq, struct Etor_rec* etor);
 bool_t sequence_eval_rec(struct Sequence* seq, struct Etor_rec* etor, struct Object** value);
-void sequence_show(struct Sequence* seq, FILE* stream);
+void sequence_show(struct Sequence* seq, struct OutStream* outStream);

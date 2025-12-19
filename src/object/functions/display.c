@@ -18,12 +18,15 @@
 
 /* Public functions **********************************************************/
 
-void display(struct Object* obj, FILE* stream) {
+void display(struct Object* obj, struct OutStream* outStream) {
     switch(obj->typeId) {
-        case OT_Nil:    return;  /* nil is not displayed */
-        case OT_String: string_display((struct String*)obj, stream); return;
+        case OT_Nil:
+            return;  /* nil is not displayed */
+        case OT_String:
+            string_display((struct String*)obj, outStream);
+            return;
         default:
-            show(obj, stream);
+            show(obj, outStream);
             break;
     }
 }

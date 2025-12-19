@@ -33,10 +33,10 @@ void eval_cps(struct Object* obj, struct Etor_CPS* etor) {
     switch(obj->typeId) {
         /* Constants */
         case OT_Boolean:
-        case OT_Device:
         case OT_Etor_Rec:
         case OT_Integer:
         case OT_Nil:
+        case OT_OutStream:
         case OT_Primitive:
         case OT_Real:
         case OT_String:

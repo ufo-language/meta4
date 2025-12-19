@@ -16,6 +16,8 @@ struct String {
     char chars[];
 };
 
+struct OutStream;
+
 /* Forward declarations ******************************************************/
 
 /* Global variables **********************************************************/
@@ -35,7 +37,7 @@ bool_t string_hash_chars(enum TypeId typeId, count_t nChars, const string_t char
 
 /* Object functions ******************/
 
-void string_display(struct String* string, FILE* stream);
+void string_display(struct String* string, struct OutStream* outStream);
 bool_t string_equal(struct String* string, struct String* other);
 bool_t string_hash(struct String* string, word_t* hashCode);
-void string_show(struct String* string, FILE* stream);
+void string_show(struct String* string, struct OutStream* outStream);

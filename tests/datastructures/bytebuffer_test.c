@@ -67,7 +67,7 @@ int main(int argc, char* argv[]) {
         EXPECT_IEQ(nBytes + 1, byteBuffer->nBytes);
     END
 
-    TEST(byteBuffer_toString)
+    TEST(byteBuffer_checkToString)
         struct ByteBuffer* byteBuffer = byteBuffer_new();
         byteBuffer_appendByte(byteBuffer, 'a');
         byteBuffer_appendByte(byteBuffer, 'b');
@@ -76,6 +76,14 @@ int main(int argc, char* argv[]) {
         ASSERT_ISA(OT_String, string);
         ASSERT_IEQ(3, string->nChars);
         ASSERT_IEQ(0, strcmp("abc", string->chars));
+    END
+
+    TEST(byteBuffer_checkShow)
+        struct ByteBuffer* byteBuffer = byteBuffer_new();
+        byteBuffer_appendByte(byteBuffer, '0');
+        byteBuffer_appendByte(byteBuffer, '1');
+        byteBuffer_appendByte(byteBuffer, '2');
+        SHOW("Should show 'ByteBuffer{30:31:32}'", byteBuffer);
     END
 
     END_TESTS

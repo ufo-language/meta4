@@ -34,9 +34,9 @@ void contin_eval_cps(struct Continuation* contin, struct Etor_CPS etor) {
     (void)etor;
 }
 
-void contin_show(struct Continuation* contin, FILE* stream) {
+void contin_show(struct Continuation* contin, struct OutStream* outStream) {
     (void)contin;
-    (void)stream;
+    (void)outStream;
 }
 
 /* Private functions *********************************************************/

@@ -9,6 +9,7 @@
 #include "object/object.h"
 #include "object/typeids.h"
 #include "object/types/ifthen.h"
+#include "object/types/outstream.h"
 
 /* Defines *******************************************************************/
 
@@ -51,11 +52,14 @@ bool_t ifThen_eval_rec(struct IfThen* ifThen, struct Etor_rec* etor, struct Obje
     return eval_rec(b ? ifThen->conseq : ifThen->alt, etor, value);
 }
 
-void ifThen_show(struct IfThen* ifThen, FILE* stream) {
-    fputs("if ", stream);
-    show(ifThen->cond, stream);
-    fputs(" then ", stream);
-    show(ifThen->conseq, stream);
-    fputs(" else ", stream);
-    show(ifThen->alt, stream);
+void ifThen_show(struct IfThen* ifThen, struct OutStream* outStream) {
+    outStream_fwrite(outStream,
+        'S', "if ",
+        'O', ifThen->cond,
+        'S', " then ",
+        'O', ifThen->conseq,
+        'S', " else ",
+        'O', ifThen->alt,
+        0
+    );
 }

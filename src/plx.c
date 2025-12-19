@@ -4,10 +4,10 @@
 #include "_typedefs.h"
 
 #include "memory/memory.h"
+#include "object/functions/show.h"
 #include "object/globals.h"
 #include "object/primitives/defineprims.h"
 #include "plx.h"
-#include "object/functions/show.h"
 
 
 /* Defines ------------------------------------------------------------------*/
@@ -59,6 +59,8 @@ int plx_main(void) {
 #include "object/types/dec.h"
 #include "object/types/intvar.h"
 #include "object/types/while.h"
+#include "object/globals.h"
+#include "object/types/outstream.h"
 
 void _program1(void) {
     struct IntVar* intVar = intVar_new(N);
@@ -67,13 +69,17 @@ void _program1(void) {
     struct Etor_rec* etor = etor_rec_new();
     struct Object* value = (struct Object*)g_nil;
     if (!etor_rec_run(etor, (struct Object*)while_, &value)) {
-        fputs("main _program1 error ", stderr);
-        show(value, stderr);
-        fputc('\n', stderr);
+        outStream_fwriteLn(g_stderr,
+            'S', "main _program1 error ",
+            'O', value,
+            0
+        );
     }
     else {
-        fputs("main _program1 final value = ", stderr);
-        show(value, stderr);
-        fputc('\n', stderr);
+        outStream_fwriteLn(g_stderr,
+            'S', "main _program1 final value = ",
+            'O', value,
+            0
+        );
     }
 }

@@ -7,6 +7,7 @@
 #include "object/functions/show.h"
 #include "object/globals.h"
 #include "object/object.h"
+#include "object/types/outstream.h"
 #include "object/types/while.h"
 
 /* Defines *******************************************************************/
@@ -59,11 +60,14 @@ bool_t while_eval_rec(struct While* while_, struct Etor_rec* etor, struct Object
     return true;
 }
 
-void while_show(struct While* while_, FILE* stream) {
-    fputs("while ", stream);
-    show(while_->cond, stream);
-    fputc(' ', stream);
-    show(while_->body, stream);
+void while_show(struct While* while_, struct OutStream* outStream) {
+    outStream_fwrite(outStream,
+        'S', "while ",
+        'O', while_->cond,
+        'C', ' ',
+        'O', while_->body,
+        0
+    );
 }
 
 /* Private functions *********************************************************/

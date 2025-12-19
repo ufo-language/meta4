@@ -18,6 +18,8 @@ struct Integer {
     int_t i;
 };
 
+struct OutStream;
+
 /* Forward declarations ******************************************************/
 
 /* Global variables **********************************************************/
@@ -32,4 +34,4 @@ struct Integer* integer_new(int_t i);
 
 /* Object functions ******************/
 
-void integer_show(struct Integer* integer, FILE* stream);
+void integer_show(struct Integer* integer, struct OutStream* outStream);

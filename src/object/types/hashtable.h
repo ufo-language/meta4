@@ -13,7 +13,6 @@
 
 /* Types *********************************************************************/
 
-struct Symbolic;
 struct Triple;
 
 struct HashTable {
@@ -24,6 +23,9 @@ struct HashTable {
     count_t nBuckets;
     struct Triple** buckets;
 };
+
+struct OutStream;
+struct Symbolic;
 
 /* Forward declarations ******************************************************/
 
@@ -48,4 +50,4 @@ struct Symbolic* hashTable_intern(struct HashTable* internTable, count_t nChars,
 /* Object functions ******************/
 
 count_t hashTable_count(struct HashTable* hashTable);
-void hashTable_show(struct HashTable* hashTable, FILE* stream);
+void hashTable_show(struct HashTable* hashTable, struct OutStream* outStream);

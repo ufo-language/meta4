@@ -17,6 +17,8 @@ struct Quote {
     struct Object* expr;
 };
 
+struct OutStream;
+
 /* Forward declarations ******************************************************/
 
 /* Global variables **********************************************************/
@@ -32,4 +34,4 @@ struct Quote* quote_new(struct Object* expr);
 /* Object functions ******************/
 
 bool_t quote_eval_rec(struct Quote* quote, struct Etor_rec* etor, struct Object **value);
-void quote_show(struct Quote* quote, FILE* stream);
+void quote_show(struct Quote* quote, struct OutStream* outStream);

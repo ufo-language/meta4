@@ -5,6 +5,7 @@
 #include "object/object.h"
 #include "object/typeids.h"
 #include "object/types/nil.h"
+#include "object/types/outstream.h"
 
 /* Defines *******************************************************************/
 
@@ -32,9 +33,9 @@ bool_t nil_eval_rec(struct Nil* nil, struct Etor_rec* etor, struct Object** valu
     return true;
 }
 
-void nil_show(struct Nil* nil, FILE* stream) {
+void nil_show(struct Nil* nil, struct OutStream* outStream) {
     (void)nil;
-    fputs("nil", stream);
+    outStream_writeString(outStream, "nil");
 }
 
 /* Private functions *********************************************************/

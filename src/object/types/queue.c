@@ -1,6 +1,7 @@
 #include "_typedefs.h"
 
 #include "object/globals.h"
+#include "object/types/outstream.h"
 #include "object/types/pair.h"
 #include "object/types/queue.h"
 
@@ -56,8 +57,8 @@ count_t queue_count(struct Queue* q) {
     return q->nElems;
 }
 
-void queue_show(struct Queue* q, FILE* stream) {
-    pair_showWith(q->first, "~[", "]", stream);
+void queue_show(struct Queue* q, struct OutStream* outStream) {
+    pair_showWith(q->first, "~[", "]", outStream);
 }
 
 /* Private functions *********************************************************/

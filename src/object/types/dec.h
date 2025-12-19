@@ -15,6 +15,8 @@ struct Dec {
     struct Object* expr;
 };
 
+struct OutStream;
+
 /* Forward declarations ******************************************************/
 
 /* Global variables **********************************************************/
@@ -30,4 +32,4 @@ struct Dec* dec_new(struct Object* expr);
 /* Object functions ******************/
 
 bool_t dec_eval_rec(struct Dec* dec, struct Etor_rec* etor, struct Object** value);
-void dec_show(struct Dec* dec, FILE* stream);
+void dec_show(struct Dec* dec, struct OutStream* outStream);

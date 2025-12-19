@@ -50,7 +50,6 @@ bool_t equal(struct Object* obj, struct Object* other) {
         case OT_ByteBuffer:    break;
         case OT_ConstantLimit: break;
         case OT_Dec:           break;
-        case OT_Device:        break;
         case OT_Etor_Rec:      break;
         case OT_Function:      break;
         case OT_HashTable:     break;
@@ -62,6 +61,7 @@ bool_t equal(struct Object* obj, struct Object* other) {
         case OT_IntVector:     break; /*return intVector_equal((struct IntVector*)obj, stream);*/
         case OT_IntVar:        break; /* already handled above */
         case OT_Let:           break;
+        case OT_OutStream:     break;
         case OT_Pair:          break;
         case OT_Nil:           return true;
         case OT_Null:          break;

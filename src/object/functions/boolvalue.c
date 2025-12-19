@@ -1,12 +1,15 @@
 #include "_typedefs.h"
 
+#include "object/globals.h"
 #include "object/object.h"
 #include "object/typeids.h"
 #include "object/types/array.h"
 #include "object/types/boolean.h"
 #include "object/types/integer.h"
 #include "object/types/intvar.h"
+#include "object/types/pair.h"
 #include "object/types/string.h"
+#include "object/types/triple.h"
 
 /* Defines *******************************************************************/
 
@@ -26,14 +29,13 @@
 
 bool_t boolValue(struct Object* obj) {
     switch(obj->typeId) {
-        case OT_Application:         return true;
+        case OT_Application:   return true;
         case OT_Array:         return ((struct Array*)obj)->nElems != 0;
         case OT_BinOp:         return true;
         case OT_Boolean:       return ((struct Boolean*)obj)->b;
         case OT_ByteBuffer:    break;
         case OT_ConstantLimit: break;
         case OT_Dec:           return true;
-        case OT_Device:        return true;
         case OT_Etor_Rec:      return true;
         case OT_Function:      return true;
         case OT_HashTable:     break;
@@ -45,7 +47,8 @@ bool_t boolValue(struct Object* obj) {
         case OT_IntVector:     break;
         case OT_IntVar:        return ((struct IntVar*)obj)->i != 0;
         case OT_Let:           return true;
-        case OT_Pair:          break;
+        case OT_OutStream:     return true;
+        case OT_Pair:          return ((struct Pair*)obj) != g_emptyPair;
         case OT_Nil:           return false;
         case OT_Null:          break;
         case OT_Primitive:     return true;
@@ -55,6 +58,7 @@ bool_t boolValue(struct Object* obj) {
         case OT_String:        return ((struct String*)obj)->nChars > 0;
         case OT_Symbol:        return true;
         case OT_Test:          return true;
+        case OT_Triple:        return ((struct Triple*)obj) != g_emptyTriple;
         case OT_User:          return true;
         case OT_Var:           return true;
         case OT_Vector:        break;

@@ -12,6 +12,8 @@ struct Set {
     struct HashTable hashTable;
 };
 
+struct OutStream;
+
 /* Forward declarations ******************************************************/
 
 /* Global variables **********************************************************/
@@ -31,4 +33,4 @@ bool_t set_remove(struct Set* set, struct Object* elem);
 /* Object functions ******************/
 
 count_t set_count(struct Set* set);
-void set_show(struct Set* set, FILE* stream);
+void set_show(struct Set* set, struct OutStream* outStream);

@@ -17,6 +17,8 @@ struct Triple {
     struct Triple* next;
 };
 
+struct OutStream;
+
 /* Forward declarations ******************************************************/
 
 /* Global variables **********************************************************/
@@ -32,4 +34,4 @@ struct Triple* triple_new_empty(void);
 
 /* Object functions ******************/
 
-void triple_show(struct Triple* triple, FILE* stream);
+void triple_show(struct Triple* triple, struct OutStream* outStream);

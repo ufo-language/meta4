@@ -3,15 +3,16 @@
 #include "_typedefs.h"
 
 #include "memory/memory.h"
-#include "object/types/function.h"
 #include "object/evaluator/etor_rec.h"
+#include "object/functions/close_rec.h"
 #include "object/functions/eval_rec.h"
 #include "object/functions/freevars.h"
 #include "object/functions/match.h"
 #include "object/functions/show.h"
+#include "object/types/function.h"
 #include "object/types/identifier.h"
+#include "object/types/outstream.h"
 #include "object/types/vector.h"
-#include "object/functions/close_rec.h"
 
 /* Defines *******************************************************************/
 
@@ -20,7 +21,7 @@
 /* Forward declarations ******************************************************/
 
 static void _function_closeRule(struct FunctionRule* rule, struct Etor_rec* etor);
-static void _function_showRule(struct FunctionRule* rule, FILE* stream);
+static void _function_showRule(struct FunctionRule* rule, struct OutStream* outStream);
 
 /* Global variables **********************************************************/
 
@@ -111,19 +112,19 @@ bool_t function_eval_rec(struct Function* function, struct Etor_rec* etor, struc
     return true;
 }
 
-void function_show(struct Function* function, FILE* stream) {
-    fputs(function->argEvalType == ArgEvalType_Function ? "fun " : "macro ", stream);
+void function_show(struct Function* function, struct OutStream* outStream) {
+    outStream_writeString(outStream, function->argEvalType == ArgEvalType_Function ? "fun " : "macro ");
     if (function->name != g_idNil) {
-        identifier_show(function->name, stream);
+        identifier_show(function->name, outStream);
     }
     assert(function->rules != g_emptyFunctionRule);
     struct FunctionRule* rule = function->rules;
-    _function_showRule(rule, stream);
+    _function_showRule(rule, outStream);
     for (rule = rule->nextRule; rule != g_emptyFunctionRule; rule = rule->nextRule) {
-        fputs(" | ", stream);
-        _function_showRule(rule, stream);
+        outStream_writeString(outStream, " | ");
+        _function_showRule(rule, outStream);
     }
-    fputs(" end", stream);
+    outStream_writeString(outStream, " end");
 }
 
 /* Private functions *********************************************************/
@@ -151,7 +152,7 @@ static void _function_closeRule(struct FunctionRule* rule, struct Etor_rec* etor
     etor_rec_envRestore(etor, savedEnv);
 }
 
-static void _function_showRule(struct FunctionRule* rule, FILE* stream) {
-    array_showElems(rule->nParams, rule->params, "(", ", ", ") = ", stream);
-    show(rule->body, stream);
+static void _function_showRule(struct FunctionRule* rule, struct OutStream* outStream) {
+    array_showElems(rule->nParams, rule->params, "(", ", ", ") = ", outStream);
+    show(rule->body, outStream);
 }

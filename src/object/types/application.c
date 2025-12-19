@@ -14,6 +14,7 @@
 #include "object/types/array.h"
 #include "object/types/function.h"
 #include "object/types/identifier.h"
+#include "object/types/outstream.h"
 #include "object/types/primitive.h"
 
 /* Defines *******************************************************************/
@@ -82,18 +83,18 @@ bool_t application_eval(struct Application* app, struct Etor_rec* etor, struct O
     return apply(abstrVal, etor, app->nArgs, argVals, value);
 }
 
-void application_show(struct Application* app, FILE* stream) {
+void application_show(struct Application* app, struct OutStream* outStream) {
     struct Object* abstr = app->abstraction;
     switch (abstr->typeId) {
         case OT_Identifier:
         case OT_Primitive:
-            show(abstr, stream);
+            show(abstr, outStream);
             break;
         default:
-            fputc('(', stream);
-            show(abstr, stream);
-            fputc(')', stream);
+            outStream_writeChar(outStream, '(');
+            show(abstr, outStream);
+            outStream_writeChar(outStream, ')');
             break;
     }
-    array_showElems(app->nArgs, app->args, "(", ", ", ")", stream);
+    array_showElems(app->nArgs, app->args, "(", ", ", ")", outStream);
 }

@@ -5,6 +5,7 @@
 #include "object/object.h"
 #include "object/typeids.h"
 #include "object/types/integer.h"
+#include "object/types/outstream.h"
 
 /* Defines *******************************************************************/
 
@@ -28,8 +29,8 @@ struct Integer* integer_new(int_t i) {
 
 /* Object functions ******************/
 
-void integer_show(struct Integer* integer, FILE* stream) {
-    fprintf(stream, "%ld", integer->i);
+void integer_show(struct Integer* integer, struct OutStream* outStream) {
+    outStream_writeInt(outStream, integer->i);
 }
 
 /* Private functions *********************************************************/
