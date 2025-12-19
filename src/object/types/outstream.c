@@ -16,6 +16,8 @@
 
 /* Forward declarations ******************************************************/
 
+void _outStream_fwriteList(struct OutStream* outStream, va_list args);
+
 /* Global variables **********************************************************/
 
 /* Lifecycle functions *******************************************************/
@@ -45,36 +47,16 @@ void outStream_nl(struct OutStream* outStream) {
 void outStream_fwrite(struct OutStream* outStream, ...) {
     va_list args;
     va_start(args, outStream);
-    bool_t contin = true;
-    while (contin) {
-        int argType = va_arg(args, int);
-        switch (argType) {
-            case 'C': {
-                    int c = va_arg(args, int);
-                    outStream_writeChar(outStream, c);
-                }
-                break;
-            case 'O': {
-                    struct Object* obj = va_arg(args, struct Object*);
-                    show(obj, outStream);
-                }
-                break;
-            case 'S': {
-                    string_t s = va_arg(args, string_t);
-                    outStream_writeString(outStream, s);
-                }
-                break;
-            case 0:
-                contin = false;
-                break;
-        }
-    }
+    _outStream_fwriteList(outStream, args);
     va_end(args);
 }
 
 void outStream_fwriteLn(struct OutStream* outStream, ...) {
-    (void)outStream;
-    assert(false);
+    va_list args;
+    va_start(args, outStream);
+    _outStream_fwriteList(outStream, args);
+    va_end(args);
+    outStream_nl(outStream);
 }
 
 void outStream_writeChar(struct OutStream* outStream, char c) {
@@ -163,3 +145,38 @@ void outStream_show(struct OutStream* self, struct OutStream* outStream) {
 }
 
 /* Private functions *********************************************************/
+
+void _outStream_fwriteList(struct OutStream* outStream, va_list args) {
+    bool_t contin = true;
+    while (contin) {
+        int argType = va_arg(args, int);
+        switch (argType) {
+            case 'C': {
+                    int c = va_arg(args, int);
+                    outStream_writeChar(outStream, c);
+                }
+                break;
+            case 'I': {
+                    int_t i = va_arg(args, int_t);
+                    outStream_writeInt(outStream, i);
+                }
+                break;
+            case 'O': {
+                    struct Object* obj = va_arg(args, struct Object*);
+                    show(obj, outStream);
+                }
+                break;
+            case 'S': {
+                    string_t s = va_arg(args, string_t);
+                    outStream_writeString(outStream, s);
+                }
+                break;
+            case 0:
+                contin = false;
+                break;
+            default:
+                fprintf(stderr, "_outStream_fwriteList got unhandled argType '%c'\n", argType);
+        }
+    }
+    va_end(args);
+}
