@@ -4,6 +4,9 @@
 
 #include "_typedefs.h"
 
+#include "memory/gc.h"
+#include "memory/memory.h"
+#include "object/globals.h"
 #include "object/functions/equal.h"
 #include "object/functions/show.h"
 #include "object/object.h"

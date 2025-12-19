@@ -7,6 +7,7 @@
 #include "object/globals.h"
 #include "object/primitives/defineprims.h"
 #include "plx.h"
+#include "object/functions/show.h"
 
 
 /* Defines ------------------------------------------------------------------*/

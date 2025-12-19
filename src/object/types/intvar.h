@@ -5,9 +5,6 @@
 #include "_typedefs.h"
 
 #include "object/object.h"
-#include "object/typeids.h"
-#include "object/functions/eval_rec.h"
-#include "object/functions/show.h"
 
 /* Defines *******************************************************************/
 

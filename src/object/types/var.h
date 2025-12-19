@@ -5,21 +5,17 @@
 #include "_typedefs.h"
 
 #include "object/object.h"
+#include "object/typeids.h"
+#include "object/functions/eval_rec.h"
+#include "object/functions/show.h"
 
 /* Defines *******************************************************************/
 
 /* Types *********************************************************************/
 
-enum {
-    DEFAULT_BYTE_BUFFER_SIZE = 8
-};
-
-struct ByteBuffer {
+struct Var {
     struct Object obj;
-    count_t capacity;
-    count_t nBytes;
-    byte_t* bytes;
-    count_t nResizes;
+    struct Object* value;
 };
 
 /* Forward declarations ******************************************************/
@@ -28,16 +24,12 @@ struct ByteBuffer {
 
 /* Lifecycle functions *******************************************************/
 
-struct ByteBuffer* byteBuffer_new(void);
+struct Var* var_new(struct Object* value);
 
 /* Public functions **********************************************************/
 
 /* Unique functions ******************/
 
-void byteBuffer_appendByte(struct ByteBuffer* byteBuffer, byte_t byte);
-void byteBuffer_appendBytes(struct ByteBuffer* byteBuffer, count_t nBytes, byte_t bytes[]);
-struct String* byteBuffer_toString(struct ByteBuffer* byteBuffer);
-
 /* Object functions ******************/
 
-void byteBuffer_show(struct ByteBuffer* byteBuffer, FILE* stream);
+void var_show(struct Var* var, FILE* stream);
