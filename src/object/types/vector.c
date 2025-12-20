@@ -47,13 +47,8 @@ count_t vector_capacity(struct Vector* vector) {
     return vector->elems->nElems;
 }
 
-index_t vector_top(struct Vector* vector) {
-    return vector->top;
-}
-
-void vector_setTop(struct Vector* vector, index_t newTop) {
-    assert(newTop <= vector->top);
-    vector->top = newTop;
+void vector_clear(struct Vector* vector) {
+    vector->top = 0;
 }
 
 void vector_bindPair(struct Vector* vector, struct Object* key, struct Object* value) {
@@ -99,6 +94,15 @@ void vector_push(struct Vector* vector, struct Object* elem) {
 
 void vector_showBindings(struct Vector* vector, struct OutStream* outStream) {
     array_showBindings(vector->top, vector->elems->elems, VECTOR_OPEN, ", ", VECTOR_CLOSE, outStream);
+}
+
+index_t vector_top(struct Vector* vector) {
+    return vector->top;
+}
+
+void vector_setTop(struct Vector* vector, index_t newTop) {
+    assert(newTop <= vector->top);
+    vector->top = newTop;
 }
 
 /* Object functions ******************/

@@ -68,7 +68,7 @@ struct Vector* lexer_lexAll(struct Transition** syntax, const string_t sourceStr
     return tokens;
 }
 
-void lexer_lexAll_withVector(struct Transition** syntax, const string_t sourceString, struct Vector* tokens) {
+struct Vector* lexer_lexAll_withVector(struct Transition** syntax, const string_t sourceString, struct Vector* tokens) {
     if (!tokenTypeNamesCreated) {
         _lexer_createTokenTypeNames();
     }
@@ -98,28 +98,29 @@ void lexer_lexAll_withVector(struct Transition** syntax, const string_t sourceSt
                     struct Term* tokenTerm = term_new_1arg(tokenTermName, lexemeObj, attrib);
                     vector_push(tokens, (struct Object*)tokenTerm);
                     if (lexerFields.tokenType == T_EOI) {
-                        return;
+                        return tokens;
                     }
                 }
                 break;
             case Lexer_UnknownError:
                 fprintf(stderr, "ERROR: lexer_lexAll got an unknown error %d\n", res);
-                return;
+                return tokens;
             case Lexer_StringError:
                 fprintf(stderr, "ERROR: lexer_lexAll got a string error %d\n", res);
-                return;
+                return tokens;
             case Lexer_RealError:
                 fprintf(stderr, "ERROR: lexer_lexAll got an real-number error %d\n", res);
-                return;
+                return tokens;
             case Lexer_CommentError:
                 fprintf(stderr, "ERROR: lexer_lexAll got a comment error %d\n", res);
-                return;
+                return tokens;
             default:
                 fprintf(stderr, "ERROR: lexer_lexAll unhandled lex result %d\n", res);
                 assert(false);
-                return;
+                return tokens;
         }
     }
+    return tokens;
 }
 
 /* Object functions ******************/

@@ -1,5 +1,7 @@
 #include "_typedefs.h"
 
+#include "parsers/parsestate.h"
+
 /* Defines *******************************************************************/
 
 /* Types *********************************************************************/
@@ -14,7 +16,7 @@ enum ParseStatus {
     PS_Error
 };
 
-typedef enum ParseStatus (*ParserFunction)(struct Vector* tokens, index_t* tokenIndex, struct Object** result);
+typedef enum ParseStatus (*ParserFunction)(struct ParseState* parseState);
 
 /* Forward declarations ******************************************************/
 
@@ -24,13 +26,13 @@ typedef enum ParseStatus (*ParserFunction)(struct Vector* tokens, index_t* token
 
 /* Public functions **********************************************************/
 
-enum ParseStatus pIgnore(ParserFunction parser, struct Vector* tokens, index_t* tokenIndex, struct Object** result);
-enum ParseStatus pOneOf(count_t nParsers, ParserFunction parsers[], struct Vector* tokens, index_t* tokenIndex, struct Object** result);
-enum ParseStatus pSequence(count_t nParsers, ParserFunction parsers[], struct Vector* tokens, index_t* tokenIndex, struct Object** result);
-enum ParseStatus pSpot(struct Symbol* tokenType, struct Vector* tokens, index_t* tokenIndex, struct Object** result);
+enum ParseStatus pIgnore(ParserFunction parser, struct ParseState* parseState);
+enum ParseStatus pOneOf(count_t nParsers, ParserFunction parsers[], struct ParseState* parseState);
+enum ParseStatus pSequence(count_t nParsers, ParserFunction parsers[], struct ParseState* parseState);
+enum ParseStatus pSpot(struct Symbol* tokenType, struct ParseState* parseState);
 
 /* Composable parsers */
 
-enum ParseStatus pStrip(struct Vector* tokens, index_t* tokenIndex, struct Object** result);
+enum ParseStatus pStrip(struct ParseState* parseState);
 
 /* Private functions *********************************************************/

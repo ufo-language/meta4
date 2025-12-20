@@ -16,7 +16,6 @@ enum {
 struct Vector {
     struct Object obj;
     count_t top;
-    // count_t capacity;
     count_t nResizes;
     struct Array* elems;
 };
@@ -35,6 +34,8 @@ struct Vector* vector_new_withCapacity(count_t capacity);
 /* Public functions **********************************************************/
 
 /* Unique functions ******************/
+
+void vector_clear(struct Vector* vector);
 
 index_t vector_top(struct Vector* vector);
 void vector_setTop(struct Vector* vector, index_t newTop);

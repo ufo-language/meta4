@@ -307,11 +307,11 @@ int main(int argc, char* argv[]) {
             index_t expectedIndex = indexes[n];
             index_t expectedLine = lines[n];
             index_t expectedCol = cols[n];
-            index_t tokenIndex = attrib->elems[0];
+            index_t index = attrib->elems[0];
             index_t tokenLine = attrib->elems[1];
             index_t tokenCol = attrib->elems[2];
             SHOW("Token", tokenObj);
-            EXPECT_IEQ(expectedIndex, tokenIndex);
+            EXPECT_IEQ(expectedIndex, index);
             EXPECT_IEQ(expectedLine, tokenLine);
             EXPECT_IEQ(expectedCol, tokenCol);
         }

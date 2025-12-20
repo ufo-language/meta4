@@ -1,6 +1,7 @@
 #include "_typedefs.h"
 
 #include "parsers/parserprims.h"
+#include "parsers/parsestate.h"
 #include "object/globals.h"
 #include "object/types/symbol.h"
 #include "object/types/term.h"
@@ -20,18 +21,18 @@
 
 #include "debug.h"
 
-enum ParseStatus pIgnore(ParserFunction parser, struct Vector* tokens, index_t* tokenIndex, struct Object** result) {
-    enum ParseStatus parseStatus = parser(tokens, tokenIndex, result);
+enum ParseStatus pIgnore(ParserFunction parser, struct ParseState* parseState) {
+    enum ParseStatus parseStatus = parser(parseState);
     if (parseStatus == PS_Success) {
-        *result = g_uniqueObject;
+        parseState->result = g_uniqueObject;
     }
     return parseStatus;
 }
 
-enum ParseStatus pOneOf(count_t nParsers, ParserFunction parsers[], struct Vector* tokens, index_t* tokenIndex, struct Object** result) {
-    index_t savedIndex = *tokenIndex;
+enum ParseStatus pOneOf(count_t nParsers, ParserFunction parsers[], struct ParseState* parseState) {
+    index_t savedIndex = parseState->index;
     for (index_t n=0; n<nParsers; ++n) {
-        enum ParseStatus parseStatus = parsers[n](tokens, tokenIndex, result);
+        enum ParseStatus parseStatus = parsers[n](parseState);
         switch (parseStatus) {
             case PS_Fail:
                 break;
@@ -39,59 +40,62 @@ enum ParseStatus pOneOf(count_t nParsers, ParserFunction parsers[], struct Vecto
             case PS_Error:
                 return parseStatus;
         }
-        *tokenIndex = savedIndex;
+        parseState->index = savedIndex;
     }
     return PS_Fail;
 }
 
-enum ParseStatus pSequence(count_t nParsers, ParserFunction parsers[], struct Vector* tokens, index_t* tokenIndex, struct Object** result) {
-    index_t savedIndex = *tokenIndex;
-    struct Object* innerResult;
+#if 0
+enum ParseStatus pSepBy(ParserFunction elem, ParserFunction sep, count_t minElems, struct ParseState* parseState) {
+    index_t savedIndex = parseState->index;
+    // TODO
+}
+#endif
+
+enum ParseStatus pSequence(count_t nParsers, ParserFunction parsers[], struct ParseState* parseState) {
+    index_t savedIndex = parseState->index;
     struct Vector* results = vector_new();
     for (index_t n=0; n<nParsers; ++n) {
-        enum ParseStatus parseStatus = parsers[n](tokens, tokenIndex, &innerResult);
+        enum ParseStatus parseStatus = parsers[n](parseState);
         switch (parseStatus) {
             case PS_Success:
-                if (innerResult != g_uniqueObject) {
-                    vector_push(results, innerResult);
+                if (parseState->result != g_uniqueObject) {
+                    vector_push(results, parseState->result);
                 }
                 break;
             case PS_Fail:
-                *tokenIndex = savedIndex;
+                parseState->index = savedIndex;
                 return PS_Fail;
             case PS_Error:
-                *result = innerResult;
                 return PS_Error;
         }
     }
     switch (vector_count(results)) {
         case 0:
-            *result = (struct Object*)g_nil;
+            parseState->result = (struct Object*)g_nil;
             break;
         case 1:
-            *result = vector_pop_unsafe(results);
+            parseState->result = vector_pop_unsafe(results);
             break;
         default:
-            *result = (struct Object*)results;
+            parseState->result = (struct Object*)results;
             break;
     }
     return PS_Success;
 }
 
-enum ParseStatus pSpot(struct Symbol* tokenType, struct Vector* tokens, index_t* tokenIndex, struct Object** result) {
-    struct Object* tokenObj = tokens->elems->elems[*tokenIndex];
+enum ParseStatus pSpot(struct Symbol* tokenType, struct ParseState* parseState) {
+    struct Object* tokenObj = parseState->tokens->elems->elems[parseState->index];
     if (((struct Term*)tokenObj)->name == tokenType) {
-        ++(*tokenIndex);
-        *result = tokenObj;
+        ++(parseState->index);
+        parseState->result = tokenObj;
         return PS_Success;
     }
     return PS_Fail;
 }
 
-enum ParseStatus pStrip(struct Vector* tokens, index_t* tokenIndex, struct Object** result) {
-    (void)tokens;
-    (void)tokenIndex;
-    *result = ((struct Term*)*result)->args[0];
+enum ParseStatus pStrip(struct ParseState* parseState) {
+    parseState->result = ((struct Term*)parseState->result)->args[0];
     return PS_Success;
 }
 
