@@ -31,7 +31,7 @@ bool_t boolValue(struct Object* obj) {
     switch(obj->typeId) {
         case OT_Application:   return true;
         case OT_Array:         return ((struct Array*)obj)->nElems != 0;
-        case OT_Binding:       return ((struct Binding*)obj) != g_emptyTriple;
+        case OT_Binding:       return ((struct Binding*)obj) != g_emptyBinding;
         case OT_BinOp:         return true;
         case OT_Boolean:       return ((struct Boolean*)obj)->b;
         case OT_ByteBuffer:    break;

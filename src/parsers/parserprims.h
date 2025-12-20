@@ -1,3 +1,5 @@
+#pragma once
+
 #include "_typedefs.h"
 
 #include "parsers/parsestate.h"
@@ -28,6 +30,7 @@ typedef enum ParseStatus (*ParserFunction)(struct ParseState* parseState);
 
 enum ParseStatus pIgnore(ParserFunction parser, struct ParseState* parseState);
 enum ParseStatus pOneOf(count_t nParsers, ParserFunction parsers[], struct ParseState* parseState);
+enum ParseStatus pSepBy(ParserFunction elem, ParserFunction separator, count_t minElems, struct ParseState* parseState);
 enum ParseStatus pSequence(count_t nParsers, ParserFunction parsers[], struct ParseState* parseState);
 enum ParseStatus pSpot(struct Symbol* tokenType, struct ParseState* parseState);
 

@@ -45,12 +45,44 @@ enum ParseStatus pOneOf(count_t nParsers, ParserFunction parsers[], struct Parse
     return PS_Fail;
 }
 
-#if 0
-enum ParseStatus pSepBy(ParserFunction elem, ParserFunction sep, count_t minElems, struct ParseState* parseState) {
+enum ParseStatus pSepBy(ParserFunction elem, ParserFunction separator, count_t minElems, struct ParseState* parseState) {
+    struct Vector* elems = vector_new();
+    count_t nElems = 0;
     index_t savedIndex = parseState->index;
-    // TODO
+    bool_t contin = true;
+    while (contin) {
+        switch (elem(parseState)) {
+            case PS_Success:
+                vector_push(elems, parseState->result);
+                ++nElems;
+                switch (separator(parseState)) {
+                    case PS_Success:
+                        break;
+                    case PS_Fail:
+                        contin = false;
+                        break;
+                    case PS_Error:
+                        return PS_Error;
+                }
+                break;
+            case PS_Fail:
+                if (nElems > 0) {
+                    // ERROR: element expected after separator
+                    return PS_Error;
+                }
+                contin = false;
+                break;
+            case PS_Error:
+                return PS_Error;
+        }
+    }
+    if (nElems < minElems) {
+        parseState->index = savedIndex;
+        return PS_Fail;
+    }
+    parseState->result = (struct Object*)elems;
+    return PS_Success;
 }
-#endif
 
 enum ParseStatus pSequence(count_t nParsers, ParserFunction parsers[], struct ParseState* parseState) {
     index_t savedIndex = parseState->index;

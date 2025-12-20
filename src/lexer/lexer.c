@@ -145,21 +145,21 @@ static enum Lexer_TokenType _lexer_classifyWord(char* s) {
 }
 
 static void _lexer_createTokenTypeNames(void) {
-    tokenTypeNames[T_None]     = symbol_new("None");
-    tokenTypeNames[T_Int]      = symbol_new("Int");
-    tokenTypeNames[T_HexInt]   = symbol_new("Int");
-    tokenTypeNames[T_BinInt]   = symbol_new("Int");
-    tokenTypeNames[T_Real]     = symbol_new("Real");
-    tokenTypeNames[T_Bool]     = symbol_new("Bool");
-    tokenTypeNames[T_Nil]      = symbol_new("Nil");
-    tokenTypeNames[T_Word]     = symbol_new("Word");
-    tokenTypeNames[T_Ident]    = symbol_new("Ident");
-    tokenTypeNames[T_Reserved] = symbol_new("Reserved");
-    tokenTypeNames[T_String]   = symbol_new("String");
-    tokenTypeNames[T_Oper]     = symbol_new("Oper");
-    tokenTypeNames[T_Special]  = symbol_new("Special");
-    tokenTypeNames[T_Symbol]   = symbol_new("Symbol");
-    tokenTypeNames[T_EOI]      = symbol_new("EOI");
+    tokenTypeNames[T_None]     = g_symNone;
+    tokenTypeNames[T_Int]      = g_symInteger;
+    tokenTypeNames[T_HexInt]   = g_symInteger;
+    tokenTypeNames[T_BinInt]   = g_symInteger;
+    tokenTypeNames[T_Real]     = g_symReal;
+    tokenTypeNames[T_Bool]     = g_symBoolean;
+    tokenTypeNames[T_Nil]      = g_symNil;
+    tokenTypeNames[T_Word]     = g_symWord;
+    tokenTypeNames[T_Ident]    = g_symIdentifier;
+    tokenTypeNames[T_Reserved] = g_symReserved;
+    tokenTypeNames[T_String]   = g_symString;
+    tokenTypeNames[T_Oper]     = g_symOperator;
+    tokenTypeNames[T_Special]  = g_symSpecial;
+    tokenTypeNames[T_Symbol]   = g_symSymbol;
+    tokenTypeNames[T_EOI]      = g_symEOI;
     tokenTypeNamesCreated      = true;
 }
 

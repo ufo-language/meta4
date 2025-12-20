@@ -11,6 +11,7 @@
 #include "object/types/outstream.h"
 #include "object/types/pair.h"
 #include "object/types/primitive.h"
+#include "object/types/symbol.h"
 #include "object/types/vector.h"
 
 /* Defines *******************************************************************/
@@ -21,6 +22,7 @@
 
 /* Global variables **********************************************************/
 
+struct Binding*       g_emptyBinding;
 struct Boolean*       g_false;
 struct Boolean*       g_true;
 struct FunctionRule*  g_emptyFunctionRule;
@@ -30,12 +32,26 @@ struct Nil*           g_nil;
 struct Object*        g_uniqueObject;
 struct Pair*          g_emptyPair;
 struct PrimitiveRule* g_emptyPrimRule;
-struct Binding*        g_emptyTriple;
 struct Vector*        g_globalEnv;
 struct HashTable*     g_identifierInternTable;
 struct HashTable*     g_symbolInternTable;
 struct OutStream*     g_stdout;
 struct OutStream*     g_stderr;
+
+/* Symbols used by the lexer and parser */
+struct Symbol*        g_symBoolean;
+struct Symbol*        g_symEOI;
+struct Symbol*        g_symIdentifier;
+struct Symbol*        g_symInteger;
+struct Symbol*        g_symNil;
+struct Symbol*        g_symNone;
+struct Symbol*        g_symOperator;
+struct Symbol*        g_symReal;
+struct Symbol*        g_symReserved;
+struct Symbol*        g_symSpecial;
+struct Symbol*        g_symString;
+struct Symbol*        g_symSymbol;
+struct Symbol*        g_symWord;
 
 /* Lifecycle functions *******************************************************/
 
@@ -49,9 +65,9 @@ void globals_init(void) {
     /* Memory & GC first */
     g_gc                    = gc_new();
     /* Prepare intern tables */
-    g_emptyTriple           = binding_new_empty();
-    g_identifierInternTable = hashTable_new();  /* Depends on g_emptyTriple */
-    g_symbolInternTable     = hashTable_new();  /* Depends on g_emptyTriple */
+    g_emptyBinding          = binding_new_empty();
+    g_identifierInternTable = hashTable_new();  /* Depends on g_emptyBinding */
+    g_symbolInternTable     = hashTable_new();  /* Depends on g_emptyBinding */
     /* Create constants next */
     g_true                  = boolean_new(true);
     g_false                 = boolean_new(false);
@@ -64,6 +80,21 @@ void globals_init(void) {
     g_emptyPair             = pair_new_empty();
     g_emptyFunctionRule     = function_emptyRule();
     g_emptyPrimRule         = prim_emptyRule();
+    /* Lexer/parser symbols */
+    g_symInteger            = symbol_new("Integer");
+    g_symBoolean               = symbol_new("Bool");
+    g_symEOI                = symbol_new("EOI");
+    g_symIdentifier         = symbol_new("Identifeir");
+    g_symInteger            = symbol_new("Integer");
+    g_symNil                = symbol_new("Nil");
+    g_symNone               = symbol_new("None");
+    g_symOperator           = symbol_new("Operator");
+    g_symReal               = symbol_new("Real");
+    g_symReserved           = symbol_new("Reserved");
+    g_symSpecial            = symbol_new("Special");
+    g_symString             = symbol_new("String");
+    g_symSymbol             = symbol_new("Symbol");
+    g_symWord               = symbol_new("Word");
     /* Global environment last */
     g_globalEnv             = vector_new();
 }

@@ -53,7 +53,7 @@ void set_show(struct Set* set, struct OutStream* outStream) {
     bool_t firstShown = false;
     for (index_t n=0; n<set->hashTable.nBuckets; ++n) {
         struct Binding* binding = set->hashTable.buckets[n];
-        while (binding != g_emptyTriple) {
+        while (binding != g_emptyBinding) {
             if (firstShown) {
                 outStream_writeString(outStream, ", ");
             }

@@ -3,6 +3,7 @@
 
 #include "lexer/syntax.h"
 #include "parsers/parserprims.h"
+#include "parsers/parseliterals.h"
 #include "object/globals.h"
 #include "object/types/integer.h"
 #include "object/types/symbol.h"
@@ -258,6 +259,78 @@ int main(int argc, char* argv[]) {
         ASSERT_IEQ(PS_Success, pOneOf(nParsers, parsers, &parseState));
         EXPECT_EQ(g_nil, parseState.result);
         EXPECT_IEQ(0, testParser_fail_nCalls);
+    END
+
+    TEST(pSepBy_intSymbol_0)
+        const string_t src = "";
+        vector_clear(tokens);
+        struct ParseState parseState = {
+            .tokens = lexer_lexAll_withVector(syntax, src, tokens),
+            .index = 0,
+            .result = (struct Object*)g_nil
+        };
+        ASSERT_IEQ(PS_Success, pSepBy(pInteger, pSymbol, 0, &parseState));
+        ASSERT_ISA(OT_Vector, parseState.result);
+        ASSERT_IEQ(0, vector_count((struct Vector*)parseState.result));
+    END
+
+    TEST(pSepBy_intSymbol_1)
+        const string_t src = "123";
+        vector_clear(tokens);
+        struct ParseState parseState = {
+            .tokens = lexer_lexAll_withVector(syntax, src, tokens),
+            .index = 0,
+            .result = (struct Object*)g_nil
+        };
+        ASSERT_IEQ(PS_Success, pSepBy(pInteger, pSymbol, 1, &parseState));
+        ASSERT_ISA(OT_Vector, parseState.result);
+        ASSERT_IEQ(1, vector_count((struct Vector*)parseState.result));
+    END
+
+    TEST(pSepBy_intSymbol_3)
+        const string_t src = "123 A 456 B 789";
+        vector_clear(tokens);
+        struct ParseState parseState = {
+            .tokens = lexer_lexAll_withVector(syntax, src, tokens),
+            .index = 0,
+            .result = (struct Object*)g_nil
+        };
+        ASSERT_IEQ(PS_Success, pSepBy(pInteger, pSymbol, 3, &parseState));
+        ASSERT_ISA(OT_Vector, parseState.result);
+        ASSERT_IEQ(3, vector_count((struct Vector*)parseState.result));
+    END
+
+    TEST(pSepBy_intSymbol_3_fail_2)
+        const string_t src = "123 A 456";
+        vector_clear(tokens);
+        struct ParseState parseState = {
+            .tokens = lexer_lexAll_withVector(syntax, src, tokens),
+            .index = 0,
+            .result = (struct Object*)g_nil
+        };
+        ASSERT_IEQ(PS_Fail, pSepBy(pInteger, pSymbol, 3, &parseState));
+    END
+
+    TEST(pSepBy_intSymbol_error_Sym)
+        const string_t src = "123 A B";
+        vector_clear(tokens);
+        struct ParseState parseState = {
+            .tokens = lexer_lexAll_withVector(syntax, src, tokens),
+            .index = 0,
+            .result = (struct Object*)g_nil
+        };
+        ASSERT_IEQ(PS_Error, pSepBy(pInteger, pSymbol, 3, &parseState));
+    END
+
+    TEST(pSepBy_intSymbol_Fail)
+        const string_t src = "123 456";
+        vector_clear(tokens);
+        struct ParseState parseState = {
+            .tokens = lexer_lexAll_withVector(syntax, src, tokens),
+            .index = 0,
+            .result = (struct Object*)g_nil
+        };
+        ASSERT_IEQ(PS_Fail, pSepBy(pInteger, pSymbol, 3, &parseState));
     END
 
     END_TESTS
