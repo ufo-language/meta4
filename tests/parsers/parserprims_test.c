@@ -4,6 +4,7 @@
 #include "lexer/syntax.h"
 #include "parsers/parserprims.h"
 #include "parsers/parseliterals.h"
+#include "parsers/parsespecialchars.h"
 #include "object/globals.h"
 #include "object/types/integer.h"
 #include "object/types/symbol.h"
@@ -362,6 +363,28 @@ int main(int argc, char* argv[]) {
             .result = (struct Object*)g_nil
         };
         ASSERT_IEQ(PS_Success, pListOf(pSymbol, pBoolean, pInteger, pIdentifier, &parseState));
+    END
+
+    TEST(pSpotSpecialChar_success)
+        const string_t src = "{";
+        vector_clear(tokens);
+        struct ParseState parseState = {
+            .tokens = lexer_lexAll_withVector(syntax, src, tokens),
+            .index = 0,
+            .result = (struct Object*)g_nil
+        };
+        ASSERT_IEQ(PS_Success, pSpecialOpenBrace(&parseState));
+    END
+
+    TEST(pSpotSpecialChar_success)
+        const string_t src = "X";
+        vector_clear(tokens);
+        struct ParseState parseState = {
+            .tokens = lexer_lexAll_withVector(syntax, src, tokens),
+            .index = 0,
+            .result = (struct Object*)g_nil
+        };
+        ASSERT_IEQ(PS_Fail, pSpecialOpenBrace(&parseState));
     END
 
     END_TESTS

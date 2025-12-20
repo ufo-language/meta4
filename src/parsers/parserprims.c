@@ -3,6 +3,7 @@
 #include "parsers/parserprims.h"
 #include "parsers/parsestate.h"
 #include "object/globals.h"
+#include "object/types/string.h"
 #include "object/types/symbol.h"
 #include "object/types/term.h"
 #include "object/types/vector.h"
@@ -140,13 +141,38 @@ enum ParseStatus pSequence(count_t nParsers, ParserFunction parsers[], struct Pa
 
 enum ParseStatus pSpot(struct Symbol* tokenType, struct ParseState* parseState) {
     struct Object* tokenObj = parseState->tokens->elems->elems[parseState->index];
-    if (((struct Term*)tokenObj)->name == tokenType) {
+    if (tokenObj->typeId != OT_Term) {
+        return PS_Fail;
+    }
+    struct Term* token = (struct Term*)tokenObj;
+    if (token->name == tokenType) {
         ++(parseState->index);
         parseState->result = tokenObj;
         return PS_Success;
     }
     return PS_Fail;
 }
+
+#if 0
+enum ParseStatus pSpotSpecific(struct Symbol* tokenType, const string_t tokenString, struct ParseState* parseState) {
+    index_t savedIndex = parseState->index;
+    enum ParseStatus status = pSpot(tokenType, parseState);
+    if (status == PS_Success) {
+        struct Term* token = (struct Term*)parseState->result;
+        if (token->nArgs == 1) {
+            struct Object* argObj = token->args[0];
+            if (argObj->typeId == OT_String) {
+                struct String* argString = (struct String*)argObj;
+                if (string_equal_chars(argString, tokenString)) {
+                    return PS_Success;
+                }
+            }
+        }
+    }
+    parseState->index = savedIndex;
+    return PS_Fail;
+}
+#endif
 
 enum ParseStatus pStrip(struct ParseState* parseState) {
     parseState->result = ((struct Term*)parseState->result)->args[0];
