@@ -29,6 +29,28 @@ enum ParseStatus pIgnore(ParserFunction parser, struct ParseState* parseState) {
     return parseStatus;
 }
 
+enum ParseStatus pListOf(ParserFunction open, ParserFunction elem, ParserFunction sep, ParserFunction close, struct ParseState* parseState) {
+    index_t savedIndex = parseState->index;
+    enum ParseStatus status = open(parseState);
+    if (status != PS_Success) {
+        parseState->index = savedIndex;
+        return status;
+    }
+    status = pSepBy(elem, sep, 0, parseState);
+    if (status != PS_Success) {
+        parseState->index = savedIndex;
+        return status;
+    }
+    struct Vector* elems = (struct Vector*)parseState->result;
+    status = close(parseState);
+    if (status != PS_Success) {
+        parseState->index = savedIndex;
+        return status;
+    }
+    parseState->result = (struct Object*)elems;
+    return PS_Success;
+}
+
 enum ParseStatus pOneOf(count_t nParsers, ParserFunction parsers[], struct ParseState* parseState) {
     index_t savedIndex = parseState->index;
     for (index_t n=0; n<nParsers; ++n) {

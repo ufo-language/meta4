@@ -10,10 +10,9 @@
 #include "object/types/term.h"
 #include "object/types/vector.h"
 
-static bool_t isA(const string_t tokenType, struct Object* tokenObj) {
+static bool_t isA(struct Symbol* tokenType, struct Object* tokenObj) {
     struct Term* token = (struct Term*)tokenObj;
-    struct Symbol* expectedNameSym = symbol_new(tokenType);
-    return token->name == expectedNameSym;
+    return token->name == tokenType;
 }
 
 count_t testParser_pass_nCalls = 0;
@@ -56,7 +55,6 @@ enum ParseStatus testParser_returnUnique(struct ParseState* parseState) {
 int main(int argc, char* argv[]) {
     BEGIN_TESTS
 
-    struct Symbol* integerSym = symbol_new("Int");
     struct Vector* tokens = vector_new();
 
     TEST(pSpot_checkEmptyTokenVector)
@@ -69,8 +67,8 @@ int main(int argc, char* argv[]) {
         };
         /* The vector is not really empty; it contains EOF{EOF} */
         ASSERT_IEQ(1, vector_count(parseState.tokens));
-        ASSERT_TRUE(isA("EOI", vector_get_unsafe(parseState.tokens, 0)));
-        EXPECT_IEQ(PS_Fail, pSpot(integerSym, &parseState));
+        ASSERT_TRUE(isA(g_symEOI, vector_get_unsafe(parseState.tokens, 0)));
+        EXPECT_IEQ(PS_Fail, pSpot(g_symInteger, &parseState));
     END
 
     TEST(pSpot_checkInt)
@@ -81,13 +79,13 @@ int main(int argc, char* argv[]) {
             .index = 0,
             .result = (struct Object*)g_nil
         };
-        EXPECT_TRUE(isA("Int", vector_get_unsafe(parseState.tokens, 0)));
-        ASSERT_TRUE(isA("EOI", vector_get_unsafe(parseState.tokens, 1)));
+        EXPECT_TRUE(isA(g_symInteger, vector_get_unsafe(parseState.tokens, 0)));
+        ASSERT_TRUE(isA(g_symEOI, vector_get_unsafe(parseState.tokens, 1)));
         ASSERT_IEQ(2, vector_count(parseState.tokens));
-        ASSERT_IEQ(PS_Success, pSpot(integerSym, &parseState));
+        ASSERT_IEQ(PS_Success, pSpot(g_symInteger, &parseState));
         EXPECT_IEQ(1, parseState.index);
         ASSERT_ISA(OT_Term, parseState.result);
-        EXPECT_TRUE(isA("Int", parseState.result));
+        EXPECT_TRUE(isA(g_symInteger, parseState.result));
     END
 
     TEST(pStrip_checkInt)
@@ -98,7 +96,7 @@ int main(int argc, char* argv[]) {
             .index = 0,
             .result = (struct Object*)g_nil
         };
-        ASSERT_IEQ(PS_Success, pSpot(integerSym, &parseState));
+        ASSERT_IEQ(PS_Success, pSpot(g_symInteger, &parseState));
         ASSERT_IEQ(1, parseState.index);
         ASSERT_IEQ(PS_Success, pStrip(&parseState));
         ASSERT_ISA(OT_Integer, parseState.result);
@@ -331,6 +329,17 @@ int main(int argc, char* argv[]) {
             .result = (struct Object*)g_nil
         };
         ASSERT_IEQ(PS_Fail, pSepBy(pInteger, pSymbol, 3, &parseState));
+    END
+
+    TEST(pListOf_success)
+        const string_t src = "A true 0 false 1 true x";
+        vector_clear(tokens);
+        struct ParseState parseState = {
+            .tokens = lexer_lexAll_withVector(syntax, src, tokens),
+            .index = 0,
+            .result = (struct Object*)g_nil
+        };
+        ASSERT_IEQ(PS_Success, pListOf(pSymbol, pBoolean, pInteger, pIdentifier, &parseState));
     END
 
     END_TESTS

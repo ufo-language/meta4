@@ -29,6 +29,7 @@ typedef enum ParseStatus (*ParserFunction)(struct ParseState* parseState);
 /* Public functions **********************************************************/
 
 enum ParseStatus pIgnore(ParserFunction parser, struct ParseState* parseState);
+enum ParseStatus pListOf(ParserFunction open, ParserFunction elem, ParserFunction sep, ParserFunction close, struct ParseState* parseState);
 enum ParseStatus pOneOf(count_t nParsers, ParserFunction parsers[], struct ParseState* parseState);
 enum ParseStatus pSepBy(ParserFunction elem, ParserFunction separator, count_t minElems, struct ParseState* parseState);
 enum ParseStatus pSequence(count_t nParsers, ParserFunction parsers[], struct ParseState* parseState);
