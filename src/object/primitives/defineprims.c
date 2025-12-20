@@ -38,6 +38,15 @@ void definePrim(struct Vector* env, const string_t name, PrimFunction function, 
     vector_bindPair(env, (struct Object*)prim->name, (struct Object*)prim);
 }
 
+void defineMacro(struct Vector* env, const string_t name, PrimFunction function, count_t nParams, ...) {
+    va_list paramTypes;
+    va_start(paramTypes, nParams);
+    struct Primitive* prim = prim_newMacro(name);
+    prim_vaddRule(prim, function, nParams, paramTypes);
+    va_end(paramTypes);
+    vector_bindPair(env, (struct Object*)prim->name, (struct Object*)prim);
+}
+
 void definePrims_init(struct Vector* env) {
     definePrim(env, "count",   _prim_count,   1, OT_Any);
     definePrim(env, "display", _prim_display, COUNT_MAX);

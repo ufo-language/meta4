@@ -6,7 +6,7 @@
 #include "object/typeids.h"
 #include "object/types/outstream.h"
 #include "object/types/set.h"
-#include "object/types/triple.h"
+#include "object/types/binding.h"
 
 /* Defines *******************************************************************/
 
@@ -52,7 +52,7 @@ void set_show(struct Set* set, struct OutStream* outStream) {
     outStream_writeString(outStream, "${");
     bool_t firstShown = false;
     for (index_t n=0; n<set->hashTable.nBuckets; ++n) {
-        struct Triple* binding = set->hashTable.buckets[n];
+        struct Binding* binding = set->hashTable.buckets[n];
         while (binding != g_emptyTriple) {
             if (firstShown) {
                 outStream_writeString(outStream, ", ");

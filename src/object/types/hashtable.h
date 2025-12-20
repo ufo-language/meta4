@@ -13,7 +13,7 @@
 
 /* Types *********************************************************************/
 
-struct Triple;
+struct Binding;
 
 struct HashTable {
     struct Object obj;
@@ -21,7 +21,7 @@ struct HashTable {
     count_t nElems;
     count_t maxLoad;
     count_t nBuckets;
-    struct Triple** buckets;
+    struct Binding** buckets;
 };
 
 struct OutStream;

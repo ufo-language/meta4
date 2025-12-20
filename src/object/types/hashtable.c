@@ -12,7 +12,7 @@
 #include "object/types/outstream.h"
 #include "object/types/string.h"
 #include "object/types/symbolic.h"
-#include "object/types/triple.h"
+#include "object/types/binding.h"
 
 /* Defines *******************************************************************/
 
@@ -20,9 +20,9 @@
 
 /* Forward declarations ******************************************************/
 
-static struct Triple** _hashTable_createNBuckets(count_t nBuckets);
+static struct Binding** _hashTable_createNBuckets(count_t nBuckets);
 static void _hashTable_resize(struct HashTable* hashTable);
-static void _hashTable_putUsingBuckets(count_t nBuckets, struct Triple** buckets, struct Object* key, word_t hashCode, struct Object* value);
+static void _hashTable_putUsingBuckets(count_t nBuckets, struct Binding** buckets, struct Object* key, word_t hashCode, struct Object* value);
 
 /* Global variables **********************************************************/
 
@@ -59,7 +59,7 @@ bool_t hashTable_get(struct HashTable* hashTable, struct Object* key, struct Obj
 bool_t hashTable_get_withHashCode(struct HashTable* hashTable, struct Object* key, word_t hashCode, struct Object** value) {
     index_t bucketNum = hashCode % hashTable->nBuckets;
     /* Look for existing key */
-    struct Triple* binding = hashTable->buckets[bucketNum];
+    struct Binding* binding = hashTable->buckets[bucketNum];
     while (binding != g_emptyTriple) {
         if (equal(key, binding->key)) {
             *value = binding->value;
@@ -111,8 +111,8 @@ bool_t hashTable_remove(struct HashTable* hashTable, struct Object* key) {
         return false;
     }
     index_t bucketNum = hashCode % hashTable->nBuckets;
-    struct Triple* binding = hashTable->buckets[bucketNum];
-    struct Triple* prev = g_emptyTriple;
+    struct Binding* binding = hashTable->buckets[bucketNum];
+    struct Binding* prev = g_emptyTriple;
     while (binding != g_emptyTriple) {
         if (equal(key, binding->key)) {
             if (prev == g_emptyTriple) {
@@ -140,12 +140,12 @@ void hashTable_show(struct HashTable* hashTable, struct OutStream* outStream) {
     outStream_writeString(outStream, "#{");
     bool_t firstShown = false;
     for (index_t n=0; n<hashTable->nBuckets; ++n) {
-        struct Triple* binding = hashTable->buckets[n];
+        struct Binding* binding = hashTable->buckets[n];
         while (binding != g_emptyTriple) {
             if (firstShown) {
                 outStream_writeString(outStream, ", ");
             }
-            triple_show(binding, outStream);
+            binding_show(binding, outStream);
             binding = binding->next;
             firstShown = true;
         }
@@ -155,19 +155,19 @@ void hashTable_show(struct HashTable* hashTable, struct OutStream* outStream) {
 
 /* Private functions *********************************************************/
 
-static struct Triple** _hashTable_createNBuckets(count_t nBuckets) {
-    count_t nWords = NBYTES_TO_WORDS(sizeof(struct Triple*) * nBuckets);
-    struct Triple** buckets = memory_alloc(nWords);
+static struct Binding** _hashTable_createNBuckets(count_t nBuckets) {
+    count_t nWords = NBYTES_TO_WORDS(sizeof(struct Binding*) * nBuckets);
+    struct Binding** buckets = memory_alloc(nWords);
     for (index_t n=0; n<nBuckets; ++n) {
         buckets[n] = g_emptyTriple;
     }
     return buckets;
 }
 
-static void _hashTable_putUsingBuckets(count_t nBuckets, struct Triple** buckets, struct Object* key, word_t hashCode, struct Object* value) {
+static void _hashTable_putUsingBuckets(count_t nBuckets, struct Binding** buckets, struct Object* key, word_t hashCode, struct Object* value) {
     index_t bucketNum = hashCode % nBuckets;
     /* Look for existing key */
-    struct Triple* binding = buckets[bucketNum];
+    struct Binding* binding = buckets[bucketNum];
     while (binding != g_emptyTriple) {
         if (equal(key, binding->key)) {
             binding->value = value;
@@ -175,17 +175,17 @@ static void _hashTable_putUsingBuckets(count_t nBuckets, struct Triple** buckets
         }
         binding = binding->next;
     }
-    binding = triple_new(key, value, buckets[bucketNum]);
+    binding = binding_new(key, value, buckets[bucketNum]);
     buckets[bucketNum] = binding;
 }
 
 static void _hashTable_resize(struct HashTable* hashTable) {
     count_t newNBuckets = hashTable->nBuckets * 2;
     /* Allocate new buckets */
-    struct Triple** newBuckets = _hashTable_createNBuckets(newNBuckets);
+    struct Binding** newBuckets = _hashTable_createNBuckets(newNBuckets);
     /* Rehash each pair */
     for (index_t n=0; n<hashTable->nBuckets; ++n) {
-        struct Triple* binding = hashTable->buckets[n];
+        struct Binding* binding = hashTable->buckets[n];
         while (binding != g_emptyTriple) {
             word_t hashCode;
             /* It's safe to ignore the return value of hash() because we already know

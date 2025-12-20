@@ -10,11 +10,11 @@
 
 /* Types *********************************************************************/
 
-struct Triple {
+struct Binding {
     struct Object obj;
     struct Object* key;
     struct Object* value;
-    struct Triple* next;
+    struct Binding* next;
 };
 
 struct OutStream;
@@ -25,8 +25,8 @@ struct OutStream;
 
 /* Lifecycle functions *******************************************************/
 
-struct Triple* triple_new(struct Object* key, struct Object* value, struct Triple* next);
-struct Triple* triple_new_empty(void);
+struct Binding* binding_new(struct Object* key, struct Object* value, struct Binding* next);
+struct Binding* binding_new_empty(void);
 
 /* Public functions **********************************************************/
 
@@ -34,4 +34,4 @@ struct Triple* triple_new_empty(void);
 
 /* Object functions ******************/
 
-void triple_show(struct Triple* triple, struct OutStream* outStream);
+void binding_show(struct Binding* triple, struct OutStream* outStream);

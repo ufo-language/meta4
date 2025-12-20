@@ -30,7 +30,7 @@
 #include "object/types/string.h"
 #include "object/types/symbolic.h"
 #include "object/types/term.h"
-#include "object/types/triple.h"
+#include "object/types/binding.h"
 #include "object/types/vector.h"
 #include "object/types/while.h"
 
@@ -50,6 +50,7 @@ void show(struct Object* obj, struct OutStream* outStream) {
     switch(obj->typeId) {
         case OT_Application:   application_show((struct Application*)obj, outStream); return;
         case OT_Array:         array_show((struct Array*)obj, outStream); return;
+        case OT_Binding:       binding_show((struct Binding*)obj, outStream); return;
         case OT_BinOp:         break;
         case OT_Boolean:       boolean_show((struct Boolean*)obj, outStream); return;
         case OT_ByteBuffer:    byteBuffer_show((struct ByteBuffer*)obj, outStream); return;
@@ -80,7 +81,6 @@ void show(struct Object* obj, struct OutStream* outStream) {
         case OT_Symbol:        symbolic_show((struct Symbolic*)obj, outStream); return;
         case OT_Term:          term_show((struct Term*)obj, outStream); return;
         case OT_Test:          break;
-        case OT_Triple:        triple_show((struct Triple*)obj, outStream); return;
         case OT_User:          break;
         case OT_Var:           break;
         case OT_Vector:        vector_show((struct Vector*)obj, outStream); return;

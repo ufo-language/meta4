@@ -19,6 +19,7 @@ enum TypeId {
     OT_ConstantLimit,  /* Constant typeIds are less than this value */
     /* Containers */
     OT_Array,
+    OT_Binding,
     OT_ByteBuffer,
     OT_HashTable,
     OT_IntArray,
@@ -28,7 +29,6 @@ enum TypeId {
     OT_Queue,
     OT_Set,
     OT_Term,
-    OT_Triple,
     OT_Vector,
     OT_Var,
     /* Expressions */

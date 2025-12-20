@@ -9,7 +9,7 @@
 #include "object/types/intvar.h"
 #include "object/types/pair.h"
 #include "object/types/string.h"
-#include "object/types/triple.h"
+#include "object/types/binding.h"
 
 /* Defines *******************************************************************/
 
@@ -31,6 +31,7 @@ bool_t boolValue(struct Object* obj) {
     switch(obj->typeId) {
         case OT_Application:   return true;
         case OT_Array:         return ((struct Array*)obj)->nElems != 0;
+        case OT_Binding:       return ((struct Binding*)obj) != g_emptyTriple;
         case OT_BinOp:         return true;
         case OT_Boolean:       return ((struct Boolean*)obj)->b;
         case OT_ByteBuffer:    break;
@@ -58,7 +59,6 @@ bool_t boolValue(struct Object* obj) {
         case OT_String:        return ((struct String*)obj)->nChars > 0;
         case OT_Symbol:        return true;
         case OT_Test:          return true;
-        case OT_Triple:        return ((struct Triple*)obj) != g_emptyTriple;
         case OT_User:          return true;
         case OT_Var:           return true;
         case OT_Vector:        break;

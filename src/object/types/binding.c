@@ -3,8 +3,8 @@
 #include "object/functions/show.h"
 #include "object/globals.h"
 #include "object/object.h"
+#include "object/types/binding.h"
 #include "object/types/outstream.h"
-#include "object/types/triple.h"
 
 /* Defines *******************************************************************/
 
@@ -16,16 +16,16 @@
 
 /* Lifecycle functions *******************************************************/
 
-struct Triple* triple_new(struct Object* key, struct Object* value, struct Triple* next) {
-    struct Triple* triple = (struct Triple*)object_new(OT_Triple, NWORDS(struct Triple));
+struct Binding* binding_new(struct Object* key, struct Object* value, struct Binding* next) {
+    struct Binding* triple = (struct Binding*)object_new(OT_Binding, NWORDS(struct Binding));
     triple->key = key;
     triple->value = value;
     triple->next = next;
     return triple;
 }
 
-struct Triple* triple_new_empty(void) {
-    struct Triple* triple = (struct Triple*)object_new(OT_Triple, NWORDS(struct Triple));
+struct Binding* binding_new_empty(void) {
+    struct Binding* triple = (struct Binding*)object_new(OT_Binding, NWORDS(struct Binding));
     triple->key = (struct Object*)g_nil;
     triple->value = (struct Object*)g_nil;
     triple->next = triple;
@@ -40,7 +40,7 @@ struct Triple* triple_new_empty(void) {
 
 /* Private functions *********************************************************/
 
-void triple_show(struct Triple* triple, struct OutStream* outStream) {
+void binding_show(struct Binding* triple, struct OutStream* outStream) {
     outStream_fwrite(outStream,
         'O', triple->key,
         'C', '=',

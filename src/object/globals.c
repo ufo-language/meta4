@@ -2,6 +2,7 @@
 
 #include "memory/gc.h"
 #include "object/globals.h"
+#include "object/types/binding.h"
 #include "object/types/boolean.h"
 #include "object/types/function.h"
 #include "object/types/hashtable.h"
@@ -10,7 +11,6 @@
 #include "object/types/outstream.h"
 #include "object/types/pair.h"
 #include "object/types/primitive.h"
-#include "object/types/triple.h"
 #include "object/types/vector.h"
 
 /* Defines *******************************************************************/
@@ -30,7 +30,7 @@ struct Nil*           g_nil;
 struct Object*        g_uniqueObject;
 struct Pair*          g_emptyPair;
 struct PrimitiveRule* g_emptyPrimRule;
-struct Triple*        g_emptyTriple;
+struct Binding*        g_emptyTriple;
 struct Vector*        g_globalEnv;
 struct HashTable*     g_identifierInternTable;
 struct HashTable*     g_symbolInternTable;
@@ -49,7 +49,7 @@ void globals_init(void) {
     /* Memory & GC first */
     g_gc                    = gc_new();
     /* Prepare intern tables */
-    g_emptyTriple           = triple_new_empty();
+    g_emptyTriple           = binding_new_empty();
     g_identifierInternTable = hashTable_new();  /* Depends on g_emptyTriple */
     g_symbolInternTable     = hashTable_new();  /* Depends on g_emptyTriple */
     /* Create constants next */
