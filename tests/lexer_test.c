@@ -5,6 +5,7 @@
 
 #include "lexer/lexer.h"
 #include "lexer/syntax.h"
+#include "object/globals.h"
 #include "object/types/identifier.h"
 #include "object/types/intarray.h"
 #include "object/types/integer.h"
@@ -14,8 +15,19 @@
 #include "object/types/term.h"
 #include "object/types/vector.h"
 
-bool_t tokenTypeIs(const char* typeName, struct Term* token) {
-    return strcmp(token->name->name, typeName) ? false : true;
+// bool_t tokenTypeIs(struct Symbol* typeName, struct Term* token) {
+//     return token->name == typeName;
+// }
+
+bool_t isEOI(struct Object* tokenObj) {
+    if (tokenObj->typeId != OT_Term) {
+        return false;
+    }
+    struct Term* token = (struct Term*)tokenObj;
+    if (token->name != g_symEOI) {
+        return false;
+    }
+    return true;
 }
 
 int main(int argc, char* argv[]) {
@@ -28,7 +40,7 @@ int main(int argc, char* argv[]) {
         struct Vector* tokens = lexer_lexAll(syntax, src);
         ASSERT_IEQ(1, vector_count(tokens));
         /* First token */
-        ASSERT_TRUE(tokenTypeIs("EOI", (struct Term*)tokens->elems->elems[0]));
+        ASSERT_TRUE(isEOI(tokens->elems->elems[0]));
     END
 
     TEST(lexer_checkInteger_positive)
@@ -37,13 +49,13 @@ int main(int argc, char* argv[]) {
         ASSERT_IEQ(2, vector_count(tokens));
         /* First token */
         struct Term* token = (struct Term*)tokens->elems->elems[0];
-        ASSERT_TRUE(tokenTypeIs("Int", token));
+        ASSERT_EQ(g_symInteger, token->name);
         ASSERT_IEQ(1, token->nArgs);
         struct Object* arg = token->args[0];
         ASSERT_ISA(OT_Integer, arg);
         ASSERT_IEQ(123, ((struct Integer*)arg)->i);
         /* Second token */
-        ASSERT_TRUE(tokenTypeIs("EOI", (struct Term*)tokens->elems->elems[1]));
+        ASSERT_TRUE(isEOI(tokens->elems->elems[1]));
     END
 
     TEST(lexer_checkInteger_negative)
@@ -52,13 +64,13 @@ int main(int argc, char* argv[]) {
         ASSERT_IEQ(2, vector_count(tokens));
         /* First token */
         struct Term* token = (struct Term*)tokens->elems->elems[0];
-        ASSERT_TRUE(tokenTypeIs("Int", token));
+        ASSERT_EQ(g_symInteger, token->name);
         ASSERT_IEQ(1, token->nArgs);
         struct Object* arg = token->args[0];
         ASSERT_ISA(OT_Integer, arg);
         ASSERT_IEQ(-123, ((struct Integer*)arg)->i);
         /* Second token */
-        ASSERT_TRUE(tokenTypeIs("EOI", (struct Term*)tokens->elems->elems[1]));
+        ASSERT_TRUE(isEOI(tokens->elems->elems[1]));
     END
 
     TEST(lexer_checkInteger_withPlus)
@@ -67,13 +79,13 @@ int main(int argc, char* argv[]) {
         ASSERT_IEQ(2, vector_count(tokens));
         /* First token */
         struct Term* token = (struct Term*)tokens->elems->elems[0];
-        ASSERT_TRUE(tokenTypeIs("Int", token));
+        ASSERT_EQ(g_symInteger, token->name);
         ASSERT_IEQ(1, token->nArgs);
         struct Object* arg = token->args[0];
         ASSERT_ISA(OT_Integer, arg);
         ASSERT_IEQ(123, ((struct Integer*)arg)->i);
         /* Second token */
-        ASSERT_TRUE(tokenTypeIs("EOI", (struct Term*)tokens->elems->elems[1]));
+        ASSERT_TRUE(isEOI(tokens->elems->elems[1]));
     END
 
     TEST(lexer_checkHexInt)
@@ -82,13 +94,13 @@ int main(int argc, char* argv[]) {
         ASSERT_IEQ(2, vector_count(tokens));
         /* First token */
         struct Term* token = (struct Term*)tokens->elems->elems[0];
-        ASSERT_TRUE(tokenTypeIs("Int", token));
+        ASSERT_EQ(g_symInteger, token->name);
         ASSERT_IEQ(1, token->nArgs);
         struct Object* arg = token->args[0];
         ASSERT_ISA(OT_Integer, arg);
         ASSERT_IEQ(511, ((struct Integer*)arg)->i);
         /* Second token */
-        ASSERT_TRUE(tokenTypeIs("EOI", (struct Term*)tokens->elems->elems[1]));
+        ASSERT_TRUE(isEOI(tokens->elems->elems[1]));
     END
 
     TEST(lexer_checkNegativeHexInt)
@@ -97,13 +109,13 @@ int main(int argc, char* argv[]) {
         ASSERT_IEQ(2, vector_count(tokens));
         /* First token */
         struct Term* token = (struct Term*)tokens->elems->elems[0];
-        ASSERT_TRUE(tokenTypeIs("Int", token));
+        ASSERT_EQ(g_symInteger, token->name);
         ASSERT_IEQ(1, token->nArgs);
         struct Object* arg = token->args[0];
         ASSERT_ISA(OT_Integer, arg);
         ASSERT_IEQ(-511, ((struct Integer*)arg)->i);
         /* Second token */
-        ASSERT_TRUE(tokenTypeIs("EOI", (struct Term*)tokens->elems->elems[1]));
+        ASSERT_TRUE(isEOI(tokens->elems->elems[1]));
     END
 
     TEST(lexer_checkBinInt)
@@ -112,13 +124,13 @@ int main(int argc, char* argv[]) {
         ASSERT_IEQ(2, vector_count(tokens));
         /* First token */
         struct Term* token = (struct Term*)tokens->elems->elems[0];
-        ASSERT_TRUE(tokenTypeIs("Int", token));
+        ASSERT_EQ(g_symInteger, token->name);
         ASSERT_IEQ(1, token->nArgs);
         struct Object* arg = token->args[0];
         ASSERT_ISA(OT_Integer, arg);
         ASSERT_IEQ(8, ((struct Integer*)arg)->i);
         /* Second token */
-        ASSERT_TRUE(tokenTypeIs("EOI", (struct Term*)tokens->elems->elems[1]));
+        ASSERT_TRUE(isEOI(tokens->elems->elems[1]));
     END
 
     TEST(lexer_checkNegativeBinInt)
@@ -127,13 +139,13 @@ int main(int argc, char* argv[]) {
         ASSERT_IEQ(2, vector_count(tokens));
         /* First token */
         struct Term* token = (struct Term*)tokens->elems->elems[0];
-        ASSERT_TRUE(tokenTypeIs("Int", token));
+        ASSERT_EQ(g_symInteger, token->name);
         ASSERT_IEQ(1, token->nArgs);
         struct Object* arg = token->args[0];
         ASSERT_ISA(OT_Integer, arg);
         ASSERT_IEQ(-8, ((struct Integer*)arg)->i);
         /* Second token */
-        ASSERT_TRUE(tokenTypeIs("EOI", (struct Term*)tokens->elems->elems[1]));
+        ASSERT_TRUE(isEOI(tokens->elems->elems[1]));
     END
 
     TEST(lexer_checkReal)
@@ -143,13 +155,13 @@ int main(int argc, char* argv[]) {
         ASSERT_IEQ(2, vector_count(tokens));
         /* First token */
         struct Term* token = (struct Term*)tokens->elems->elems[0];
-        ASSERT_TRUE(tokenTypeIs("Real", token));
+        ASSERT_EQ(g_symReal, token->name);
         ASSERT_IEQ(1, token->nArgs);
         struct Object* arg = token->args[0];
         ASSERT_ISA(OT_Real, arg);
         EXPECT_REQ(1234.5, ((struct Real*)arg)->r);
         /* Second token */
-        ASSERT_TRUE(tokenTypeIs("EOI", (struct Term*)tokens->elems->elems[1]));
+        ASSERT_TRUE(isEOI(tokens->elems->elems[1]));
     END
 
     TEST(lexer_checkPositiveReal)
@@ -159,13 +171,13 @@ int main(int argc, char* argv[]) {
         ASSERT_IEQ(2, vector_count(tokens));
         /* First token */
         struct Term* token = (struct Term*)tokens->elems->elems[0];
-        ASSERT_TRUE(tokenTypeIs("Real", token));
+        ASSERT_EQ(g_symReal, token->name);
         ASSERT_IEQ(1, token->nArgs);
         struct Object* arg = token->args[0];
         ASSERT_ISA(OT_Real, arg);
         EXPECT_REQ(1234.5, ((struct Real*)arg)->r);
         /* Second token */
-        ASSERT_TRUE(tokenTypeIs("EOI", (struct Term*)tokens->elems->elems[1]));
+        ASSERT_TRUE(isEOI(tokens->elems->elems[1]));
     END
 
     TEST(lexer_checkNegativeReal)
@@ -175,13 +187,13 @@ int main(int argc, char* argv[]) {
         ASSERT_IEQ(2, vector_count(tokens));
         /* First token */
         struct Term* token = (struct Term*)tokens->elems->elems[0];
-        ASSERT_TRUE(tokenTypeIs("Real", token));
+        ASSERT_EQ(g_symReal, token->name);
         ASSERT_IEQ(1, token->nArgs);
         struct Object* arg = token->args[0];
         ASSERT_ISA(OT_Real, arg);
         EXPECT_REQ(-1234.5, ((struct Real*)arg)->r);
         /* Second token */
-        ASSERT_TRUE(tokenTypeIs("EOI", (struct Term*)tokens->elems->elems[1]));
+        ASSERT_TRUE(isEOI(tokens->elems->elems[1]));
     END
 
     TEST(lexer_checkString)
@@ -191,13 +203,13 @@ int main(int argc, char* argv[]) {
         ASSERT_IEQ(2, vector_count(tokens));
         /* First token */
         struct Term* token = (struct Term*)tokens->elems->elems[0];
-        ASSERT_TRUE(tokenTypeIs("String", token));
+        ASSERT_EQ(g_symString, token->name);
         ASSERT_IEQ(1, token->nArgs);
         struct Object* arg = token->args[0];
         ASSERT_ISA(OT_String, arg);
         EXPECT_IEQ(0, strcmp("abc", ((struct String*)arg)->chars));
         /* Second token */
-        ASSERT_TRUE(tokenTypeIs("EOI", (struct Term*)tokens->elems->elems[1]));
+        ASSERT_TRUE(isEOI(tokens->elems->elems[1]));
     END
 
     TEST(lexer_checkIdentifier)
@@ -206,13 +218,13 @@ int main(int argc, char* argv[]) {
         ASSERT_IEQ(2, vector_count(tokens));
         /* First token */
         struct Term* token = (struct Term*)tokens->elems->elems[0];
-        ASSERT_TRUE(tokenTypeIs("Ident", token));
+        ASSERT_EQ(g_symIdentifier, token->name);
         ASSERT_IEQ(1, token->nArgs);
         struct Object* arg = token->args[0];
         ASSERT_ISA(OT_Identifier, arg);
         EXPECT_IEQ(0, strcmp("abc", ((struct Identifier*)arg)->name));
         /* Second token */
-        ASSERT_TRUE(tokenTypeIs("EOI", (struct Term*)tokens->elems->elems[1]));
+        ASSERT_TRUE(isEOI(tokens->elems->elems[1]));
     END
 
     TEST(lexer_checkReservedWord)
@@ -221,13 +233,13 @@ int main(int argc, char* argv[]) {
         ASSERT_IEQ(2, vector_count(tokens));
         /* First token */
         struct Term* token = (struct Term*)tokens->elems->elems[0];
-        ASSERT_TRUE(tokenTypeIs("Reserved", token));
+        ASSERT_EQ(g_symReserved, token->name);
         ASSERT_IEQ(1, token->nArgs);
         struct Object* arg = token->args[0];
         ASSERT_ISA(OT_String, arg);
         EXPECT_IEQ(0, strcmp("end", ((struct String*)arg)->chars));
         /* Second token */
-        ASSERT_TRUE(tokenTypeIs("EOI", (struct Term*)tokens->elems->elems[1]));
+        ASSERT_TRUE(isEOI(tokens->elems->elems[1]));
     END
 
     TEST(lexer_checkOperator)
@@ -236,13 +248,13 @@ int main(int argc, char* argv[]) {
         ASSERT_IEQ(2, vector_count(tokens));
         /* First token */
         struct Term* token = (struct Term*)tokens->elems->elems[0];
-        ASSERT_TRUE(tokenTypeIs("Oper", token));
+        ASSERT_EQ(g_symOperator, token->name);
         ASSERT_IEQ(1, token->nArgs);
         struct Object* arg = token->args[0];
         ASSERT_ISA(OT_Identifier, arg);
         EXPECT_IEQ(0, strcmp("++", ((struct Identifier*)arg)->name));
         /* Second token */
-        ASSERT_TRUE(tokenTypeIs("EOI", (struct Term*)tokens->elems->elems[1]));
+        ASSERT_TRUE(isEOI(tokens->elems->elems[1]));
     END
 
     TEST(lexer_checkSymbol)
@@ -251,13 +263,13 @@ int main(int argc, char* argv[]) {
         ASSERT_IEQ(2, vector_count(tokens));
         /* First token */
         struct Term* token = (struct Term*)tokens->elems->elems[0];
-        ASSERT_TRUE(tokenTypeIs("Symbol", token));
+        ASSERT_EQ(g_symSymbol, token->name);
         ASSERT_IEQ(1, token->nArgs);
         struct Object* arg = token->args[0];
         ASSERT_ISA(OT_Symbol, arg);
         EXPECT_IEQ(0, strcmp("Abc", ((struct Symbol*)arg)->name));
         /* Second token */
-        ASSERT_TRUE(tokenTypeIs("EOI", (struct Term*)tokens->elems->elems[1]));
+        ASSERT_TRUE(isEOI(tokens->elems->elems[1]));
     END
 
     TEST(lexer_checkSpecialChar)
@@ -266,13 +278,13 @@ int main(int argc, char* argv[]) {
         ASSERT_IEQ(2, vector_count(tokens));
         /* First token */
         struct Term* token = (struct Term*)tokens->elems->elems[0];
-        ASSERT_TRUE(tokenTypeIs("Special", token));
+        ASSERT_EQ(g_symSpecial, token->name);
         ASSERT_IEQ(1, token->nArgs);
         struct Object* arg = token->args[0];
         ASSERT_ISA(OT_String, arg);
         EXPECT_IEQ(0, strcmp("{", ((struct String*)arg)->chars));
         /* Second token */
-        ASSERT_TRUE(tokenTypeIs("EOI", (struct Term*)tokens->elems->elems[1]));
+        ASSERT_TRUE(isEOI(tokens->elems->elems[1]));
     END
 
     /* Check multiple tokens */
