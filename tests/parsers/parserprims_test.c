@@ -331,7 +331,29 @@ int main(int argc, char* argv[]) {
         ASSERT_IEQ(PS_Fail, pSepBy(pInteger, pSymbol, 3, &parseState));
     END
 
-    TEST(pListOf_success)
+    TEST(pListOf_success_0elems)
+        const string_t src = "A x";
+        vector_clear(tokens);
+        struct ParseState parseState = {
+            .tokens = lexer_lexAll_withVector(syntax, src, tokens),
+            .index = 0,
+            .result = (struct Object*)g_nil
+        };
+        ASSERT_IEQ(PS_Success, pListOf(pSymbol, pBoolean, pInteger, pIdentifier, &parseState));
+    END
+
+    TEST(pListOf_success_1elem)
+        const string_t src = "A true x";
+        vector_clear(tokens);
+        struct ParseState parseState = {
+            .tokens = lexer_lexAll_withVector(syntax, src, tokens),
+            .index = 0,
+            .result = (struct Object*)g_nil
+        };
+        ASSERT_IEQ(PS_Success, pListOf(pSymbol, pBoolean, pInteger, pIdentifier, &parseState));
+    END
+
+    TEST(pListOf_success_3elems)
         const string_t src = "A true 0 false 1 true x";
         vector_clear(tokens);
         struct ParseState parseState = {
