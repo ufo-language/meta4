@@ -1,5 +1,11 @@
 #include "_typedefs.h"
 
+#include "object/globals.h"
+#include "parsers/parsestate.h"
+#include "parsers/parserprims.h"
+#include "object/types/string.h"
+#include "object/types/term.h"
+
 /* Defines *******************************************************************/
 
 /* Types *********************************************************************/
@@ -12,10 +18,27 @@
 
 /* Public functions **********************************************************/
 
-#if 0
-enum ParseStatus pReservedEnd(struct ParseState* parseState) {
-    return pSpotSpecific(g_symReserved, "end", parseState);
+enum ParseStatus pSpotReserved(const string_t word, struct ParseState* parseState) {
+    index_t savedIndex = parseState->index;
+    enum ParseStatus status = pSpot(g_symReserved, parseState);
+    if (status == PS_Success) {
+        struct Term* token = (struct Term*)parseState->result;
+        if (token->nArgs == 1) {
+            struct Object* arg = token->args[0];
+            if (arg->typeId == OT_String) {
+                struct String* argString = (struct String*)arg;
+                if (string_equal_chars(argString, word)) {
+                    return PS_Success;
+                }
+            }
+        }
+    }
+    parseState->index = savedIndex;
+    return PS_Fail;
 }
-#endif
+
+enum ParseStatus pReservedEnd(struct ParseState* parseState) {
+    return pSpotReserved("end", parseState);
+}
 
 /* Private functions *********************************************************/
