@@ -175,6 +175,9 @@ static enum Lexer_LexResult _lexer_nextToken(struct LexerFields* lexerFields) {
         for (t = lexerFields->syntax[state]; !t->charClassPredicate(c); ++t); /* This is the whole loop */
         switch (t->action) {
             case A_Keep:
+                if (lexemeBufferIndex == Lexer_LexemeSize) {
+                    return Lexer_LexemeLengthError;
+                }
                 lexerFields->lexemeBuffer[lexemeBufferIndex++] = (char)c;
                 break;
             case A_Skip:

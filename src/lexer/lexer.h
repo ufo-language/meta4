@@ -29,7 +29,8 @@ enum Lexer_LexResult {
     Lexer_UnknownError,
     Lexer_StringError,
     Lexer_RealError,
-    Lexer_CommentError
+    Lexer_CommentError,
+    Lexer_LexemeLengthError
 };
 
 struct Transition {
