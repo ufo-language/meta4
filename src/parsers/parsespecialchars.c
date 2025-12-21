@@ -1,10 +1,10 @@
 #include "_typedefs.h"
 
 #include "object/globals.h"
-#include "parsers/parsestate.h"
-#include "parsers/parserprims.h"
 #include "object/types/string.h"
 #include "object/types/term.h"
+#include "parsers/parser.h"
+#include "parsers/parserprims.h"
 
 /* Defines *******************************************************************/
 

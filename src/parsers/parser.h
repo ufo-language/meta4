@@ -2,11 +2,26 @@
 
 #include "_typedefs.h"
 
-#include "parsers/parser.h"
-
 /* Defines *******************************************************************/
 
 /* Types *********************************************************************/
+
+enum ParseStatus {
+    PS_Success,
+    PS_Fail,
+    PS_Error
+};
+
+struct Object;
+struct Vector;
+
+struct ParseState {
+    struct Vector* tokens;
+    index_t index;
+    struct Object* result;
+};
+
+typedef enum ParseStatus (*ParserFunction)(struct ParseState* parseState);
 
 /* Forward declarations ******************************************************/
 
@@ -16,10 +31,8 @@
 
 /* Public functions **********************************************************/
 
-enum ParseStatus pBoolean(struct ParseState* parseState);
-enum ParseStatus pIdentifier(struct ParseState* parseState);
-enum ParseStatus pInteger(struct ParseState* parseState);
-enum ParseStatus pNil(struct ParseState* parseState);
-enum ParseStatus pReal(struct ParseState* parseState);
-enum ParseStatus pString(struct ParseState* parseState);
-enum ParseStatus pSymbol(struct ParseState* parseState);
+/* Unique functions ******************/
+
+/* Object functions ******************/
+
+/* Private functions *********************************************************/

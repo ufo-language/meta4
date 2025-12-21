@@ -1,8 +1,8 @@
 #include "_typedefs.h"
 
 #include "object/globals.h"
+#include "parsers/parser.h"
 #include "parsers/parserprims.h"
-#include "parsers/parsestate.h"
 
 /* Defines *******************************************************************/
 

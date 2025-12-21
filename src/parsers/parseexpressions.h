@@ -6,15 +6,6 @@
 
 /* Types *********************************************************************/
 
-struct Object;
-struct Vector;
-
-struct ParseState {
-    struct Vector* tokens;
-    index_t index;
-    struct Object* result;
-};
-
 /* Forward declarations ******************************************************/
 
 /* Global variables **********************************************************/

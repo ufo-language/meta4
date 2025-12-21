@@ -2,7 +2,7 @@
 
 #include "_typedefs.h"
 
-#include "parsers/parsestate.h"
+#include "parsers/parser.h"
 
 /* Defines *******************************************************************/
 
@@ -11,14 +11,6 @@
 struct Object;
 struct Symbol;
 struct Vector;
-
-enum ParseStatus {
-    PS_Success,
-    PS_Fail,
-    PS_Error
-};
-
-typedef enum ParseStatus (*ParserFunction)(struct ParseState* parseState);
 
 /* Forward declarations ******************************************************/
 
