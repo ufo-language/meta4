@@ -8,6 +8,7 @@
 #include "parsers/parsereservedwords.h"
 #include "object/globals.h"
 #include "object/types/integer.h"
+#include "object/types/string.h"
 #include "object/types/symbol.h"
 #include "object/types/term.h"
 #include "object/types/vector.h"
@@ -52,6 +53,10 @@ enum ParseStatus testParser_returnTrue(struct ParseState* parseState) {
 enum ParseStatus testParser_returnUnique(struct ParseState* parseState) {
     parseState->result = g_uniqueObject;
     return PS_Success;
+}
+
+enum ParseStatus testParser_error1(struct ParseState* parseState) {
+    return pError("error1", parseState);
 }
 
 int main(int argc, char* argv[]) {
@@ -408,6 +413,43 @@ int main(int argc, char* argv[]) {
             .result = (struct Object*)g_nil
         };
         ASSERT_IEQ(PS_Fail, pReservedEnd(&parseState));
+    END
+
+    TEST(pError)
+        vector_clear(tokens);
+        struct ParseState parseState = {
+            .tokens = tokens,
+            .index = 0,
+            .result = g_uniqueObject
+        };
+        const string_t message = "message";
+        ASSERT_IEQ(PS_Error, pError(message, &parseState));
+        ASSERT_ISA(OT_String, parseState.result);
+        ASSERT_TRUE(string_equal_chars((struct String*)parseState.result, message));
+    END
+
+    TEST(pSequence_withError)
+        vector_clear(tokens);
+        struct ParseState parseState = {
+            .tokens = tokens,
+            .index = 0,
+            .result = (struct Object*)g_nil
+        };
+        count_t nParsers = 3;
+        ParserFunction parsers[] = {testParser_pass, testParser_pass, testParser_error1};
+        ASSERT_IEQ(PS_Error, pSequence(nParsers, parsers, &parseState));
+    END
+
+    TEST(pOneOf_withError)
+        vector_clear(tokens);
+        struct ParseState parseState = {
+            .tokens = tokens,
+            .index = 0,
+            .result = (struct Object*)g_nil
+        };
+        count_t nParsers = 3;
+        ParserFunction parsers[] = {testParser_fail, testParser_error1, testParser_pass};
+        ASSERT_IEQ(PS_Error, pOneOf(nParsers, parsers, &parseState));
     END
 
     END_TESTS

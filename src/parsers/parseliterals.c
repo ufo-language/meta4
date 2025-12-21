@@ -20,10 +20,6 @@ enum ParseStatus pBoolean(struct ParseState* parseState) {
     return pSpot(g_symBoolean, parseState);
 }
 
-enum ParseStatus pEOI(struct ParseState* parseState) {
-    return pSpot(g_symEOI, parseState);
-}
-
 enum ParseStatus pIdentifier(struct ParseState* parseState) {
     return pSpot(g_symIdentifier, parseState);
 }

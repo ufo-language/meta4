@@ -22,6 +22,12 @@
 
 #include "debug.h"
 
+enum ParseStatus pError(const string_t message, struct ParseState* parseState) {
+    struct String* messageString = string_new(message);
+    parseState->result = (struct Object*)messageString;
+    return PS_Error;
+}
+
 enum ParseStatus pIgnore(ParserFunction parser, struct ParseState* parseState) {
     enum ParseStatus parseStatus = parser(parseState);
     if (parseStatus == PS_Success) {
