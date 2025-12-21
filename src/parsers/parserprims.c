@@ -3,6 +3,7 @@
 #include "parsers/parserprims.h"
 #include "parsers/parsestate.h"
 #include "object/globals.h"
+#include "object/functions/show.h"
 #include "object/types/string.h"
 #include "object/types/symbol.h"
 #include "object/types/term.h"
@@ -20,7 +21,41 @@
 
 /* Public functions **********************************************************/
 
-#include "debug.h"
+
+static void _indent(count_t level) {
+    for (count_t n=0; n<level; n++) {
+        fputs("│ ", stderr);
+    }
+}
+
+static count_t debugLevel = 0;
+
+enum ParseStatus pDebug(ParserFunction parser, const string_t message, struct ParseState* parseState) {
+    static string_t statusNames[] = {"Pass", "Fail", "Error"};
+    _indent(debugLevel);
+    fprintf(stderr, "┌ DEBUG: %s, token = ", message);
+    struct Object* token = (struct Object*)parseState->tokens->elems->elems[parseState->index];
+    show(token, g_stderr);
+    fputc('\n', stderr);
+    ++debugLevel;
+    enum ParseStatus status = parser(parseState);
+    --debugLevel;
+    _indent(debugLevel);
+    fprintf(stderr, "└ STATUS: %s, result = ", statusNames[status]);
+    show(parseState->result, g_stderr);
+    fputc('\n', stderr);
+    return status;
+}
+
+enum ParseStatus pEnsure(ParserFunction parser, const string_t message, struct ParseState* parseState) {
+    enum ParseStatus status = parser(parseState);
+    if (status == PS_Fail) {
+        struct String* messageString = string_new(message);
+        parseState->result = (struct Object*)messageString;
+        return PS_Error;
+    }
+    return status;
+}
 
 enum ParseStatus pError(const string_t message, struct ParseState* parseState) {
     struct String* messageString = string_new(message);

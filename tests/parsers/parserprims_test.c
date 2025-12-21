@@ -452,5 +452,17 @@ int main(int argc, char* argv[]) {
         ASSERT_IEQ(PS_Error, pOneOf(nParsers, parsers, &parseState));
     END
 
+    TEST(pDebug_pass)
+        vector_clear(tokens);
+        struct ParseState parseState = {
+            .tokens = tokens,
+            .index = 0,
+            .result = (struct Object*)g_nil
+        };
+        ASSERT_IEQ(PS_Success, pDebug(testParser_pass, "debug test Pass", &parseState));
+        ASSERT_IEQ(PS_Fail, pDebug(testParser_fail, "debug test Fail", &parseState));
+        ASSERT_IEQ(PS_Error, pDebug(testParser_error, "debug test Error", &parseState));
+    END
+
     END_TESTS
 }
