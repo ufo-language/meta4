@@ -39,6 +39,8 @@ struct ByteBuffer* byteBuffer_new(void) {
 
 /* Public functions **********************************************************/
 
+/* Unique functions ******************/
+
 void byteBuffer_appendByte(struct ByteBuffer* byteBuffer, byte_t byte) {
     if (byteBuffer->nBytes == byteBuffer->capacity) {
         _byteBuffer_resize(byteBuffer);
@@ -52,12 +54,6 @@ void byteBuffer_appendBytes(struct ByteBuffer* byteBuffer, count_t nBytes, byte_
     }
     memcpy(byteBuffer->bytes + byteBuffer->nBytes, bytes, nBytes);
     byteBuffer->nBytes += nBytes;
-}
-
-/* Unique functions ******************/
-
-count_t byteBuffer_capacity(struct ByteBuffer* byteBuffer) {
-    return byteBuffer->capacity;
 }
 
 struct String* byteBuffer_toString(struct ByteBuffer* byteBuffer) {
