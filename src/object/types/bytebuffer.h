@@ -42,6 +42,7 @@ struct ByteBuffer* byteBuffer_new(void);
 void byteBuffer_appendByte(struct ByteBuffer* byteBuffer, byte_t byte);
 void byteBuffer_appendBytes(struct ByteBuffer* byteBuffer, count_t nBytes, byte_t bytes[]);
 count_t byteBuffer_count(struct ByteBuffer* byteBuffer);
+count_t byteBuffer_moveBytesTo(struct ByteBuffer* byteBuffer, struct ByteBuffer* otherByteBuffer);
 bool_t byteBuffer_readByte(struct ByteBuffer* byteBuffer, byte_t* byte);
 bool_t byteBuffer_readString(struct ByteBuffer* byteBuffer, struct String** string);
 

@@ -17,7 +17,6 @@
 /* Forward declarations ******************************************************/
 
 void _outStream_fwriteList(struct OutStream* outStream, va_list args);
-static void _outStream_streamTypeError(enum OutStreamType ost);
 
 /* Global variables **********************************************************/
 
@@ -69,7 +68,7 @@ void outStream_writeChar(struct OutStream* outStream, char c) {
             byteBuffer_appendByte(outStream->byteBuffer, c);
             break;
         default:
-            _outStream_streamTypeError(outStream->streamType);
+            assert(false);
             break;
     }
 }
@@ -85,7 +84,7 @@ void outStream_writeString(struct OutStream* outStream, const string_t s) {
             }
             break;
         default:
-            _outStream_streamTypeError(outStream->streamType);
+            assert(false);
             break;
     }
 }
@@ -135,7 +134,7 @@ void outStream_show(struct OutStream* self, struct OutStream* outStream) {
             byteBuffer_show(self->byteBuffer, outStream);
             break;
         default:
-            _outStream_streamTypeError(outStream->streamType);
+            assert(false);
             break;
     }
     outStream_writeChar(outStream, '}');
@@ -176,10 +175,4 @@ void _outStream_fwriteList(struct OutStream* outStream, va_list args) {
         }
     }
     va_end(args);
-}
-
-static void _outStream_streamTypeError(enum OutStreamType ost) {
-    fprintf(stderr, "ERROR: unknown OutStream type %d\n", ost);
-    assert(false);
-    exit(1);
 }

@@ -42,6 +42,5 @@ void quote_show(struct Quote* quote, struct OutStream* outStream) {
         'C', q,
         'O', quote->expr,
         'C', q,
-        0
-    );
+        0);
 }

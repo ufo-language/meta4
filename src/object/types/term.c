@@ -83,8 +83,7 @@ bool_t term_eval_rec(struct Term* term, struct Etor_rec* etor, struct Object** v
             'O', newName,
             'S', " :: ",
             'S', typeName(newName->typeId),
-            0
-        );
+            0);
         return false;
     }
     newTerm->name = (struct Symbol*)newName;

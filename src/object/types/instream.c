@@ -15,8 +15,6 @@
 
 /* Forward declarations ******************************************************/
 
-static void _inStream_streamTypeError(enum InStreamType ist);
-
 /* Global variables **********************************************************/
 
 /* Lifecycle functions *******************************************************/
@@ -47,31 +45,47 @@ count_t inStream_available(struct InStream* inStream) {
             assert(false);
             break;
         default:
-            _inStream_streamTypeError(inStream->streamType);
+            assert(false);
             break;
     }
 }
 
 bool_t inStream_readByte(struct InStream* inStream, byte_t* byte) {
     switch (inStream->streamType) {
+        case IST_ByteBuffer:
+            return byteBuffer_readByte(inStream->byteBuffer, byte);
         default:
-            _inStream_streamTypeError(inStream->streamType);
+            assert(false);
             return false;
     }
 }
 
 count_t inStream_readBytes(struct InStream* inStream, struct ByteBuffer* buffer) {
     switch (inStream->streamType) {
+        case IST_ByteBuffer:
+            return byteBuffer_moveBytesTo(inStream->byteBuffer, buffer);
         default:
-            _inStream_streamTypeError(inStream->streamType);
+            assert(false);
             return 0;
+    }
+}
+
+bool_t inStream_readLine(struct InStream* inStream, struct String** string) {
+    switch (inStream->streamType) {
+        case IST_ByteBuffer:
+            return byteBuffer_readString(inStream->byteBuffer, string);
+        default:
+            assert(false);
+            return false;
     }
 }
 
 bool_t inStream_readString(struct InStream* inStream, struct String** string) {
     switch (inStream->streamType) {
+        case IST_ByteBuffer:
+            return byteBuffer_readString(inStream->byteBuffer, string);
         default:
-            _inStream_streamTypeError(inStream->streamType);
+            assert(false);
             return false;
     }
 }
@@ -82,6 +96,7 @@ void inStream_show(struct InStream* inStream, struct OutStream* outStream) {
     outStream_writeString(outStream, "InStream{");
     switch (inStream->streamType) {
         default:
+            assert(false);
             break;
     }
     outStream_writeChar(outStream, '}');
@@ -89,8 +104,3 @@ void inStream_show(struct InStream* inStream, struct OutStream* outStream) {
 
 /* Private functions *********************************************************/
 
-static void _inStream_streamTypeError(enum InStreamType ist) {
-    fprintf(stderr, "ERROR: unknown InStream type %d\n", ist);
-    assert(false);
-    exit(1);
-}

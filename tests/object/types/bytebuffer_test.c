@@ -145,5 +145,19 @@ int main(int argc, char* argv[]) {
         EXPECT_IEQ(0, byteBuffer->readIndex);
     END
 
+    TEST(byteBuffer_checkCopyTo)
+        struct ByteBuffer* bb1 = byteBuffer_new();
+        byte_t bytes[] = {0x20, 0x21, 0x22};
+        byteBuffer_appendBytes(bb1, 3, bytes);
+        ASSERT_IEQ(3, byteBuffer_count(bb1));
+        struct ByteBuffer* bb2 = byteBuffer_new();
+        ASSERT_IEQ(0, byteBuffer_count(bb2));
+        ASSERT_IEQ(3, byteBuffer_moveBytesTo(bb1, bb2));
+        ASSERT_IEQ(0, byteBuffer_count(bb1));
+        ASSERT_IEQ(0, bb1->readIndex);
+        ASSERT_IEQ(0, bb1->writeIndex);
+        ASSERT_IEQ(3, byteBuffer_count(bb2));
+    END
+
     END_TESTS
 }

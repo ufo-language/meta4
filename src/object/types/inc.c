@@ -59,8 +59,7 @@ void inc_show(struct Inc* inc, struct OutStream* outStream) {
         'S', "Inc{",
         'O', inc->expr,
         'C', '}',
-        0
-    );
+        0);
 }
 
 /* Private functions *********************************************************/

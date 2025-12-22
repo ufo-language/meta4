@@ -72,14 +72,12 @@ void _program1(void) {
         outStream_fwriteLn(g_stderr,
             'S', "main _program1 error ",
             'O', value,
-            0
-        );
+            0);
     }
     else {
         outStream_fwriteLn(g_stderr,
             'S', "main _program1 final value = ",
             'O', value,
-            0
-        );
+            0);
     }
 }

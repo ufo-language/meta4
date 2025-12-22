@@ -35,8 +35,7 @@ void var_show(struct Var* var, struct OutStream* outStream) {
         'S', "Var{",
         'O', var->value,
         'C', '}',
-        0
-    );
+        0);
 }
 
 /* Private functions *********************************************************/

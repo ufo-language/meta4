@@ -34,8 +34,7 @@ void intVar_show(struct IntVar* intVar, struct OutStream* outStream) {
         'S', "IntVar{",
         'I', intVar->i,
         'C', '}',
-        0
-    );
+        0);
 }
 
 /* Private functions *********************************************************/

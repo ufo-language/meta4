@@ -52,8 +52,7 @@ bool_t let_eval_rec(struct Let* let, struct Etor_rec* etor, struct Object** valu
             'O', let->lhs,
             'S', ", rhs = ",
             'O', rhsVal,
-            0
-        );
+            0);
         return false;
     }
     *value = (struct Object*)g_nil;
@@ -66,8 +65,7 @@ void let_show(struct Let* let, struct OutStream* outStream) {
         'O', let->lhs,
         'S', " = ",
         'O', let->rhs,
-        0
-    );
+        0);
 }
 
 /* Private functions *********************************************************/

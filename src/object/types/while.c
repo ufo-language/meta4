@@ -66,8 +66,7 @@ void while_show(struct While* while_, struct OutStream* outStream) {
         'O', while_->cond,
         'C', ' ',
         'O', while_->body,
-        0
-    );
+        0);
 }
 
 /* Private functions *********************************************************/

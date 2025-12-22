@@ -59,6 +59,15 @@ void byteBuffer_appendBytes(struct ByteBuffer* byteBuffer, count_t nBytes, byte_
     byteBuffer->nBytes += nBytes;
 }
 
+count_t byteBuffer_moveBytesTo(struct ByteBuffer* byteBuffer, struct ByteBuffer* otherByteBuffer) {
+    count_t nBytes = byteBuffer->nBytes;
+    byteBuffer_appendBytes(otherByteBuffer, byteBuffer->nBytes, &byteBuffer->bytes[byteBuffer->readIndex]);
+    byteBuffer->writeIndex = 0;
+    byteBuffer->readIndex = 0;
+    byteBuffer->nBytes = 0;
+    return nBytes;
+}
+
 bool_t byteBuffer_readByte(struct ByteBuffer* byteBuffer, byte_t* byte) {
     if (byteBuffer->nBytes == 0) {
         return false;

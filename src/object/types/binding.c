@@ -45,6 +45,5 @@ void binding_show(struct Binding* triple, struct OutStream* outStream) {
         'O', triple->key,
         'C', '=',
         'O', triple->value,
-        0
-    );
+        0);
 }

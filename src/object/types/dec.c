@@ -50,8 +50,7 @@ bool_t dec_eval_rec(struct Dec* dec, struct Etor_rec* etor, struct Object** valu
             outStream_fwriteLn(g_stderr,
                 'S', "ERROR: dec_eval unable to dec object",
                 'O', exprValue,
-                0
-            );
+                0);
             return false;
     }
 }
@@ -61,8 +60,7 @@ void dec_show(struct Dec* dec, struct OutStream* outStream) {
         'S', "Dec{",
         'O', dec->expr,
         'C', '}',
-        0
-    );
+        0);
 }
 
 /* Private functions *********************************************************/

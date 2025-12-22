@@ -60,6 +60,5 @@ void ifThen_show(struct IfThen* ifThen, struct OutStream* outStream) {
         'O', ifThen->conseq,
         'S', " else ",
         'O', ifThen->alt,
-        0
-    );
+        0);
 }
