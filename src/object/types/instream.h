@@ -10,18 +10,19 @@
 
 /* Types *********************************************************************/
 
-enum {
-    ByteBuffer_DefaultCapacity = 8
+enum InStreamType {
+    IST_File, IST_ByteBuffer
 };
 
-struct ByteBuffer {
+struct ByteBuffer;
+
+struct InStream {
     struct Object obj;
-    count_t capacity;
-    count_t nBytes;
-    index_t writeIndex;
-    index_t readIndex;
-    byte_t* bytes;
-    count_t nResizes;
+    enum InStreamType streamType;
+    union {
+        FILE* file;
+        struct ByteBuffer* byteBuffer;
+    };
 };
 
 struct OutStream;
@@ -33,18 +34,18 @@ struct String;
 
 /* Lifecycle functions *******************************************************/
 
-struct ByteBuffer* byteBuffer_new(void);
+struct InStream* inStream_new_file(FILE* file);
+struct InStream* inStream_new_byteBuffer(struct ByteBuffer* byteBuffer);
 
 /* Public functions **********************************************************/
 
 /* Unique functions ******************/
 
-void byteBuffer_appendByte(struct ByteBuffer* byteBuffer, byte_t byte);
-void byteBuffer_appendBytes(struct ByteBuffer* byteBuffer, count_t nBytes, byte_t bytes[]);
-count_t byteBuffer_count(struct ByteBuffer* byteBuffer);
-bool_t byteBuffer_readByte(struct ByteBuffer* byteBuffer, byte_t* byte);
-bool_t byteBuffer_readString(struct ByteBuffer* byteBuffer, struct String** string);
+count_t inStream_available(struct InStream* inStream);
+bool_t inStream_readByte(struct InStream* inStream, byte_t* byte);
+count_t inStream_readBytes(struct InStream* inStream, struct ByteBuffer* buffer);
+bool_t inStream_readString(struct InStream* inStream, struct String** string);
 
 /* Object functions ******************/
 
-void byteBuffer_show(struct ByteBuffer* byteBuffer, struct OutStream* outStream);
+void inStream_show(struct InStream* inStream, struct OutStream* outStream);

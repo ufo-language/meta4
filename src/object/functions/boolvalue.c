@@ -5,6 +5,7 @@
 #include "object/typeids.h"
 #include "object/types/array.h"
 #include "object/types/boolean.h"
+#include "object/types/instream.h"
 #include "object/types/integer.h"
 #include "object/types/intvar.h"
 #include "object/types/pair.h"
@@ -43,6 +44,7 @@ bool_t boolValue(struct Object* obj) {
         case OT_Identifier:    return true;
         case OT_IfThen:        return true;
         case OT_Inc:           return true;
+        case OT_InStream:      return inStream_available((struct InStream*)obj) > 0;
         case OT_IntArray:      break;
         case OT_Integer:       return ((struct Integer*)obj)->i != 0;
         case OT_IntVector:     break;

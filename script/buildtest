@@ -1,0 +1,29 @@
+#!/bin/sh
+
+# PLX build script
+
+# compile options
+compileForSpeed="-DNDEBUG -std=c17 -Wall -O3 -ffast-math"
+compileForSize="-DNDEBUG -std=c17 -Wall -Os"
+# the switch-enum is a bit much
+# compileForDebug="-DDEBUG -std=c17  -Wextra -Wswitch-enum -pedantic -g -O0"
+compileForDebug="-DDEBUG -std=c17 -Wall -Wextra -pedantic -g -O0"
+compileForDebugWithMemCheck="-DDEBUG -std=c17 -Wall -fsanitize=address -g -O0"  # must also use clang
+# the -fsanitize=address option is currently not useful because memory is managed internally
+
+options="$compileForDebug"
+
+CC=clang
+# CC=gcc
+# CC=tcc
+
+# build each test executable concurrently
+testDir=tests
+testSources=$(find ${testDir} -name "${1}*" ! -name main.c)
+for sourceFile in ${testSources}; do
+    f=$(basename $sourceFile .c)
+    s="${f%_test}"
+    exeFile=bin/$f
+    echo $CC $options -o $exeFile -I src -I ${testDir} $sourceFile -Llib -lplx
+    $CC $options -o $exeFile -I src -I ${testDir} $sourceFile -Llib -lplx &
+done

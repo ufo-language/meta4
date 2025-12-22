@@ -29,10 +29,11 @@ static void _byteBuffer_resize(struct ByteBuffer* byteBuffer);
 
 struct ByteBuffer* byteBuffer_new(void) {
     struct ByteBuffer* byteBuffer = (struct ByteBuffer*)object_new(OT_ByteBuffer, NWORDS(*byteBuffer));
-    byteBuffer->capacity = DEFAULT_BYTE_BUFFER_SIZE;
-    byteBuffer->nBytes = 0;
+    byteBuffer->capacity = ByteBuffer_DefaultCapacity;
+    // byteBuffer->nBytes = 0;
+    byteBuffer->writeIndex = 0;
     gc_pushRoot(g_gc, (struct Object*)byteBuffer);
-    byteBuffer->bytes = memory_alloc(NBYTES_TO_WORDS(DEFAULT_BYTE_BUFFER_SIZE));
+    byteBuffer->bytes = memory_alloc(NBYTES_TO_WORDS(ByteBuffer_DefaultCapacity));
     gc_popRoot(g_gc);
     return byteBuffer;
 }
@@ -42,26 +43,48 @@ struct ByteBuffer* byteBuffer_new(void) {
 /* Unique functions ******************/
 
 void byteBuffer_appendByte(struct ByteBuffer* byteBuffer, byte_t byte) {
-    if (byteBuffer->nBytes == byteBuffer->capacity) {
+    if (byteBuffer->writeIndex == byteBuffer->capacity) {
         _byteBuffer_resize(byteBuffer);
     }
-    byteBuffer->bytes[byteBuffer->nBytes++] = byte;
+    byteBuffer->bytes[byteBuffer->writeIndex++] = byte;
+    ++byteBuffer->nBytes;
 }
 
 void byteBuffer_appendBytes(struct ByteBuffer* byteBuffer, count_t nBytes, byte_t bytes[]) {
-    while (byteBuffer->nBytes + nBytes >= byteBuffer->capacity) {
+    while (byteBuffer->writeIndex + nBytes >= byteBuffer->capacity) {
         _byteBuffer_resize(byteBuffer);
     }
-    memcpy(byteBuffer->bytes + byteBuffer->nBytes, bytes, nBytes);
+    memcpy(byteBuffer->bytes + byteBuffer->writeIndex, bytes, nBytes);
+    byteBuffer->writeIndex += nBytes;
     byteBuffer->nBytes += nBytes;
 }
 
-struct String* byteBuffer_toString(struct ByteBuffer* byteBuffer) {
+bool_t byteBuffer_readByte(struct ByteBuffer* byteBuffer, byte_t* byte) {
+    if (byteBuffer->nBytes == 0) {
+        return false;
+    }
+    *byte = byteBuffer->bytes[byteBuffer->readIndex++];
+    if (--byteBuffer->nBytes == 0) {
+        /* If there are no bytes left, set both indexes back to 0. */
+        byteBuffer->writeIndex = byteBuffer->readIndex = 0;
+    }
+    return true;
+}
+
+/* Note that if the byteBuffer contains embedded 0s then the string will also
+   contain embedded 0s. */
+bool_t byteBuffer_readString(struct ByteBuffer* byteBuffer, struct String** string) {
+    if (byteBuffer->nBytes == 0) {
+        return false;
+    }
     count_t nBytes = byteBuffer->nBytes;
-    struct String* string = string_new_empty(nBytes);
-    memcpy(string->chars, byteBuffer->bytes, nBytes);
-    string->chars[nBytes] = 0;
-    return string;
+    *string = string_new_empty(nBytes);
+    memcpy((*string)->chars, byteBuffer->bytes, nBytes);
+    (*string)->chars[nBytes] = 0;
+    byteBuffer->nBytes = 0;
+    byteBuffer->writeIndex = 0;
+    byteBuffer->readIndex = 0;
+    return true;
 }
 
 /* Object functions ******************/
@@ -87,9 +110,19 @@ void byteBuffer_show(struct ByteBuffer* byteBuffer, struct OutStream* outStream)
 
 static void _byteBuffer_resize(struct ByteBuffer* byteBuffer) {
     count_t nBytes = byteBuffer->nBytes;
-    count_t newCapacity = byteBuffer->capacity * 2;
-    byte_t* newBytes = memory_alloc(NBYTES_TO_WORDS(newCapacity));
-    memcpy(newBytes, byteBuffer->bytes, nBytes);
-    byteBuffer->capacity = newCapacity;
-    ++byteBuffer->nResizes;
+    if (nBytes <= byteBuffer->capacity / 2) {
+        /* If the nBtes <= 1/2 the capacity, don't reallocate, just shift */
+        memcpy(byteBuffer->bytes, &byteBuffer->bytes[byteBuffer->readIndex], nBytes);
+        byteBuffer->writeIndex = nBytes;
+        byteBuffer->readIndex = 0;
+    }
+    else {
+        count_t newCapacity = byteBuffer->capacity * 2;
+        byte_t* newBytes = memory_alloc(NBYTES_TO_WORDS(newCapacity));
+        memcpy(newBytes, &byteBuffer->bytes[byteBuffer->readIndex], nBytes);
+        byteBuffer->capacity = newCapacity;
+        byteBuffer->writeIndex = nBytes;
+        byteBuffer->readIndex = 0;
+        ++byteBuffer->nResizes;
+    }
 }

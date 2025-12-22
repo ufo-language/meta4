@@ -35,6 +35,7 @@ string_t typeName(enum TypeId typeId) {
         case OT_Identifier:    return "Identifier";
         case OT_IfThen:        return "IfThen";
         case OT_Inc:           return "Inc";
+        case OT_InStream:      return "InStream";
         case OT_Integer:       return "Integer";
         case OT_IntArray:      return "IntArray";
         case OT_IntVector:     return "IntVector";

@@ -25,7 +25,7 @@ struct IntVector* intVector_new(void) {
 
 struct IntVector* intVector_new_withCapacity(count_t capacity) {
     struct IntVector* intVector = (struct IntVector*)object_new(OT_IntVector, NWORDS(*intVector));
-    intVector->top = 0;
+    intVector->nElems = 0;
     intVector->capacity = capacity;
     intVector->elems = intArray_new_noFill(capacity);
     intVector->nResizes = 0;
@@ -37,7 +37,7 @@ struct IntVector* intVector_new_withCapacity(count_t capacity) {
 /* Unique functions ******************/
 
 bool_t intVector_get(struct IntVector* intVector, index_t index, int_t* elem) {
-    if (index >= intVector->top) {
+    if (index >= intVector->nElems) {
         return false;
     }
     *elem = intArray_get_unsafe(intVector->elems, index);
@@ -45,7 +45,7 @@ bool_t intVector_get(struct IntVector* intVector, index_t index, int_t* elem) {
 }
 
 bool_t intVector_set(struct IntVector* intVector, index_t index, int_t elem) {
-    if (index >= intVector->top) {
+    if (index >= intVector->nElems) {
         return false;
     }
     intArray_set_unsafe(intVector->elems, index, elem);
@@ -53,30 +53,30 @@ bool_t intVector_set(struct IntVector* intVector, index_t index, int_t elem) {
 }
 
 bool_t intVector_pop(struct IntVector* intVector, int_t* elem) {
-    if (intVector->top == 0) {
+    if (intVector->nElems == 0) {
         return false;
     }
-    *elem = intVector->elems->elems[--intVector->top];
+    *elem = intVector->elems->elems[--intVector->nElems];
     return true;
 }
 
 void intVector_push(struct IntVector* intVector, int_t elem) {
-    if (intVector->top == intVector->elems->nElems) {
+    if (intVector->nElems == intVector->elems->nElems) {
         _intVector_resize(intVector);
     }
-    intVector->elems->elems[intVector->top++] = elem;
+    intVector->elems->elems[intVector->nElems++] = elem;
 }
 
 /* Object functions ******************/
 
 count_t intVector_count(struct IntVector* intVector) {
-    return intVector->top;
+    return intVector->nElems;
 }
 
 void intVector_show(struct IntVector* intVector, struct OutStream* outStream) {
     outStream_writeString(outStream, "{i|");
     int_t* elems = intVector->elems->elems;
-    for (index_t n=0; n<intVector->top; ++n) {
+    for (index_t n=0; n<intVector->nElems; ++n) {
         if (n > 0) {
             outStream_writeString(outStream, ", ");
         }

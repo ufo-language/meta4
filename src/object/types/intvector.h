@@ -15,7 +15,7 @@ enum {
 
 struct IntVector {
     struct Object obj;
-    count_t top;
+    count_t nElems;
     count_t capacity;
     count_t nResizes;
     struct IntArray* elems;

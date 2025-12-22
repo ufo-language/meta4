@@ -15,6 +15,7 @@
 #include "object/types/hashtable.h"
 #include "object/types/ifthen.h"
 #include "object/types/inc.h"
+#include "object/types/instream.h"
 #include "object/types/intarray.h"
 #include "object/types/integer.h"
 #include "object/types/intvar.h"
@@ -64,6 +65,7 @@ void show(struct Object* obj, struct OutStream* outStream) {
         case OT_Identifier:    symbolic_show((struct Symbolic*)obj, outStream); return;
         case OT_IfThen:        ifThen_show((struct IfThen*)obj, outStream); return;
         case OT_Inc:           inc_show((struct Inc*)obj, outStream); return;
+        case OT_InStream:      inStream_show((struct InStream*)obj, outStream); return;
         case OT_IntArray:      intArray_show((struct IntArray*)obj, outStream); return;
         case OT_Integer:       integer_show((struct Integer*)obj, outStream); return;
         case OT_IntVector:     intVector_show((struct IntVector*)obj, outStream); return;
