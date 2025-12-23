@@ -22,40 +22,42 @@ count_t testParser_pass_nCalls = 0;
 count_t testParser_fail_nCalls = 0;
 count_t testParser_error_nCalls = 0;
 
-enum ParseStatus testParser_pass(struct ParseState* parseState) {
+static enum ParseStatus testParser_pass(struct ParseState* parseState) {
     (void)parseState;
     ++testParser_pass_nCalls;
     return PS_Success;
 }
 
-enum ParseStatus testParser_fail(struct ParseState* parseState) {
+static enum ParseStatus testParser_fail(struct ParseState* parseState) {
     (void)parseState;
     ++testParser_fail_nCalls;
     return PS_Fail;
 }
 
-enum ParseStatus testParser_error(struct ParseState* parseState) {
+static enum ParseStatus testParser_error(struct ParseState* parseState) {
     parseState->result = (struct Object*)g_false;  /* Just use some unique value here */
     ++testParser_error_nCalls;
     return PS_Error;
 }
 
-enum ParseStatus testParser_returnNil(struct ParseState* parseState) {
+static enum ParseStatus testParser_returnNil(struct ParseState* parseState) {
     parseState->result = (struct Object*)g_nil;
     return PS_Success;
 }
 
-enum ParseStatus testParser_returnTrue(struct ParseState* parseState) {
+#if 0
+static enum ParseStatus testParser_returnTrue(struct ParseState* parseState) {
     parseState->result = (struct Object*)g_true;
     return PS_Success;
 }
+#endif
 
-enum ParseStatus testParser_returnUnique(struct ParseState* parseState) {
+static enum ParseStatus testParser_returnUnique(struct ParseState* parseState) {
     parseState->result = g_uniqueObject;
     return PS_Success;
 }
 
-enum ParseStatus testParser_error1(struct ParseState* parseState) {
+static enum ParseStatus testParser_error1(struct ParseState* parseState) {
     return pError("error1", parseState);
 }
 

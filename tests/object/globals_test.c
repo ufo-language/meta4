@@ -17,7 +17,7 @@ int main(int argc, char* argv[]) {
     END
 
     TEST(globale_checkShowUniqueObject)
-        SHOW("Should show 'Null/Unique'", g_uniqueObject);
+        EXPECT_SHOW("Null/Unique", g_uniqueObject);
     END
 
     END_TESTS

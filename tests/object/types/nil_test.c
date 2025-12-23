@@ -29,7 +29,7 @@ int main(int argc, char* argv[]) {
     END
 
     TEST(nil_checkShow)
-        SHOW("Should show 'nil'", g_nil);
+        EXPECT_SHOW("nil", g_nil);
     END
 
     END_TESTS

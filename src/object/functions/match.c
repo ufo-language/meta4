@@ -2,6 +2,7 @@
 
 #include "object/evaluator/etor_rec.h"
 #include "object/functions/equal.h"
+#include "object/functions/match.h"
 #include "object/object.h"
 #include "object/typeids.h"
 #include "object/types/array.h"

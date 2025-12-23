@@ -44,6 +44,7 @@ struct InStream* inStream_new_byteBuffer(struct ByteBuffer* byteBuffer);
 count_t inStream_available(struct InStream* inStream);
 bool_t inStream_readByte(struct InStream* inStream, byte_t* byte);
 count_t inStream_readBytes(struct InStream* inStream, struct ByteBuffer* buffer);
+bool_t inStream_readLine(struct InStream* inStream, struct String** string);
 bool_t inStream_readString(struct InStream* inStream, struct String** string);
 
 /* Object functions ******************/

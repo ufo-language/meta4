@@ -29,21 +29,21 @@ void memory_free(void) {
 
 /* Public functions **********************************************************/
 
-#if 0
+#if 1
 #include <stdio.h>
 #include <stdlib.h>
 #endif
 address_t memory_alloc(count_t nWords) {
-    #if 1
+    #if 0
     return bumpAllocator_allocate(g_bumpAllocator, nWords);
-    #elif 1
+    #elif 0
     address_t address = bumpAllocator_allocate(g_bumpAllocator, nWords);
     fprintf(stderr, "memory_alloc %2lu words / %2lu bytes @ %p - %p\n", nWords, (nWords * sizeof(word_t)), address, (void*)((intptr_t)address + (nWords * sizeof(word_t))));
     return address;
     #else  /* for valgrind */
     count_t nBytes = nWords * sizeof(word_t);
     address_t address = malloc(nBytes);
-    fprintf(stderr, "malloced %lu bytes @ %p\n", nBytes, address);
+    // fprintf(stderr, "malloced %lu bytes @ %p\n", nBytes, address);
     return address;
     #endif
 }

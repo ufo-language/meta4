@@ -21,6 +21,7 @@ struct InitFunction_handler {
 
 /* Public functions ---------------------------------------------------------*/
 
+int plx_main(void);
 void plx_startup(void);
 void plx_shutdown(void);
 

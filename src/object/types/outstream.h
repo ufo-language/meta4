@@ -44,6 +44,7 @@ void outStream_fwrite(struct OutStream* outStream, ...);
 void outStream_fwriteLn(struct OutStream* outStream, ...);
 
 void outStream_writeChar(struct OutStream* outStream, char c);
+void outStream_writeChars(struct OutStream* outStream, count_t nChars, char chars[]);
 void outStream_writeString(struct OutStream* outStream, const string_t s);
 
 void outStream_writeInt(struct OutStream* outStream, int_t i);

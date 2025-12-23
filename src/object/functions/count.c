@@ -1,7 +1,8 @@
 #include "_typedefs.h"
 
-#include "object/typeids.h"
+#include "object/functions/count.h"
 #include "object/object.h"
+#include "object/typeids.h"
 #include "object/types/array.h"
 #include "object/types/bytebuffer.h"
 #include "object/types/hashtable.h"

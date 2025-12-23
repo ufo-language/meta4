@@ -47,7 +47,7 @@ int main(int argc, char* argv[]) {
 
     TEST(let_checkShow)
         struct Let* let = let_new(OBJ(a), OBJ(i100));
-        SHOW("Should show 'let a = 100'", let);
+        EXPECT_SHOW("let a = 100", let);
     END
 
     END_TESTS

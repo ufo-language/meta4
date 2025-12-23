@@ -1,16 +1,17 @@
 #include "_typedefs.h"
 
+#include "object/functions/boolvalue.h"
 #include "object/globals.h"
 #include "object/object.h"
 #include "object/typeids.h"
 #include "object/types/array.h"
+#include "object/types/binding.h"
 #include "object/types/boolean.h"
 #include "object/types/instream.h"
 #include "object/types/integer.h"
 #include "object/types/intvar.h"
 #include "object/types/pair.h"
 #include "object/types/string.h"
-#include "object/types/binding.h"
 
 /* Defines *******************************************************************/
 

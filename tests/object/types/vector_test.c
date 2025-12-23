@@ -121,7 +121,7 @@ int main(int argc, char* argv[]) {
         vector_push(vector, OBJ(i100));
         vector_push(vector, OBJ(i200));
         vector_push(vector, OBJ(i300));
-        SHOW("Should show '{|100, 200, 300|}'", vector);
+        EXPECT_SHOW("{|100, 200, 300|}", vector);
     END
 
     END_TESTS

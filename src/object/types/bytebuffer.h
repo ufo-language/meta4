@@ -20,8 +20,8 @@ struct ByteBuffer {
     count_t nBytes;
     index_t writeIndex;
     index_t readIndex;
-    byte_t* bytes;
     count_t nResizes;
+    byte_t* bytes;
 };
 
 struct OutStream;

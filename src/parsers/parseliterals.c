@@ -1,6 +1,7 @@
 #include "_typedefs.h"
 
 #include "object/globals.h"
+#include "parsers/parseliterals.h"
 #include "parsers/parser.h"
 #include "parsers/parserprims.h"
 

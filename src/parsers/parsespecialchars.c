@@ -5,12 +5,15 @@
 #include "object/types/term.h"
 #include "parsers/parser.h"
 #include "parsers/parserprims.h"
+#include "parsers/parsespecialchars.h"
 
 /* Defines *******************************************************************/
 
 /* Types *********************************************************************/
 
 /* Forward declarations ******************************************************/
+
+enum ParseStatus pSpotSpecialChar(char c, struct ParseState* parseState);
 
 /* Global variables **********************************************************/
 

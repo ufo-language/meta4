@@ -11,7 +11,7 @@
 count_t testFunction1CallCount = 0;
 count_t testFunction2CallCount = 0;
 
-bool_t testFunction1(struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value) {
+static bool_t testFunction1(struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value) {
     (void)etor;
     (void)nArgs;
     (void)args;
@@ -20,7 +20,7 @@ bool_t testFunction1(struct Etor_rec* etor, count_t nArgs, struct Object* args[]
     return true;
 }
 
-bool_t testFunction2(struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value) {
+static bool_t testFunction2(struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value) {
     (void)etor;
     (void)nArgs;
     (void)args;
@@ -29,7 +29,7 @@ bool_t testFunction2(struct Etor_rec* etor, count_t nArgs, struct Object* args[]
     return true;
 }
 
-bool_t testFunction3(struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value) {
+static bool_t testFunction3(struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value) {
     (void)etor;
     (void)nArgs;
     (void)args;

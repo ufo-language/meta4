@@ -113,16 +113,24 @@ bool_t function_eval_rec(struct Function* function, struct Etor_rec* etor, struc
 }
 
 void function_show(struct Function* function, struct OutStream* outStream) {
+    assert(outStream->streamType < 2);
     outStream_writeString(outStream, function->argEvalType == ArgEvalType_Function ? "fun " : "macro ");
+    assert(outStream->streamType < 2);
     if (function->name != g_idNil) {
-        identifier_show(function->name, outStream);
+        symbolic_show((struct Symbolic*)function->name, outStream);
+        assert(outStream->streamType < 2);
     }
     assert(function->rules != g_emptyFunctionRule);
     struct FunctionRule* rule = function->rules;
+    assert(outStream->streamType < 2);
     _function_showRule(rule, outStream);
+    assert(outStream->streamType < 2);
     for (rule = rule->nextRule; rule != g_emptyFunctionRule; rule = rule->nextRule) {
+        assert(outStream->streamType < 2);
         outStream_writeString(outStream, " | ");
+        assert(outStream->streamType < 2);
         _function_showRule(rule, outStream);
+        assert(outStream->streamType < 2);
     }
     outStream_writeString(outStream, " end");
 }
@@ -153,6 +161,9 @@ static void _function_closeRule(struct FunctionRule* rule, struct Etor_rec* etor
 }
 
 static void _function_showRule(struct FunctionRule* rule, struct OutStream* outStream) {
+    assert(outStream->streamType < 2);
     array_showElems(rule->nParams, rule->params, "(", ", ", ") = ", outStream);
+    assert(outStream->streamType < 2);
     show(rule->body, outStream);
+    assert(outStream->streamType < 2);
 }

@@ -1,5 +1,6 @@
 #include "_typedefs.h"
 
+#include "object/functions/hash.h"
 #include "object/object.h"
 #include "object/types/string.h"
 #include "object/types/symbolic.h"

@@ -6,6 +6,7 @@
 #include "object/functions/display.h"
 #include "object/functions/show.h"
 #include "object/globals.h"
+#include "object/primitives/defineprims.h"
 #include "object/types/integer.h"
 #include "object/types/pair.h"
 #include "object/types/primitive.h"
@@ -16,6 +17,9 @@
 /* Types *********************************************************************/
 
 /* Forward declarations ******************************************************/
+
+void definePrim(struct Vector* env, const string_t name, PrimFunction function, count_t nParams, ...);
+void defineMacro(struct Vector* env, const string_t name, PrimFunction function, count_t nParams, ...);
 
 static bool_t _prim_count  (struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value);
 static bool_t _prim_display(struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value);

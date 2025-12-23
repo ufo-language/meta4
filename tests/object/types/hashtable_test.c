@@ -103,7 +103,7 @@ int main(int argc, char* argv[]) {
         hashTable_put(hashTable, OBJ(symbol_new("A")), OBJ(integer_new(100)));
         hashTable_put(hashTable, OBJ(symbol_new("B")), OBJ(integer_new(200)));
         hashTable_put(hashTable, OBJ(symbol_new("C")), OBJ(integer_new(300)));
-        SHOW("Should show '#{A=100, B=200, C=300}'", hashTable);
+        EXPECT_SHOW("#{A=100, B=200, C=300}", hashTable);
     END
 
     TEST(hashTable_checkIntern)

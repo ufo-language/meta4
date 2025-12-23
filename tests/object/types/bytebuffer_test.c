@@ -84,7 +84,7 @@ int main(int argc, char* argv[]) {
         byteBuffer_appendByte(byteBuffer, '0');
         byteBuffer_appendByte(byteBuffer, '1');
         byteBuffer_appendByte(byteBuffer, '2');
-        SHOW("Should show 'ByteBuffer{30:31:32}'", byteBuffer);
+        EXPECT_SHOW("ByteBuffer{30:31:32}", byteBuffer);
     END
 
     TEST(byteBuffer_checkRead)

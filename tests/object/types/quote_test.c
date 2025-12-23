@@ -29,7 +29,7 @@ int main(int argc, char* argv[]) {
 
     TEST(quote_checkShow)
         struct Quote* quote = quote_new(OBJ(x));
-        SHOW("Should show \"'x'\"", quote);
+        EXPECT_SHOW("'x'", quote);
     END
 
     END_TESTS

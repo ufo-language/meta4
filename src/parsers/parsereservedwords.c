@@ -4,6 +4,7 @@
 #include "object/types/string.h"
 #include "object/types/term.h"
 #include "parsers/parser.h"
+#include "parsers/parsereservedwords.h"
 #include "parsers/parserprims.h"
 
 /* Defines *******************************************************************/

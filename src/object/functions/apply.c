@@ -1,6 +1,7 @@
 #include "_typedefs.h"
 
 #include "object/evaluator/etor_rec.h"
+#include "object/functions/apply.h"
 #include "object/object.h"
 #include "object/typeids.h"
 #include "object/types/function.h"

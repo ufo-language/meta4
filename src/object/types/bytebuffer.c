@@ -32,8 +32,10 @@ static void _byteBuffer_resize(struct ByteBuffer* byteBuffer, count_t nBytesNeed
 struct ByteBuffer* byteBuffer_new(void) {
     struct ByteBuffer* byteBuffer = (struct ByteBuffer*)object_new(OT_ByteBuffer, NWORDS(*byteBuffer));
     byteBuffer->capacity = ByteBuffer_DefaultCapacity;
-    // byteBuffer->nBytes = 0;
+    byteBuffer->nBytes = 0;
     byteBuffer->writeIndex = 0;
+    byteBuffer->readIndex = 0;
+    byteBuffer->nResizes = 0;
     gc_pushRoot(g_gc, (struct Object*)byteBuffer);
     byteBuffer->bytes = memory_alloc(NBYTES_TO_WORDS(ByteBuffer_DefaultCapacity));
     gc_popRoot(g_gc);
@@ -57,6 +59,7 @@ void byteBuffer_appendBytes(struct ByteBuffer* byteBuffer, count_t nBytes, byte_
         _byteBuffer_compactOrResize(byteBuffer, nBytes);
     }
     memcpy(byteBuffer->bytes + byteBuffer->writeIndex, bytes, nBytes);
+
     byteBuffer->writeIndex += nBytes;
     byteBuffer->nBytes += nBytes;
 }
@@ -107,12 +110,14 @@ count_t byteBuffer_count(struct ByteBuffer* byteBuffer) {
 void byteBuffer_show(struct ByteBuffer* byteBuffer, struct OutStream* outStream) {
     outStream_writeString(outStream, "ByteBuffer{");
     count_t nBytes = byteBuffer->nBytes;
-    byte_t* bytes = byteBuffer->bytes;
+    byte_t* src = byteBuffer->bytes + byteBuffer->readIndex;
     for (count_t n=0; n<nBytes; ++n) {
         if (n > 0) {
-            outStream_writeString(outStream, ":");
+            outStream_writeChar(outStream, ':');
         }
-        outStream_writeHexInt(outStream, bytes[n]);
+        byte_t b = *src;
+        outStream_writeHexInt(outStream, (uint_t)b);
+        ++src;
     }
     outStream_writeChar(outStream, '}');
 }
@@ -126,16 +131,12 @@ static void _byteBuffer_compact(struct ByteBuffer* byteBuffer) {
 }
 
 static void _byteBuffer_compactOrResize(struct ByteBuffer* byteBuffer, count_t nBytesNeeded) {
-    fprintf(stderr, "_byteBuffer_compactOrResize capacity = %lu\n", byteBuffer->capacity);
     if (byteBuffer->nBytes + nBytesNeeded <= byteBuffer->capacity && byteBuffer->readIndex > 0) {
         _byteBuffer_compact(byteBuffer);
     }
     else {
         _byteBuffer_resize(byteBuffer, nBytesNeeded);
     }
-    fprintf(stderr, "_byteBuffer_compactOrResize finished, byteBuffer = ");
-    byteBuffer_show(byteBuffer, g_stderr);
-    fputc('\n', stderr);
 }
 
 static void _byteBuffer_resize(struct ByteBuffer* byteBuffer, count_t nBytesNeeded) {

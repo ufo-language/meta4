@@ -19,7 +19,7 @@
 //     return token->name == typeName;
 // }
 
-bool_t isEOI(struct Object* tokenObj) {
+static bool_t isEOI(struct Object* tokenObj) {
     if (tokenObj->typeId != OT_Term) {
         return false;
     }

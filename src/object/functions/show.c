@@ -47,9 +47,9 @@
 
 /* Public functions **********************************************************/
 
-#include "debug.h"
+#include <assert.h>
 void show(struct Object* obj, struct OutStream* outStream) {
-    // fprintf(stderr, "show %d (%s), identifier = %d\n", obj->typeId, typeName(obj->typeId), OT_Identifier);
+    assert(outStream->streamType < 2);
     switch(obj->typeId) {
         case OT_Application:   application_show((struct Application*)obj, outStream); return;
         case OT_Array:         array_show((struct Array*)obj, outStream); return;

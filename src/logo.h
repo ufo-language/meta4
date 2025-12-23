@@ -1,7 +1,4 @@
-#include <stdio.h>
-
-#include "logo.h"
-#include "version.h"
+#pragma once
 
 /* Defines *******************************************************************/
 
@@ -9,21 +6,16 @@
 
 /* Forward declarations ******************************************************/
 
+void logo(void);
+
 /* Global variables **********************************************************/
 
 /* Lifecycle functions *******************************************************/
 
 /* Public functions **********************************************************/
 
-void logo(void) {
-    fprintf(stderr, "▌▐ ▛▘▛▜ UFO version %s\n", UFO_VERSION);
-    fprintf(stderr, "▙▟ ▛ ▙▟ http://github.com/ufo-language\n");
-    fprintf(stderr, "Type :? for help\n\n");
-}
-
 /* Unique functions ******************/
 
 /* Object functions ******************/
 
 /* Private functions *********************************************************/
-

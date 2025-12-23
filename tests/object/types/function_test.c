@@ -98,7 +98,7 @@ int main(int argc, char* argv[]) {
         struct Object* params[] = {OBJ(x)};
         struct Object* body = OBJ(y);
         function_addlRule(function, nParams, params, body);
-        SHOW("Should show 'fun f(x) = x'", function);
+        EXPECT_SHOW("fun f(x) = y end", function);
     END
 
     TEST(function_checkShow_2Rules)
@@ -109,9 +109,8 @@ int main(int argc, char* argv[]) {
         function_addlRule(function, nParams, params, body);
         nParams = 1;
         struct Object* params1[] = {OBJ(x)};
-        body = OBJ(x);
         function_addlRule(function, nParams, params1, body);
-        EXPECT_SHOW("fun f(x, y) = y | b(x) = x", function);
+        EXPECT_SHOW("fun f(x, y) = x | (x) = x end", function);
     END
 
     END_TESTS
