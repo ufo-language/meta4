@@ -105,7 +105,7 @@ bool_t prim_apply(struct Primitive* prim, struct Etor_rec* etor, count_t nArgs, 
 
 void prim_show(struct Primitive* prim, struct OutStream* outStream) {
     outStream_writeChar(outStream, '@');
-    identifier_show(prim->name, outStream);
+    symbolic_show((struct Symbolic*)prim->name, outStream);
 }
 
 /* Private functions *********************************************************/

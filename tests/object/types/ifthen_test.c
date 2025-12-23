@@ -41,7 +41,7 @@ int main(int argc, char* argv[]) {
 
     TEST(ifThen_checkShow)
         struct IfThen* ifThen = ifThen_new(OBJ(g_true), OBJ(i100), OBJ(i200));
-        SHOW("Should show 'if true then 100 else 200'", ifThen);
+        EXPECT_SHOW("if true then 100 else 200", ifThen);
     END
 
     END_TESTS

@@ -28,7 +28,7 @@ int main(int argc, char* argv[]) {
 
     TEST(intVar_checkShow)
         struct IntVar* intVar = intVar_new(123);
-        SHOW("Should show 'IntVar{123}'", intVar);
+        EXPECT_SHOW("IntVar{123}", intVar);
     END
 
     END_TESTS

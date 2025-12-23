@@ -4,6 +4,7 @@
 
 #include "object/functions/show.h"
 #include "object/globals.h"
+#include "object/types/string.h"
 #include "object/types/vector.h"
 #include "plx.h"
 
@@ -292,6 +293,18 @@ index_t _SAVED_GLOBALS_TOP_ = 0;
     fprintf(stderr, "[%sMESG%s] ⏩ [%s:%d] ", CYAN, NORMAL, __FILE__, __LINE__); \
     fputs(message, stderr); \
     fputc('\n', stderr);
+
+#define EXPECT_SHOW(expectedString, obj) \
+    struct String* actualString = showString((struct Object*)obj); \
+    string_t actualStringChars = actualString->chars; \
+    if (string_equal_chars(actualString, expectedString)) { \
+        fprintf(stderr, "[%sPASS%s] ✅ [%s:%d] %s == %s\n", GREEN, NORMAL, __FILE__, __LINE__, (#expectedString), (#obj)); \
+        ++_TEST_NPASS_; \
+    } \
+    else { \
+        fprintf(stderr, "[%sFAIL%s] ❌ [%s:%d] %s == %s, actual = '%s'\n", RED, NORMAL, __FILE__, __LINE__, (#expectedString), (#obj), (actualStringChars)); \
+        ++_TEST_NFAIL_; \
+    }
 
 #define SHOW(message, obj) \
     fprintf(stderr, "[%sSHOW%s] ⏩ [%s:%d] ", CYAN, NORMAL, __FILE__, __LINE__); \

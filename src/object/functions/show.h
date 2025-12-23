@@ -24,3 +24,4 @@ struct OutStream;
 /* Object functions ******************/
 
 void show(struct Object* obj, struct OutStream* outStream);
+struct String* showString(struct Object* obj);

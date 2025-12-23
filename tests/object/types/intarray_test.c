@@ -37,7 +37,7 @@ int main(int argc, char* argv[]) {
 
     TEST(intArray_checkShow)
         struct IntArray* intArray = intArray_new_elems(3, elems);
-        SHOW("Should show 'IntArray{100, 200, 300}'", intArray);
+        EXPECT_SHOW("IntArray{100, 200, 300}", intArray);
     END
 
     END_TESTS

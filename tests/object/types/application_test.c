@@ -45,7 +45,7 @@ int main(int argc, char* argv[]) {
     TEST(application_checkShow)
         struct Object* args[] = {OBJ(i100)};
         struct Application* app = application_new((struct Object*)f, 1, args);
-        SHOW("Should show 'f(100)'", app);
+        EXPECT_SHOW("f(100)", app);
     END
 
     END_TESTS

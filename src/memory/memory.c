@@ -36,9 +36,9 @@ void memory_free(void) {
 address_t memory_alloc(count_t nWords) {
     #if 1
     return bumpAllocator_allocate(g_bumpAllocator, nWords);
-    #elif 0
+    #elif 1
     address_t address = bumpAllocator_allocate(g_bumpAllocator, nWords);
-    fprintf(stderr, "memory_alloc %2lu words @ %p\n", nWords, address);
+    fprintf(stderr, "memory_alloc %2lu words / %2lu bytes @ %p - %p\n", nWords, (nWords * sizeof(word_t)), address, (void*)((intptr_t)address + (nWords * sizeof(word_t))));
     return address;
     #else  /* for valgrind */
     count_t nBytes = nWords * sizeof(word_t);

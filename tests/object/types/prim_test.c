@@ -115,7 +115,7 @@ int main(int argc, char* argv[]) {
 
     TEST(primitive_show)
         struct Primitive* prim = prim_newFunction("foo");
-        SHOW("Should show '@foo'", prim);
+        EXPECT_SHOW("@foo", prim);
     END
 
     END_TESTS

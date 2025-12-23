@@ -47,7 +47,9 @@
 
 /* Public functions **********************************************************/
 
+#include "debug.h"
 void show(struct Object* obj, struct OutStream* outStream) {
+    // fprintf(stderr, "show %d (%s), identifier = %d\n", obj->typeId, typeName(obj->typeId), OT_Identifier);
     switch(obj->typeId) {
         case OT_Application:   application_show((struct Application*)obj, outStream); return;
         case OT_Array:         array_show((struct Array*)obj, outStream); return;
@@ -92,6 +94,17 @@ void show(struct Object* obj, struct OutStream* outStream) {
     }
     fprintf(stderr, "show: Unknown type ID %u (%s)\n", obj->typeId, typeName(obj->typeId));
     outStream_writeString(outStream, "UNKNOWN");
+}
+
+struct String* showString(struct Object* obj) {
+    struct ByteBuffer* bb = byteBuffer_new();
+    struct OutStream* os = outStream_new_byteBuffer(bb);
+    show(obj, os);
+    struct String* string;
+    if (!byteBuffer_readString(bb, &string)) {
+        string = string_new("");
+    }
+    return string;
 }
 
 /* Private functions *********************************************************/

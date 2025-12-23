@@ -111,7 +111,7 @@ int main(int argc, char* argv[]) {
         struct Object* params1[] = {OBJ(x)};
         body = OBJ(x);
         function_addlRule(function, nParams, params1, body);
-        SHOW("Should show 'fun f(x, y) = y | b(x) = x'", function);
+        EXPECT_SHOW("fun f(x, y) = y | b(x) = x", function);
     END
 
     END_TESTS

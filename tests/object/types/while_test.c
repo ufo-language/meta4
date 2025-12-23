@@ -4,8 +4,11 @@
 #include "object/evaluator/etor_rec.h"
 #include "object/globals.h"
 #include "object/functions/eval_rec.h"
+#include "object/types/bytebuffer.h"
 #include "object/types/dec.h"
 #include "object/types/intvar.h"
+#include "object/types/outstream.h"
+#include "object/types/string.h"
 #include "object/types/while.h"
 
 int main(int argc, char* argv[]) {
@@ -41,7 +44,7 @@ int main(int argc, char* argv[]) {
     
     TEST(while_checkShow)
         struct While* while_ = while_new(OBJ(g_false), OBJ(g_nil));
-        SHOW("should be 'while false nil'", while_);
+        EXPECT_SHOW("while false nil", while_);
     END
 
     END_TESTS

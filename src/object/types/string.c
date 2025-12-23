@@ -34,12 +34,15 @@ struct String* string_new_empty(count_t nChars) {
     return string;
 }
 
+#include <assert.h>
 void string_init(struct String* string, count_t nChars, const string_t chars) {
     object_init((struct Object*)string, OT_String, NWORDS(*string) + NBYTES_TO_WORDS(nChars + 1));
     /* This is duplicated in string_new_empty; that's necessary because these functions
        are used in other places */
     string->nChars = nChars;
     memcpy(string->chars, chars, nChars + 1);  /* The '+ 1' copies the null terminator */
+    assert(string->chars[nChars] == 0);
+    assert(strlen(string->chars) == nChars);
 }
 
 /* Public functions **********************************************************/

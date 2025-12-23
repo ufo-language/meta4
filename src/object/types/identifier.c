@@ -49,8 +49,4 @@ bool_t identifier_eval_rec(struct Identifier* ident, struct Etor_rec* etor, stru
     return true;
 }
 
-void identifier_show(struct Identifier* ident, struct OutStream* outStream) {
-    outStream_writeString(outStream, ident->name);
-}
-
 /* Private functions *********************************************************/

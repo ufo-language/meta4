@@ -39,7 +39,7 @@ int main(int argc, char* argv[]) {
 
     TEST(integer_checkShow)
         struct Integer* integer = integer_new(123);
-        SHOW("Should show '123'", integer);
+        EXPECT_SHOW("123", integer);
     END
 
     END_TESTS

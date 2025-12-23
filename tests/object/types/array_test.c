@@ -131,7 +131,7 @@ int main(int argc, char* argv[]) {
 
     TEST(array_checkShow)
         struct Array* array = array_new_withElems(3, elems);
-        SHOW("Should show '{100, 200, 300}'", array);
+        EXPECT_SHOW("{100, 200, 300}", array);
     END
 
     END_TESTS

@@ -21,7 +21,9 @@
 
 /* Forward declarations ******************************************************/
 
-static void _byteBuffer_resize(struct ByteBuffer* byteBuffer);
+static void _byteBuffer_compact(struct ByteBuffer* byteBuffer);
+static void _byteBuffer_compactOrResize(struct ByteBuffer* byteBuffer, count_t nBytesNeeded);
+static void _byteBuffer_resize(struct ByteBuffer* byteBuffer, count_t nBytesNeeded);
 
 /* Global variables **********************************************************/
 
@@ -44,15 +46,15 @@ struct ByteBuffer* byteBuffer_new(void) {
 
 void byteBuffer_appendByte(struct ByteBuffer* byteBuffer, byte_t byte) {
     if (byteBuffer->writeIndex == byteBuffer->capacity) {
-        _byteBuffer_resize(byteBuffer);
+        _byteBuffer_compactOrResize(byteBuffer, 1);
     }
     byteBuffer->bytes[byteBuffer->writeIndex++] = byte;
     ++byteBuffer->nBytes;
 }
 
 void byteBuffer_appendBytes(struct ByteBuffer* byteBuffer, count_t nBytes, byte_t bytes[]) {
-    while (byteBuffer->writeIndex + nBytes >= byteBuffer->capacity) {
-        _byteBuffer_resize(byteBuffer);
+    if (byteBuffer->writeIndex + nBytes > byteBuffer->capacity) {
+        _byteBuffer_compactOrResize(byteBuffer, nBytes);
     }
     memcpy(byteBuffer->bytes + byteBuffer->writeIndex, bytes, nBytes);
     byteBuffer->writeIndex += nBytes;
@@ -117,21 +119,35 @@ void byteBuffer_show(struct ByteBuffer* byteBuffer, struct OutStream* outStream)
 
 /* Private functions *********************************************************/
 
-static void _byteBuffer_resize(struct ByteBuffer* byteBuffer) {
-    count_t nBytes = byteBuffer->nBytes;
-    if (nBytes <= byteBuffer->capacity / 2) {
-        /* If the nBtes <= 1/2 the capacity, don't reallocate, just shift */
-        memcpy(byteBuffer->bytes, &byteBuffer->bytes[byteBuffer->readIndex], nBytes);
-        byteBuffer->writeIndex = nBytes;
-        byteBuffer->readIndex = 0;
+static void _byteBuffer_compact(struct ByteBuffer* byteBuffer) {
+    memmove(byteBuffer->bytes, byteBuffer->bytes + byteBuffer->readIndex, byteBuffer->nBytes);
+    byteBuffer->writeIndex = byteBuffer->nBytes;
+    byteBuffer->readIndex = 0;
+}
+
+static void _byteBuffer_compactOrResize(struct ByteBuffer* byteBuffer, count_t nBytesNeeded) {
+    fprintf(stderr, "_byteBuffer_compactOrResize capacity = %lu\n", byteBuffer->capacity);
+    if (byteBuffer->nBytes + nBytesNeeded <= byteBuffer->capacity && byteBuffer->readIndex > 0) {
+        _byteBuffer_compact(byteBuffer);
     }
     else {
-        count_t newCapacity = byteBuffer->capacity * 2;
-        byte_t* newBytes = memory_alloc(NBYTES_TO_WORDS(newCapacity));
-        memcpy(newBytes, &byteBuffer->bytes[byteBuffer->readIndex], nBytes);
-        byteBuffer->capacity = newCapacity;
-        byteBuffer->writeIndex = nBytes;
-        byteBuffer->readIndex = 0;
-        ++byteBuffer->nResizes;
+        _byteBuffer_resize(byteBuffer, nBytesNeeded);
     }
+    fprintf(stderr, "_byteBuffer_compactOrResize finished, byteBuffer = ");
+    byteBuffer_show(byteBuffer, g_stderr);
+    fputc('\n', stderr);
+}
+
+static void _byteBuffer_resize(struct ByteBuffer* byteBuffer, count_t nBytesNeeded) {
+    count_t required = byteBuffer->nBytes + nBytesNeeded;
+    count_t newCapacity = byteBuffer->capacity;
+    while (newCapacity < required) {
+        newCapacity *= 2;
+    }
+    byte_t* newBytes = memory_alloc(NBYTES_TO_WORDS(newCapacity));
+    memcpy(newBytes, &byteBuffer->bytes[byteBuffer->readIndex], byteBuffer->nBytes);
+    byteBuffer->capacity = newCapacity;
+    byteBuffer->writeIndex = byteBuffer->nBytes;
+    byteBuffer->readIndex = 0;
+    ++byteBuffer->nResizes;
 }

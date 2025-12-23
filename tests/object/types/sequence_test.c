@@ -16,7 +16,7 @@ int main(int argc, char* argv[]) {
     struct Identifier* a = identifier_new("a");
     struct Integer* i100 = integer_new(100);
     struct Integer* i200 = integer_new(200);
-    struct Integer* i300 = integer_new(200);
+    struct Integer* i300 = integer_new(300);
     struct Object* exprs[] = {OBJ(i100), OBJ(i200), OBJ(i300)};
 
     TEST(sequence_checkConstruction)
@@ -65,7 +65,7 @@ int main(int argc, char* argv[]) {
 
     TEST(sequence_checkShow)
         struct Sequence* seq = sequence_new(3, exprs);
-        SHOW("Should show '(100; 200; 300)'", seq);
+        EXPECT_SHOW("(100; 200; 300)", seq);
     END
 
     END_TESTS
