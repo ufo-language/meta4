@@ -12,6 +12,7 @@
 #include "object/types/ifthen.h"
 #include "object/types/pair.h"
 #include "object/types/sequence.h"
+#include "object/types/subscript.h"
 #include "object/types/vector.h"
 
 /* Defines *******************************************************************/
@@ -99,6 +100,10 @@ void freeVars(struct Object* obj, struct Vector* freeVars_) {
                 }
             }
             return;
+        case OT_Subscript:
+            freeVars(((struct Subscript*)obj)->base, freeVars_);
+            freeVars(((struct Subscript*)obj)->index, freeVars_);
+            break;
         case OT_Test:
             break;
         case OT_User:

@@ -33,7 +33,10 @@ void array_init(struct Array* array, count_t nElems, struct Object* elems[]);
 
 /* Unique functions ******************/
 
-/* Per-element operations; also used by other types */
+bool_t array_get(struct Array* array, struct Object* indexObj, struct Object** value);
+bool_t array_get_index_t(struct Array* array, index_t index, struct Object** value);
+
+/* Element/array-wise operations; also used by other types */
 void array_closeElems_rec(count_t nElems, struct Object* elems[], struct Object* newElems[], struct Etor_rec* etor);
 bool_t array_equalElems(count_t nElems, struct Object* elems[], struct Object* otherElems[]);
 bool_t array_evalElems_rec(count_t nElems, struct Object* elems[], struct Object* newElems[], struct Etor_rec* etor, struct Object** error);

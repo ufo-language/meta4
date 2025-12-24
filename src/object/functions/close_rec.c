@@ -15,6 +15,7 @@
 #include "object/types/let.h"
 #include "object/types/pair.h"
 #include "object/types/sequence.h"
+#include "object/types/subscript.h"
 #include "object/types/while.h"
 
 /* Defines *******************************************************************/
@@ -62,6 +63,7 @@ struct Object* close_rec(struct Object* obj, struct Etor_rec* etor) {
         case OT_Pair:        return pair_close_rec((struct Pair*)obj, etor);
         case OT_Quote:       break;
         case OT_Sequence:    return sequence_close_rec((struct Sequence*)obj, etor);
+        case OT_Subscript:   return subscript_close_rec((struct Subscript*)obj, etor);
         case OT_Test:        break;
         case OT_User:        break;
         case OT_Var:         break;

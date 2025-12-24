@@ -2,13 +2,15 @@
 
 #include "_typedefs.h"
 
-#include "object/object.h"
-#include "object/types/array.h"
+#include "object/errorterm.h"
 #include "object/functions/close_rec.h"
 #include "object/functions/equal.h"
 #include "object/functions/eval_rec.h"
 #include "object/functions/match.h"
 #include "object/functions/show.h"
+#include "object/object.h"
+#include "object/types/array.h"
+#include "object/types/integer.h"
 #include "object/types/outstream.h"
 #include "object/types/vector.h"
 
@@ -50,6 +52,30 @@ void array_init(struct Array* array, count_t nElems, struct Object* elems[]) {
 
 /* Unique functions ******************/
 
+bool_t array_get(struct Array* array, struct Object* indexObj, struct Object** value) {
+    switch (indexObj->typeId) {
+        case OT_Integer:
+            return array_get_index_t(array, ((struct Integer*)indexObj)->i, value);
+        default:
+            if (indexObj->typeId < OT_ConstantLimit) {
+                return array_lookupElems(array->nElems, array->elems, indexObj, value);
+            }
+            *value = (struct Object*)errorTerm1("ArrayError", "Unable to use object as array subscript index", indexObj);
+            return false;
+    }
+}
+
+bool_t array_get_index_t(struct Array* array, index_t index, struct Object** value) {
+    if (index >= array->nElems) {
+        *value = (struct Object*)errorTerm1("ArrayError", "Index out of bounds", (struct Object*)integer_new(index));
+        return false;
+    }
+    *value = array->elems[index];
+    return true;
+}
+
+/* Element/array-wise operations; also used by other types */
+
 void array_closeElems_rec(count_t nElems, struct Object* elems[], struct Object* newElems[], struct Etor_rec* etor) {
     for (index_t n=0; n<nElems; ++n) {
         newElems[n] = close_rec(elems[n], etor);
@@ -85,6 +111,7 @@ bool_t array_lookupElems(count_t nElems, struct Object* elems[], struct Object* 
             return true;
         }
     }
+    *value = (struct Object*)errorTerm1("ArrayError", "Key not found in array", key);
     return false;
 }
 

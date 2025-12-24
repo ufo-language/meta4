@@ -17,6 +17,7 @@
 #include "object/types/pair.h"
 #include "object/types/quote.h"
 #include "object/types/sequence.h"
+#include "object/types/subscript.h"
 #include "object/types/term.h"
 #include "object/types/while.h"
 
@@ -66,6 +67,7 @@ bool_t eval_rec(struct Object* obj, struct Etor_rec* etor, struct Object** value
         case OT_Pair:        return pair_eval_rec((struct Pair*)obj, etor, value);
         case OT_Quote:       return quote_eval_rec((struct Quote*)obj, etor, value);
         case OT_Sequence:    return sequence_eval_rec((struct Sequence*)obj, etor, value);
+        case OT_Subscript:   return subscript_eval_rec((struct Subscript*)obj, etor, value);
         case OT_Term:        return term_eval_rec((struct Term*)obj, etor, value);
         case OT_Test:        break;
         case OT_User:        break;

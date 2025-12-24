@@ -20,6 +20,9 @@ int main(int argc, char* argv[]) {
     struct Identifier* b = identifier_new("b");
     struct Identifier* c = identifier_new("c");
     struct Integer* i0 = integer_new(0);
+    struct Integer* i1 = integer_new(1);
+    struct Integer* i2 = integer_new(2);
+    struct Integer* i3 = integer_new(3);
     struct Integer* i100 = integer_new(100);
     struct Integer* i200 = integer_new(200);
     struct Integer* i300 = integer_new(300);
@@ -127,6 +130,29 @@ int main(int argc, char* argv[]) {
         EXPECT_EQ(i200, value);
         ASSERT_TRUE(vector_lookup(bindings, OBJ(c), &value));
         EXPECT_EQ(i300, value);
+    END
+
+    TEST(array_checkSafeGet)
+        struct Array* array = array_new_withElems(3, elems);
+        struct Object* elem;
+        /* array_get */
+        ASSERT_TRUE(array_get(array, OBJ(i0), &elem));
+        EXPECT_EQ(i100, elem);
+        ASSERT_TRUE(array_get(array, OBJ(i1), &elem));
+        EXPECT_EQ(i200, elem);
+        ASSERT_TRUE(array_get(array, OBJ(i2), &elem));
+        EXPECT_EQ(i300, elem);
+        ASSERT_FALSE(array_get(array, OBJ(i3), &elem));
+        EXPECT_ISA(OT_Term, elem);
+        /* array_get_index_t */
+        ASSERT_TRUE(array_get_index_t(array, 0, &elem));
+        EXPECT_EQ(i100, elem);
+        ASSERT_TRUE(array_get_index_t(array, 1, &elem));
+        EXPECT_EQ(i200, elem);
+        ASSERT_TRUE(array_get_index_t(array, 2, &elem));
+        EXPECT_EQ(i300, elem);
+        ASSERT_FALSE(array_get_index_t(array, 3, &elem));
+        EXPECT_ISA(OT_Term, elem);
     END
 
     TEST(array_checkShow)
