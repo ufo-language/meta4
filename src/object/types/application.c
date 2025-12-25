@@ -55,18 +55,16 @@ struct Object* application_close(struct Application* app, struct Etor_rec* etor)
     return (struct Object*)closedApp;
 }
 
-bool_t application_eval(struct Application* app, struct Etor_rec* etor, struct Object** value) {
+bool_t application_eval_rec(struct Application* app, struct Etor_rec* etor, struct Object** value) {
     /* Evaluate the abstraction */
     struct Object* abstrVal;
     if (!eval_rec(app->abstraction, etor, &abstrVal)) {
         return false;
     }
-
     bool_t evalArgs =
            (abstrVal->typeId == OT_Primitive && ((struct Primitive*)abstrVal)->argEvalType == ArgEvalType_Function)
         || (abstrVal->typeId == OT_Function  && ((struct Function*)abstrVal)->argEvalType  == ArgEvalType_Function)
         ;
-
     struct Object** argVals;
     if (evalArgs) {
         /* Evaluate the arguments */

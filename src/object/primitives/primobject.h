@@ -2,8 +2,6 @@
 
 #include "_typedefs.h"
 
-#include "object/types/primitive.h"
-
 /* Defines *******************************************************************/
 
 /* Types *********************************************************************/
@@ -18,6 +16,4 @@ struct Vector;
 
 /* Public functions **********************************************************/
 
-void defineMacro(struct Vector* env, const string_t name, PrimFunction function, count_t nParams, ...);
-void definePrim(struct Vector* env, const string_t name, PrimFunction function, count_t nParams, ...);
-void definePrims_init(struct Vector* env);
+void prim_object_defineAll(struct Vector* env);

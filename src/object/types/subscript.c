@@ -30,6 +30,32 @@ struct Subscript* subscript_new(struct Object* base, struct Object* index) {
 
 /* Unique functions ******************/
 
+bool_t subscript_assign(struct Subscript* subs, struct Object* value, struct Object** error, struct Etor_rec* etor) {
+    struct Object* base;
+    if (!eval_rec(subs->base, etor, &base)) {
+        return false;
+    }
+    struct Object* index;
+    if (!eval_rec(subs->index, etor, &index)) {
+        return false;
+    }
+    switch (base->typeId) {
+        case OT_Array:
+            return array_set((struct Array*)base, index, value, error);
+#if 0
+        case OT_HashTable:
+            return hashTable_set((struct HashTable*)base, index, value, error);
+        case OT_IntArray:
+            return intArray_set((struct IntArray*)base, index, value, error);
+        case OT_IntVector:
+            return intVector_set((struct IntVector*)base, index, value, error);
+#endif
+        default:
+            *error = (struct Object*)errorTerm1("SubscriptAssign", "Unable to assign to subscript of object", base);
+            return false;
+    }
+}
+
 /* Object functions ******************/
 
 struct Object* subscript_close_rec(struct Subscript* subs, struct Etor_rec* etor) {

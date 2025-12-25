@@ -29,6 +29,8 @@ struct Subscript* subscript_new(struct Object* base, struct Object* index);
 
 /* Unique functions ******************/
 
+bool_t subscript_assign(struct Subscript* subs, struct Object* value, struct Object** error, struct Etor_rec* etor);
+
 /* Object functions ******************/
 
 struct Object* subscript_close_rec(struct Subscript* subscript, struct Etor_rec* etor);

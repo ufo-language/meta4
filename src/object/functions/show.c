@@ -7,6 +7,7 @@
 #include "object/typeids.h"
 #include "object/types/application.h"
 #include "object/types/array.h"
+#include "object/types/binop.h"
 #include "object/types/boolean.h"
 #include "object/types/bytebuffer.h"
 #include "object/types/continuation.h"
@@ -55,7 +56,7 @@ void show(struct Object* obj, struct OutStream* outStream) {
         case OT_Application:   application_show((struct Application*)obj, outStream); return;
         case OT_Array:         array_show((struct Array*)obj, outStream); return;
         case OT_Binding:       binding_show((struct Binding*)obj, outStream); return;
-        /* case OT_BinOp:         break; */
+        case OT_BinOp:         binOp_show((struct BinOp*)obj, outStream); return;
         case OT_Boolean:       boolean_show((struct Boolean*)obj, outStream); return;
         case OT_ByteBuffer:    byteBuffer_show((struct ByteBuffer*)obj, outStream); return;
         /* case OT_ConstantLimit: break; */

@@ -35,6 +35,8 @@ void array_init(struct Array* array, count_t nElems, struct Object* elems[]);
 
 bool_t array_get(struct Array* array, struct Object* indexObj, struct Object** value);
 bool_t array_get_index_t(struct Array* array, index_t index, struct Object** value);
+bool_t array_set(struct Array* array, struct Object* indexObj, struct Object* value, struct Object** error);
+bool_t array_set_index_t(struct Array* array, index_t index, struct Object* value, struct Object** error);
 
 /* Element/array-wise operations; also used by other types */
 void array_closeElems_rec(count_t nElems, struct Object* elems[], struct Object* newElems[], struct Etor_rec* etor);

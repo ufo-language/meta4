@@ -51,7 +51,7 @@ bool_t eval_rec(struct Object* obj, struct Etor_rec* etor, struct Object** value
             return true;
 
         /* Non-constants */
-        case OT_Application: return application_eval((struct Application*)obj, etor, value);
+        case OT_Application: return application_eval_rec((struct Application*)obj, etor, value);
         case OT_Array:       return array_eval_rec((struct Array*)obj, etor, value);
         case OT_BinOp:       break;
         case OT_ByteBuffer:  break;

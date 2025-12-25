@@ -74,6 +74,25 @@ bool_t array_get_index_t(struct Array* array, index_t index, struct Object** val
     return true;
 }
 
+bool_t array_set(struct Array* array, struct Object* indexObj, struct Object* value, struct Object** error) {
+    switch (indexObj->typeId) {
+        case OT_Integer:
+            return array_set_index_t(array, ((struct Integer*)indexObj)->i, value, error);
+        default:
+            *error = (struct Object*)errorTerm1("ArrayError", "Unable to use object as array subscript index", indexObj);
+            return false;
+    }
+}
+
+bool_t array_set_index_t(struct Array* array, index_t index, struct Object* value, struct Object** error) {
+    if (index >= array->nElems) {
+        *error = (struct Object*)errorTerm1("ArrayError", "Index out of bounds", (struct Object*)integer_new(index));
+        return false;
+    }
+    array->elems[index] = value;
+    return true;
+}
+
 /* Element/array-wise operations; also used by other types */
 
 void array_closeElems_rec(count_t nElems, struct Object* elems[], struct Object* newElems[], struct Etor_rec* etor) {

@@ -1,7 +1,5 @@
 #pragma once
 
-#include <stdio.h>
-
 #include "_typedefs.h"
 
 #include "object/object.h"
@@ -10,13 +8,17 @@
 
 /* Types *********************************************************************/
 
-struct Application {
+struct Application;
+
+struct BinOp {
     struct Object obj;
-    struct Object* abstraction;
-    count_t nArgs;
-    struct Object* args[];
+    struct Object* lhs;
+    struct Object* oper;
+    struct Object* rhs;
+    struct Application* application;
 };
 
+struct Etor_rec;
 struct OutStream;
 
 /* Forward declarations ******************************************************/
@@ -25,7 +27,7 @@ struct OutStream;
 
 /* Lifecycle functions *******************************************************/
 
-struct Application* application_new(struct Object* abstraction, count_t nArgs, struct Object* args[]);
+struct BinOp* binOp_new(struct Object* lhs, struct Object* oper, struct Object* rhs);
 
 /* Public functions **********************************************************/
 
@@ -33,6 +35,6 @@ struct Application* application_new(struct Object* abstraction, count_t nArgs, s
 
 /* Object functions ******************/
 
-struct Object* application_close(struct Application* app, struct Etor_rec* etor);
-bool_t application_eval_rec(struct Application* app, struct Etor_rec* etor, struct Object** value);
-void application_show(struct Application* app, struct OutStream* outStream);
+struct Object* binOp_close_rec(struct BinOp* binOp, struct Etor_rec* etor);
+bool_t binOp_eval_rec(struct BinOp* binOp, struct Etor_rec* etor, struct Object** value);
+void binOp_show(struct BinOp* binOp, struct OutStream* outStream);
