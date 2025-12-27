@@ -30,10 +30,10 @@ struct Subscript* subscript_new(struct Object* base, struct Object* index) {
 
 /* Unique functions ******************/
 
-bool_t subscript_assign(struct Subscript* subs, struct Object* value, struct Object** error) {
-    switch (subs->base->typeId) {
+bool_t subscript_assign(struct Object* base, struct Object* index, struct Object* value, struct Object** error) {
+    switch (base->typeId) {
         case OT_Array:
-            return array_set((struct Array*)subs->base, subs->index, value, error);
+            return array_set((struct Array*)base, index, value, error);
 #if 0
         case OT_HashTable:
             return hashTable_set((struct HashTable*)base, index, value, error);
@@ -43,9 +43,29 @@ bool_t subscript_assign(struct Subscript* subs, struct Object* value, struct Obj
             return intVector_set((struct IntVector*)base, index, value, error);
 #endif
         default:
-            *error = (struct Object*)errorTerm1("SubscriptAssign", "Unable to assign to subscript of object", subs->base);
+            *error = (struct Object*)errorTerm1("SubscriptAssign", "Unable to assign to subscript of object", base);
             return false;
     }
+}
+
+bool_t subscript_evalParts(struct Object* baseObj,
+                           struct Object* indexObj,
+                           struct Etor_rec* etor,
+                           struct Object** base,
+                           struct Object** index,
+                           struct Object** error) {
+    struct Object* tempValue;
+    if (!eval_rec(baseObj, etor, &tempValue)) {
+        *error = tempValue;
+        return false;
+    }
+    *base = tempValue;
+    if (!eval_rec(indexObj, etor, &tempValue)) {
+        *error = tempValue;
+        return false;
+    }
+    *index = tempValue;
+    return true;
 }
 
 /* Object functions ******************/

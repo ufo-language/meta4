@@ -25,6 +25,16 @@
         'O', (struct Object*)object2, \
         0);
 
+#define DEBUG3(string1, object1, string2, object2, string3, object3) \
+    outStream_fwriteLn(g_stderr, \
+        'S', string1, \
+        'O', (struct Object*)object1, \
+        'S', string2, \
+        'O', (struct Object*)object2, \
+        'S', string3, \
+        'O', (struct Object*)object3, \
+        0);
+
 #define DEBUG_ARRAY(string1, nElems, array) \
     fputs(string1, stderr); \
     fprintf(stderr, "(%lu elems)\n", nElems); \

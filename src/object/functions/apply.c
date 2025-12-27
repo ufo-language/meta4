@@ -23,7 +23,6 @@
 
 /* Object functions ******************/
 
-#include "debug.h"
 bool_t apply(struct Object* obj, struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value) {
     switch (obj->typeId) {
         case OT_Function:  return function_apply((struct Function*)obj, etor, nArgs, args, value);

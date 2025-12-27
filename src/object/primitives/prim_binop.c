@@ -32,7 +32,6 @@ void prim_binOp_defineAll(struct Vector* env) {
     definePrim(env, "+", _plus, 2, OT_Any, OT_Any);
 }
 
-#include "debug.h"
 static bool_t _assign(struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value) {
     (void)etor;
     (void)nArgs;
@@ -47,10 +46,17 @@ static bool_t _assign(struct Etor_rec* etor, count_t nArgs, struct Object* args[
             *value = rhsVal;
             return identifier_assign((struct Identifier*)lhs, rhsVal, etor);
         case OT_Subscript: {
+                struct Object* base;
+                struct Object* index;
                 struct Object* error;
-                if (subscript_assign((struct Subscript*)lhs, rhsVal, &error)) {
-                    *value = rhsVal;
+                struct Subscript* subs = (struct Subscript*)lhs;
+                if (!subscript_evalParts(subs->base, subs->index, etor, &base, &index, &error)) {
+                    *value = error;
                     return false;
+                }
+                if (subscript_assign(base, index, rhsVal, &error)) {
+                    *value = rhsVal;
+                    return true;
                 }
                 *value = error;
                 return false;
