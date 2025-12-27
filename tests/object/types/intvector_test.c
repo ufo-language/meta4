@@ -4,6 +4,7 @@
 #include "_typedefs.h"
 
 #include "object/typeids.h"
+#include "object/types/integer.h"
 #include "object/types/intvector.h"
 #include "object/evaluator/etor_rec.h"
 
@@ -47,7 +48,14 @@ int main(int argc, char* argv[]) {
         ASSERT_TRUE(intVector_get(intVector, 2, &value));
         EXPECT_IEQ(0, value);
 
-        ASSERT_TRUE(intVector_set(intVector, 0, 100));
+        struct Integer* i0 = integer_new(0);
+        struct Integer* i1 = integer_new(1);
+        struct Integer* i2 = integer_new(2);
+        struct Integer* i100 = integer_new(100);
+        struct Integer* i200 = integer_new(200);
+        struct Integer* i300 = integer_new(300);
+        struct Object* error;
+        ASSERT_TRUE(intVector_set(intVector, OBJ(i0), OBJ(i100), &error));
         ASSERT_TRUE(intVector_get(intVector, 0, &value));
         ASSERT_IEQ(100, value);
         ASSERT_TRUE(intVector_get(intVector, 1, &value));
@@ -55,7 +63,7 @@ int main(int argc, char* argv[]) {
         ASSERT_TRUE(intVector_get(intVector, 2, &value));
         EXPECT_IEQ(0, value);
 
-        ASSERT_TRUE(intVector_set(intVector, 1, 200));
+        ASSERT_TRUE(intVector_set(intVector, OBJ(i1), OBJ(i200), &error));
         ASSERT_TRUE(intVector_get(intVector, 0, &value));
         EXPECT_IEQ(100, value);
         ASSERT_TRUE(intVector_get(intVector, 1, &value));
@@ -63,7 +71,7 @@ int main(int argc, char* argv[]) {
         ASSERT_TRUE(intVector_get(intVector, 2, &value));
         EXPECT_IEQ(0, value);
 
-        ASSERT_TRUE(intVector_set(intVector, 2, 300));
+        ASSERT_TRUE(intVector_set(intVector, OBJ(i2), OBJ(i300), &error));
         ASSERT_TRUE(intVector_get(intVector, 0, &value));
         EXPECT_IEQ(100, value);
         ASSERT_TRUE(intVector_get(intVector, 1, &value));

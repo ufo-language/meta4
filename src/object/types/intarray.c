@@ -3,9 +3,11 @@
 
 #include "_typedefs.h"
 
+#include "object/errorterm.h"
 #include "object/object.h"
 #include "object/typeids.h"
 #include "object/types/intarray.h"
+#include "object/types/integer.h"
 #include "object/types/outstream.h"
 
 /* Defines *******************************************************************/
@@ -63,6 +65,30 @@ struct IntArray* intArray_new_noFill(count_t nElems) {
 
 int_t intArray_get_unsafe(struct IntArray* intArray, index_t index) {
     return intArray->elems[index];
+}
+
+bool_t intArray_set(struct IntArray* intArray, struct Object* indexObj, struct Object* elemObj, struct Object** error) {
+    if (indexObj->typeId != OT_Integer) {
+        *error = (struct Object*)errorTerm1("IntArray", "Index must be an Integer", indexObj);
+        return false;
+    }
+    int_t indexInt = ((struct Integer*)indexObj)->i;
+    if (indexInt < 0) {
+        *error = (struct Object*)errorTerm1("IntArray", "Index can't be negative", indexObj);
+        return false;
+    }
+    index_t index = (index_t)indexInt;
+    if (index >= intArray->nElems) {
+        *error = (struct Object*)errorTerm1("IntArray", "Index is too large", indexObj);
+        return false;
+    }
+    if (elemObj->typeId != OT_Integer) {
+        *error = (struct Object*)errorTerm1("IntArray", "Element value must be an Integer", elemObj);
+        return false;
+    }
+    int_t elem = ((struct Integer*)elemObj)->i;
+    intArray->elems[index] = elem;
+    return true;
 }
 
 void intArray_set_unsafe(struct IntArray* intArray, index_t index, int_t elem) {

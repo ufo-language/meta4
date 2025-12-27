@@ -35,6 +35,7 @@ struct IntArray* intArray_new_noFill(count_t nElems);
 /* Unique functions ******************/
 
 int_t intArray_get_unsafe(struct IntArray* intArray, index_t index);
+bool_t intArray_set(struct IntArray* intArray, struct Object* indexObj, struct Object* elemObj, struct Object** error);
 void intArray_set_unsafe(struct IntArray* intArray, index_t index, int_t elem);
 
 /* Object functions ******************/

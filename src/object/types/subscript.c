@@ -5,6 +5,9 @@
 #include "object/functions/eval_rec.h"
 #include "object/object.h"
 #include "object/types/array.h"
+#include "object/types/hashtable.h"
+#include "object/types/intarray.h"
+#include "object/types/intvector.h"
 #include "object/types/outstream.h"
 #include "object/types/subscript.h"
 #include "object/typeids.h"
@@ -34,14 +37,17 @@ bool_t subscript_assign(struct Object* base, struct Object* index, struct Object
     switch (base->typeId) {
         case OT_Array:
             return array_set((struct Array*)base, index, value, error);
-#if 0
-        case OT_HashTable:
-            return hashTable_set((struct HashTable*)base, index, value, error);
+        case OT_HashTable: {
+                if (hashTable_put((struct HashTable*)base, index, value)) {
+                    return true;
+                }
+                *error = (struct Object*)errorTerm1("SubscriptAssign", "Key is unhashable", index);
+                return false;
+            }
         case OT_IntArray:
             return intArray_set((struct IntArray*)base, index, value, error);
         case OT_IntVector:
             return intVector_set((struct IntVector*)base, index, value, error);
-#endif
         default:
             *error = (struct Object*)errorTerm1("SubscriptAssign", "Unable to assign to subscript of object", base);
             return false;

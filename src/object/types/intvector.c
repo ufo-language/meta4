@@ -4,8 +4,10 @@
 
 #include "object/object.h"
 #include "object/typeids.h"
+#include "object/types/integer.h"
 #include "object/types/intvector.h"
 #include "object/types/outstream.h"
+#include "object/errorterm.h"
 
 /* Defines *******************************************************************/
 
@@ -44,11 +46,37 @@ bool_t intVector_get(struct IntVector* intVector, index_t index, int_t* elem) {
     return true;
 }
 
+#if 0
 bool_t intVector_set(struct IntVector* intVector, index_t index, int_t elem) {
     if (index >= intVector->nElems) {
         return false;
     }
     intArray_set_unsafe(intVector->elems, index, elem);
+    return true;
+}
+#endif
+
+bool_t intVector_set(struct IntVector* intVector, struct Object* indexObj, struct Object* elemObj, struct Object** error) {
+    if (indexObj->typeId != OT_Integer) {
+        *error = (struct Object*)errorTerm1("IntVector", "Index must be an Integer", indexObj);
+        return false;
+    }
+    int_t indexInt = ((struct Integer*)indexObj)->i;
+    if (indexInt < 0) {
+        *error = (struct Object*)errorTerm1("IntVector", "Index can't be negative", indexObj);
+        return false;
+    }
+    index_t index = (index_t)indexInt;
+    if (index >= intVector->nElems) {
+        *error = (struct Object*)errorTerm1("IntVector", "Index is too large", indexObj);
+        return false;
+    }
+    if (elemObj->typeId != OT_Integer) {
+        *error = (struct Object*)errorTerm1("IntVector", "Element value must be an Integer", elemObj);
+        return false;
+    }
+    int_t elem = ((struct Integer*)elemObj)->i;
+    intVector->elems->elems[index] = elem;
     return true;
 }
 

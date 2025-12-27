@@ -7,6 +7,7 @@
 #include "object/primitives/defineprims.h"
 #include "object/types/identifier.h"
 #include "object/types/integer.h"
+#include "object/types/intvar.h"
 #include "object/types/subscript.h"
 #include "object/types/variable.h"
 
@@ -65,14 +66,14 @@ static bool_t _assign(struct Etor_rec* etor, count_t nArgs, struct Object* args[
             ((struct Variable*)lhs)->value = rhsVal;
             *value = rhsVal;
             return true;
-#if 0
         case OT_IntVar:
             if (rhsVal->typeId != OT_Integer) {
                 *value = (struct Object*)errorTerm1("IntArray", "Assigned value is not an an integer", rhsVal);
                 return false;
             }
-            return intVar_assign((struct IntVar*)lhs, ((struct Integer*)rhsVal)->i);
-#endif
+            ((struct IntVar*)lhs)->i = ((struct Integer*)rhsVal)->i;
+            *value = rhsVal;
+            return true;
         default:
             *value = (struct Object*)errorTerm1("Assign", "Unable to assign to LHS", lhs);
             return false;
