@@ -23,6 +23,8 @@ struct ParseState {
     struct IntVector* memoVector;
 };
 
+struct Vector;
+
 typedef enum ParseStatus (*ParserFunction)(struct ParseState* parseState);
 
 /* Forward declarations ******************************************************/
@@ -30,6 +32,9 @@ typedef enum ParseStatus (*ParserFunction)(struct ParseState* parseState);
 /* Global variables **********************************************************/
 
 /* Lifecycle functions *******************************************************/
+
+struct ParseState* parseState_new(struct Vector* tokens);
+void parseState_init(struct ParseState* parseState, struct Vector* tokens);
 
 /* Public functions **********************************************************/
 
