@@ -13,7 +13,7 @@
 
 /* Types *********************************************************************/
 
-struct Var {
+struct Variable {
     struct Object obj;
     struct Object* value;
 };
@@ -26,7 +26,7 @@ struct OutStream;
 
 /* Lifecycle functions *******************************************************/
 
-struct Var* var_new(struct Object* value);
+struct Variable* variable_new(struct Object* value);
 
 /* Public functions **********************************************************/
 
@@ -34,4 +34,4 @@ struct Var* var_new(struct Object* value);
 
 /* Object functions ******************/
 
-void var_show(struct Var* var, struct OutStream* outStream);
+void variable_show(struct Variable* var, struct OutStream* outStream);

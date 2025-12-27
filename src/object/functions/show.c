@@ -34,6 +34,7 @@
 #include "object/types/symbolic.h"
 #include "object/types/term.h"
 #include "object/types/binding.h"
+#include "object/types/variable.h"
 #include "object/types/vector.h"
 #include "object/types/while.h"
 
@@ -89,7 +90,7 @@ void show(struct Object* obj, struct OutStream* outStream) {
         case OT_Term:          term_show((struct Term*)obj, outStream); return;
         /* case OT_Test:          break; */
         /* case OT_User:          break; */
-        /* case OT_Var:           break; */
+        case OT_Var:           variable_show((struct Variable*)obj, outStream); return;
         case OT_Vector:        vector_show((struct Vector*)obj, outStream); return;
         case OT_While:         while_show((struct While*)obj, outStream); return;
         default:

@@ -61,9 +61,11 @@ static bool_t _assign(struct Etor_rec* etor, count_t nArgs, struct Object* args[
                 *value = error;
                 return false;
             }
-#if 0
         case OT_Var:
-            return var_assign((struct Variable*)lhs, rhsVal);
+            ((struct Variable*)lhs)->value = rhsVal;
+            *value = rhsVal;
+            return true;
+#if 0
         case OT_IntVar:
             if (rhsVal->typeId != OT_Integer) {
                 *value = (struct Object*)errorTerm1("IntArray", "Assigned value is not an an integer", rhsVal);

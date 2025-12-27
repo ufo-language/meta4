@@ -22,9 +22,13 @@ int main(int argc, char* argv[]) {
         struct Integer* i100 = integer_new(100);
         struct Integer* i200 = integer_new(200);
         struct Array* array = array_new_withElem(1, OBJ(i100));
-        struct Subscript* subs = subscript_new(OBJ(array), OBJ(i0));
+        /* struct Subscript* subs = subscript_new(OBJ(array), OBJ(i0));*/
         struct Object* error;
-        ASSERT_TRUE(subscript_assign(subs, OBJ(i200), &error));
+        /* ASSERT_TRUE(subscript_assign(subs, OBJ(i200), &error)); */
+        struct Object* base = OBJ(array);
+        struct Object* index = OBJ(i0);
+        struct Object* value = OBJ(i200);
+        ASSERT_TRUE(subscript_assign(base, index, value, &error));
         EXPECT_EQ(i200, array->elems[0]);
     END
 

@@ -18,8 +18,8 @@
 
 /* Lifecycle functions *******************************************************/
 
-struct Var* var_new(struct Object* value) {
-    struct Var* var = (struct Var*)object_new(OT_Var, NWORDS(*var));
+struct Variable* variable_new(struct Object* value) {
+    struct Variable* var = (struct Variable*)object_new(OT_Var, NWORDS(*var));
     var->value = value;
     return var;
 }
@@ -30,7 +30,7 @@ struct Var* var_new(struct Object* value) {
 
 /* Object functions ******************/
 
-void var_show(struct Var* var, struct OutStream* outStream) {
+void variable_show(struct Variable* var, struct OutStream* outStream) {
     outStream_fwrite(outStream,
         'S', "Var{",
         'O', var->value,
