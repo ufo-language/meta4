@@ -30,6 +30,8 @@ struct Identifier* identifier_new(const string_t name);
 
 /* Unique functions ******************/
 
+bool_t identifier_assign(struct Identifier* ident, struct Object* value, struct Etor_rec* etor);
+
 /* Object functions ******************/
 
 struct Object* identifier_close_rec(struct Identifier* ident, struct Etor_rec* etor);

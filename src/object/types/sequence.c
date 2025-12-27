@@ -69,7 +69,7 @@ bool_t sequence_eval_rec(struct Sequence* seq, struct Etor_rec* etor, struct Obj
 }
 
 void sequence_show(struct Sequence* seq, struct OutStream* outStream) {
-    array_showElems(seq->nExprs, seq->exprs, "(", "; ", ")", outStream);
+    array_show_usingElems(seq->nExprs, seq->exprs, "(", "; ", ")", outStream);
 }
 
 /* Private functions *********************************************************/

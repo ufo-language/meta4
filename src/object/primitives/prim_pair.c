@@ -4,7 +4,6 @@
 #include "object/globals.h"
 #include "object/object.h"
 #include "object/primitives/defineprims.h"
-#include "object/primitives/primpair.h"
 #include "object/types/pair.h"
 
 /* Defines *******************************************************************/
@@ -12,6 +11,8 @@
 /* Types *********************************************************************/
 
 /* Forward declarations ******************************************************/
+
+void prim_pair_defineAll(struct Vector* env);
 
 static bool_t _first(struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value);
 static bool_t _rest(struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value);

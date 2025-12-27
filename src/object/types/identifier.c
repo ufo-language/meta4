@@ -32,6 +32,13 @@ struct Identifier* identifier_new(const string_t name) {
 
 /* Unique functions ******************/
 
+bool_t identifier_assign(struct Identifier* ident, struct Object* value, struct Etor_rec* etor) {
+    if (!etor_rec_rebind(etor, ident, value)) {
+        etor_rec_bind(etor, ident, value);
+    }
+    return true;
+}
+
 /* Object functions ******************/
 
 struct Object* identifier_close_rec(struct Identifier* ident, struct Etor_rec* etor) {

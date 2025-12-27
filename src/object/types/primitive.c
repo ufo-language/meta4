@@ -93,7 +93,7 @@ bool_t prim_apply(struct Primitive* prim, struct Etor_rec* etor, count_t nArgs, 
     if (prim->argEvalType == ArgEvalType_Function) {
         argVals = memory_alloc(nArgs);
         struct Object* error;
-        if (!array_evalElems_rec(nArgs, args, argVals, etor, &error)) {
+        if (!array_eval_rec_usingElems(nArgs, args, argVals, etor, &error)) {
             return false;
         }
     }

@@ -162,7 +162,7 @@ static void _function_closeRule(struct FunctionRule* rule, struct Etor_rec* etor
 
 static void _function_showRule(struct FunctionRule* rule, struct OutStream* outStream) {
     assert(outStream->streamType < 2);
-    array_showElems(rule->nParams, rule->params, "(", ", ", ") = ", outStream);
+    array_show_usingElems(rule->nParams, rule->params, "(", ", ", ") = ", outStream);
     assert(outStream->streamType < 2);
     show(rule->body, outStream);
     assert(outStream->streamType < 2);

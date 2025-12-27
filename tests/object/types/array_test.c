@@ -82,7 +82,7 @@ int main(int argc, char* argv[]) {
         etor_rec_bind(etor, b, OBJ(i200));
         etor_rec_bind(etor, c, OBJ(i300));
         struct Object* error = g_uniqueObject;
-        ASSERT_TRUE(array_evalElems_rec(nElems, elems, newElems, etor, &error));
+        ASSERT_TRUE(array_eval_rec_usingElems(nElems, elems, newElems, etor, &error));
         EXPECT_EQ(i100, newElems[0]);
         EXPECT_EQ(i200, newElems[1]);
         EXPECT_EQ(i300, newElems[2]);
@@ -116,9 +116,6 @@ int main(int argc, char* argv[]) {
     TEST(array_checkMatch)
         struct Object* identElems[] = {OBJ(a), OBJ(b), OBJ(c)};
         struct Array* array = array_new_withElems(3, identElems);
-        struct Identifier* a = identifier_new("a");
-        struct Identifier* b = identifier_new("b");
-        struct Identifier* c = identifier_new("c");
         struct Object* intElems[] = {OBJ(i100), OBJ(i200), OBJ(i300)};
         struct Array* otherArray = array_new_withElems(3, intElems);
         struct Vector* bindings = vector_new();
@@ -153,6 +150,36 @@ int main(int argc, char* argv[]) {
         EXPECT_EQ(i300, elem);
         ASSERT_FALSE(array_get_index_t(array, 3, &elem));
         EXPECT_ISA(OT_Term, elem);
+    END
+
+    TEST(array_checkLookup)
+        count_t nElems = 6;
+        struct Object* elems[] = {OBJ(a), OBJ(i100), OBJ(b), OBJ(i200), OBJ(c), OBJ(i300)};
+        struct Array* array = array_new_withElems(nElems, elems);
+        struct Object* value;
+        ASSERT_TRUE(array_lookup_usingElems(nElems, array->elems, OBJ(a), &value));
+        EXPECT_EQ(i100, value);
+        ASSERT_TRUE(array_lookup_usingElems(nElems, array->elems, OBJ(b), &value));
+        EXPECT_EQ(i200, value);
+        ASSERT_TRUE(array_lookup_usingElems(nElems, array->elems, OBJ(c), &value));
+        EXPECT_EQ(i300, value);
+        struct Identifier* d = identifier_new("d");
+        ASSERT_FALSE(array_lookup_usingElems(nElems, array->elems, OBJ(d), &value));
+    END
+    
+    TEST(array_checkLocate)
+        count_t nElems = 6;
+        struct Object* elems[] = {OBJ(a), OBJ(i100), OBJ(b), OBJ(i200), OBJ(c), OBJ(i300)};
+        struct Array* array = array_new_withElems(nElems, elems);
+        int_t index;
+        ASSERT_TRUE(array_locate_usingElems(nElems, array->elems, OBJ(a), &index));
+        EXPECT_IEQ(1, index);
+        ASSERT_TRUE(array_locate_usingElems(nElems, array->elems, OBJ(b), &index));
+        EXPECT_IEQ(3, index);
+        ASSERT_TRUE(array_locate_usingElems(nElems, array->elems, OBJ(c), &index));
+        EXPECT_IEQ(5, index);
+        struct Identifier* d = identifier_new("d");
+        ASSERT_FALSE(array_locate_usingElems(nElems, array->elems, OBJ(d), &index));
     END
 
     TEST(array_checkShow)

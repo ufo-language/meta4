@@ -7,7 +7,6 @@
 #include "object/globals.h"
 #include "object/object.h"
 #include "object/primitives/defineprims.h"
-#include "object/primitives/primobject.h"
 #include "object/types/integer.h"
 #include "object/types/outstream.h"
 
@@ -16,6 +15,8 @@
 /* Types *********************************************************************/
 
 /* Forward declarations ******************************************************/
+
+void prim_object_defineAll(struct Vector* env);
 
 static bool_t _count(struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value);
 static bool_t _display(struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value);

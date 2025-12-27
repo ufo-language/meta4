@@ -43,11 +43,13 @@ void vector_setTop(struct Vector* vector, index_t newTop);
 count_t vector_capacity(struct Vector* vector);
 
 void vector_bindPair(struct Vector* vector, struct Object* key, struct Object* value);
+bool_t vector_locate(struct Vector* vector, struct Object* key, int_t* index);
 bool_t vector_lookup(struct Vector* vector, struct Object* key, struct Object** value);
 bool_t vector_get(struct Vector* vector, index_t index, struct Object** elem);
 bool_t vector_set(struct Vector* vector, index_t index, struct Object* elem);
 bool_t vector_pop(struct Vector* vector, struct Object** elem);
 void vector_push(struct Vector* vector, struct Object* elem);
+bool_t vector_rebind(struct Vector* vector, struct Object* key, struct Object* value);
 void vector_showBindings(struct Vector* vector, struct OutStream* outStream);
 
 static inline struct Object* vector_get_unsafe(struct Vector* vector, index_t index) {

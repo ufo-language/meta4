@@ -90,7 +90,7 @@ bool_t term_eval_rec(struct Term* term, struct Etor_rec* etor, struct Object** v
     if (!eval_rec((struct Object*)term->attrib, etor, &term->attrib)) {
         return false;
     }
-    if (!array_evalElems_rec(nArgs, term->args, newTerm->args, etor, value)) {
+    if (!array_eval_rec_usingElems(nArgs, term->args, newTerm->args, etor, value)) {
         return false;
     }
     *value = (struct Object*)newTerm;
@@ -102,7 +102,7 @@ bool_t term_match(struct Object* obj, struct Object* other, struct Vector* bindi
 
 void term_show(struct Term* term, struct OutStream* outStream) {
     show((struct Object*)term->name, outStream);
-    array_showElems(term->nArgs, term->args, "{", ", ", "}", outStream);
+    array_show_usingElems(term->nArgs, term->args, "{", ", ", "}", outStream);
     outStream_writeChar(outStream, '%');
     show(term->attrib, outStream);
 }

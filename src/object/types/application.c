@@ -70,7 +70,7 @@ bool_t application_eval_rec(struct Application* app, struct Etor_rec* etor, stru
         /* Evaluate the arguments */
         argVals = memory_alloc(app->nArgs);
         struct Object* error;
-        if (!array_evalElems_rec(app->nArgs, app->args, argVals, etor, &error)) {
+        if (!array_eval_rec_usingElems(app->nArgs, app->args, argVals, etor, &error)) {
             return false;
         }
     }
@@ -94,5 +94,5 @@ void application_show(struct Application* app, struct OutStream* outStream) {
             outStream_writeChar(outStream, ')');
             break;
     }
-    array_showElems(app->nArgs, app->args, "(", ", ", ")", outStream);
+    array_show_usingElems(app->nArgs, app->args, "(", ", ", ")", outStream);
 }

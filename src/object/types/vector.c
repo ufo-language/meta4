@@ -57,8 +57,13 @@ void vector_bindPair(struct Vector* vector, struct Object* key, struct Object* v
 }
 
 /* This treats the array as an association list of pairs: [key, value, key, value...] */
+bool_t vector_locate(struct Vector* vector, struct Object* key, int_t* index) {
+    return array_locate_usingElems(vector->top, vector->elems->elems, key, index);
+}
+
+/* This treats the array as an association list of pairs: [key, value, key, value...] */
 bool_t vector_lookup(struct Vector* vector, struct Object* key, struct Object** value) {
-    return array_lookupElems(vector->top, vector->elems->elems, key, value);
+    return array_lookup_usingElems(vector->top, vector->elems->elems, key, value);
 }
 
 bool_t vector_get(struct Vector* vector, index_t index, struct Object** elem) {
@@ -92,6 +97,16 @@ void vector_push(struct Vector* vector, struct Object* elem) {
     vector->elems->elems[vector->top++] = elem;
 }
 
+/* This treats the array as an association list of pairs: [key, value, key, value...] */
+bool_t vector_rebind(struct Vector* vector, struct Object* key, struct Object* value) {
+    int_t index;
+    if (vector_locate(vector, key, &index)) {
+        vector_set(vector, index, value);
+        return true;
+    }
+    return false;
+}
+
 void vector_showBindings(struct Vector* vector, struct OutStream* outStream) {
     array_showBindings(vector->top, vector->elems->elems, VECTOR_OPEN, ", ", VECTOR_CLOSE, outStream);
 }
@@ -112,7 +127,7 @@ count_t vector_count(struct Vector* vector) {
 }
 
 void vector_show(struct Vector* vector, struct OutStream* outStream) {
-    array_showElems(vector->top, vector->elems->elems, VECTOR_OPEN, ", ", VECTOR_CLOSE, outStream);
+    array_show_usingElems(vector->top, vector->elems->elems, VECTOR_OPEN, ", ", VECTOR_CLOSE, outStream);
 }
 
 /* Private functions *********************************************************/

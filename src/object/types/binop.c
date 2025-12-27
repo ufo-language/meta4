@@ -5,6 +5,7 @@
 #include "object/functions/eval_cps.h"
 #include "object/types/application.h"
 #include "object/types/binop.h"
+#include "object/types/identifier.h"
 #include "object/types/outstream.h"
 
 /* Defines *******************************************************************/

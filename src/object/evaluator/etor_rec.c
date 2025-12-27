@@ -47,6 +47,10 @@ bool_t etor_rec_lookup(struct Etor_rec* etor, struct Identifier* name, struct Ob
     return vector_lookup(etor->env, (struct Object*)name, value);
 }
 
+bool_t etor_rec_rebind(struct Etor_rec* etor, struct Identifier* name, struct Object* value) {
+    return vector_rebind(etor->env, (struct Object*)name, value);
+}
+
 bool_t etor_rec_run(struct Etor_rec* etor, struct Object* expr, struct Object** value) {
     return eval_rec(expr, etor, value);
 }

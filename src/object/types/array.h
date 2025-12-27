@@ -39,13 +39,14 @@ bool_t array_set(struct Array* array, struct Object* indexObj, struct Object* va
 bool_t array_set_index_t(struct Array* array, index_t index, struct Object* value, struct Object** error);
 
 /* Element/array-wise operations; also used by other types */
-void array_closeElems_rec(count_t nElems, struct Object* elems[], struct Object* newElems[], struct Etor_rec* etor);
-bool_t array_equalElems(count_t nElems, struct Object* elems[], struct Object* otherElems[]);
-bool_t array_evalElems_rec(count_t nElems, struct Object* elems[], struct Object* newElems[], struct Etor_rec* etor, struct Object** error);
-bool_t array_lookupElems(count_t nElems, struct Object* elems[], struct Object* key, struct Object** value);
-bool_t array_matchElems(count_t nElems, struct Object* elems[], struct Object* otherElems[], struct Vector* bindings);
+void array_close_rec_usingElems(count_t nElems, struct Object* elems[], struct Object* newElems[], struct Etor_rec* etor);
+bool_t array_equal_usingElems(count_t nElems, struct Object* elems[], struct Object* otherElems[]);
+bool_t array_eval_rec_usingElems(count_t nElems, struct Object* elems[], struct Object* newElems[], struct Etor_rec* etor, struct Object** error);
+bool_t array_locate_usingElems(count_t nElems, struct Object* elems[], struct Object* key, int_t* index);
+bool_t array_lookup_usingElems(count_t nElems, struct Object* elems[], struct Object* key, struct Object** value);
+bool_t array_match_usingElems(count_t nElems, struct Object* elems[], struct Object* otherElems[], struct Vector* bindings);
+void array_show_usingElems(count_t nElems, struct Object* elems[], const string_t open, const string_t sep, const string_t close, struct OutStream* outStream);
 void array_showBindings(count_t nElems, struct Object* elems[], const string_t open, const string_t sep, const string_t close, struct OutStream* outStream);
-void array_showElems(count_t nElems, struct Object* elems[], const string_t open, const string_t sep, const string_t close, struct OutStream* outStream);
 
 /* Object functions ******************/
 

@@ -6,7 +6,7 @@
 #include "object/object.h"
 #include "object/typeids.h"
 #include "object/types/outstream.h"
-#include "object/types/var.h"
+#include "object/types/variable.h"
 
 /* Defines *******************************************************************/
 
