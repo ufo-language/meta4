@@ -20,7 +20,7 @@
 void prim_binOp_defineAll(struct Vector* env);
 
 static bool_t _assign(struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value);
-static bool_t _plus(struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value);
+// static bool_t _plus(struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value);
 
 /* Global variables **********************************************************/
 
@@ -30,7 +30,7 @@ static bool_t _plus(struct Etor_rec* etor, count_t nArgs, struct Object* args[],
 
 void prim_binOp_defineAll(struct Vector* env) {
     defineMacro(env, ":=", _assign, 2, OT_Any, OT_Any);
-    definePrim(env, "+", _plus, 2, OT_Any, OT_Any);
+    // definePrim(env, "+", _plus, 2, OT_Any, OT_Any);
 }
 
 static bool_t _assign(struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value) {
@@ -81,6 +81,7 @@ static bool_t _assign(struct Etor_rec* etor, count_t nArgs, struct Object* args[
     }
 }
 
+#if 0
 static bool_t _plus(struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value) {
     (void)etor;
     (void)nArgs;
@@ -91,5 +92,6 @@ static bool_t _plus(struct Etor_rec* etor, count_t nArgs, struct Object* args[],
     // *value = (struct Object*)integer_new((int_t)nElems);
     return true;
 }
+#endif
 
 /* Private functions *********************************************************/

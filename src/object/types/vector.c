@@ -5,9 +5,11 @@
 
 #include "object/functions/equal.h"
 #include "object/functions/show.h"
+#include "object/globals.h"
 #include "object/object.h"
 #include "object/typeids.h"
 #include "object/types/array.h"
+#include "object/types/integer.h"
 #include "object/types/outstream.h"
 #include "object/types/vector.h"
 
@@ -32,7 +34,7 @@ struct Vector* vector_new(void) {
 
 struct Vector* vector_new_withCapacity(count_t capacity) {
     struct Vector* vector = (struct Vector*)object_new(OT_Vector, NWORDS(*vector));
-    vector->top = 0;
+    vector->nElems = 0;
     // vector->capacity = capacity;
     vector->elems = array_new_noFill(capacity);
     vector->nResizes = 0;
@@ -48,7 +50,7 @@ count_t vector_capacity(struct Vector* vector) {
 }
 
 void vector_clear(struct Vector* vector) {
-    vector->top = 0;
+    vector->nElems = 0;
 }
 
 void vector_bindPair(struct Vector* vector, struct Object* key, struct Object* value) {
@@ -58,76 +60,97 @@ void vector_bindPair(struct Vector* vector, struct Object* key, struct Object* v
 
 /* This treats the array as an association list of pairs: [key, value, key, value...] */
 bool_t vector_locate(struct Vector* vector, struct Object* key, int_t* index) {
-    return array_locate_usingElems(vector->top, vector->elems->elems, key, index);
+    return array_locate_usingElems(vector->nElems, vector->elems->elems, key, index);
 }
 
 /* This treats the array as an association list of pairs: [key, value, key, value...] */
 bool_t vector_lookup(struct Vector* vector, struct Object* key, struct Object** value) {
-    return array_lookup_usingElems(vector->top, vector->elems->elems, key, value);
+    return array_lookup_usingElems(vector->nElems, vector->elems->elems, key, value);
 }
 
 bool_t vector_get(struct Vector* vector, index_t index, struct Object** elem) {
-    if (index >= vector->top) {
+    if (index >= vector->nElems) {
         return false;
     }
     *elem = vector->elems->elems[index];
     return true;
 }
 
-bool_t vector_set(struct Vector* vector, index_t index, struct Object* elem) {
-    if (index >= vector->top) {
-        return false;
-    }
-    vector->elems->elems[index] = elem;
-    return true;
-}
-
 bool_t vector_pop(struct Vector* vector, struct Object** elem) {
-    if (vector->top == 0) {
+    if (vector->nElems == 0) {
         return false;
     }
-    *elem = vector->elems->elems[--vector->top];
+    *elem = vector->elems->elems[--vector->nElems];
     return true;
 }
 
 void vector_push(struct Vector* vector, struct Object* elem) {
-    if (vector->top == vector->elems->nElems) {
+    if (vector->nElems == vector->elems->nElems) {
         _vector_resize(vector);
     }
-    vector->elems->elems[vector->top++] = elem;
+    vector->elems->elems[vector->nElems++] = elem;
 }
 
 /* This treats the array as an association list of pairs: [key, value, key, value...] */
 bool_t vector_rebind(struct Vector* vector, struct Object* key, struct Object* value) {
     int_t index;
     if (vector_locate(vector, key, &index)) {
-        vector_set(vector, index, value);
+        vector_set_raw(vector, index, value);
         return true;
     }
     return false;
 }
 
+bool_t vector_set(struct Vector* vector, struct Object* indexObj, struct Object* elem, struct Object** error) {
+    if (indexObj->typeId != OT_Integer) {
+        *error = (struct Object*)errorTerm1("Vector", "Index must be an Integer", indexObj);
+        return false;
+    }
+    int_t indexInt = ((struct Integer*)indexObj)->i;
+    if (indexInt < 0) {
+        *error = (struct Object*)errorTerm1("IntVector", "Index can't be negative", indexObj);
+        return false;
+    }
+    index_t index = (index_t)indexInt;
+    vector_set_raw(vector, index, elem);
+    return true;
+}
+
+void vector_set_raw(struct Vector* vector, index_t index, struct Object* elem) {
+    if (index >= vector->nElems) {
+        while (vector->elems->nElems <= index) {
+            _vector_resize(vector);
+        }
+        struct Object** elems = vector->elems->elems;
+        for (index_t n=vector->nElems; n<index; n++) {
+            elems[n] = (struct Object*)g_nil;
+        }
+        vector->nElems = index + 1;
+    }
+    vector->elems->elems[index] = elem;
+}
+
 void vector_showBindings(struct Vector* vector, struct OutStream* outStream) {
-    array_showBindings(vector->top, vector->elems->elems, VECTOR_OPEN, ", ", VECTOR_CLOSE, outStream);
+    array_showBindings(vector->nElems, vector->elems->elems, VECTOR_OPEN, ", ", VECTOR_CLOSE, outStream);
 }
 
 index_t vector_top(struct Vector* vector) {
-    return vector->top;
+    return vector->nElems;
 }
 
 void vector_setTop(struct Vector* vector, index_t newTop) {
-    assert(newTop <= vector->top);
-    vector->top = newTop;
+    assert(newTop <= vector->nElems);
+    vector->nElems = newTop;
 }
 
 /* Object functions ******************/
 
 count_t vector_count(struct Vector* vector) {
-    return vector->top;
+    return vector->nElems;
 }
 
 void vector_show(struct Vector* vector, struct OutStream* outStream) {
-    array_show_usingElems(vector->top, vector->elems->elems, VECTOR_OPEN, ", ", VECTOR_CLOSE, outStream);
+    array_show_usingElems(vector->nElems, vector->elems->elems, VECTOR_OPEN, ", ", VECTOR_CLOSE, outStream);
 }
 
 /* Private functions *********************************************************/

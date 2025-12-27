@@ -1,29 +1,11 @@
-#pragma once
-
 #include "_typedefs.h"
+
+#include "object/types/intvector.h"
+#include "parsers/parser.h"
 
 /* Defines *******************************************************************/
 
 /* Types *********************************************************************/
-
-enum ParseStatus {
-    PS_Success,
-    PS_Fail,
-    PS_Error
-};
-
-struct IntVector;
-struct Object;
-struct Vector;
-
-struct ParseState {
-    struct Vector* tokens;
-    index_t index;
-    struct Object* result;
-    struct IntVector* memoVector;
-};
-
-typedef enum ParseStatus (*ParserFunction)(struct ParseState* parseState);
 
 /* Forward declarations ******************************************************/
 
@@ -33,4 +15,11 @@ typedef enum ParseStatus (*ParserFunction)(struct ParseState* parseState);
 
 /* Public functions **********************************************************/
 
-enum ParseStatus parse(ParserFunction parser, struct ParseState* parseState);
+enum ParseStatus parse(ParserFunction parser, struct ParseState* parseState) {
+    index_t savedIndex = parseState->index;
+    enum ParseStatus status = parser(parseState);
+    intVector_set_raw(parseState->memoVector, savedIndex, (int_t)status);
+    return status;
+}
+
+/* Private functions *********************************************************/

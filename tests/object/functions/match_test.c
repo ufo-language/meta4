@@ -17,16 +17,16 @@ int main(int argc, char* argv[]) {
 
     TEST(match_checkConstants)
         struct Vector* bindings = vector_new();
-        ASSERT_IEQ(0, bindings->top);
+        ASSERT_IEQ(0, bindings->nElems);
         ASSERT_TRUE(match(OBJ(i100), OBJ(i100), bindings));
         ASSERT_FALSE(match(OBJ(i100), OBJ(i200), bindings));
     END
 
     TEST(match_checkIdentifiers)
         struct Vector* bindings = vector_new();
-        ASSERT_IEQ(0, bindings->top);
+        ASSERT_IEQ(0, bindings->nElems);
         ASSERT_TRUE(match(OBJ(a), OBJ(i100), bindings));
-        ASSERT_IEQ(2, bindings->top);
+        ASSERT_IEQ(2, bindings->nElems);
         struct Object* value;
         ASSERT_TRUE(vector_lookup(bindings, OBJ(a), &value));
         ASSERT_EQ(i100, value);

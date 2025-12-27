@@ -45,13 +45,13 @@ struct Object* sequence_close_rec(struct Sequence* seq, struct Etor_rec* etor) {
             vector_push(values, value);
         }
     }
-    switch (values->top) {
+    switch (values->nElems) {
         case 0:
             return (struct Object*)g_nil;
         case 1:
             return values->elems->elems[0];
         default:
-            return (struct Object*)sequence_new(values->top, values->elems->elems);
+            return (struct Object*)sequence_new(values->nElems, values->elems->elems);
     }
 }
 

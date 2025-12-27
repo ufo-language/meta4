@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 
 #include "_typedefs.h"
 
@@ -28,7 +29,6 @@ struct IntVector* intVector_new(void) {
 struct IntVector* intVector_new_withCapacity(count_t capacity) {
     struct IntVector* intVector = (struct IntVector*)object_new(OT_IntVector, NWORDS(*intVector));
     intVector->nElems = 0;
-    intVector->capacity = capacity;
     intVector->elems = intArray_new_noFill(capacity);
     intVector->nResizes = 0;
     return intVector;
@@ -46,16 +46,6 @@ bool_t intVector_get(struct IntVector* intVector, index_t index, int_t* elem) {
     return true;
 }
 
-#if 0
-bool_t intVector_set(struct IntVector* intVector, index_t index, int_t elem) {
-    if (index >= intVector->nElems) {
-        return false;
-    }
-    intArray_set_unsafe(intVector->elems, index, elem);
-    return true;
-}
-#endif
-
 bool_t intVector_set(struct IntVector* intVector, struct Object* indexObj, struct Object* elemObj, struct Object** error) {
     if (indexObj->typeId != OT_Integer) {
         *error = (struct Object*)errorTerm1("IntVector", "Index must be an Integer", indexObj);
@@ -66,18 +56,29 @@ bool_t intVector_set(struct IntVector* intVector, struct Object* indexObj, struc
         *error = (struct Object*)errorTerm1("IntVector", "Index can't be negative", indexObj);
         return false;
     }
-    index_t index = (index_t)indexInt;
-    if (index >= intVector->nElems) {
-        *error = (struct Object*)errorTerm1("IntVector", "Index is too large", indexObj);
-        return false;
-    }
     if (elemObj->typeId != OT_Integer) {
         *error = (struct Object*)errorTerm1("IntVector", "Element value must be an Integer", elemObj);
         return false;
     }
+    index_t index = (index_t)indexInt;
     int_t elem = ((struct Integer*)elemObj)->i;
-    intVector->elems->elems[index] = elem;
+    intVector_set_raw(intVector, index, elem);
     return true;
+}
+
+void intVector_set_raw(struct IntVector* intVector, index_t index, int_t elem) {
+    if (index >= intVector->nElems) {
+        while (intVector->elems->nElems <= index) {
+            _intVector_resize(intVector);
+        }
+        int_t* elems = intVector->elems->elems;
+        index_t start = intVector->nElems;
+        index_t count = index - start;
+        /* Set all intermediate elements to 0 */
+        memset(&elems[start], 0, count * sizeof(int_t));
+        intVector->nElems = index + 1;
+    }
+    intVector->elems->elems[index] = elem;
 }
 
 bool_t intVector_pop(struct IntVector* intVector, int_t* elem) {
@@ -116,8 +117,8 @@ void intVector_show(struct IntVector* intVector, struct OutStream* outStream) {
 /* Private functions *********************************************************/
 
 static void _intVector_resize(struct IntVector* intVector) {
-    intVector->capacity *= 2;
-    struct IntArray* newElems = intArray_new_fromIntArray(intVector->capacity, intVector->elems);
+    count_t newCapacity = intVector->elems->nElems * 2;
+    struct IntArray* newElems = intArray_new_fromIntArray(newCapacity, intVector->elems);
     intVector->elems = newElems;
     ++intVector->nResizes;
 }

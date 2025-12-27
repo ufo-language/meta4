@@ -41,7 +41,7 @@ bool_t count(struct Object* obj, count_t* nElems) {
         case OT_Pair:       *nElems = pair_count((struct Pair*)obj); return true;
         case OT_String:     *nElems = ((struct String*)obj)->nChars; return true;
         case OT_Term:       *nElems = 1 + ((struct Term*)obj)->nArgs; return true;
-        case OT_Vector:     *nElems = ((struct Vector*)obj)->top; return true;
+        case OT_Vector:     *nElems = ((struct Vector*)obj)->nElems; return true;
         default:            return false;
     }
     fprintf(stderr, "count: Unhandled type ID %u (%s)\n", obj->typeId, typeName(obj->typeId));

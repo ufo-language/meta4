@@ -83,7 +83,7 @@ int main(int argc, char* argv[]) {
     TEST(intVector_checkResize)
         struct IntVector* intVector = intVector_new_withCapacity(4);
         ASSERT_IEQ(0, intVector_count(intVector));
-        count_t capacity = intVector->capacity;
+        count_t capacity = intVector->elems->nElems;
         ASSERT_IEQ(4, capacity);
         for (count_t n=0; n<capacity; ++n) {
             intVector_push(intVector, n * 100);
@@ -91,10 +91,19 @@ int main(int argc, char* argv[]) {
         ASSERT_IEQ(0, intVector->nResizes);
         intVector_push(intVector, (capacity + 1) * 100);
         ASSERT_IEQ(1, intVector->nResizes);
-        ASSERT_IEQ(capacity * 2, intVector->capacity);
+        ASSERT_IEQ(capacity * 2, intVector->elems->nElems);
         int_t value;
         ASSERT_TRUE(intVector_pop(intVector, &value));
         ASSERT_IEQ((capacity + 1) * 100, value);
+    END
+
+    TEST(intVector_checkSetRaw)
+        struct IntVector* intVector = intVector_new();
+        intVector_set_raw(intVector, 2, 100);
+        ASSERT_IEQ(3, intVector->nElems);
+        EXPECT_IEQ(0, intVector->elems->elems[0]);
+        EXPECT_IEQ(0, intVector->elems->elems[1]);
+        EXPECT_IEQ(100, intVector->elems->elems[2]);
     END
 
     TEST(intVector_checkShow)

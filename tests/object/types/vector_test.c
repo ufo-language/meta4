@@ -56,7 +56,7 @@ int main(int argc, char* argv[]) {
         ASSERT_TRUE(vector_get(vector, 2, &value));
         EXPECT_EQ(i0, value);
 
-        ASSERT_TRUE(vector_set(vector, 0, OBJ(i100)));
+        vector_set_raw(vector, 0, OBJ(i100));
         ASSERT_TRUE(vector_get(vector, 0, &value));
         ASSERT_EQ(i100, value);
         ASSERT_TRUE(vector_get(vector, 1, &value));
@@ -64,7 +64,7 @@ int main(int argc, char* argv[]) {
         ASSERT_TRUE(vector_get(vector, 2, &value));
         EXPECT_EQ(i0, value);
 
-        ASSERT_TRUE(vector_set(vector, 1, OBJ(i200)));
+        vector_set_raw(vector, 1, OBJ(i200));
         ASSERT_TRUE(vector_get(vector, 0, &value));
         EXPECT_EQ(i100, value);
         ASSERT_TRUE(vector_get(vector, 1, &value));
@@ -72,13 +72,22 @@ int main(int argc, char* argv[]) {
         ASSERT_TRUE(vector_get(vector, 2, &value));
         EXPECT_EQ(i0, value);
 
-        ASSERT_TRUE(vector_set(vector, 2, OBJ(i300)));
+        vector_set_raw(vector, 2, OBJ(i300));
         ASSERT_TRUE(vector_get(vector, 0, &value));
         EXPECT_EQ(i100, value);
         ASSERT_TRUE(vector_get(vector, 1, &value));
         EXPECT_EQ(i200, value);
         ASSERT_TRUE(vector_get(vector, 2, &value));
         ASSERT_EQ(i300, value);
+    END
+
+    TEST(vector_checkSetRaw)
+        struct Vector* vector = vector_new();
+        vector_set_raw(vector, 2, OBJ(i100));
+        ASSERT_IEQ(3, vector->nElems);
+        EXPECT_IEQ(g_nil, vector->elems->elems[0]);
+        EXPECT_IEQ(g_nil, vector->elems->elems[1]);
+        EXPECT_IEQ(i100, vector->elems->elems[2]);
     END
 
     TEST(vector_checkResize)

@@ -59,9 +59,9 @@ int main(int argc, char* argv[]) {
 
     TEST(identifier_checkAssign_newBinding)
         struct Etor_rec* etor = etor_rec_new();
-        count_t envTopBefore = etor->env->top;
+        count_t envTopBefore = etor->env->nElems;
         ASSERT_TRUE(identifier_assign(a1, OBJ(i100), etor));
-        ASSERT_IEQ(envTopBefore + 2, etor->env->top);
+        ASSERT_IEQ(envTopBefore + 2, etor->env->nElems);
         struct Object* value;
         ASSERT_TRUE(etor_rec_lookup(etor, a1, &value));
         EXPECT_EQ(i100, value);
@@ -73,9 +73,9 @@ int main(int argc, char* argv[]) {
         struct Object* value;
         ASSERT_TRUE(etor_rec_lookup(etor, a1, &value));
         EXPECT_EQ(i100, value);
-        count_t envTopBefore = etor->env->top;
+        count_t envTopBefore = etor->env->nElems;
         ASSERT_TRUE(identifier_assign(a1, OBJ(i200), etor));
-        ASSERT_IEQ(envTopBefore, etor->env->top);
+        ASSERT_IEQ(envTopBefore, etor->env->nElems);
         ASSERT_TRUE(etor_rec_lookup(etor, a1, &value));
         EXPECT_EQ(i200, value);
     END
