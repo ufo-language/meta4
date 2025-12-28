@@ -28,6 +28,12 @@ struct Function {
     struct FunctionRule* rules;
 };
 
+enum Function_ApplyResult {
+    ApplyResult_Success,
+    ApplyResult_NoMatch,
+    ApplyResult_Exception
+};
+
 struct OutStream;
 
 /* Forward declarations ******************************************************/
@@ -46,6 +52,7 @@ struct FunctionRule* function_emptyRule(void);
 /* Unique functions ******************/
 
 bool_t function_apply(struct Function* function, struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value);
+enum Function_ApplyResult function_apply_aux(struct Function* function, struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value);
 
 /* Object functions ******************/
 

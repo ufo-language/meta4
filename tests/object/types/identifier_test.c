@@ -25,6 +25,7 @@ int main(int argc, char* argv[]) {
         ASSERT_IEQ(0, strcmp("a", a1->name));
         count_t nChars = strlen("a") + 1;
         ASSERT_IEQ(a1->hashCode, a2->hashCode);
+        fprintf(stderr, "a1 hash code = %lu, a2 hash code = %lu\n", a1->hashCode, a2->hashCode);
         ASSERT_INE(a1->hashCode, b->hashCode);
         EXPECT_IEQ(NWORDS(struct Object) + 1 + NBYTES_TO_WORDS(nChars), a1->obj.nWords);
         EXPECT_IEQ(NWORDS(struct Identifier) + NBYTES_TO_WORDS(nChars), a1->obj.nWords);
