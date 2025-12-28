@@ -110,7 +110,7 @@ int main(int argc, char* argv[]) {
         struct Object* elems[] = {OBJ(i100), OBJ(i200), OBJ(i300)};
         struct Array* array1 = array_new_withElems(3, elems);
         struct Array* array2 = array_new_withElems(3, elems);
-        ASSERT_IEQ(CompareEqual, compare(OBJ(array1), OBJ(array2)));
+        ASSERT_IEQ(CompareResult_Equal, compare(OBJ(array1), OBJ(array2)));
     END
 
     TEST(array_checkMatch)

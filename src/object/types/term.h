@@ -42,6 +42,6 @@ struct Term* term_new_1arg(struct Symbol* name, struct Object* attrib, struct Ob
 bool_t term_close(struct Term* term, struct Etor_rec* etor, struct Object** value);
 bool_t term_equal(struct Term* term, struct Term* other);
 bool_t term_eval_rec(struct Term* term, struct Etor_rec* etor, struct Object** value);
-void term_freeVars(struct Object* obj, struct Vector* freeVars);
-bool_t term_match(struct Object* obj, struct Object* other, struct Vector* bindings);
+void term_freeVars(struct Term* term, struct Vector* freeVars);
+bool_t term_match(struct Term* term, struct Object* other, struct Vector* bindings);
 void term_show(struct Term* term, struct OutStream* outStream);

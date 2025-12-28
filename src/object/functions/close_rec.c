@@ -16,6 +16,7 @@
 #include "object/types/pair.h"
 #include "object/types/sequence.h"
 #include "object/types/subscript.h"
+#include "object/types/trycatchfinally.h"
 #include "object/types/while.h"
 
 /* Defines *******************************************************************/
@@ -34,7 +35,6 @@ struct Object* close_rec(struct Object* obj, struct Etor_rec* etor) {
     switch(obj->typeId) {
         /* Constants */
         case OT_Boolean:
-        case OT_Dec:
         case OT_Integer:
         case OT_IntVar:
         case OT_Nil:
@@ -46,29 +46,30 @@ struct Object* close_rec(struct Object* obj, struct Etor_rec* etor) {
             return obj;
 
         /* Non-constants */
-        case OT_Application: return application_close((struct Application*)obj, etor);
-        case OT_Array:       return array_close_rec((struct Array*)obj, etor);
-        case OT_BinOp:       break;
-        case OT_ByteBuffer:  break;
-        /* case OT_Dec:        return dec_close_rec((struct Dec*)obj, etor); */
-        case OT_Etor_Rec:    break;
-        case OT_Function:    return function_close_rec((struct Function*)obj, etor);
-        case OT_HashTable:   break;
-        case OT_Identifier:  return identifier_close_rec((struct Identifier*)obj, etor);
-        case OT_IfThen:      return ifThen_close_rec((struct IfThen*)obj, etor);
-        case OT_Inc:         break;
-        case OT_IntArray:    break;
-        case OT_IntVector:   break;
-        case OT_Let:         return let_close_rec((struct Let*)obj, etor);
-        case OT_Pair:        return pair_close_rec((struct Pair*)obj, etor);
-        case OT_Quote:       break;
-        case OT_Sequence:    return sequence_close_rec((struct Sequence*)obj, etor);
-        case OT_Subscript:   return subscript_close_rec((struct Subscript*)obj, etor);
-        case OT_Test:        break;
-        case OT_User:        break;
-        case OT_Var:         break;
-        case OT_Vector:      break;
-        case OT_While:       return while_close_rec((struct While*)obj, etor);
+        case OT_Application:     return application_close((struct Application*)obj, etor);
+        case OT_Array:           return array_close_rec((struct Array*)obj, etor);
+        case OT_BinOp:           break;
+        case OT_ByteBuffer:      break;
+        case OT_Dec:             break;
+        case OT_Etor_Rec:        break;
+        case OT_Function:        return function_close_rec((struct Function*)obj, etor);
+        case OT_HashTable:       break;
+        case OT_Identifier:      return identifier_close_rec((struct Identifier*)obj, etor);
+        case OT_IfThen:          return ifThen_close_rec((struct IfThen*)obj, etor);
+        case OT_Inc:             break;
+        case OT_IntArray:        break;
+        case OT_IntVector:       break;
+        case OT_Let:             return let_close_rec((struct Let*)obj, etor);
+        case OT_Pair:            return pair_close_rec((struct Pair*)obj, etor);
+        case OT_Quote:           break;
+        case OT_Sequence:        return sequence_close_rec((struct Sequence*)obj, etor);
+        case OT_Subscript:       return subscript_close_rec((struct Subscript*)obj, etor);
+        case OT_Test:            break;
+        case OT_TryCatchFinally: return tryCatchFinally_close_rec((struct TryCatchFinally*)obj, etor);
+        case OT_User:            break;
+        case OT_Var:             break;
+        case OT_Vector:          break;
+        case OT_While:           return while_close_rec((struct While*)obj, etor);
 
         /* Non-datatypes */
         case OT_ConstantLimit:

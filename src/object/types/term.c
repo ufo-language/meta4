@@ -97,8 +97,8 @@ bool_t term_eval_rec(struct Term* term, struct Etor_rec* etor, struct Object** v
     return true;
 }
 
-void term_freeVars(struct Object* obj, struct Vector* freeVars);
-bool_t term_match(struct Object* obj, struct Object* other, struct Vector* bindings);
+// void term_freeVars(struct Object* obj, struct Vector* freeVars);
+// bool_t term_match(struct Object* obj, struct Object* other, struct Vector* bindings);
 
 void term_show(struct Term* term, struct OutStream* outStream) {
     show((struct Object*)term->name, outStream);

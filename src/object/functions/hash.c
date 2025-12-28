@@ -23,14 +23,10 @@
 
 bool_t hash(struct Object* obj, word_t* hashCode) {
     switch (obj->typeId) {
-        case OT_Identifier:
-        case OT_Symbol:
-            *hashCode = ((struct Symbolic*)obj)->hashCode;
-            return true;
-        case OT_String:
-            return string_hash((struct String*)obj, hashCode);
-        default:
-            return false;
+        case OT_Identifier: *hashCode = ((struct Symbolic*)obj)->hashCode; return true;
+        case OT_String:     *hashCode = string_hash((struct String*)obj, hashCode); return true;
+        case OT_Symbol:     *hashCode = ((struct Symbolic*)obj)->hashCode; return true;
+        default:            return false;
     }
 }
 

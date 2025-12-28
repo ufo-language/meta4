@@ -44,6 +44,7 @@ enum TypeId {
     OT_Quote,
     OT_Sequence,
     OT_Subscript,
+    OT_TryCatchFinally,
     OT_While,
     /* Other */
     OT_Etor_Rec,

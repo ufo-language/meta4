@@ -77,8 +77,6 @@ struct FunctionRule* function_emptyRule(void) {
 
 /* Unique functions ******************/
 
-/* Object functions ******************/
-
 bool_t function_apply(struct Function* function, struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value) {
     index_t savedEnv = etor_rec_envSave(etor);
     /* Check each rule for a match */
@@ -97,6 +95,8 @@ bool_t function_apply(struct Function* function, struct Etor_rec* etor, count_t 
     }
     return false;
 }
+
+/* Object functions ******************/
 
 struct Object* function_close_rec(struct Function* function, struct Etor_rec* etor) {
     for (struct FunctionRule* rule=function->rules; rule!=g_emptyFunctionRule; rule=rule->nextRule) {

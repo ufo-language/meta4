@@ -25,10 +25,10 @@ int main(int argc, char* argv[]) {
         struct Integer* i100a = integer_new(100);
         struct Integer* i100b = integer_new(100);
         struct Integer* i200 = integer_new(200);
-        EXPECT_IEQ(CompareEqual, compare(OBJ(i100a), OBJ(i100b)));
-        EXPECT_INE(CompareEqual, compare(OBJ(i100a), OBJ(i200)));
-        EXPECT_IEQ(CompareLess, compare(OBJ(i100a), OBJ(i200)));
-        EXPECT_IEQ(CompareGreater, compare(OBJ(i200), OBJ(i100a)));
+        EXPECT_IEQ(CompareResult_Equal, compare(OBJ(i100a), OBJ(i100b)));
+        EXPECT_INE(CompareResult_Equal, compare(OBJ(i100a), OBJ(i200)));
+        EXPECT_IEQ(CompareResult_Less, compare(OBJ(i100a), OBJ(i200)));
+        EXPECT_IEQ(CompareResult_Greater, compare(OBJ(i200), OBJ(i100a)));
     END
 
     TEST(integer_checkEval)

@@ -9,10 +9,10 @@
 /* Types *********************************************************************/
 
 enum CompareResult {
-    CompareLess = -1,
-    CompareEqual = 0,
-    CompareGreater = 1,
-    CompareUnordered = 2
+    CompareResult_Less = -1,
+    CompareResult_Equal = 0,
+    CompareResult_Greater = 1,
+    CompareResult_Unordered = 2
 };
 
 struct Object;

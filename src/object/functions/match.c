@@ -40,7 +40,7 @@ bool_t match(struct Object* obj, struct Object* other, struct Vector* bindings) 
         return false;
     }
     if (obj->typeId < OT_ConstantLimit) {
-        return compare(obj, other) == CompareEqual;
+        return compare(obj, other) == CompareResult_Equal;
     }
     switch (obj->typeId) {
         /* Non-constants */

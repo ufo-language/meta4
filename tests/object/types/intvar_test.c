@@ -22,10 +22,10 @@ int main(int argc, char* argv[]) {
         struct IntVar* i100a = intVar_new(100);
         struct IntVar* i100b = intVar_new(100);
         struct IntVar* i200 = intVar_new(200);
-        EXPECT_IEQ(CompareEqual, compare(OBJ(i100a), OBJ(i100b)));
-        EXPECT_INE(CompareEqual, compare(OBJ(i100a), OBJ(i200)));
-        EXPECT_IEQ(CompareLess, compare(OBJ(i100a), OBJ(i200)));
-        EXPECT_IEQ(CompareGreater, compare(OBJ(i200), OBJ(i100a)));
+        EXPECT_IEQ(CompareResult_Equal, compare(OBJ(i100a), OBJ(i100b)));
+        EXPECT_INE(CompareResult_Equal, compare(OBJ(i100a), OBJ(i200)));
+        EXPECT_IEQ(CompareResult_Less, compare(OBJ(i100a), OBJ(i200)));
+        EXPECT_IEQ(CompareResult_Greater, compare(OBJ(i200), OBJ(i100a)));
     END
 
     TEST(intVar_checkShow)

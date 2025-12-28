@@ -10,9 +10,9 @@ int main(int argc, char* argv[]) {
     TEST(compare_checkIntInt)
         struct Integer* i100 = integer_new(100);
         struct Integer* i200 = integer_new(200);
-        EXPECT_IEQ(CompareEqual, compare(OBJ(i100), OBJ(i100)));
-        EXPECT_IEQ(CompareLess, compare(OBJ(i100), OBJ(i200)));
-        EXPECT_IEQ(CompareGreater, compare(OBJ(i200), OBJ(i100)));
+        EXPECT_IEQ(CompareResult_Equal, compare(OBJ(i100), OBJ(i100)));
+        EXPECT_IEQ(CompareResult_Less, compare(OBJ(i100), OBJ(i200)));
+        EXPECT_IEQ(CompareResult_Greater, compare(OBJ(i200), OBJ(i100)));
     END
 
     END_TESTS

@@ -362,7 +362,7 @@ int main(int argc, char* argv[]) {
         const string_t message = "message";
         ASSERT_IEQ(PS_Error, pError(message, &parseState));
         ASSERT_ISA(OT_String, parseState.result);
-        ASSERT_IEQ(CompareEqual, string_compare_chars(((struct String*)parseState.result)->chars, message));
+        ASSERT_IEQ(CompareResult_Equal, string_compare_chars(((struct String*)parseState.result)->chars, message));
     END
 
     TEST(pSequence_withError)

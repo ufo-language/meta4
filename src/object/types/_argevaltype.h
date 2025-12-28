@@ -5,7 +5,8 @@
 /* Types *********************************************************************/
 
 enum ArgEvalType {
-    ArgEvalType_Function, ArgEvalType_Macro
+    ArgEvalType_Function,
+    ArgEvalType_Macro
 };
 
 /* Forward declarations ******************************************************/

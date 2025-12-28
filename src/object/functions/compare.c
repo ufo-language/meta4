@@ -25,9 +25,9 @@
 /* Public functions **********************************************************/
 
 static enum CompareResult _compareInts(int_t i1, int_t i2) {
-    if (i1 < i2) return CompareLess;
-    if (i1 > i2) return CompareGreater;
-    return CompareEqual;
+    if (i1 < i2) return CompareResult_Less;
+    if (i1 > i2) return CompareResult_Greater;
+    return CompareResult_Equal;
 }
 
 enum CompareResult compare(struct Object* obj, struct Object* other) {
@@ -36,19 +36,19 @@ enum CompareResult compare(struct Object* obj, struct Object* other) {
         switch (other->typeId) {
             case OT_IntVar: return _compareInts(((struct Integer*)obj)->i, ((struct IntVar*)other)->i);
             case OT_Integer: return _compareInts(((struct Integer*)obj)->i, ((struct Integer*)other)->i);
-            default: return CompareUnordered;
+            default: return CompareResult_Unordered;
         }
     }
     if (obj->typeId == OT_IntVar) {
         switch (other->typeId) {
             case OT_IntVar: return _compareInts(((struct IntVar*)obj)->i, ((struct IntVar*)other)->i);
             case OT_Integer: return _compareInts(((struct IntVar*)obj)->i, ((struct Integer*)other)->i);
-            default: return CompareUnordered;
+            default: return CompareResult_Unordered;
         }
     }
     /* If types are not equal then objects can't be compared */
     if (obj->typeId != other->typeId) {
-        return CompareUnordered;
+        return CompareResult_Unordered;
     }
     switch(obj->typeId) {
         case OT_Application:   break;
@@ -71,7 +71,7 @@ enum CompareResult compare(struct Object* obj, struct Object* other) {
         case OT_Let:           break;
         case OT_OutStream:     break;
         case OT_Pair:          break;
-        case OT_Nil:           return CompareEqual;
+        case OT_Nil:           return CompareResult_Equal;
         case OT_Null:          break;
         case OT_Primitive:     break;
         case OT_Quote:         break;

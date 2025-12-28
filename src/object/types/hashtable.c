@@ -61,7 +61,7 @@ bool_t hashTable_get_withHashCode(struct HashTable* hashTable, struct Object* ke
     /* Look for existing key */
     struct Binding* binding = hashTable->buckets[bucketNum];
     while (binding != g_emptyBinding) {
-        if (compare(key, binding->key) == CompareEqual) {
+        if (compare(key, binding->key) == CompareResult_Equal) {
             *value = binding->value;
             return true;
         }
@@ -114,7 +114,7 @@ bool_t hashTable_remove(struct HashTable* hashTable, struct Object* key) {
     struct Binding* binding = hashTable->buckets[bucketNum];
     struct Binding* prev = g_emptyBinding;
     while (binding != g_emptyBinding) {
-        if (compare(key, binding->key) == CompareEqual) {
+        if (compare(key, binding->key) == CompareResult_Equal) {
             if (prev == g_emptyBinding) {
                 hashTable->buckets[bucketNum] = binding->next;
             }
@@ -169,7 +169,7 @@ static void _hashTable_putUsingBuckets(count_t nBuckets, struct Binding** bucket
     /* Look for existing key */
     struct Binding* binding = buckets[bucketNum];
     while (binding != g_emptyBinding) {
-        if (compare(key, binding->key) == CompareEqual) {
+        if (compare(key, binding->key) == CompareResult_Equal) {
             binding->value = value;
             return;
         }

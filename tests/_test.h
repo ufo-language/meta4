@@ -298,7 +298,7 @@ index_t _SAVED_GLOBALS_TOP_ = 0;
 #define EXPECT_SHOW(expectedString, obj) \
     struct String* actualString = showString((struct Object*)obj); \
     string_t actualStringChars = actualString->chars; \
-    if (string_compare_chars(actualString->chars, expectedString) == CompareEqual) { \
+    if (string_compare_chars(actualString->chars, expectedString) == CompareResult_Equal) { \
         fprintf(stderr, "[%sPASS%s] ✅ [%s:%d] %s == %s\n", GREEN, NORMAL, __FILE__, __LINE__, (#expectedString), (#obj)); \
         ++_TEST_NPASS_; \
     } \

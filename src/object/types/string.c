@@ -53,9 +53,9 @@ void string_init(struct String* string, count_t nChars, const string_t chars) {
 
 enum CompareResult string_compare_chars(string_t string, string_t otherString) {
     int res = strcmp(string, otherString);
-    if (res < 0) return CompareLess;
-    if (res > 0) return CompareGreater;
-    return CompareEqual;
+    if (res < 0) return CompareResult_Less;
+    if (res > 0) return CompareResult_Greater;
+    return CompareResult_Equal;
 }
 
 /* Object functions ******************/
