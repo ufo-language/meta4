@@ -6,6 +6,9 @@
 
 /* Types *********************************************************************/
 
+/*
+After adding a new TypeId, add the name in typeids.c
+*/
 enum TypeId {
     OT_Null,  /* Should never be used */
     OT_Boolean,

@@ -78,24 +78,6 @@ struct FunctionRule* function_emptyRule(void) {
 /* Unique functions ******************/
 
 bool_t function_apply(struct Function* function, struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value) {
-#if 0
-    index_t savedEnv = etor_rec_envSave(etor);
-    /* Check each rule for a match */
-    struct FunctionRule* rule = function->rules;
-    while (rule != g_emptyFunctionRule) {
-        if (rule->nParams == nArgs) {
-            if (matchObjs(nArgs, rule->params, args, etor->env)) {
-                bool_t success = eval_rec(rule->closedBody, etor, value);
-                etor_rec_envRestore(etor, savedEnv);
-                return success;
-            }
-        }
-        /* Restore the environment because matchObjs creates new bindings */
-        etor_rec_envRestore(etor, savedEnv);
-        rule = rule->nextRule;
-    }
-    return false;
-#endif
     enum Function_ApplyResult res = function_apply_aux(function, etor, nArgs, args, value);
     return res == ApplyResult_Success ? true : false;
 }

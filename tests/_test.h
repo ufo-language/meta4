@@ -178,6 +178,29 @@ index_t _SAVED_GLOBALS_TOP_ = 0;
         break; \
     }
 
+#define EXPECT_IGT(expected, actual) \
+    if ((int64_t)(expected) > (int64_t)(actual)) { \
+        fprintf(stderr, "[%sPASS%s] ✅ [%s:%d] %" PRId64 " > %s\n", GREEN, NORMAL, __FILE__, __LINE__, (int64_t)(expected), (#actual)); \
+        ++_TEST_NPASS_; \
+    } \
+    else { \
+        fprintf(stderr, "[%sFAIL%s] ❌ [%s:%d] %" PRId64 " > %s, actual = ", RED, NORMAL, __FILE__, __LINE__, (int64_t)(expected), (#actual)); \
+        fprintf(stderr, "%" PRId64 "l\n", (int64_t)(actual)); \
+        ++_TEST_NFAIL_; \
+    }
+
+#define ASSERT_IGT(expected, actual) \
+    if ((int64_t)(expected) > (int64_t)(actual)) { \
+        fprintf(stderr, "[%sPASS%s] ✅ [%s:%d] %" PRId64 " > %s\n", GREEN, NORMAL, __FILE__, __LINE__, (int64_t)(expected), (#actual)); \
+        ++_TEST_NPASS_; \
+    } \
+    else { \
+        fprintf(stderr, "[%sFAIL%s] ❌ [%s:%d] %" PRId64 " > %s, actual = ", RED, NORMAL, __FILE__, __LINE__, (int64_t)(expected), (#actual)); \
+        fprintf(stderr, "%" PRId64 "\n", (int64_t)(actual)); \
+        ++_TEST_NFAIL_; \
+        break; \
+    }
+
 #define EXPECT_REQ(expected, actual) \
     if ((real_t)(expected) == (real_t)(actual)) { \
         fprintf(stderr, "[%sPASS%s] ✅ [%s:%d] %g == %s\n", GREEN, NORMAL, __FILE__, __LINE__, (real_t)(expected), (#actual)); \

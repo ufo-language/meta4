@@ -20,19 +20,16 @@
 
 struct Symbolic* symbolic_new(const string_t name, enum TypeId typeId, struct HashTable* internTable) {
     count_t nChars = strlen(name);
-    return hashTable_intern(internTable, nChars, name, typeId);
+    struct Symbolic* symbolic = hashTable_intern(internTable, nChars, name, typeId);
+    return symbolic;
 }
 
-#include <assert.h>
 struct Symbolic* symbolic_new_aux(enum TypeId typeId, count_t nChars, const string_t name, word_t hashCode) {
     struct Symbolic* symbolic = (struct Symbolic*)object_new(typeId, NWORDS(*symbolic) + NBYTES_TO_WORDS(nChars + 1));
     symbolic->hashCode = hashCode;
     memcpy(symbolic->name, name, nChars + 1);
-    assert(strlen(symbolic->name) == nChars);
-    assert(symbolic->name[nChars] == 0);
     return symbolic;
 }
-
 
 /* Public functions **********************************************************/
 

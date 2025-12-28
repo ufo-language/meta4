@@ -79,9 +79,7 @@ struct Symbolic* hashTable_intern(struct HashTable* internTable, count_t nChars,
     /* Create a probe string to check the table for the key */
     string_init((struct String*)&probeString, nChars, name);
     word_t hashCode;
-    // hash((struct Object*)&probeString, &hashCode);
-    string_hash_chars(typeId, nChars, name, &hashCode);
-    fprintf(stderr, "hashTable_intern name = '%s', hashCode = %lu\n", name, hashCode);
+    hash((struct Object*)&probeString, &hashCode);
     struct Object* value;
     if (hashTable_get_withHashCode(internTable, (struct Object*)&probeString, hashCode, &value)) {
         return (struct Symbolic*)value;
