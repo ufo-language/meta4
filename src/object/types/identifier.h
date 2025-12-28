@@ -4,6 +4,7 @@
 
 #include "_typedefs.h"
 
+#include "object/functions/compare.h"
 #include "object/object.h"
 #include "object/types/symbolic.h"
 
@@ -35,4 +36,5 @@ bool_t identifier_assign(struct Identifier* ident, struct Object* value, struct 
 /* Object functions ******************/
 
 struct Object* identifier_close_rec(struct Identifier* ident, struct Etor_rec* etor);
+enum CompareResult identifier_compare(struct Identifier* ident, struct Identifier* otherIdent);
 bool_t identifier_eval_rec(struct Identifier* ident, struct Etor_rec* etor, struct Object** value);

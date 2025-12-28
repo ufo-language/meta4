@@ -3,7 +3,6 @@
 
 #include "_typedefs.h"
 
-#include "object/functions/equal.h"
 #include "object/functions/show.h"
 #include "object/globals.h"
 #include "object/object.h"

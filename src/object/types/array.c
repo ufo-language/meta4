@@ -1,10 +1,11 @@
+#include <math.h>
 #include <string.h>
 
 #include "_typedefs.h"
 
 #include "object/errorterm.h"
 #include "object/functions/close_rec.h"
-#include "object/functions/equal.h"
+#include "object/functions/compare.h"
 #include "object/functions/eval_rec.h"
 #include "object/functions/match.h"
 #include "object/functions/show.h"
@@ -101,15 +102,6 @@ void array_close_rec_usingElems(count_t nElems, struct Object* elems[], struct O
     }
 }
 
-bool_t array_equal_usingElems(count_t nElems, struct Object* elems[], struct Object* otherElems[]) {
-    for (index_t n=0; n<nElems; ++n) {
-        if (!equal(elems[n], otherElems[n])) {
-            return false;
-        }
-    }
-    return true;
-}
-
 bool_t array_eval_rec_usingElems(count_t nElems, struct Object* elems[], struct Object* newElems[], struct Etor_rec* etor, struct Object** error) {
     struct Object* value;
     for (index_t n=0; n<nElems; ++n) {
@@ -125,7 +117,7 @@ bool_t array_eval_rec_usingElems(count_t nElems, struct Object* elems[], struct 
 /* This treats the array as an association list of pairs: [key, value, key, value...] */
 bool_t array_locate_usingElems(count_t nElems, struct Object* elems[], struct Object* key, int_t* index) {
     for (index_t n=0; n<nElems; n+=2) {
-        if (equal(elems[n], key)) {
+        if (compare(elems[n], key) == CompareEqual) {
             *index = n+1;
             return true;
         }
@@ -136,7 +128,7 @@ bool_t array_locate_usingElems(count_t nElems, struct Object* elems[], struct Ob
 /* This treats the array as an association list of pairs: [key, value, key, value...] */
 bool_t array_lookup_usingElems(count_t nElems, struct Object* elems[], struct Object* key, struct Object** value) {
     for (index_t n=0; n<nElems; n+=2) {
-        if (equal(elems[n], key)) {
+        if (compare(elems[n], key) == CompareEqual) {
             *value = elems[n+1];
             return true;
         }
@@ -188,11 +180,22 @@ struct Object* array_close_rec(struct Array* array, struct Etor_rec* etor) {
     return (struct Object*)newArray;
 }
 
-bool_t array_equal(struct Array* array, struct Array* otherArray) {
-    if (array->nElems != otherArray->nElems) {
-        return false;
+enum CompareResult array_compare(struct Array* array, struct Array* otherArray) {
+    count_t nElems = array->nElems < otherArray->nElems ? array->nElems : otherArray->nElems;
+    struct Object** elems = array->elems;
+    struct Object** otherElems = otherArray->elems;
+    for (count_t n=0; n<nElems; n++) {
+        enum CompareResult compareResult = compare(elems[n], otherElems[n]);
+        if (compareResult != CompareEqual)
+            return compareResult;
     }
-    return array_equal_usingElems(array->nElems, array->elems, otherArray->elems);
+    if (array->nElems < otherArray->nElems) {
+        return CompareLess;
+    }
+    if (array->nElems > otherArray->nElems) {
+        return CompareGreater;
+    }
+    return CompareEqual;
 }
 
 bool_t array_eval_rec(struct Array* array, struct Etor_rec* etor, struct Object** value) {

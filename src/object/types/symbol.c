@@ -5,6 +5,7 @@
 #include "_typedefs.h"
 
 #include "object/evaluator/etor_rec.h"
+#include "object/functions/compare.h"
 #include "object/globals.h"
 #include "object/object.h"
 #include "object/typeids.h"
@@ -33,5 +34,9 @@ struct Symbol* symbol_new(const string_t name) {
 /* Unique functions ******************/
 
 /* Object functions ******************/
+
+enum CompareResult symbol_compare(struct Symbol* symbol, struct Symbol* otherSymbol) {
+    return string_compare_chars(symbol->name, otherSymbol->name);
+}
 
 /* Private functions *********************************************************/

@@ -5,7 +5,7 @@
 #include "lexer/lexer.h"
 #include "memory/gc.h"
 #include "memory/memory.h"
-#include "object/functions/equal.h"
+#include "object/functions/compare.h"
 #include "object/functions/hash.h"
 #include "object/globals.h"
 #include "object/types/hashtable.h"
@@ -61,7 +61,7 @@ bool_t hashTable_get_withHashCode(struct HashTable* hashTable, struct Object* ke
     /* Look for existing key */
     struct Binding* binding = hashTable->buckets[bucketNum];
     while (binding != g_emptyBinding) {
-        if (equal(key, binding->key)) {
+        if (compare(key, binding->key) == CompareEqual) {
             *value = binding->value;
             return true;
         }
@@ -114,7 +114,7 @@ bool_t hashTable_remove(struct HashTable* hashTable, struct Object* key) {
     struct Binding* binding = hashTable->buckets[bucketNum];
     struct Binding* prev = g_emptyBinding;
     while (binding != g_emptyBinding) {
-        if (equal(key, binding->key)) {
+        if (compare(key, binding->key) == CompareEqual) {
             if (prev == g_emptyBinding) {
                 hashTable->buckets[bucketNum] = binding->next;
             }
@@ -169,7 +169,7 @@ static void _hashTable_putUsingBuckets(count_t nBuckets, struct Binding** bucket
     /* Look for existing key */
     struct Binding* binding = buckets[bucketNum];
     while (binding != g_emptyBinding) {
-        if (equal(key, binding->key)) {
+        if (compare(key, binding->key) == CompareEqual) {
             binding->value = value;
             return;
         }

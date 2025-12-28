@@ -4,6 +4,7 @@
 
 #include "_typedefs.h"
 
+#include "object/functions/compare.h"
 #include "object/object.h"
 #include "object/types/symbolic.h"
 
@@ -28,3 +29,5 @@ struct Symbol* symbol_new(const string_t name);
 /* Unique functions ******************/
 
 /* Object functions ******************/
+
+enum CompareResult symbol_compare(struct Symbol* symbol, struct Symbol* otherSymbol);

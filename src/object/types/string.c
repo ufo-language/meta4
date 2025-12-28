@@ -3,6 +3,7 @@
 
 #include "_typedefs.h"
 
+#include "object/functions/compare.h"
 #include "object/object.h"
 #include "object/types/outstream.h"
 #include "object/types/string.h"
@@ -34,26 +35,34 @@ struct String* string_new_empty(count_t nChars) {
     return string;
 }
 
-#include <assert.h>
 void string_init(struct String* string, count_t nChars, const string_t chars) {
     object_init((struct Object*)string, OT_String, NWORDS(*string) + NBYTES_TO_WORDS(nChars + 1));
     /* This is duplicated in string_new_empty; that's necessary because these functions
        are used in other places */
     string->nChars = nChars;
     memcpy(string->chars, chars, nChars + 1);  /* The '+ 1' copies the null terminator */
-    assert(string->chars[nChars] == 0);
-    assert(strlen(string->chars) == nChars);
 }
 
 /* Public functions **********************************************************/
 
 /* Unique functions ******************/
 
-bool_t string_equal_chars(struct String* string, string_t chars) {
-    return strcmp(string->chars, chars) == 0;
+// bool_t string_equal_chars(struct String* string, string_t chars) {
+//     return strcmp(string->chars, chars) == 0;
+// }
+
+enum CompareResult string_compare_chars(string_t string, string_t otherString) {
+    int res = strcmp(string, otherString);
+    if (res < 0) return CompareLess;
+    if (res > 0) return CompareGreater;
+    return CompareEqual;
 }
 
 /* Object functions ******************/
+
+enum CompareResult string_compare(struct String* string, struct String* otherString) {
+    return string_compare_chars(string->chars, otherString->chars);
+}
 
 void string_display(struct String* string, struct OutStream* outStream) {
     outStream_writeString(outStream, string->chars);

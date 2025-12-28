@@ -1,7 +1,7 @@
 #include "_typedefs.h"
 
 #include "object/evaluator/etor_rec.h"
-#include "object/functions/equal.h"
+#include "object/functions/compare.h"
 #include "object/functions/match.h"
 #include "object/object.h"
 #include "object/typeids.h"
@@ -40,7 +40,7 @@ bool_t match(struct Object* obj, struct Object* other, struct Vector* bindings) 
         return false;
     }
     if (obj->typeId < OT_ConstantLimit) {
-        return equal(obj, other);
+        return compare(obj, other) == CompareEqual;
     }
     switch (obj->typeId) {
         /* Non-constants */

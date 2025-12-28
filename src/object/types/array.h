@@ -2,6 +2,7 @@
 
 #include "_typedefs.h"
 
+#include "object/functions/compare.h"
 #include "object/object.h"
 
 /* Defines *******************************************************************/
@@ -40,7 +41,6 @@ bool_t array_set_index_t(struct Array* array, index_t index, struct Object* valu
 
 /* Element/array-wise operations; also used by other types */
 void array_close_rec_usingElems(count_t nElems, struct Object* elems[], struct Object* newElems[], struct Etor_rec* etor);
-bool_t array_equal_usingElems(count_t nElems, struct Object* elems[], struct Object* otherElems[]);
 bool_t array_eval_rec_usingElems(count_t nElems, struct Object* elems[], struct Object* newElems[], struct Etor_rec* etor, struct Object** error);
 bool_t array_locate_usingElems(count_t nElems, struct Object* elems[], struct Object* key, int_t* index);
 bool_t array_lookup_usingElems(count_t nElems, struct Object* elems[], struct Object* key, struct Object** value);
@@ -51,7 +51,7 @@ void array_showBindings(count_t nElems, struct Object* elems[], const string_t o
 /* Object functions ******************/
 
 struct Object* array_close_rec(struct Array* array, struct Etor_rec* etor);
-bool_t array_equal(struct Array* array, struct Array* otherArray);
+enum CompareResult array_compare(struct Array* array, struct Array* otherArray);
 bool_t array_eval_rec(struct Array* array, struct Etor_rec* etor, struct Object** value);
 bool_t array_match(struct Array* array, struct Array* other, struct Vector* bindings);
 void array_show(struct Array* array, struct OutStream* outStream);

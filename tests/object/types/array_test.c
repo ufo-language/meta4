@@ -4,7 +4,7 @@
 #include "_typedefs.h"
 
 #include "object/evaluator/etor_rec.h"
-#include "object/functions/equal.h"
+#include "object/functions/compare.h"
 #include "object/functions/match.h"
 #include "object/globals.h"
 #include "object/typeids.h"
@@ -106,11 +106,11 @@ int main(int argc, char* argv[]) {
         EXPECT_EQ(i300, arrayValue->elems[2]);
     END
 
-    TEST(check_equal_true)
+    TEST(check_compare_equal)
         struct Object* elems[] = {OBJ(i100), OBJ(i200), OBJ(i300)};
         struct Array* array1 = array_new_withElems(3, elems);
         struct Array* array2 = array_new_withElems(3, elems);
-        ASSERT_TRUE(equal(OBJ(array1), OBJ(array2)));
+        ASSERT_IEQ(CompareEqual, compare(OBJ(array1), OBJ(array2)));
     END
 
     TEST(array_checkMatch)

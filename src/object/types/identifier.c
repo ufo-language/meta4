@@ -47,6 +47,10 @@ struct Object* identifier_close_rec(struct Identifier* ident, struct Etor_rec* e
     return success ? value : (struct Object*)ident;
 }
 
+enum CompareResult identifier_compare(struct Identifier* ident, struct Identifier* otherIdent) {
+    return string_compare_chars(ident->name, otherIdent->name);
+}
+
 bool_t identifier_eval_rec(struct Identifier* ident, struct Etor_rec* etor, struct Object** value) {
     bool_t success = etor_rec_lookup(etor, ident, value);
     if (!success) {

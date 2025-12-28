@@ -28,7 +28,7 @@ enum ParseStatus pSpotReserved(const string_t word, struct ParseState* parseStat
             struct Object* arg = token->args[0];
             if (arg->typeId == OT_String) {
                 struct String* argString = (struct String*)arg;
-                if (string_equal_chars(argString, word)) {
+                if (string_compare_chars(argString->chars, word) == CompareEqual) {
                     return PS_Success;
                 }
             }

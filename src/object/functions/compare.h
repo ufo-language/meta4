@@ -8,6 +8,13 @@
 
 /* Types *********************************************************************/
 
+enum CompareResult {
+    CompareLess = -1,
+    CompareEqual = 0,
+    CompareGreater = 1,
+    CompareUnordered = 2
+};
+
 struct Object;
 
 /* Forward declarations ******************************************************/
@@ -22,4 +29,7 @@ struct Object;
 
 /* Object functions ******************/
 
-bool_t equal(struct Object* obj, struct Object* other);
+/* Returns false if the two objects are not equal.
+   The result variable contains -1, 0, or +1.
+*/
+enum CompareResult compare(struct Object* obj, struct Object* other);

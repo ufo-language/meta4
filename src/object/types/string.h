@@ -4,6 +4,7 @@
 
 #include "_typedefs.h"
 
+#include "object/functions/compare.h"
 #include "object/object.h"
 
 /* Defines *******************************************************************/
@@ -32,11 +33,12 @@ void string_init(struct String* string, count_t nChars, const string_t chars);
 
 /* Unique functions ******************/
 
-bool_t string_equal_chars(struct String* string, string_t chars);
+enum CompareResult string_compare_chars(string_t string, string_t otherString);
 bool_t string_hash_chars(enum TypeId typeId, count_t nChars, const string_t chars, word_t* hashCode);
 
 /* Object functions ******************/
 
+enum CompareResult string_compare(struct String* string, struct String* otherString);
 void string_display(struct String* string, struct OutStream* outStream);
 bool_t string_equal(struct String* string, struct String* other);
 bool_t string_hash(struct String* string, word_t* hashCode);
