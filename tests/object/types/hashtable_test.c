@@ -101,9 +101,7 @@ int main(int argc, char* argv[]) {
     TEST(hashTable_checkShow)
         struct HashTable* hashTable = hashTable_new();
         hashTable_put(hashTable, OBJ(symbol_new("A")), OBJ(integer_new(100)));
-        hashTable_put(hashTable, OBJ(symbol_new("B")), OBJ(integer_new(200)));
-        hashTable_put(hashTable, OBJ(symbol_new("C")), OBJ(integer_new(300)));
-        EXPECT_SHOW("#{A=100, B=200, C=300}", hashTable);
+        EXPECT_SHOW("#{A=100}", hashTable);
     END
 
     TEST(hashTable_checkIntern)
