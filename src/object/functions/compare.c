@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <stdio.h>
 
 #include "_typedefs.h"
@@ -86,7 +87,8 @@ enum CompareResult compare(struct Object* obj, struct Object* other) {
         case OT_While:         break;
         default:               break;
     }
-    fprintf(stderr, "compare: Unknown type ID %u (%s)\n", obj->typeId, typeName(obj->typeId));
+    fprintf(stderr, "compare: Unhandled type ID %u (%s)\n", obj->typeId, typeName(obj->typeId));
+    assert(false);
     return false;
 }
 

@@ -67,7 +67,7 @@ string_t typeName(enum TypeId typeId) {
         case OT_Vector:          return "Vector";
         case OT_While:           return "While";
         default:
-            fprintf(stderr, "Unknown type ID %u\n", typeId);
+            fprintf(stderr, "Unhandled type ID %u\n", typeId);
             return "UNKNOWN";
     }
 }

@@ -40,6 +40,7 @@ static bool_t _assign(struct Etor_rec* etor, count_t nArgs, struct Object* args[
     struct Object* rhs = args[1];
     struct Object* rhsVal;
     if (!eval_rec(rhs, etor, &rhsVal)) {
+        *value = rhsVal;
         return false;
     }
     switch (lhs->typeId) {
@@ -68,14 +69,14 @@ static bool_t _assign(struct Etor_rec* etor, count_t nArgs, struct Object* args[
             return true;
         case OT_IntVar:
             if (rhsVal->typeId != OT_Integer) {
-                *value = (struct Object*)errorTerm1("IntArray", "Assigned value is not an an integer", rhsVal);
+                *value = (struct Object*)errorTerm_objAndType("IntVarError", "Assigned value is not an an integer", rhsVal);
                 return false;
             }
             ((struct IntVar*)lhs)->i = ((struct Integer*)rhsVal)->i;
             *value = rhsVal;
             return true;
         default:
-            *value = (struct Object*)errorTerm1("Assign", "Unable to assign to LHS", lhs);
+            *value = (struct Object*)errorTerm_objAndType("AssignError", "Unable to assign to LHS", lhs);
             return false;
 
     }

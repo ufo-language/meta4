@@ -78,7 +78,7 @@ bool_t match(struct Object* obj, struct Object* other, struct Vector* bindings) 
         default:
             break;
     }
-    fprintf(stderr, "match: Unknown type ID %u (%s)\n", obj->typeId, typeName(obj->typeId));
+    fprintf(stderr, "match: Unhandled type ID %u (%s)\n", obj->typeId, typeName(obj->typeId));
     return false;
 }
 

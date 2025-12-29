@@ -1,3 +1,6 @@
+#include <assert.h>
+#include <stdio.h>
+
 #include "_typedefs.h"
 
 #include "object/functions/boolvalue.h"
@@ -76,7 +79,8 @@ bool_t boolValue(struct Object* obj) {
         default:
             break;
     }
-    fprintf(stderr, "boolValue: Unknown type ID %u (%s)\n", obj->typeId, typeName(obj->typeId));
+    fprintf(stderr, "boolValue: Unhandled type ID %u (%s)\n", obj->typeId, typeName(obj->typeId));
+    assert(false);
     return false;
 }
 

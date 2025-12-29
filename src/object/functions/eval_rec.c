@@ -12,6 +12,7 @@
 #include "object/types/binop.h"
 #include "object/types/dec.h"
 #include "object/types/function.h"
+#include "object/types/integer.h"
 #include "object/types/identifier.h"
 #include "object/types/ifthen.h"
 #include "object/types/inc.h"
@@ -19,6 +20,7 @@
 #include "object/types/pair.h"
 #include "object/types/quote.h"
 #include "object/types/sequence.h"
+#include "object/types/string.h"
 #include "object/types/subscript.h"
 #include "object/types/term.h"
 #include "object/types/trycatchfinally.h"
@@ -82,18 +84,20 @@ bool_t eval_rec(struct Object* obj, struct Etor_rec* etor, struct Object** value
         /* Non-datatypes; should never get here */
         case OT_ConstantLimit:
         case OT_Null:
-            *value = (struct Object*)errorTerm("EvalError",
-                "Unable to evaluate object (should not get here: eval_rec.c)",
-                2,
-                "Object", obj,
-                "Type", typeSymbol(obj->typeId));
+            *value = (struct Object*)errorTerm_objAndType("EvalError",
+                "Unable to evaluate object (should not get here: eval_rec.c)", obj);
             return false;
 
         default:
             break;
     }
     etor_rec_envRestore(etor, savedEnv);
-    fprintf(stderr, "eval_rec: Unknown type ID %u (%s)\n", obj->typeId, typeName(obj->typeId));
+    *value = (struct Object*)errorTerm("EvalError",
+        "Unknown type ID (should not get here: eval_rec.c)",
+        2,
+        "TypeID", integer_new(obj->typeId),
+        "TypeName", string_new(typeName(obj->typeId))
+    );
     return false;
 }
 

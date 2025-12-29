@@ -124,7 +124,7 @@ void freeVars(struct Object* obj, struct Vector* freeVars_) {
         default:
             break;
     }
-    fprintf(stderr, "eval_rec: Unknown type ID %u (%s)\n", obj->typeId, typeName(obj->typeId));
+    fprintf(stderr, "eval_rec: Unhandled type ID %u (%s)\n", obj->typeId, typeName(obj->typeId));
 }
 
 /* Private functions *********************************************************/

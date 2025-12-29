@@ -54,6 +54,13 @@ struct Term* errorTerm1(const string_t name, const string_t message, struct Obje
     return term_new(symbol_new(name), nArgs, args, (struct Object*)g_nil);
 }
 
+struct Term* errorTerm_objAndType(const string_t name, const string_t message, struct Object* arg) {
+    return errorTerm(name, message, 2,
+        "Object", arg,
+        "Type", typeSymbol(arg->typeId)
+    );
+}
+
 /* Object functions ******************/
 
 /* Private functions *********************************************************/

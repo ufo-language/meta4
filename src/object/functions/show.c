@@ -96,7 +96,7 @@ void show(struct Object* obj, struct OutStream* outStream) {
         case OT_Vector:          vector_show((struct Vector*)obj, outStream); return;
         case OT_While:           while_show((struct While*)obj, outStream); return;
         default:
-            fprintf(stderr, "show: Unknown type ID %u (%s)\n", obj->typeId, typeName(obj->typeId));
+            fprintf(stderr, "show: Unhandled type ID %u (%s)\n", obj->typeId, typeName(obj->typeId));
             outStream_writeString(outStream, "UNKNOWN");
         }
 

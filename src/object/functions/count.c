@@ -1,3 +1,6 @@
+#include <assert.h>
+#include <stdio.h>
+
 #include "_typedefs.h"
 
 #include "object/functions/count.h"
@@ -45,6 +48,7 @@ bool_t count(struct Object* obj, count_t* nElems) {
         default:            return false;
     }
     fprintf(stderr, "count: Unhandled type ID %u (%s)\n", obj->typeId, typeName(obj->typeId));
+    assert(false);
     return false;
 }
 

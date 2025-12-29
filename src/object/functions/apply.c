@@ -1,5 +1,6 @@
 #include "_typedefs.h"
 
+#include "object/errorterm.h"
 #include "object/evaluator/etor_rec.h"
 #include "object/functions/apply.h"
 #include "object/object.h"
@@ -29,6 +30,7 @@ bool_t apply(struct Object* obj, struct Etor_rec* etor, count_t nArgs, struct Ob
         case OT_Primitive:
             return prim_apply((struct Primitive*)obj, etor, nArgs, args, value);
         default:
+            *value = (struct Object*)errorTerm_objAndType("ApplyError", "Object is not applyable", obj);
             return false;
     }
 }

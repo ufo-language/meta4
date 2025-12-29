@@ -1,5 +1,6 @@
 #include "_typedefs.h"
 
+#include "object/errorterm.h"
 #include "object/evaluator/etor_rec.h"
 #include "object/functions/count.h"
 #include "object/functions/display.h"
@@ -41,6 +42,7 @@ static bool_t _count(struct Etor_rec* etor, count_t nArgs, struct Object* args[]
     (void)nArgs;
     count_t nElems;
     if (!count(args[0], &nElems)) {
+        *value = (struct Object*)errorTerm_objAndType("CountError", "Object is not countable", args[0]);
         return false;
     }
     *value = (struct Object*)integer_new((int_t)nElems);

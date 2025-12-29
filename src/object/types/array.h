@@ -15,6 +15,13 @@ struct Array {
     struct Object* elems[];
 };
 
+enum ArrayResult {
+    ArrayResult_OK,
+    ArrayResult_IndexOutOfBounds,
+    ArrayResult_IndexType,
+    ArrayResult_KeyNotFound
+};
+
 struct Etor_rec;
 struct OutStream;
 struct Vector;

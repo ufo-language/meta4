@@ -61,7 +61,7 @@ bool_t array_get(struct Array* array, struct Object* indexObj, struct Object** v
             if (indexObj->typeId < OT_ConstantLimit) {
                 return array_lookup_usingElems(array->nElems, array->elems, indexObj, value);
             }
-            *value = (struct Object*)errorTerm1("ArrayError", "Unable to use object as array subscript index", indexObj);
+            *value = (struct Object*)errorTerm_objAndType("ArrayError", "Unable to use object as array subscript index", indexObj);
             return false;
     }
 }
@@ -80,7 +80,7 @@ bool_t array_set(struct Array* array, struct Object* indexObj, struct Object* va
         case OT_Integer:
             return array_set_index_t(array, ((struct Integer*)indexObj)->i, value, error);
         default:
-            *error = (struct Object*)errorTerm1("ArrayError", "Unable to use object as array subscript index", indexObj);
+            *error = (struct Object*)errorTerm_objAndType("ArrayError", "Unable to use object as array subscript index", indexObj);
             return false;
     }
 }
@@ -133,7 +133,7 @@ bool_t array_lookup_usingElems(count_t nElems, struct Object* elems[], struct Ob
             return true;
         }
     }
-    *value = (struct Object*)errorTerm1("ArrayError", "Key not found in array", key);
+    *value = (struct Object*)errorTerm_objAndType("ArrayError", "Key not found in array", key);
     return false;
 }
 

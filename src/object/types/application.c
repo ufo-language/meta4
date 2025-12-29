@@ -59,6 +59,7 @@ bool_t application_eval_rec(struct Application* app, struct Etor_rec* etor, stru
     /* Evaluate the abstraction */
     struct Object* abstrVal;
     if (!eval_rec(app->abstraction, etor, &abstrVal)) {
+        *value = abstrVal;
         return false;
     }
     bool_t evalArgs =
@@ -71,6 +72,7 @@ bool_t application_eval_rec(struct Application* app, struct Etor_rec* etor, stru
         argVals = memory_alloc(app->nArgs);
         struct Object* error;
         if (!array_eval_rec_usingElems(app->nArgs, app->args, argVals, etor, &error)) {
+            *value = error;
             return false;
         }
     }

@@ -80,7 +80,7 @@ struct Object* close_rec(struct Object* obj, struct Etor_rec* etor) {
         default:
             break;
     }
-    fprintf(stderr, "close_rec: Unknown type ID %u (%s)\n", obj->typeId, typeName(obj->typeId));
+    fprintf(stderr, "close_rec: Unhandled type ID %u (%s)\n", obj->typeId, typeName(obj->typeId));
     return obj;
 }
 
