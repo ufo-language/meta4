@@ -21,6 +21,7 @@ void prim_object_defineAll(struct Vector* env);
 static bool_t _count(struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value);
 static bool_t _display(struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value);
 static bool_t _show(struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value);
+static bool_t _throw(struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value);
 
 /* Global variables **********************************************************/
 
@@ -32,6 +33,7 @@ void prim_object_defineAll(struct Vector* env) {
     definePrim(env, "count",   _count,   1, OT_Any);
     definePrim(env, "display", _display, COUNT_MAX);
     definePrim(env, "show",    _show,    COUNT_MAX);
+    definePrim(env, "throw",   _throw,   1, OT_Any);
 }
 
 static bool_t _count(struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value) {
@@ -61,6 +63,13 @@ static bool_t _show(struct Etor_rec* etor, count_t nArgs, struct Object* args[],
     }
     *value = (struct Object*)g_nil;
     return true;
+}
+
+static bool_t _throw(struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value) {
+    (void)etor;
+    (void)nArgs;
+    *value = args[0];
+    return false;
 }
 
 /* Private functions *********************************************************/

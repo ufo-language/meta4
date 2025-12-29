@@ -1,3 +1,5 @@
+#include <assert.h>
+
 #include "_typedefs.h"
 
 #include "object/functions/eval_rec.h"
@@ -25,13 +27,11 @@ struct TryCatchFinally {
     struct Object* finallyExpr;
 };
 */
-#include <assert.h>
 struct TryCatchFinally* tryCatchFinally_new(struct Object* tryExpr, struct Function* catchRules, struct Object* finallyExpr) {
     struct TryCatchFinally* tcf = (struct TryCatchFinally*)object_new(OT_TryCatchFinally, NWORDS(struct TryCatchFinally));
     tcf->tryExpr = tryExpr;
     tcf->catchRules = catchRules;
     tcf->finallyExpr = finallyExpr;
-    struct Object* args[1] = {(struct Object*)g_nil};
     return tcf;
 }
 
@@ -42,6 +42,9 @@ struct TryCatchFinally* tryCatchFinally_new(struct Object* tryExpr, struct Funct
 /* Object functions ******************/
 
 struct Object* tryCatchFinally_close_rec(struct TryCatchFinally* tcf, struct Etor_rec* etor) {
+    (void)tcf;
+    (void)etor;
+    assert(false);
 }
 
 bool_t tryCatchFinally_eval_rec(struct TryCatchFinally* tcf, struct Etor_rec* etor, struct Object** value) {
@@ -75,9 +78,15 @@ bool_t tryCatchFinally_eval_rec(struct TryCatchFinally* tcf, struct Etor_rec* et
 }
 
 void tryCatchFinally_freeVars(struct TryCatchFinally* tcf, struct Vector* freeVars) {
+    (void)tcf;
+    (void)freeVars;
+    assert(false);
 }
 
 void tryCatchFinally_show(struct TryCatchFinally* tcf, struct OutStream* outStream) {
+    (void)tcf;
+    (void)outStream;
+    assert(false);
 }
 
 /* Private functions *********************************************************/
