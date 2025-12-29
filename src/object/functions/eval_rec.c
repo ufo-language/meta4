@@ -2,6 +2,7 @@
 
 #include "_typedefs.h"
 
+#include "object/errorterm.h"
 #include "object/evaluator/etor_rec.h"
 #include "object/functions/eval_rec.h"
 #include "object/object.h"
@@ -81,7 +82,11 @@ bool_t eval_rec(struct Object* obj, struct Etor_rec* etor, struct Object** value
         /* Non-datatypes; should never get here */
         case OT_ConstantLimit:
         case OT_Null:
-            fprintf(stderr, "Error evaluating object of type '%s'\n", typeName(obj->typeId));
+            *value = (struct Object*)errorTerm("EvalError",
+                "Unable to evaluate object (should not get here: eval_rec.c)",
+                2,
+                "Object", obj,
+                "Type", typeSymbol(obj->typeId));
             return false;
 
         default:

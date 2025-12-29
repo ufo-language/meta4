@@ -18,6 +18,7 @@ struct Object;
 
 /* Unique functions ******************/
 
+struct Term* errorTerm(const string_t name, const string_t message, count_t nArgs, ...);
 struct Term* errorTerm0(const string_t name, const string_t message);
 struct Term* errorTerm1(const string_t name, const string_t message, struct Object* arg);
 

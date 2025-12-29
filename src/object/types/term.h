@@ -33,7 +33,8 @@ struct Vector;
 
 // struct Term* term_new(struct Symbol* name, struct Object* attrib, count_t nArgs, struct Object* args[]);
 struct Term* term_new(struct Symbol* name, count_t nArgs, struct Object* args[], struct Object* attrib);
-struct Term* term_new_1arg(struct Symbol* name, struct Object* attrib, struct Object* arg);
+struct Term* term_new_1arg(struct Symbol* name, struct Object* arg, struct Object* attrib);
+struct Term* term_new_nArgs(struct Symbol* name, count_t nArgs, struct Object* attrib);
 
 /* Unique functions ******************/
 

@@ -54,7 +54,7 @@ int main(int argc, char* argv[]) {
         count_t nArgs = 2;
         struct Object* args[] = {OBJ(i100), OBJ(i200)};
         struct Term* term = term_new(name, nArgs, args, attrib);
-        EXPECT_SHOW("Term1{100, 200}%nil", term);
+        EXPECT_SHOW("Term1{100, 200}", term);
     END
 
     END_TESTS

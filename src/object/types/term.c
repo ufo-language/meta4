@@ -18,6 +18,8 @@
 
 /* Defines *******************************************************************/
 
+#define SHOW_ATTRIB false
+
 /* Types *********************************************************************/
 
 /* for reference
@@ -51,6 +53,17 @@ struct Term* term_new(struct Symbol* name, count_t nArgs, struct Object* args[],
 struct Term* term_new_1arg(struct Symbol* name, struct Object* arg, struct Object* attrib) {
     struct Object* args[] = {arg};
     return term_new(name, 1, args, attrib);
+}
+
+struct Term* term_new_nArgs(struct Symbol* name, count_t nArgs, struct Object* attrib) {
+    struct Term* term = (struct Term*)object_new(OT_Term, NWORDS(*term) + nArgs);
+    term->name = name;
+    term->nArgs = nArgs;
+    term->attrib = attrib;
+    for (index_t n=0; n<nArgs; n++) {
+        term->args[n] = (struct Object*)g_nil;
+    }
+    return term;
 }
 
 /* Unique functions ******************/
@@ -103,8 +116,10 @@ bool_t term_eval_rec(struct Term* term, struct Etor_rec* etor, struct Object** v
 void term_show(struct Term* term, struct OutStream* outStream) {
     show((struct Object*)term->name, outStream);
     array_show_usingElems(term->nArgs, term->args, "{", ", ", "}", outStream);
+#if SHOW_ATTRIB
     outStream_writeChar(outStream, '%');
     show(term->attrib, outStream);
+#endif
 }
 
 /* Private functions *********************************************************/

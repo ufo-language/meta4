@@ -3,6 +3,7 @@
 #include "_typedefs.h"
 
 #include "object/typeids.h"
+#include "object/types/symbol.h"
 
 /* Defines *******************************************************************/
 
@@ -15,6 +16,10 @@
 /* Lifecycle functions *******************************************************/
 
 /* Public functions **********************************************************/
+
+struct Symbol* typeSymbol(enum TypeId typeId) {
+    return symbol_new(typeName(typeId));
+}
 
 string_t typeName(enum TypeId typeId) {
     switch (typeId) {

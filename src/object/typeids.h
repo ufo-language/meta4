@@ -68,3 +68,4 @@ enum TypeId {
 /* Public functions **********************************************************/
 
 string_t typeName(enum TypeId typeId);
+struct Symbol* typeSymbol(enum TypeId typeId);
