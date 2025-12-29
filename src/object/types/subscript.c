@@ -1,3 +1,5 @@
+#include <assert.h>
+
 #include "_typedefs.h"
 
 #include "object/errorterm.h"
@@ -33,24 +35,29 @@ struct Subscript* subscript_new(struct Object* base, struct Object* index) {
 
 /* Unique functions ******************/
 
-bool_t subscript_assign(struct Object* base, struct Object* index, struct Object* value, struct Object** error) {
+enum SubscriptResult subscript_assign(struct Object* base, struct Object* index, struct Object* value) {
+    struct Object* error;
     switch (base->typeId) {
         case OT_Array:
-            return array_set((struct Array*)base, index, value, error);
+            return array_set((struct Array*)base, index, value);
         case OT_HashTable: {
                 if (hashTable_put((struct HashTable*)base, index, value)) {
                     return true;
                 }
-                *error = (struct Object*)errorTerm1("SubscriptAssign", "Key is unhashable", index);
-                return false;
+                return SubscriptResult_UnhashableKey;
             }
         case OT_IntArray:
-            return intArray_set((struct IntArray*)base, index, value, error);
+            switch (intArray_set((struct IntArray*)base, index, value, &error)) {
+                default:
+                    assert(false);
+            }
         case OT_IntVector:
-            return intVector_set((struct IntVector*)base, index, value, error);
+            switch (intVector_set((struct IntVector*)base, index, value, &error)) {
+                default:
+                    assert(false);
+            }
         default:
-            *error = (struct Object*)errorTerm1("SubscriptAssign", "Unable to assign to subscript of object", base);
-            return false;
+            return SubscriptResult_ObjectNotSubscriptable;
     }
 }
 

@@ -1,3 +1,5 @@
+#include <assert.h>
+
 #include "_typedefs.h"
 
 #include "object/errorterm.h"
@@ -56,12 +58,29 @@ static bool_t _assign(struct Etor_rec* etor, count_t nArgs, struct Object* args[
                     *value = error;
                     return false;
                 }
-                if (subscript_assign(base, index, rhsVal, &error)) {
-                    *value = rhsVal;
-                    return true;
+                switch (subscript_assign(base, index, rhsVal)) {
+                    case SubscriptResult_OK:
+                        *value = rhsVal;
+                        return true;
+                    case SubscriptResult_IndexOutOfBounds:
+                        *value = (struct Object*)errorTerm1("SubscriptError", "Subscript out of bounds", index);
+                        return false;
+                    case SubscriptResult_IndexType:
+                        *value = (struct Object*)errorTerm_objAndType("SubscriptError", "Object not usable as index", index);
+                        return false;
+                    case SubscriptResult_KeyNotFound:
+                        *value = (struct Object*)errorTerm_objAndType("SubscriptError", "Key not found in collection", index);
+                        return false;
+                    case SubscriptResult_UnhashableKey:
+                        *value = (struct Object*)errorTerm_objAndType("SubscriptError", "Unhashable key", index);
+                        return false;
+                    case SubscriptResult_ObjectNotSubscriptable:
+                        *value = (struct Object*)errorTerm_objAndType("SubscriptError", "Object is not subscriptable", base);
+                        return false;
+                    default:
+                        assert(false);
+                        return false;
                 }
-                *value = error;
-                return false;
             }
         case OT_Var:
             ((struct Variable*)lhs)->value = rhsVal;

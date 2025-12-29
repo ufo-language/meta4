@@ -133,23 +133,21 @@ int main(int argc, char* argv[]) {
         struct Array* array = array_new_withElems(3, elems);
         struct Object* elem;
         /* array_get */
-        ASSERT_TRUE(array_get(array, OBJ(i0), &elem));
+        ASSERT_IEQ(SubscriptResult_OK, array_get(array, OBJ(i0), &elem));
         EXPECT_EQ(i100, elem);
-        ASSERT_TRUE(array_get(array, OBJ(i1), &elem));
+        ASSERT_IEQ(SubscriptResult_OK, array_get(array, OBJ(i1), &elem));
         EXPECT_EQ(i200, elem);
-        ASSERT_TRUE(array_get(array, OBJ(i2), &elem));
+        ASSERT_IEQ(SubscriptResult_OK, array_get(array, OBJ(i2), &elem));
         EXPECT_EQ(i300, elem);
-        ASSERT_FALSE(array_get(array, OBJ(i3), &elem));
-        EXPECT_ISA(OT_Term, elem);
+        ASSERT_IEQ(SubscriptResult_IndexOutOfBounds, array_get(array, OBJ(i3), &elem));
         /* array_get_index_t */
-        ASSERT_TRUE(array_get_index_t(array, 0, &elem));
+        ASSERT_IEQ(SubscriptResult_OK, array_get_index_t(array, 0, &elem));
         EXPECT_EQ(i100, elem);
-        ASSERT_TRUE(array_get_index_t(array, 1, &elem));
+        ASSERT_IEQ(SubscriptResult_OK, array_get_index_t(array, 1, &elem));
         EXPECT_EQ(i200, elem);
-        ASSERT_TRUE(array_get_index_t(array, 2, &elem));
+        ASSERT_IEQ(SubscriptResult_OK, array_get_index_t(array, 2, &elem));
         EXPECT_EQ(i300, elem);
-        ASSERT_FALSE(array_get_index_t(array, 3, &elem));
-        EXPECT_ISA(OT_Term, elem);
+        ASSERT_IEQ(SubscriptResult_IndexOutOfBounds, array_get_index_t(array, 3, &elem));
     END
 
     TEST(array_checkLookup)

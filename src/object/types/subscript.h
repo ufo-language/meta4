@@ -14,6 +14,15 @@ struct Subscript {
     struct Object* index;
 };
 
+enum SubscriptResult {
+    SubscriptResult_OK,
+    SubscriptResult_IndexOutOfBounds,
+    SubscriptResult_IndexType,
+    SubscriptResult_KeyNotFound,
+    SubscriptResult_UnhashableKey,
+    SubscriptResult_ObjectNotSubscriptable
+};
+
 struct Etor_rec;
 struct OutStream;
 
@@ -29,7 +38,7 @@ struct Subscript* subscript_new(struct Object* base, struct Object* index);
 
 /* Unique functions ******************/
 
-bool_t subscript_assign(struct Object* base, struct Object* index, struct Object* value, struct Object** error);
+enum SubscriptResult subscript_assign(struct Object* base, struct Object* index, struct Object* value);
 bool_t subscript_evalParts(struct Object* baseObj, struct Object* indexObj, struct Etor_rec* etor, struct Object** base, struct Object** index, struct Object** error);
 
 /* Object functions ******************/

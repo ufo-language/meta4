@@ -4,6 +4,7 @@
 
 #include "object/functions/compare.h"
 #include "object/object.h"
+#include "object/types/subscript.h"
 
 /* Defines *******************************************************************/
 
@@ -13,13 +14,6 @@ struct Array {
     struct Object obj;
     count_t nElems;
     struct Object* elems[];
-};
-
-enum ArrayResult {
-    ArrayResult_OK,
-    ArrayResult_IndexOutOfBounds,
-    ArrayResult_IndexType,
-    ArrayResult_KeyNotFound
 };
 
 struct Etor_rec;
@@ -41,10 +35,10 @@ void array_init(struct Array* array, count_t nElems, struct Object* elems[]);
 
 /* Unique functions ******************/
 
-bool_t array_get(struct Array* array, struct Object* indexObj, struct Object** value);
-bool_t array_get_index_t(struct Array* array, index_t index, struct Object** value);
-bool_t array_set(struct Array* array, struct Object* indexObj, struct Object* value, struct Object** error);
-bool_t array_set_index_t(struct Array* array, index_t index, struct Object* value, struct Object** error);
+enum SubscriptResult array_get(struct Array* array, struct Object* indexObj, struct Object** value);
+enum SubscriptResult array_get_index_t(struct Array* array, index_t index, struct Object** value);
+enum SubscriptResult array_set(struct Array* array, struct Object* indexObj, struct Object* value);
+enum SubscriptResult array_set_index_t(struct Array* array, index_t index, struct Object* value);
 
 /* Element/array-wise operations; also used by other types */
 void array_close_rec_usingElems(count_t nElems, struct Object* elems[], struct Object* newElems[], struct Etor_rec* etor);

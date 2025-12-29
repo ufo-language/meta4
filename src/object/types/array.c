@@ -53,7 +53,7 @@ void array_init(struct Array* array, count_t nElems, struct Object* elems[]) {
 
 /* Unique functions ******************/
 
-bool_t array_get(struct Array* array, struct Object* indexObj, struct Object** value) {
+enum SubscriptResult array_get(struct Array* array, struct Object* indexObj, struct Object** value) {
     switch (indexObj->typeId) {
         case OT_Integer:
             return array_get_index_t(array, ((struct Integer*)indexObj)->i, value);
@@ -61,37 +61,33 @@ bool_t array_get(struct Array* array, struct Object* indexObj, struct Object** v
             if (indexObj->typeId < OT_ConstantLimit) {
                 return array_lookup_usingElems(array->nElems, array->elems, indexObj, value);
             }
-            *value = (struct Object*)errorTerm_objAndType("ArrayError", "Unable to use object as array subscript index", indexObj);
-            return false;
+            return SubscriptResult_IndexType;
     }
 }
 
-bool_t array_get_index_t(struct Array* array, index_t index, struct Object** value) {
+enum SubscriptResult array_get_index_t(struct Array* array, index_t index, struct Object** value) {
     if (index >= array->nElems) {
-        *value = (struct Object*)errorTerm1("ArrayError", "Index out of bounds", (struct Object*)integer_new(index));
-        return false;
+        return SubscriptResult_IndexOutOfBounds;
     }
     *value = array->elems[index];
-    return true;
+    return SubscriptResult_OK;
 }
 
-bool_t array_set(struct Array* array, struct Object* indexObj, struct Object* value, struct Object** error) {
+enum SubscriptResult array_set(struct Array* array, struct Object* indexObj, struct Object* value) {
     switch (indexObj->typeId) {
         case OT_Integer:
-            return array_set_index_t(array, ((struct Integer*)indexObj)->i, value, error);
+            return array_set_index_t(array, ((struct Integer*)indexObj)->i, value);
         default:
-            *error = (struct Object*)errorTerm_objAndType("ArrayError", "Unable to use object as array subscript index", indexObj);
-            return false;
+            return SubscriptResult_IndexType;
     }
 }
 
-bool_t array_set_index_t(struct Array* array, index_t index, struct Object* value, struct Object** error) {
+enum SubscriptResult array_set_index_t(struct Array* array, index_t index, struct Object* value) {
     if (index >= array->nElems) {
-        *error = (struct Object*)errorTerm1("ArrayError", "Index out of bounds", (struct Object*)integer_new(index));
-        return false;
+        return SubscriptResult_IndexOutOfBounds;
     }
     array->elems[index] = value;
-    return true;
+    return SubscriptResult_OK;
 }
 
 /* Element/array-wise operations; also used by other types */
