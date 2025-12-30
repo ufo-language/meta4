@@ -69,21 +69,21 @@ int_t intArray_get_unsafe(struct IntArray* intArray, index_t index) {
 
 bool_t intArray_set(struct IntArray* intArray, struct Object* indexObj, struct Object* elemObj, struct Object** error) {
     if (indexObj->typeId != OT_Integer) {
-        *error = (struct Object*)errorTerm1("IntArray", "Index must be an Integer", indexObj);
+        *error = (struct Object*)errorTerm_objAndType("IntArrayError", "Index must be an Integer", indexObj);
         return false;
     }
     int_t indexInt = ((struct Integer*)indexObj)->i;
     if (indexInt < 0) {
-        *error = (struct Object*)errorTerm1("IntArray", "Index can't be negative", indexObj);
+        *error = (struct Object*)errorTerm1("IntArrayError", "Index can't be negative", indexObj);
         return false;
     }
     index_t index = (index_t)indexInt;
     if (index >= intArray->nElems) {
-        *error = (struct Object*)errorTerm1("IntArray", "Index is too large", indexObj);
+        *error = (struct Object*)errorTerm1("IntArrayError", "Index is too large", indexObj);
         return false;
     }
     if (elemObj->typeId != OT_Integer) {
-        *error = (struct Object*)errorTerm1("IntArray", "Element value must be an Integer", elemObj);
+        *error = (struct Object*)errorTerm_objAndType("IntArrayError", "Element value must be an Integer", elemObj);
         return false;
     }
     int_t elem = ((struct Integer*)elemObj)->i;

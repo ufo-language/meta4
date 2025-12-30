@@ -48,16 +48,16 @@ bool_t intVector_get(struct IntVector* intVector, index_t index, int_t* elem) {
 
 bool_t intVector_set(struct IntVector* intVector, struct Object* indexObj, struct Object* elemObj, struct Object** error) {
     if (indexObj->typeId != OT_Integer) {
-        *error = (struct Object*)errorTerm1("IntVector", "Index must be an Integer", indexObj);
+        *error = (struct Object*)errorTerm_objAndType("IntVectorError", "Index must be an Integer", indexObj);
         return false;
     }
     int_t indexInt = ((struct Integer*)indexObj)->i;
     if (indexInt < 0) {
-        *error = (struct Object*)errorTerm1("IntVector", "Index can't be negative", indexObj);
+        *error = (struct Object*)errorTerm1("IntVectorError", "Index can't be negative", indexObj);
         return false;
     }
     if (elemObj->typeId != OT_Integer) {
-        *error = (struct Object*)errorTerm1("IntVector", "Element value must be an Integer", elemObj);
+        *error = (struct Object*)errorTerm_objAndType("IntVectorError", "Element value must be an Integer", elemObj);
         return false;
     }
     index_t index = (index_t)indexInt;

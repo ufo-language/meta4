@@ -102,12 +102,12 @@ bool_t vector_rebind(struct Vector* vector, struct Object* key, struct Object* v
 
 bool_t vector_set(struct Vector* vector, struct Object* indexObj, struct Object* elem, struct Object** error) {
     if (indexObj->typeId != OT_Integer) {
-        *error = (struct Object*)errorTerm1("Vector", "Index must be an Integer", indexObj);
+        *error = (struct Object*)errorTerm_objAndType("VectorError", "Index must be an Integer", indexObj);
         return false;
     }
     int_t indexInt = ((struct Integer*)indexObj)->i;
     if (indexInt < 0) {
-        *error = (struct Object*)errorTerm1("IntVector", "Index can't be negative", indexObj);
+        *error = (struct Object*)errorTerm1("VectorError", "Index can't be negative", indexObj);
         return false;
     }
     index_t index = (index_t)indexInt;
