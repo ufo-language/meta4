@@ -35,11 +35,11 @@ void set_add(struct Set* set, struct Object* elem) {
 
 bool_t set_contains(struct Set* set, struct Object* elem) {
     struct Object* value;
-    return hashTable_get(&set->hashTable, elem, &value);
+    return hashTable_get(&set->hashTable, elem, &value) == SubscriptResult_OK;
 }
 
 bool_t set_remove(struct Set* set, struct Object* elem) {
-    return hashTable_remove(&set->hashTable, elem);
+    return hashTable_remove(&set->hashTable, elem) == SubscriptResult_OK;
 }
 
 /* Object functions ******************/

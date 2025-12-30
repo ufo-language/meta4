@@ -30,6 +30,7 @@
 #include "object/types/quote.h"
 #include "object/types/real.h"
 #include "object/types/sequence.h"
+#include "object/types/set.h"
 #include "object/types/string.h"
 #include "object/types/subscript.h"
 #include "object/types/symbolic.h"
@@ -85,6 +86,7 @@ void show(struct Object* obj, struct OutStream* outStream) {
         case OT_Quote:           quote_show((struct Quote*)obj, outStream); return;
         case OT_Real:            real_show((struct Real*)obj, outStream); return;
         case OT_Sequence:        sequence_show((struct Sequence*)obj, outStream); return;
+        case OT_Set:             set_show((struct Set*)obj, outStream); return;
         case OT_String:          string_show((struct String*)obj, outStream); return;
         case OT_Subscript:       subscript_show((struct Subscript*)obj, outStream); return;
         case OT_Symbol:          symbolic_show((struct Symbolic*)obj, outStream); return;

@@ -48,9 +48,10 @@ void hash_objHeader(struct Object* obj, word_t* hashCode) {
 
 bool_t hash_rec(struct Object* obj, word_t* hashCode) {
     switch (obj->typeId) {
-        case OT_Boolean:    hash_obj(obj, sizeof(bool_t), &((struct Boolean*)obj)->b, hashCode);
+        case OT_Boolean:    hash_obj(obj, sizeof(bool_t), &((struct Boolean*)obj)->b, hashCode); return true;
         case OT_Identifier: *hashCode = ((struct Symbolic*)obj)->hashCode; return true;
         case OT_Integer:    hash_obj(obj, sizeof(int_t), &((struct Integer*)obj)->i, hashCode); return true;
+        case OT_Nil:        hash_objHeader(obj, hashCode); return true;
         case OT_Primitive:  return prim_hash((struct Primitive*)obj, hashCode);
         case OT_Real:       hash_obj(obj, sizeof(real_t), &((struct Real*)obj)->r, hashCode); return true;
         case OT_String:     hash_obj(obj, ((struct String*)obj)->nChars, ((struct String*)obj)->chars, hashCode); return true;

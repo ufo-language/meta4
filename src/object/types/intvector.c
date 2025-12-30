@@ -8,7 +8,7 @@
 #include "object/types/integer.h"
 #include "object/types/intvector.h"
 #include "object/types/outstream.h"
-#include "object/errorterm.h"
+#include "object/types/subscript.h"
 
 /* Defines *******************************************************************/
 
@@ -46,24 +46,21 @@ bool_t intVector_get(struct IntVector* intVector, index_t index, int_t* elem) {
     return true;
 }
 
-bool_t intVector_set(struct IntVector* intVector, struct Object* indexObj, struct Object* elemObj, struct Object** error) {
+enum SubscriptResult intVector_set(struct IntVector* intVector, struct Object* indexObj, struct Object* elemObj) {
     if (indexObj->typeId != OT_Integer) {
-        *error = (struct Object*)errorTerm_objAndType("IntVectorError", "Index must be an Integer", indexObj);
-        return false;
+        return SubscriptResult_IndexType;
     }
     int_t indexInt = ((struct Integer*)indexObj)->i;
     if (indexInt < 0) {
-        *error = (struct Object*)errorTerm1("IntVectorError", "Index can't be negative", indexObj);
-        return false;
+        return SubscriptResult_IndexOutOfBounds;
     }
     if (elemObj->typeId != OT_Integer) {
-        *error = (struct Object*)errorTerm_objAndType("IntVectorError", "Element value must be an Integer", elemObj);
-        return false;
+        return SubscriptResult_ElementType;
     }
     index_t index = (index_t)indexInt;
     int_t elem = ((struct Integer*)elemObj)->i;
     intVector_set_raw(intVector, index, elem);
-    return true;
+    return SubscriptResult_OK;
 }
 
 void intVector_set_raw(struct IntVector* intVector, index_t index, int_t elem) {

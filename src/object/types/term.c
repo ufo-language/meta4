@@ -4,6 +4,7 @@
 #include "_typedefs.h"
 
 #include "memory/memory.h"
+#include "object/errorterm.h"
 #include "object/evaluator/etor_rec.h"
 #include "object/functions/close_rec.h"
 #include "object/functions/eval_rec.h"
@@ -22,16 +23,6 @@
 
 /* Types *********************************************************************/
 
-/* for reference
-struct Term {
-    struct Object obj;
-    struct Symbol* name;
-    struct Object* attrib;
-    count_t nArgs;
-    struct Object* args[];
-};
-*/
-
 /* Forward declarations ******************************************************/
 
 /* Global variables **********************************************************/
@@ -40,7 +31,6 @@ struct Term {
 
 /* Public functions **********************************************************/
 
-// struct Term* term_new(struct Symbol* name, struct Object* attrib, count_t nArgs, struct Object* args[]) {
 struct Term* term_new(struct Symbol* name, count_t nArgs, struct Object* args[], struct Object* attrib) {
     struct Term* term = (struct Term*)object_new(OT_Term, NWORDS(*term) + nArgs);
     term->name = name;
@@ -77,32 +67,34 @@ bool_t term_close(struct Term* term, struct Etor_rec* etor, struct Object** valu
     (void)term;
     (void)etor;
     (void)value;
+    fputs("term_close is incomplete\n", stderr);
     return false;
 }
 
-bool_t term_equal(struct Term* term, struct Term* other);
+bool_t term_equal(struct Term* term, struct Term* other) {
+    (void)term;
+    (void)other;
+    fputs("term_equal is incomplete\n", stderr);
+    return false;
+}
 
 bool_t term_eval_rec(struct Term* term, struct Etor_rec* etor, struct Object** value) {
     count_t nArgs = term->nArgs;
     struct Term* newTerm = (struct Term*)object_new(OT_Term, NWORDS(*term) + nArgs);
     newTerm->nArgs = nArgs;
-    struct Object* newName;
-    if (!eval_rec((struct Object*)term->name, etor, &newName)) {
+    if (!eval_rec((struct Object*)term->name, etor, value)) {
         return false;
     }
+    struct Object* newName = *value;
     if (newName->typeId != OT_Symbol) {
-        outStream_fwriteLn(g_stderr,
-            'S', "ERROR: Term name must be a symbol: ",
-            'O', newName,
-            'S', " :: ",
-            'S', typeName(newName->typeId),
-            0);
+        *value = (struct Object*)errorTerm_objAndType("TermError", "Term name must be a symbol", newName);
         return false;
     }
     newTerm->name = (struct Symbol*)newName;
     if (!eval_rec((struct Object*)term->attrib, etor, &term->attrib)) {
         return false;
     }
+    term->attrib = *value;
     if (!array_eval_rec_usingElems(nArgs, term->args, newTerm->args, etor, value)) {
         return false;
     }

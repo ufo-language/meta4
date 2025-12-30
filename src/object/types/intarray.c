@@ -9,6 +9,7 @@
 #include "object/types/intarray.h"
 #include "object/types/integer.h"
 #include "object/types/outstream.h"
+#include "object/types/subscript.h"
 
 /* Defines *******************************************************************/
 
@@ -67,28 +68,24 @@ int_t intArray_get_unsafe(struct IntArray* intArray, index_t index) {
     return intArray->elems[index];
 }
 
-bool_t intArray_set(struct IntArray* intArray, struct Object* indexObj, struct Object* elemObj, struct Object** error) {
+enum SubscriptResult intArray_set(struct IntArray* intArray, struct Object* indexObj, struct Object* elemObj) {
     if (indexObj->typeId != OT_Integer) {
-        *error = (struct Object*)errorTerm_objAndType("IntArrayError", "Index must be an Integer", indexObj);
-        return false;
+        return SubscriptResult_IndexType;
     }
     int_t indexInt = ((struct Integer*)indexObj)->i;
     if (indexInt < 0) {
-        *error = (struct Object*)errorTerm1("IntArrayError", "Index can't be negative", indexObj);
-        return false;
+        return SubscriptResult_IndexOutOfBounds;
     }
     index_t index = (index_t)indexInt;
     if (index >= intArray->nElems) {
-        *error = (struct Object*)errorTerm1("IntArrayError", "Index is too large", indexObj);
-        return false;
+        return SubscriptResult_IndexOutOfBounds;
     }
     if (elemObj->typeId != OT_Integer) {
-        *error = (struct Object*)errorTerm_objAndType("IntArrayError", "Element value must be an Integer", elemObj);
-        return false;
+        return SubscriptResult_ElementType;
     }
     int_t elem = ((struct Integer*)elemObj)->i;
     intArray->elems[index] = elem;
-    return true;
+    return SubscriptResult_OK;
 }
 
 void intArray_set_unsafe(struct IntArray* intArray, index_t index, int_t elem) {

@@ -49,35 +49,35 @@ int main(int argc, char* argv[]) {
         vector_push(vector, OBJ(i0));
         vector_push(vector, OBJ(i0));
         struct Object* value;
-        ASSERT_TRUE(vector_get(vector, 0, &value));
+        ASSERT_IEQ(SubscriptResult_OK, vector_get(vector, 0, &value));
         EXPECT_EQ(i0, value);
-        ASSERT_TRUE(vector_get(vector, 1, &value));
+        ASSERT_IEQ(SubscriptResult_OK, vector_get(vector, 1, &value));
         EXPECT_EQ(i0, value);
-        ASSERT_TRUE(vector_get(vector, 2, &value));
+        ASSERT_IEQ(SubscriptResult_OK, vector_get(vector, 2, &value));
         EXPECT_EQ(i0, value);
 
         vector_set_raw(vector, 0, OBJ(i100));
-        ASSERT_TRUE(vector_get(vector, 0, &value));
+        ASSERT_IEQ(SubscriptResult_OK, vector_get(vector, 0, &value));
         ASSERT_EQ(i100, value);
-        ASSERT_TRUE(vector_get(vector, 1, &value));
+        ASSERT_IEQ(SubscriptResult_OK, vector_get(vector, 1, &value));
         EXPECT_EQ(i0, value);
-        ASSERT_TRUE(vector_get(vector, 2, &value));
+        ASSERT_IEQ(SubscriptResult_OK, vector_get(vector, 2, &value));
         EXPECT_EQ(i0, value);
 
         vector_set_raw(vector, 1, OBJ(i200));
-        ASSERT_TRUE(vector_get(vector, 0, &value));
+        ASSERT_IEQ(SubscriptResult_OK, vector_get(vector, 0, &value));
         EXPECT_EQ(i100, value);
-        ASSERT_TRUE(vector_get(vector, 1, &value));
+        ASSERT_IEQ(SubscriptResult_OK, vector_get(vector, 1, &value));
         ASSERT_EQ(i200, value);
-        ASSERT_TRUE(vector_get(vector, 2, &value));
+        ASSERT_IEQ(SubscriptResult_OK, vector_get(vector, 2, &value));
         EXPECT_EQ(i0, value);
 
         vector_set_raw(vector, 2, OBJ(i300));
-        ASSERT_TRUE(vector_get(vector, 0, &value));
+        ASSERT_IEQ(SubscriptResult_OK, vector_get(vector, 0, &value));
         EXPECT_EQ(i100, value);
-        ASSERT_TRUE(vector_get(vector, 1, &value));
+        ASSERT_IEQ(SubscriptResult_OK, vector_get(vector, 1, &value));
         EXPECT_EQ(i200, value);
-        ASSERT_TRUE(vector_get(vector, 2, &value));
+        ASSERT_IEQ(SubscriptResult_OK, vector_get(vector, 2, &value));
         ASSERT_EQ(i300, value);
     END
 

@@ -46,15 +46,17 @@ bool_t while_eval_rec(struct While* while_, struct Etor_rec* etor, struct Object
     struct Object* condValue;
     struct Object* bodyValue = (struct Object*)g_nil;
     for (;;) {
-        if (!eval_rec(cond, etor, &condValue)) {
+        if (!eval_rec(cond, etor, value)) {
             return false;
         }
+        condValue = *value;
         if (!boolValue(condValue)) {
             break;
         }
-        if (!eval_rec(body, etor, &bodyValue)) {
+        if (!eval_rec(body, etor, value)) {
             return false;
         }
+        bodyValue = *value;
     }
     *value = bodyValue;
     return true;

@@ -2,9 +2,9 @@
 
 #include "_typedefs.h"
 
-#include "object/errorterm.h"
 #include "object/object.h"
 #include "object/types/array.h"
+#include "object/types/subscript.h"
 
 /* Defines *******************************************************************/
 
@@ -46,8 +46,8 @@ count_t vector_capacity(struct Vector* vector);
 void vector_bindPair(struct Vector* vector, struct Object* key, struct Object* value);
 bool_t vector_locate(struct Vector* vector, struct Object* key, int_t* index);
 bool_t vector_lookup(struct Vector* vector, struct Object* key, struct Object** value);
-bool_t vector_get(struct Vector* vector, index_t index, struct Object** elem);
-bool_t vector_set(struct Vector* vector, struct Object* indexObj, struct Object* elem, struct Object** error);
+enum SubscriptResult vector_get(struct Vector* vector, index_t index, struct Object** elem);
+enum SubscriptResult vector_set(struct Vector* vector, struct Object* indexObj, struct Object* elem);
 void vector_set_raw(struct Vector* vector, index_t index, struct Object* elem);
 bool_t vector_pop(struct Vector* vector, struct Object** elem);
 void vector_push(struct Vector* vector, struct Object* elem);

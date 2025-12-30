@@ -95,6 +95,7 @@ bool_t prim_apply(struct Primitive* prim, struct Etor_rec* etor, count_t nArgs, 
         argVals = memory_alloc(nArgs);
         struct Object* error;
         if (!array_eval_rec_usingElems(nArgs, args, argVals, etor, &error)) {
+            *value = error;
             return false;
         }
     }

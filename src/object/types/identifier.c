@@ -52,12 +52,7 @@ enum CompareResult identifier_compare(struct Identifier* ident, struct Identifie
 }
 
 bool_t identifier_eval_rec(struct Identifier* ident, struct Etor_rec* etor, struct Object** value) {
-    bool_t success = etor_rec_lookup(etor, ident, value);
-    if (!success) {
-        fprintf(stderr, "ERROR: unbound identifier '%s'\n", ident->name);
-        return false;
-    }
-    return true;
+    return etor_rec_lookup(etor, ident, value);
 }
 
 /* Private functions *********************************************************/

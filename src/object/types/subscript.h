@@ -20,7 +20,8 @@ enum SubscriptResult {
     SubscriptResult_IndexType,
     SubscriptResult_KeyNotFound,
     SubscriptResult_UnhashableKey,
-    SubscriptResult_ObjectNotSubscriptable
+    SubscriptResult_ObjectNotSubscriptable,
+    SubscriptResult_ElementType
 };
 
 struct Etor_rec;

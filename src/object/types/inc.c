@@ -47,9 +47,6 @@ bool_t inc_eval_rec(struct Inc* inc, struct Etor_rec* etor, struct Object** valu
             *value = exprValue;
             return true;
         default:
-            outStream_writeString(g_stderr, "ERROR: inc_eval unable to inc object");
-            show(exprValue, g_stderr);
-            outStream_nl(g_stderr);
             return false;
     }
 }

@@ -54,8 +54,5 @@ void array_showBindings(count_t nElems, struct Object* elems[], const string_t o
 struct Object* array_close_rec(struct Array* array, struct Etor_rec* etor);
 enum CompareResult array_compare(struct Array* array, struct Array* otherArray);
 bool_t array_eval_rec(struct Array* array, struct Etor_rec* etor, struct Object** value);
-#if 0
-bool_t array_hash(struct Array* array, word_t* hashCode);
-#endif
 bool_t array_match(struct Array* array, struct Array* other, struct Vector* bindings);
 void array_show(struct Array* array, struct OutStream* outStream);

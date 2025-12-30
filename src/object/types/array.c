@@ -130,7 +130,6 @@ bool_t array_lookup_usingElems(count_t nElems, struct Object* elems[], struct Ob
             return true;
         }
     }
-    *value = (struct Object*)errorTerm_objAndType("ArrayError", "Key not found in array", key);
     return false;
 }
 
@@ -203,19 +202,6 @@ bool_t array_eval_rec(struct Array* array, struct Etor_rec* etor, struct Object*
     *value = (struct Object*)newArray;
     return true;
 }
-
-#if 0
-/* Arrays are not hashable */
-bool_t array_hash(struct Array* array, word_t* hashCode) {
-    hash_objHeader((struct Object*)array, hashCode);
-    for (index_t n=0; n<array->nElems; n++) {
-        if (!hash_rec(array->elems[n], hashCode)) {
-            return false;
-        }
-    }
-    return true;
-}
-#endif
 
 bool_t array_match(struct Array* array, struct Array* other, struct Vector* bindings) {
     if (array->nElems != other->nElems) {

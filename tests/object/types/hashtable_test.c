@@ -6,6 +6,7 @@
 #include "object/typeids.h"
 #include "object/types/hashtable.h"
 #include "object/types/integer.h"
+#include "object/types/subscript.h"
 #include "object/types/symbol.h"
 #include "object/types/vector.h"
 
@@ -28,19 +29,19 @@ int main(int argc, char* argv[]) {
         struct HashTable* hashTable = hashTable_new();
         struct Object* key = (struct Object*)g_nil;
         struct Object* value;
-        ASSERT_FALSE(hashTable_get(hashTable, key, &value));
+        ASSERT_IEQ(SubscriptResult_KeyNotFound, hashTable_get(hashTable, key, &value));
     END
 
     TEST(hashTable_checkGet_nonEmpty)
         struct HashTable* hashTable = hashTable_new();
         struct Symbol* a = symbol_new("A");
         struct Integer* i100 = integer_new(100);
-        ASSERT_TRUE(hashTable_put(hashTable, OBJ(a), OBJ(i100)));
+        ASSERT_IEQ(SubscriptResult_OK, hashTable_put(hashTable, OBJ(a), OBJ(i100)));
         struct Object* retrievedValue;
-        ASSERT_TRUE(hashTable_get(hashTable, OBJ(a), &retrievedValue));
+        ASSERT_IEQ(SubscriptResult_OK, hashTable_get(hashTable, OBJ(a), &retrievedValue));
         ASSERT_EQ(i100, retrievedValue);
         struct Symbol* b = symbol_new("B");
-        ASSERT_FALSE(hashTable_get(hashTable, OBJ(b), &retrievedValue));
+        ASSERT_IEQ(SubscriptResult_KeyNotFound, hashTable_get(hashTable, OBJ(b), &retrievedValue));
     END
 
     TEST(hashTable_checkResize)
@@ -73,7 +74,7 @@ int main(int argc, char* argv[]) {
             struct Object* key = vector_get_unsafe(keys, n);
             struct Object* value = vector_get_unsafe(values, n);
             struct Object* value1;
-            ASSERT_TRUE(hashTable_get(hashTable, key, &value1));
+            ASSERT_IEQ(SubscriptResult_OK, hashTable_get(hashTable, key, &value1));
             EXPECT_EQ(value, value1);
         }
     END
@@ -90,12 +91,12 @@ int main(int argc, char* argv[]) {
         hashTable_put(hashTable, OBJ(b), OBJ(i200));
         hashTable_put(hashTable, OBJ(c), OBJ(i300));
         ASSERT_IEQ(3, hashTable->nElems);
-        ASSERT_TRUE(hashTable_remove(hashTable, OBJ(b)));
+        ASSERT_IEQ(SubscriptResult_OK, hashTable_remove(hashTable, OBJ(b)));
         ASSERT_IEQ(2, hashTable->nElems);
         struct Object* value;
-        EXPECT_TRUE(hashTable_get(hashTable, OBJ(a), &value));
-        EXPECT_FALSE(hashTable_get(hashTable, OBJ(b), &value));
-        EXPECT_TRUE(hashTable_get(hashTable, OBJ(c), &value));
+        EXPECT_IEQ(SubscriptResult_OK, hashTable_get(hashTable, OBJ(a), &value));
+        EXPECT_IEQ(SubscriptResult_KeyNotFound, hashTable_get(hashTable, OBJ(b), &value));
+        EXPECT_IEQ(SubscriptResult_OK, hashTable_get(hashTable, OBJ(c), &value));
     END
 
     TEST(hashTable_checkShow)

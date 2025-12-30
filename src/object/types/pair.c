@@ -90,14 +90,14 @@ bool_t pair_eval_rec(struct Pair* pair, struct Etor_rec* etor, struct Object** v
         *value = (struct Object*)pair;
         return true;
     }
-    struct Object* newFirst;
-    if (!eval_rec(pair->first, etor, &newFirst)) {
+    if (!eval_rec(pair->first, etor, value)) {
         return false;
     }
-    struct Object* newRest;
-    if (!eval_rec(pair->rest, etor, &newRest)) {
+    struct Object* newFirst = *value;
+    if (!eval_rec(pair->rest, etor, value)) {
         return false;
     }
+    struct Object* newRest = *value;
     *value = (struct Object*)pair_new(newFirst, newRest);
     return true;
 }

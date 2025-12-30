@@ -9,6 +9,7 @@
 #include "object/types/array.h"
 #include "object/types/hashtable.h"
 #include "object/types/intarray.h"
+#include "object/types/integer.h"
 #include "object/types/intvector.h"
 #include "object/types/outstream.h"
 #include "object/types/subscript.h"
@@ -19,6 +20,8 @@
 /* Types *********************************************************************/
 
 /* Forward declarations ******************************************************/
+
+struct Term* _errorTerm(enum SubscriptResult subscriptResult, struct Object* base, struct Object* index);
 
 /* Global variables **********************************************************/
 
@@ -36,25 +39,15 @@ struct Subscript* subscript_new(struct Object* base, struct Object* index) {
 /* Unique functions ******************/
 
 enum SubscriptResult subscript_assign(struct Object* base, struct Object* index, struct Object* value) {
-    struct Object* error;
     switch (base->typeId) {
         case OT_Array:
             return array_set((struct Array*)base, index, value);
         case OT_HashTable:
-            if (hashTable_put((struct HashTable*)base, index, value)) {
-                return SubscriptResult_OK;
-            }
-            return SubscriptResult_UnhashableKey;
+            return hashTable_put((struct HashTable*)base, index, value);
         case OT_IntArray:
-            if (intArray_set((struct IntArray*)base, index, value, &error)) {
-                return SubscriptResult_OK;
-            }
-            return SubscriptResult_IndexOutOfBounds;
+            return intArray_set((struct IntArray*)base, index, value);
         case OT_IntVector:
-            if (intVector_set((struct IntVector*)base, index, value, &error)) {
-                return SubscriptResult_OK;
-            }
-            return SubscriptResult_IndexOutOfBounds;
+            return intVector_set((struct IntVector*)base, index, value);
         default:
             return SubscriptResult_ObjectNotSubscriptable;
     }
@@ -97,9 +90,18 @@ bool_t subscript_eval_rec(struct Subscript* subs, struct Etor_rec* etor, struct 
     if (!eval_rec(subs->index, etor, &index)) {
         return false;
     }
+    enum SubscriptResult subscriptResult;
     switch (base->typeId) {
         case OT_Array:
-            return array_get((struct Array*)base, index, value);
+            subscriptResult = array_get((struct Array*)base, index, value);
+            switch (subscriptResult) {
+                case SubscriptResult_OK:
+                    return true;
+                default:
+                    *value = (struct Object*)_errorTerm(subscriptResult, base, index);
+                    return false;;
+            }
+            break;
         default:
             *value = (struct Object*)errorTerm1("SubscriptError", "Base object is not subscriptable", base);
             return false;
@@ -116,3 +118,20 @@ void subscript_show(struct Subscript* subs, struct OutStream* outStream) {
 }
 
 /* Private functions *********************************************************/
+
+struct Term* _errorTerm(enum SubscriptResult subscriptResult, struct Object* base, struct Object* index) {
+    switch (subscriptResult) {
+        case SubscriptResult_IndexOutOfBounds:
+            return errorTerm1("SubscriptError", "Index out of bounds", index);
+        case SubscriptResult_IndexType:
+            return errorTerm_objAndType("SubscriptError", "Index type error", index);
+        case SubscriptResult_KeyNotFound:
+            return errorTerm_objAndType("SubscriptError", "Key not found", index);
+        case SubscriptResult_UnhashableKey:
+            return errorTerm_objAndType("SubscriptError", "Unhashable key", index);
+        case SubscriptResult_ObjectNotSubscriptable:
+            return errorTerm_objAndType("SubscriptError", "Object is not subscriptable", base);
+        default:
+            return errorTerm1("SubscriptError", "Unhandled SubscriptResult enum value", (struct Object*)integer_new(subscriptResult));
+    }
+}

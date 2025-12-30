@@ -1,5 +1,6 @@
 #include "_typedefs.h"
 
+#include "object/errorterm.h"
 #include "object/evaluator/etor_rec.h"
 #include "object/functions/close_rec.h"
 #include "object/functions/eval_rec.h"
@@ -41,18 +42,15 @@ struct Object* let_close_rec(struct Let* let, struct Etor_rec* etor) {
 }
 
 bool_t let_eval_rec(struct Let* let, struct Etor_rec* etor, struct Object** value) {
-    struct Object* rhsVal;
-    if (!eval_rec(let->rhs, etor, &rhsVal)) {
-        *value = rhsVal;
+   if (!eval_rec(let->rhs, etor, value)) {
         return false;
     }
+    struct Object* rhsVal = *value;
     if (!match(let->lhs, rhsVal, etor->env)) {
-        outStream_fwriteLn(g_stderr,
-            'S', "ERROR: Let match bind error, lhs = ",
-            'O', let->lhs,
-            'S', ", rhs = ",
-            'O', rhsVal,
-            0);
+        *value = (struct Object*)errorTerm("LetError", "Match failure",
+            2,
+            "LHS", let->rhs,
+            "RHS", rhsVal);
         return false;
     }
     *value = (struct Object*)g_nil;

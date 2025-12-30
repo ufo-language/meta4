@@ -5,6 +5,7 @@
 #include "_typedefs.h"
 
 #include "object/object.h"
+#include "object/types/subscript.h"
 
 /* Defines *******************************************************************/
 
@@ -40,10 +41,10 @@ void hashTable_init(struct HashTable* hashTable);
 
 /* Unique functions ******************/
 
-bool_t hashTable_get(struct HashTable* hashTable, struct Object* key, struct Object** value);
-bool_t hashTable_get_withHashCode(struct HashTable* hashTable, struct Object* key, word_t hashCode, struct Object** value);
-bool_t hashTable_put(struct HashTable* hashTable, struct Object* key, struct Object* value);
-bool_t hashTable_remove(struct HashTable* hashTable, struct Object* key);
+enum SubscriptResult hashTable_get(struct HashTable* hashTable, struct Object* key, struct Object** value);
+enum SubscriptResult hashTable_get_withHashCode(struct HashTable* hashTable, struct Object* key, word_t hashCode, struct Object** value);
+enum SubscriptResult hashTable_put(struct HashTable* hashTable, struct Object* key, struct Object* value);
+enum SubscriptResult hashTable_remove(struct HashTable* hashTable, struct Object* key);
 
 struct Symbolic* hashTable_intern(struct HashTable* internTable, count_t nChars, const string_t chars, enum TypeId typeId);
 

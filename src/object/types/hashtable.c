@@ -11,6 +11,7 @@
 #include "object/types/hashtable.h"
 #include "object/types/outstream.h"
 #include "object/types/string.h"
+#include "object/types/subscript.h"
 #include "object/types/symbolic.h"
 #include "object/types/binding.h"
 
@@ -48,26 +49,26 @@ void hashTable_init(struct HashTable* hashTable) {
 
 /* Unique functions ******************/
 
-bool_t hashTable_get(struct HashTable* hashTable, struct Object* key, struct Object** value) {
+enum SubscriptResult hashTable_get(struct HashTable* hashTable, struct Object* key, struct Object** value) {
     word_t hashCode;
     if (!hash(key, &hashCode)) {
-        return false;
+        return SubscriptResult_UnhashableKey;
     }
     return hashTable_get_withHashCode(hashTable, key, hashCode, value);
 }
 
-bool_t hashTable_get_withHashCode(struct HashTable* hashTable, struct Object* key, word_t hashCode, struct Object** value) {
+enum SubscriptResult hashTable_get_withHashCode(struct HashTable* hashTable, struct Object* key, word_t hashCode, struct Object** value) {
     index_t bucketNum = hashCode % hashTable->nBuckets;
     /* Look for existing key */
     struct Binding* binding = hashTable->buckets[bucketNum];
     while (binding != g_emptyBinding) {
         if (compare(key, binding->key) == CompareResult_Equal) {
             *value = binding->value;
-            return true;
+            return SubscriptResult_OK;
         }
         binding = binding->next;
     }
-    return false;
+    return SubscriptResult_KeyNotFound;
 }
 
 struct Symbolic* hashTable_intern(struct HashTable* internTable, count_t nChars, const string_t name, enum TypeId typeId) {
@@ -81,7 +82,7 @@ struct Symbolic* hashTable_intern(struct HashTable* internTable, count_t nChars,
     word_t hashCode;
     hash((struct Object*)&probeString, &hashCode);
     struct Object* value;
-    if (hashTable_get_withHashCode(internTable, (struct Object*)&probeString, hashCode, &value)) {
+    if (hashTable_get_withHashCode(internTable, (struct Object*)&probeString, hashCode, &value) == SubscriptResult_OK) {
         return (struct Symbolic*)value;
     }
     /* Create a real string and add it to the table */
@@ -92,23 +93,23 @@ struct Symbolic* hashTable_intern(struct HashTable* internTable, count_t nChars,
     return symbolicValue;
 }
 
-bool_t hashTable_put(struct HashTable* hashTable, struct Object* key, struct Object* value) {
+enum SubscriptResult hashTable_put(struct HashTable* hashTable, struct Object* key, struct Object* value) {
     word_t hashCode;
     if (!hash(key, &hashCode)) {
-        return false;
+        return SubscriptResult_UnhashableKey;
     }
     if (hashTable->nElems == hashTable->maxLoad) {
         _hashTable_resize(hashTable);
     }
     _hashTable_putUsingBuckets(hashTable->nBuckets, hashTable->buckets, key, hashCode, value);
     ++hashTable->nElems;
-    return true;
+    return SubscriptResult_OK;
 }
 
-bool_t hashTable_remove(struct HashTable* hashTable, struct Object* key) {
+enum SubscriptResult hashTable_remove(struct HashTable* hashTable, struct Object* key) {
     word_t hashCode;
     if (!hash(key, &hashCode)) {
-        return false;
+        return SubscriptResult_UnhashableKey;
     }
     index_t bucketNum = hashCode % hashTable->nBuckets;
     struct Binding* binding = hashTable->buckets[bucketNum];
@@ -122,12 +123,12 @@ bool_t hashTable_remove(struct HashTable* hashTable, struct Object* key) {
                 prev->next = binding->next;
             }
             --hashTable->nElems;
-            return true;
+            return SubscriptResult_OK;
         }
         prev = binding;
         binding = binding->next;
     }
-    return false;
+    return SubscriptResult_KeyNotFound;
 }
 
 /* Object functions ******************/

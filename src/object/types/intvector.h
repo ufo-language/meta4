@@ -36,7 +36,7 @@ struct IntVector* intVector_new_withCapacity(count_t capacity);
 /* Unique functions ******************/
 
 bool_t intVector_get(struct IntVector* intVector, index_t index, int_t* elem);
-bool_t intVector_set(struct IntVector* intVector, struct Object* indexObj, struct Object* elemObj, struct Object** error);
+enum SubscriptResult intVector_set(struct IntVector* intVector, struct Object* indexObj, struct Object* elemObj);
 void intVector_set_raw(struct IntVector* intVector, index_t index, int_t elem);
 bool_t intVector_pop(struct IntVector* intVector, int_t* elem);
 void intVector_push(struct IntVector* intVector, int_t elem);

@@ -38,6 +38,10 @@
 
 /* Public functions **********************************************************/
 
+/* Returns true on success and the value is in the 'value' parameter variable.
+   Alterntatively, an exception could be "thrown" and the return value will be false
+   and the 'value' parameter variable will contain the exception payload.
+*/
 bool_t eval_rec(struct Object* obj, struct Etor_rec* etor, struct Object** value) {
     index_t savedEnv = etor_rec_envSave(etor);
     switch(obj->typeId) {
@@ -81,13 +85,7 @@ bool_t eval_rec(struct Object* obj, struct Etor_rec* etor, struct Object** value
         case OT_Vector:          break;
         case OT_While:           return while_eval_rec((struct While*)obj, etor, value);
 
-        /* Non-datatypes; should never get here */
-        case OT_ConstantLimit:
-        case OT_Null:
-            *value = (struct Object*)errorTerm_objAndType("EvalError",
-                "Unable to evaluate object (should not get here: eval_rec.c)", obj);
-            return false;
-
+        /* Unhandled types; (eventually) should never get here */
         default:
             break;
     }

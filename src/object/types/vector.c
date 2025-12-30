@@ -10,6 +10,7 @@
 #include "object/types/array.h"
 #include "object/types/integer.h"
 #include "object/types/outstream.h"
+#include "object/types/subscript.h"
 #include "object/types/vector.h"
 
 /* Defines *******************************************************************/
@@ -67,12 +68,12 @@ bool_t vector_lookup(struct Vector* vector, struct Object* key, struct Object** 
     return array_lookup_usingElems(vector->nElems, vector->elems->elems, key, value);
 }
 
-bool_t vector_get(struct Vector* vector, index_t index, struct Object** elem) {
+enum SubscriptResult vector_get(struct Vector* vector, index_t index, struct Object** elem) {
     if (index >= vector->nElems) {
-        return false;
+        return SubscriptResult_IndexOutOfBounds;
     }
     *elem = vector->elems->elems[index];
-    return true;
+    return SubscriptResult_OK;
 }
 
 bool_t vector_pop(struct Vector* vector, struct Object** elem) {
@@ -100,19 +101,17 @@ bool_t vector_rebind(struct Vector* vector, struct Object* key, struct Object* v
     return false;
 }
 
-bool_t vector_set(struct Vector* vector, struct Object* indexObj, struct Object* elem, struct Object** error) {
+enum SubscriptResult vector_set(struct Vector* vector, struct Object* indexObj, struct Object* elem) {
     if (indexObj->typeId != OT_Integer) {
-        *error = (struct Object*)errorTerm_objAndType("VectorError", "Index must be an Integer", indexObj);
-        return false;
+        return SubscriptResult_IndexType;
     }
     int_t indexInt = ((struct Integer*)indexObj)->i;
     if (indexInt < 0) {
-        *error = (struct Object*)errorTerm1("VectorError", "Index can't be negative", indexObj);
-        return false;
+        return SubscriptResult_IndexOutOfBounds;
     }
     index_t index = (index_t)indexInt;
     vector_set_raw(vector, index, elem);
-    return true;
+    return SubscriptResult_OK;
 }
 
 void vector_set_raw(struct Vector* vector, index_t index, struct Object* elem) {

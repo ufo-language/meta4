@@ -47,10 +47,6 @@ bool_t dec_eval_rec(struct Dec* dec, struct Etor_rec* etor, struct Object** valu
             *value = exprValue;
             return true;
         default:
-            outStream_fwriteLn(g_stderr,
-                'S', "ERROR: dec_eval unable to dec object",
-                'O', exprValue,
-                0);
             return false;
     }
 }
