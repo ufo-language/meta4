@@ -2,6 +2,7 @@
 
 #include "_typedefs.h"
 
+#include "object/functions/hash.h"
 #include "object/object.h"
 #include "object/typeids.h"
 #include "object/types/real.h"

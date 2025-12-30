@@ -34,4 +34,5 @@ struct Nil* nil_new(void);
 /* Object functions ******************/
 
 bool_t nil_eval_rec(struct Nil* nil, struct Etor_rec* etor, struct Object** value);
+bool_t nil_hash(struct Nil* nil, word_t* hashCode);
 void nil_show(struct Nil* nil, struct OutStream* outStream);

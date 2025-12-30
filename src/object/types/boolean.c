@@ -2,6 +2,7 @@
 
 #include "_typedefs.h"
 
+#include "object/functions/hash.h"
 #include "object/typeids.h"
 #include "object/types/boolean.h"
 #include "object/types/outstream.h"

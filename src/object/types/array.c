@@ -7,6 +7,7 @@
 #include "object/functions/close_rec.h"
 #include "object/functions/compare.h"
 #include "object/functions/eval_rec.h"
+#include "object/functions/hash.h"
 #include "object/functions/match.h"
 #include "object/functions/show.h"
 #include "object/object.h"
@@ -202,6 +203,19 @@ bool_t array_eval_rec(struct Array* array, struct Etor_rec* etor, struct Object*
     *value = (struct Object*)newArray;
     return true;
 }
+
+#if 0
+/* Arrays are not hashable */
+bool_t array_hash(struct Array* array, word_t* hashCode) {
+    hash_objHeader((struct Object*)array, hashCode);
+    for (index_t n=0; n<array->nElems; n++) {
+        if (!hash_rec(array->elems[n], hashCode)) {
+            return false;
+        }
+    }
+    return true;
+}
+#endif
 
 bool_t array_match(struct Array* array, struct Array* other, struct Vector* bindings) {
     if (array->nElems != other->nElems) {

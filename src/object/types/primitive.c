@@ -7,6 +7,7 @@
 #include "_typedefs.h"
 
 #include "memory/memory.h"
+#include "object/functions/hash.h"
 #include "object/globals.h"
 #include "object/types/array.h"
 #include "object/types/identifier.h"
@@ -101,6 +102,22 @@ bool_t prim_apply(struct Primitive* prim, struct Etor_rec* etor, count_t nArgs, 
         argVals = args;
     }
     return function(etor, nArgs, argVals, value);
+}
+
+bool_t prim_hash(struct Primitive* prim, word_t* hashCode) {
+    word_t h = *hashCode;
+    hash_objHeader((struct Object*)prim, &h);
+    hash_rec((struct Object*)prim->name, &h);
+    struct PrimitiveRule* rule = prim->rules;
+    while (rule != g_emptyPrimRule) {
+        hash_bytes(sizeof(count_t), &rule->nParams, &h);
+        for (index_t n=0; n<rule->nParams; n++) {
+            hash_bytes(sizeof(enum TypeId), &rule->paramTypes[n], &h);
+        }
+        rule = rule->nextRule;
+    }
+    *hashCode = h;
+    return true;
 }
 
 void prim_show(struct Primitive* prim, struct OutStream* outStream) {

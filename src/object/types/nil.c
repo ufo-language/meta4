@@ -3,6 +3,7 @@
 #include "_typedefs.h"
 
 #include "object/object.h"
+#include "object/functions/hash.h"
 #include "object/typeids.h"
 #include "object/types/nil.h"
 #include "object/types/outstream.h"
@@ -30,6 +31,11 @@ struct Nil* nil_new(void) {
 bool_t nil_eval_rec(struct Nil* nil, struct Etor_rec* etor, struct Object** value) {
     (void)etor;
     *value = (struct Object*)nil;
+    return true;
+}
+
+bool_t nil_hash(struct Nil* nil, word_t* hashCode) {
+    hash_objHeader((struct Object*)nil, hashCode);
     return true;
 }
 

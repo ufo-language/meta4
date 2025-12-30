@@ -51,4 +51,5 @@ struct PrimitiveRule* prim_emptyRule(void);
 /* Object functions ******************/
 
 bool_t prim_apply(struct Primitive* prim, struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value);
+bool_t prim_hash(struct Primitive* prim, word_t* hashCode);
 void prim_show(struct Primitive* prim, struct OutStream* outStream);

@@ -5,6 +5,7 @@
 
 #include "object/evaluator/etor_rec.h"
 #include "object/functions/compare.h"
+#include "object/functions/hash.h"
 #include "object/functions/match.h"
 #include "object/globals.h"
 #include "object/typeids.h"
@@ -179,6 +180,21 @@ int main(int argc, char* argv[]) {
         struct Identifier* d = identifier_new("d");
         ASSERT_FALSE(array_locate_usingElems(nElems, array->elems, OBJ(d), &index));
     END
+
+#if 0
+    /* Arrays are not hashable */
+    TEST(array_checkHash)
+        count_t nElems = 3;
+        struct Object* elems[] = {OBJ(i100), OBJ(i200), OBJ(i300)};
+        struct Array* array1 = array_new_withElems(nElems, elems);
+        struct Array* array2 = array_new_withElems(nElems, elems);
+        word_t hashCode1;
+        ASSERT_TRUE(hash(OBJ(array1), &hashCode1));
+        word_t hashCode2;
+        ASSERT_TRUE(hash(OBJ(array2), &hashCode2));
+        ASSERT_IEQ(hashCode1, hashCode2);
+    END
+#endif
 
     TEST(array_checkShow)
         struct Array* array = array_new_withElems(3, elems);

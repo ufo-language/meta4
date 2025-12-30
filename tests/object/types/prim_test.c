@@ -3,6 +3,7 @@
 
 #include "object/evaluator/etor_rec.h"
 #include "object/functions/apply.h"
+#include "object/functions/hash.h"
 #include "object/globals.h"
 #include "object/types/identifier.h"
 #include "object/types/integer.h"
@@ -113,9 +114,29 @@ int main(int argc, char* argv[]) {
         EXPECT_EQ(x, value);
     END
 
-    TEST(primitive_show)
+    TEST(primitive_checkShow)
         struct Primitive* prim = prim_newFunction("foo");
         EXPECT_SHOW("@foo", prim);
+    END
+
+    TEST(primitive_checkHash)
+        struct Primitive* prim1 = prim_newFunction("foo");
+        prim_addRule(prim1, testFunction1, 1, OT_Integer);
+        prim_addRule(prim1, testFunction2, 1, OT_Boolean);
+        word_t hashCode1;
+        ASSERT_TRUE(hash((struct Object*)prim1, &hashCode1));
+        struct Primitive* prim2 = prim_newFunction("foo");
+        prim_addRule(prim2, testFunction1, 1, OT_Integer);
+        prim_addRule(prim2, testFunction2, 1, OT_Boolean);
+        word_t hashCode2;
+        ASSERT_TRUE(hash((struct Object*)prim2, &hashCode2));
+        EXPECT_IEQ(hashCode1, hashCode2);
+        /* Even with the same name and same first rule, this prim should hash differently */
+        struct Primitive* prim3 = prim_newFunction("foo");
+        prim_addRule(prim3, testFunction1, 0);
+        word_t hashCode3;
+        ASSERT_TRUE(hash((struct Object*)prim3, &hashCode3));
+        EXPECT_INE(hashCode2, hashCode3);
     END
 
     END_TESTS
