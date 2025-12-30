@@ -40,22 +40,21 @@ enum SubscriptResult subscript_assign(struct Object* base, struct Object* index,
     switch (base->typeId) {
         case OT_Array:
             return array_set((struct Array*)base, index, value);
-        case OT_HashTable: {
-                if (hashTable_put((struct HashTable*)base, index, value)) {
-                    return true;
-                }
-                return SubscriptResult_UnhashableKey;
+        case OT_HashTable:
+            if (hashTable_put((struct HashTable*)base, index, value)) {
+                return SubscriptResult_OK;
             }
+            return SubscriptResult_UnhashableKey;
         case OT_IntArray:
-            switch (intArray_set((struct IntArray*)base, index, value, &error)) {
-                default:
-                    assert(false);
+            if (intArray_set((struct IntArray*)base, index, value, &error)) {
+                return SubscriptResult_OK;
             }
+            return SubscriptResult_IndexOutOfBounds;
         case OT_IntVector:
-            switch (intVector_set((struct IntVector*)base, index, value, &error)) {
-                default:
-                    assert(false);
+            if (intVector_set((struct IntVector*)base, index, value, &error)) {
+                return SubscriptResult_OK;
             }
+            return SubscriptResult_IndexOutOfBounds;
         default:
             return SubscriptResult_ObjectNotSubscriptable;
     }
