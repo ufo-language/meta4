@@ -50,6 +50,13 @@ void array_init(struct Array* array, count_t nElems, struct Object* elems[]) {
     memcpy(array->elems, elems, sizeof(struct Object*) * nElems);
 }
 
+struct Array* array_fromVector(struct Vector* vector) {
+    count_t nElems = vector->nElems;
+    struct Array* array = array_new_noFill(nElems);
+    memcpy(array->elems, vector->elems->elems, nElems * sizeof *array->elems);
+    return array;
+}
+
 /* Public functions **********************************************************/
 
 /* Unique functions ******************/

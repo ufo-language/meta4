@@ -16,11 +16,11 @@
 
 /* Public functions **********************************************************/
 
-enum ParseStatus pArray(struct ParseState* parseState);
-enum ParseStatus pBinding(struct ParseState* parseState);
-enum ParseStatus pHashTable(struct ParseState* parseState);
-enum ParseStatus pPair(struct ParseState* parseState);
-enum ParseStatus pQueue(struct ParseState* parseState);
-enum ParseStatus pSet(struct ParseState* parseState);
-enum ParseStatus pTerm(struct ParseState* parseState);
-enum ParseStatus pVector(struct ParseState* parseState);
+enum ParseResultStatus pArray(struct ParseState* parseState);
+enum ParseResultStatus pBinding(struct ParseState* parseState);
+enum ParseResultStatus pHashTable(struct ParseState* parseState);
+enum ParseResultStatus pPair(struct ParseState* parseState);
+enum ParseResultStatus pQueue(struct ParseState* parseState);
+enum ParseResultStatus pSet(struct ParseState* parseState);
+enum ParseResultStatus pTerm(struct ParseState* parseState);
+enum ParseResultStatus pVector(struct ParseState* parseState);

@@ -18,13 +18,6 @@ struct ParseState;
 
 /* Public functions **********************************************************/
 
-enum ParseResultStatus pSpecialOpenBrace(struct ParseState* parseState);
-enum ParseResultStatus pSpecialCloseBrace(struct ParseState* parseState);
-enum ParseResultStatus pSpecialOpenBracket(struct ParseState* parseState);
-enum ParseResultStatus pSpecialCloseBracket(struct ParseState* parseState);
-enum ParseResultStatus pSpecialOpenParen(struct ParseState* parseState);
-enum ParseResultStatus pSpecialCloseParen(struct ParseState* parseState);
-enum ParseResultStatus pSpecialComma(struct ParseState* parseState);
-enum ParseResultStatus pSpecialSemicolon(struct ParseState* parseState);
+enum ParseResultStatus pOperatorEqual(struct ParseState* parseState);
 
 /* Private functions *********************************************************/

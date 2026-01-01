@@ -2,8 +2,9 @@
 
 #include "memory/memory.h"
 #include "object/globals.h"
-#include "object/types/intvector.h"
+#include "object/types/vector.h"
 #include "parsers/parser.h"
+#include "parsers/parsememotable.h"
 
 /* Defines *******************************************************************/
 
@@ -25,15 +26,26 @@ void parseState_init(struct ParseState* parseState, struct Vector* tokens) {
     parseState->tokens = tokens;
     parseState->index = 0;
     parseState->result = g_uniqueObject;
-    parseState->memoVector = intVector_new();
+    parseState->memoVector = vector_new();
 }
 
 /* Public functions **********************************************************/
 
-enum ParseStatus parse(ParserFunction parser, struct ParseState* parseState) {
+enum ParseResultStatus parse(ParserFunction parser, struct ParseState* parseState) {
+    enum ParseResultStatus status;
+    struct Object* resultObj;
+    if (parser_memoLookup(parseState->memoVector, parser, parseState->index, &status, &resultObj)) {
+        parseState->result = resultObj;
+        return status;
+    }
+    /* TODO does adding the recursion barrier here cause any problems? */
+    parser_addRecursionBarrier(parser, parseState);
     index_t savedIndex = parseState->index;
-    enum ParseStatus status = parser(parseState);
-    intVector_set_raw(parseState->memoVector, savedIndex, (int_t)status);
+    status = parser(parseState);
+    if (status != PRS_Pass) {
+        parseState->index = savedIndex;
+    }
+    parser_memoizeResult(parseState->memoVector, parser, savedIndex, status, parseState->result);
     return status;
 }
 

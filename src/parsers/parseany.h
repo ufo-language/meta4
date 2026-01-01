@@ -16,12 +16,4 @@
 
 /* Public functions **********************************************************/
 
-enum ParseResultStatus pLiteral(struct ParseState* parseState);
-
-enum ParseResultStatus pBoolean(struct ParseState* parseState);
-enum ParseResultStatus pIdentifier(struct ParseState* parseState);
-enum ParseResultStatus pInteger(struct ParseState* parseState);
-enum ParseResultStatus pNil(struct ParseState* parseState);
-enum ParseResultStatus pReal(struct ParseState* parseState);
-enum ParseResultStatus pString(struct ParseState* parseState);
-enum ParseResultStatus pSymbol(struct ParseState* parseState);
+enum ParseResultStatus pAny(struct ParseState* parseState);

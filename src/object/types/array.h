@@ -31,6 +31,8 @@ struct Array* array_new_withElems(count_t nElems, struct Object* elems[]);
 struct Array* array_new_noFill(count_t nElems);
 void array_init(struct Array* array, count_t nElems, struct Object* elems[]);
 
+struct Array* array_fromVector(struct Vector* vector);
+
 /* Public functions **********************************************************/
 
 /* Unique functions ******************/

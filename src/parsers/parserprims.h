@@ -20,18 +20,18 @@ struct Vector;
 
 /* Public functions **********************************************************/
 
-enum ParseStatus pDebug(ParserFunction parser, const string_t message, struct ParseState* parseState);
-enum ParseStatus pEnsure(ParserFunction parser, const string_t message, struct ParseState* parseState);
-enum ParseStatus pError(const string_t message, struct ParseState* parseState);
-enum ParseStatus pIgnore(ParserFunction parser, struct ParseState* parseState);
-enum ParseStatus pListOf(ParserFunction open, ParserFunction elem, ParserFunction sep, ParserFunction close, struct ParseState* parseState);
-enum ParseStatus pOneOf(count_t nParsers, ParserFunction parsers[], struct ParseState* parseState);
-enum ParseStatus pSepBy(ParserFunction elem, ParserFunction separator, count_t minElems, struct ParseState* parseState);
-enum ParseStatus pSequence(count_t nParsers, ParserFunction parsers[], struct ParseState* parseState);
-enum ParseStatus pSpot(struct Symbol* tokenType, struct ParseState* parseState);
+enum ParseResultStatus pDebug(ParserFunction parser, const string_t message, struct ParseState* parseState);
+enum ParseResultStatus pEnsure(ParserFunction parser, const string_t message, struct ParseState* parseState);
+enum ParseResultStatus pError(const string_t message, struct ParseState* parseState);
+enum ParseResultStatus pIgnore(ParserFunction parser, struct ParseState* parseState);
+enum ParseResultStatus pListOf(ParserFunction open, ParserFunction elem, ParserFunction sep, ParserFunction close, struct ParseState* parseState);
+enum ParseResultStatus pOneOf(count_t nParsers, ParserFunction parsers[], struct ParseState* parseState);
+enum ParseResultStatus pSepBy(ParserFunction elem, ParserFunction separator, count_t minElems, struct ParseState* parseState);
+enum ParseResultStatus pSequence(count_t nParsers, ParserFunction parsers[], struct ParseState* parseState);
+enum ParseResultStatus pSpot(struct Symbol* tokenType, struct ParseState* parseState);
 
 /* Composable parsers */
 
-enum ParseStatus pStrip(struct ParseState* parseState);
+enum ParseResultStatus pStrip(struct ParseState* parseState);
 
 /* Private functions *********************************************************/

@@ -13,7 +13,7 @@
 
 /* Forward declarations ******************************************************/
 
-enum ParseStatus pSpotSpecialChar(char c, struct ParseState* parseState);
+enum ParseResultStatus pSpotSpecialChar(char c, struct ParseState* parseState);
 
 /* Global variables **********************************************************/
 
@@ -21,27 +21,55 @@ enum ParseStatus pSpotSpecialChar(char c, struct ParseState* parseState);
 
 /* Public functions **********************************************************/
 
-enum ParseStatus pSpotSpecialChar(char c, struct ParseState* parseState) {
+enum ParseResultStatus pSpotSpecialChar(char c, struct ParseState* parseState) {
     index_t savedIndex = parseState->index;
-    enum ParseStatus status = pSpot(g_symSpecial, parseState);
-    if (status == PS_Success) {
+    enum ParseResultStatus status = pSpot(g_symSpecial, parseState);
+    if (status == PRS_Pass) {
         struct Term* token = (struct Term*)parseState->result;
         if (token->nArgs == 1) {
             struct Object* arg = token->args[0];
             if (arg->typeId == OT_String) {
                 struct String* argString = (struct String*)arg;
                 if (argString->nChars == 1 && argString->chars[0] == c) {
-                    return PS_Success;
+                    return PRS_Pass;
                 }
             }
         }
     }
     parseState->index = savedIndex;
-    return PS_Fail;
+    return PRS_Fail;
 }
 
-enum ParseStatus pSpecialOpenBrace(struct ParseState* parseState) {
+enum ParseResultStatus pSpecialOpenBrace(struct ParseState* parseState) {
     return pSpotSpecialChar('{', parseState);
+}
+
+enum ParseResultStatus pSpecialCloseBrace(struct ParseState* parseState) {
+    return pSpotSpecialChar('}', parseState);
+}
+
+enum ParseResultStatus pSpecialOpenBracket(struct ParseState* parseState) {
+    return pSpotSpecialChar('[', parseState);
+}
+
+enum ParseResultStatus pSpecialCloseBracket(struct ParseState* parseState) {
+    return pSpotSpecialChar(']', parseState);
+}
+
+enum ParseResultStatus pSpecialOpenParen(struct ParseState* parseState) {
+    return pSpotSpecialChar('(', parseState);
+}
+
+enum ParseResultStatus pSpecialCloseParen(struct ParseState* parseState) {
+    return pSpotSpecialChar(')', parseState);
+}
+
+enum ParseResultStatus pSpecialComma(struct ParseState* parseState) {
+    return pSpotSpecialChar(',', parseState);
+}
+
+enum ParseResultStatus pSpecialSemicolon(struct ParseState* parseState) {
+    return pSpotSpecialChar(';', parseState);
 }
 
 /* Private functions *********************************************************/

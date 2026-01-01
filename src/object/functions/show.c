@@ -5,6 +5,7 @@
 #include "object/functions/show.h"
 #include "object/object.h"
 #include "object/typeids.h"
+#include "object/types/address.h"
 #include "object/types/application.h"
 #include "object/types/array.h"
 #include "object/types/binding.h"
@@ -52,10 +53,9 @@
 
 /* Public functions **********************************************************/
 
-#include <assert.h>
 void show(struct Object* obj, struct OutStream* outStream) {
-    assert(outStream->streamType < 2);
     switch(obj->typeId) {
+        case OT_Address:         address_show((struct Address*)obj, outStream); return;
         case OT_Application:     application_show((struct Application*)obj, outStream); return;
         case OT_Array:           array_show((struct Array*)obj, outStream); return;
         case OT_Binding:         binding_show((struct Binding*)obj, outStream); return;

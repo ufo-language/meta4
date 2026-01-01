@@ -1,8 +1,7 @@
-#pragma once
-
 #include "_typedefs.h"
 
-#include "parsers/parserprims.h"
+#include "object/types/address.h"
+#include "object/types/outstream.h"
 
 /* Defines *******************************************************************/
 
@@ -14,9 +13,20 @@
 
 /* Lifecycle functions *******************************************************/
 
+struct Address* address_new(void* addr) {
+    struct Address* address = (struct Address*)object_new(OT_Address, NWORDS(*address));
+    address->address = addr;
+    return address;
+}
+
 /* Public functions **********************************************************/
 
-enum ParseResultStatus pReservedEnd(struct ParseState* parseState);
-enum ParseResultStatus pSpotReserved(const string_t word, struct ParseState* parseState);
+/* Unique functions ******************/
+
+/* Object functions ******************/
+
+void address_show(struct Address* address, struct OutStream* outStream) {
+    fprintf(outStream->file, "%p", address->address);
+}
 
 /* Private functions *********************************************************/

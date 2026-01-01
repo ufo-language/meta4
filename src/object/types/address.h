@@ -2,11 +2,18 @@
 
 #include "_typedefs.h"
 
-#include "parsers/parserprims.h"
+#include "object/object.h"
 
 /* Defines *******************************************************************/
 
 /* Types *********************************************************************/
+
+struct Address {
+    struct Object obj;
+    void* address;
+};
+
+struct OutStream;
 
 /* Forward declarations ******************************************************/
 
@@ -14,9 +21,12 @@
 
 /* Lifecycle functions *******************************************************/
 
+struct Address* address_new(void* address);
+
 /* Public functions **********************************************************/
 
-enum ParseResultStatus pReservedEnd(struct ParseState* parseState);
-enum ParseResultStatus pSpotReserved(const string_t word, struct ParseState* parseState);
+/* Unique functions ******************/
 
-/* Private functions *********************************************************/
+/* Object functions ******************/
+
+void address_show(struct Address* addr, struct OutStream* outStream);

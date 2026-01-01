@@ -14,79 +14,79 @@
 
 /* Public functions **********************************************************/
 
-enum ParseStatus pApply(struct ParseState* parseState) {
+enum ParseResultStatus pApply(struct ParseState* parseState) {
     (void)parseState;
-    return PS_Fail;
+    return PRS_Fail;
 }
 
-enum ParseStatus pAsync(struct ParseState* parseState) {
+enum ParseResultStatus pAsync(struct ParseState* parseState) {
     (void)parseState;
-    return PS_Fail;
+    return PRS_Fail;
 }
 
-enum ParseStatus pBinOp(struct ParseState* parseState) {
+enum ParseResultStatus pBinOp(struct ParseState* parseState) {
     (void)parseState;
-    return PS_Fail;
+    return PRS_Fail;
 }
 
-enum ParseStatus pCobegin(struct ParseState* parseState) {
+enum ParseResultStatus pCobegin(struct ParseState* parseState) {
     (void)parseState;
-    return PS_Fail;
+    return PRS_Fail;
 }
 
-enum ParseStatus pFunction(struct ParseState* parseState) {
+enum ParseResultStatus pFunction(struct ParseState* parseState) {
     (void)parseState;
-    return PS_Fail;
+    return PRS_Fail;
 }
 
-enum ParseStatus pIfThen(struct ParseState* parseState) {
+enum ParseResultStatus pIfThen(struct ParseState* parseState) {
     (void)parseState;
-    return PS_Fail;
+    return PRS_Fail;
 }
 
-enum ParseStatus pLet(struct ParseState* parseState) {
+enum ParseResultStatus pLet(struct ParseState* parseState) {
     (void)parseState;
-    return PS_Fail;
+    return PRS_Fail;
 }
 
-enum ParseStatus pMacro(struct ParseState* parseState) {
+enum ParseResultStatus pMacro(struct ParseState* parseState) {
     (void)parseState;
-    return PS_Fail;
+    return PRS_Fail;
 }
 
-enum ParseStatus pMatch(struct ParseState* parseState) {
+enum ParseResultStatus pMatch(struct ParseState* parseState) {
     (void)parseState;
-    return PS_Fail;
+    return PRS_Fail;
 }
 
-enum ParseStatus pNondet(struct ParseState* parseState) {
+enum ParseResultStatus pNondet(struct ParseState* parseState) {
     (void)parseState;
-    return PS_Fail;
+    return PRS_Fail;
 }
 
-enum ParseStatus pQuote(struct ParseState* parseState) {
+enum ParseResultStatus pQuote(struct ParseState* parseState) {
     (void)parseState;
-    return PS_Fail;
+    return PRS_Fail;
 }
 
-enum ParseStatus pSeq(struct ParseState* parseState) {
+enum ParseResultStatus pSeq(struct ParseState* parseState) {
     (void)parseState;
-    return PS_Fail;
+    return PRS_Fail;
 }
 
-enum ParseStatus pSubscript(struct ParseState* parseState) {
+enum ParseResultStatus pSubscript(struct ParseState* parseState) {
     (void)parseState;
-    return PS_Fail;
+    return PRS_Fail;
 }
 
-enum ParseStatus pTryCatchFinally(struct ParseState* parseState) {
+enum ParseResultStatus pTryCatchFinally(struct ParseState* parseState) {
     (void)parseState;
-    return PS_Fail;
+    return PRS_Fail;
 }
 
-enum ParseStatus pWhile(struct ParseState* parseState) {
+enum ParseResultStatus pWhile(struct ParseState* parseState) {
     (void)parseState;
-    return PS_Fail;
+    return PRS_Fail;
 }
 
 

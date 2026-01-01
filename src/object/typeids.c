@@ -23,6 +23,7 @@ struct Symbol* typeSymbol(enum TypeId typeId) {
 
 string_t typeName(enum TypeId typeId) {
     switch (typeId) {
+        case OT_Address:         return "Address";
         case OT_Any:             return "Any";
         case OT_Application:     return "Application";
         case OT_Array:           return "Array";

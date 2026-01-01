@@ -22,42 +22,48 @@ count_t testParser_pass_nCalls = 0;
 count_t testParser_fail_nCalls = 0;
 count_t testParser_error_nCalls = 0;
 
-static enum ParseStatus testParser_pass(struct ParseState* parseState) {
+static enum ParseResultStatus testParser_pass(struct ParseState* parseState) {
     (void)parseState;
     ++testParser_pass_nCalls;
-    return PS_Success;
+    ++parseState->index;
+    fprintf(stderr, "testParser_pass called, incremented index to %lu\n", parseState->index);
+    return PRS_Pass;
 }
 
-static enum ParseStatus testParser_fail(struct ParseState* parseState) {
+static enum ParseResultStatus testParser_fail(struct ParseState* parseState) {
     (void)parseState;
     ++testParser_fail_nCalls;
-    return PS_Fail;
+    ++parseState->index;
+    fprintf(stderr, "testParser_fail called, incremented index to %lu\n", parseState->index);
+    return PRS_Fail;
 }
 
-static enum ParseStatus testParser_error(struct ParseState* parseState) {
+static enum ParseResultStatus testParser_error(struct ParseState* parseState) {
     parseState->result = (struct Object*)g_false;  /* Just use some unique value here */
     ++testParser_error_nCalls;
-    return PS_Error;
+    fprintf(stderr, "testParser_error called\n");
+    return PRS_Error;
 }
 
-static enum ParseStatus testParser_returnNil(struct ParseState* parseState) {
+static enum ParseResultStatus testParser_returnNil(struct ParseState* parseState) {
     parseState->result = (struct Object*)g_nil;
-    return PS_Success;
+    ++parseState->index;
+    return PRS_Pass;
 }
 
 #if 0
-static enum ParseStatus testParser_returnTrue(struct ParseState* parseState) {
+static enum ParseResultStatus testParser_returnTrue(struct ParseState* parseState) {
     parseState->result = (struct Object*)g_true;
-    return PS_Success;
+    return PRS_Pass;
 }
 #endif
 
-static enum ParseStatus testParser_returnUnique(struct ParseState* parseState) {
+static enum ParseResultStatus testParser_returnUnique(struct ParseState* parseState) {
     parseState->result = g_uniqueObject;
-    return PS_Success;
+    return PRS_Pass;
 }
 
-static enum ParseStatus testParser_error1(struct ParseState* parseState) {
+static enum ParseResultStatus testParser_error1(struct ParseState* parseState) {
     return pError("error1", parseState);
 }
 
@@ -75,7 +81,7 @@ int main(int argc, char* argv[]) {
         /* The vector is not really empty; it contains EOF{EOF} */
         ASSERT_IEQ(1, vector_count(parseState.tokens));
         ASSERT_TRUE(isA(g_symEOI, vector_get_unsafe(parseState.tokens, 0)));
-        EXPECT_IEQ(PS_Fail, pSpot(g_symInteger, &parseState));
+        EXPECT_IEQ(PRS_Fail, pSpot(g_symInteger, &parseState));
     END
 
     TEST(pSpot_checkInt)
@@ -87,7 +93,7 @@ int main(int argc, char* argv[]) {
         EXPECT_TRUE(isA(g_symInteger, vector_get_unsafe(parseState.tokens, 0)));
         ASSERT_TRUE(isA(g_symEOI, vector_get_unsafe(parseState.tokens, 1)));
         ASSERT_IEQ(2, vector_count(parseState.tokens));
-        ASSERT_IEQ(PS_Success, pSpot(g_symInteger, &parseState));
+        ASSERT_IEQ(PRS_Pass, pSpot(g_symInteger, &parseState));
         EXPECT_IEQ(1, parseState.index);
         ASSERT_ISA(OT_Term, parseState.result);
         EXPECT_TRUE(isA(g_symInteger, parseState.result));
@@ -99,9 +105,9 @@ int main(int argc, char* argv[]) {
         tokens = lexer_lexAll_withVector(syntax, src, tokens);
         struct ParseState parseState;
         parseState_init(&parseState, tokens);
-        ASSERT_IEQ(PS_Success, pSpot(g_symInteger, &parseState));
+        ASSERT_IEQ(PRS_Pass, pSpot(g_symInteger, &parseState));
         ASSERT_IEQ(1, parseState.index);
-        ASSERT_IEQ(PS_Success, pStrip(&parseState));
+        ASSERT_IEQ(PRS_Pass, pStrip(&parseState));
         ASSERT_ISA(OT_Integer, parseState.result);
         EXPECT_IEQ(123, ((struct Integer*)parseState.result)->i);
         EXPECT_IEQ(123, ((struct Integer*)parseState.result)->i);
@@ -116,7 +122,7 @@ int main(int argc, char* argv[]) {
         testParser_pass_nCalls = 0;
         testParser_fail_nCalls = 0;
         testParser_error_nCalls = 0;
-        ASSERT_IEQ(PS_Success, pSequence(nParsers, parsers, &parseState));
+        ASSERT_IEQ(PRS_Pass, pSequence(nParsers, parsers, &parseState));
         ASSERT_IEQ(3, testParser_pass_nCalls);
         ASSERT_IEQ(0, testParser_fail_nCalls);
         ASSERT_IEQ(0, testParser_error_nCalls);
@@ -131,7 +137,7 @@ int main(int argc, char* argv[]) {
         testParser_pass_nCalls = 0;
         testParser_fail_nCalls = 0;
         testParser_error_nCalls = 0;
-        ASSERT_IEQ(PS_Fail, pSequence(nParsers, parsers, &parseState));
+        ASSERT_IEQ(PRS_Fail, pSequence(nParsers, parsers, &parseState));
         ASSERT_IEQ(2, testParser_pass_nCalls);
         ASSERT_IEQ(1, testParser_fail_nCalls);
         ASSERT_IEQ(0, testParser_error_nCalls);
@@ -143,7 +149,7 @@ int main(int argc, char* argv[]) {
         parseState_init(&parseState, tokens);
         count_t nParsers = 3;
         ParserFunction parsers[] = {testParser_returnNil, testParser_returnNil, testParser_returnNil};
-        ASSERT_IEQ(PS_Success, pSequence(nParsers, parsers, &parseState));
+        ASSERT_IEQ(PRS_Pass, pSequence(nParsers, parsers, &parseState));
         ASSERT_ISA(OT_Vector, parseState.result);
         ASSERT_IEQ(3, vector_count((struct Vector*)parseState.result));
     END
@@ -157,7 +163,7 @@ int main(int argc, char* argv[]) {
         testParser_pass_nCalls = 0;
         testParser_fail_nCalls = 0;
         testParser_error_nCalls = 0;
-        ASSERT_IEQ(PS_Success, pSequence(nParsers, parsers, &parseState));
+        ASSERT_IEQ(PRS_Pass, pSequence(nParsers, parsers, &parseState));
         ASSERT_IEQ(0, testParser_fail_nCalls);
         ASSERT_IEQ(0, testParser_error_nCalls);
         ASSERT_ISA(OT_Nil, parseState.result);
@@ -169,7 +175,7 @@ int main(int argc, char* argv[]) {
         parseState_init(&parseState, tokens);
         count_t nParsers = 3;
         ParserFunction parsers[] = {testParser_returnUnique, testParser_returnNil, testParser_returnUnique};
-        ASSERT_IEQ(PS_Success, pSequence(nParsers, parsers, &parseState));
+        ASSERT_IEQ(PRS_Pass, pSequence(nParsers, parsers, &parseState));
         ASSERT_ISA(OT_Nil, parseState.result);
     END
 
@@ -180,7 +186,7 @@ int main(int argc, char* argv[]) {
         count_t nParsers = 3;
         ParserFunction parsers[] = {testParser_returnNil, testParser_returnNil, testParser_error};
         testParser_error_nCalls = 0;
-        ASSERT_IEQ(PS_Error, pSequence(nParsers, parsers, &parseState));
+        ASSERT_IEQ(PRS_Error, pSequence(nParsers, parsers, &parseState));
         ASSERT_IEQ(1, testParser_error_nCalls);
         ASSERT_EQ(g_false, parseState.result);
     END
@@ -192,8 +198,18 @@ int main(int argc, char* argv[]) {
         count_t nParsers = 3;
         ParserFunction parsers[] = {testParser_fail, testParser_fail, testParser_fail};
         testParser_fail_nCalls = 0;
-        ASSERT_IEQ(PS_Fail, pOneOf(nParsers, parsers, &parseState));
+        ASSERT_IEQ(PRS_Fail, pOneOf(nParsers, parsers, &parseState));
+        #if 0
         EXPECT_IEQ(nParsers, testParser_fail_nCalls);
+        #else
+        /* Memoization prevents the same parser from being called when the index is the same.
+           And the way pOneOf works is that it restores the index if the parse fails.
+           This requires multiple different failing parsers in order to force each failing
+           parser to be called. Otherwise the memoized result is returned and the failing
+           parser is called only once.
+        */
+        EXPECT_IEQ(1, testParser_fail_nCalls);
+        #endif
     END
 
     TEST(pOneOf_checkFFNil)
@@ -203,9 +219,19 @@ int main(int argc, char* argv[]) {
         count_t nParsers = 3;
         ParserFunction parsers[] = {testParser_fail, testParser_fail, testParser_returnNil};
         testParser_fail_nCalls = 0;
-        ASSERT_IEQ(PS_Success, pOneOf(nParsers, parsers, &parseState));
+        ASSERT_IEQ(PRS_Pass, pOneOf(nParsers, parsers, &parseState));
         EXPECT_EQ(g_nil, parseState.result);
+        #if 0
         EXPECT_IEQ(2, testParser_fail_nCalls);
+        #else
+        /* Memoization prevents the same parser from being called when the index is the same.
+           And the way pOneOf works is that it restores the index if the parse fails.
+           This requires multiple different failing parsers in order to force each failing
+           parser to be called. Otherwise the memoized result is returned and the failing
+           parser is called only once.
+        */
+        EXPECT_IEQ(1, testParser_fail_nCalls);
+        #endif
     END
 
     TEST(pOneOf_checkFNilF)
@@ -215,7 +241,7 @@ int main(int argc, char* argv[]) {
         count_t nParsers = 3;
         ParserFunction parsers[] = {testParser_fail, testParser_returnNil, testParser_fail};
         testParser_fail_nCalls = 0;
-        ASSERT_IEQ(PS_Success, pOneOf(nParsers, parsers, &parseState));
+        ASSERT_IEQ(PRS_Pass, pOneOf(nParsers, parsers, &parseState));
         EXPECT_EQ(g_nil, parseState.result);
         EXPECT_IEQ(1, testParser_fail_nCalls);
     END
@@ -227,7 +253,7 @@ int main(int argc, char* argv[]) {
         count_t nParsers = 3;
         ParserFunction parsers[] = {testParser_returnNil, testParser_fail, testParser_fail};
         testParser_fail_nCalls = 0;
-        ASSERT_IEQ(PS_Success, pOneOf(nParsers, parsers, &parseState));
+        ASSERT_IEQ(PRS_Pass, pOneOf(nParsers, parsers, &parseState));
         EXPECT_EQ(g_nil, parseState.result);
         EXPECT_IEQ(0, testParser_fail_nCalls);
     END
@@ -238,7 +264,7 @@ int main(int argc, char* argv[]) {
         tokens = lexer_lexAll_withVector(syntax, src, tokens);
         struct ParseState parseState;
         parseState_init(&parseState, tokens);
-        ASSERT_IEQ(PS_Success, pSepBy(pInteger, pSymbol, 0, &parseState));
+        ASSERT_IEQ(PRS_Pass, pSepBy(pInteger, pSymbol, 0, &parseState));
         ASSERT_ISA(OT_Vector, parseState.result);
         ASSERT_IEQ(0, vector_count((struct Vector*)parseState.result));
     END
@@ -249,7 +275,7 @@ int main(int argc, char* argv[]) {
         tokens = lexer_lexAll_withVector(syntax, src, tokens);
         struct ParseState parseState;
         parseState_init(&parseState, tokens);
-        ASSERT_IEQ(PS_Success, pSepBy(pInteger, pSymbol, 1, &parseState));
+        ASSERT_IEQ(PRS_Pass, pSepBy(pInteger, pSymbol, 1, &parseState));
         ASSERT_ISA(OT_Vector, parseState.result);
         ASSERT_IEQ(1, vector_count((struct Vector*)parseState.result));
     END
@@ -260,7 +286,7 @@ int main(int argc, char* argv[]) {
         tokens = lexer_lexAll_withVector(syntax, src, tokens);
         struct ParseState parseState;
         parseState_init(&parseState, tokens);
-        ASSERT_IEQ(PS_Success, pSepBy(pInteger, pSymbol, 3, &parseState));
+        ASSERT_IEQ(PRS_Pass, pSepBy(pInteger, pSymbol, 3, &parseState));
         ASSERT_ISA(OT_Vector, parseState.result);
         ASSERT_IEQ(3, vector_count((struct Vector*)parseState.result));
     END
@@ -271,7 +297,7 @@ int main(int argc, char* argv[]) {
         tokens = lexer_lexAll_withVector(syntax, src, tokens);
         struct ParseState parseState;
         parseState_init(&parseState, tokens);
-        ASSERT_IEQ(PS_Fail, pSepBy(pInteger, pSymbol, 3, &parseState));
+        ASSERT_IEQ(PRS_Fail, pSepBy(pInteger, pSymbol, 3, &parseState));
     END
 
     TEST(pSepBy_intSymbol_error_Sym)
@@ -280,7 +306,7 @@ int main(int argc, char* argv[]) {
         tokens = lexer_lexAll_withVector(syntax, src, tokens);
         struct ParseState parseState;
         parseState_init(&parseState, tokens);
-        ASSERT_IEQ(PS_Error, pSepBy(pInteger, pSymbol, 3, &parseState));
+        ASSERT_IEQ(PRS_Error, pSepBy(pInteger, pSymbol, 3, &parseState));
     END
 
     TEST(pSepBy_intSymbol_Fail)
@@ -289,7 +315,7 @@ int main(int argc, char* argv[]) {
         tokens = lexer_lexAll_withVector(syntax, src, tokens);
         struct ParseState parseState;
         parseState_init(&parseState, tokens);
-        ASSERT_IEQ(PS_Fail, pSepBy(pInteger, pSymbol, 3, &parseState));
+        ASSERT_IEQ(PRS_Fail, pSepBy(pInteger, pSymbol, 3, &parseState));
     END
 
     TEST(pListOf_success_0elems)
@@ -298,7 +324,7 @@ int main(int argc, char* argv[]) {
         tokens = lexer_lexAll_withVector(syntax, src, tokens);
         struct ParseState parseState;
         parseState_init(&parseState, tokens);
-        ASSERT_IEQ(PS_Success, pListOf(pSymbol, pBoolean, pInteger, pIdentifier, &parseState));
+        ASSERT_IEQ(PRS_Pass, pListOf(pSymbol, pBoolean, pInteger, pIdentifier, &parseState));
     END
 
     TEST(pListOf_success_1elem)
@@ -307,7 +333,7 @@ int main(int argc, char* argv[]) {
         tokens = lexer_lexAll_withVector(syntax, src, tokens);
         struct ParseState parseState;
         parseState_init(&parseState, tokens);
-        ASSERT_IEQ(PS_Success, pListOf(pSymbol, pBoolean, pInteger, pIdentifier, &parseState));
+        ASSERT_IEQ(PRS_Pass, pListOf(pSymbol, pBoolean, pInteger, pIdentifier, &parseState));
     END
 
     TEST(pListOf_success_3elems)
@@ -316,7 +342,7 @@ int main(int argc, char* argv[]) {
         tokens = lexer_lexAll_withVector(syntax, src, tokens);
         struct ParseState parseState;
         parseState_init(&parseState, tokens);
-        ASSERT_IEQ(PS_Success, pListOf(pSymbol, pBoolean, pInteger, pIdentifier, &parseState));
+        ASSERT_IEQ(PRS_Pass, pListOf(pSymbol, pBoolean, pInteger, pIdentifier, &parseState));
     END
 
     TEST(pSpotSpecialChar_success)
@@ -325,7 +351,7 @@ int main(int argc, char* argv[]) {
         tokens = lexer_lexAll_withVector(syntax, src, tokens);
         struct ParseState parseState;
         parseState_init(&parseState, tokens);
-        ASSERT_IEQ(PS_Success, pSpecialOpenBrace(&parseState));
+        ASSERT_IEQ(PRS_Pass, pSpecialOpenBrace(&parseState));
     END
 
     TEST(pSpotSpecialChar_fail)
@@ -334,7 +360,7 @@ int main(int argc, char* argv[]) {
         tokens = lexer_lexAll_withVector(syntax, src, tokens);
         struct ParseState parseState;
         parseState_init(&parseState, tokens);
-        ASSERT_IEQ(PS_Fail, pSpecialOpenBrace(&parseState));
+        ASSERT_IEQ(PRS_Fail, pSpecialOpenBrace(&parseState));
     END
 
     TEST(pSpotReserved_success)
@@ -343,7 +369,7 @@ int main(int argc, char* argv[]) {
         tokens = lexer_lexAll_withVector(syntax, src, tokens);
         struct ParseState parseState;
         parseState_init(&parseState, tokens);
-        ASSERT_IEQ(PS_Success, pReservedEnd(&parseState));
+        ASSERT_IEQ(PRS_Pass, pReservedEnd(&parseState));
     END
 
     TEST(pSpotReserved_fail)
@@ -352,7 +378,7 @@ int main(int argc, char* argv[]) {
         tokens = lexer_lexAll_withVector(syntax, src, tokens);
         struct ParseState parseState;
         parseState_init(&parseState, tokens);
-        ASSERT_IEQ(PS_Fail, pReservedEnd(&parseState));
+        ASSERT_IEQ(PRS_Fail, pReservedEnd(&parseState));
     END
 
     TEST(pError)
@@ -360,9 +386,9 @@ int main(int argc, char* argv[]) {
         struct ParseState parseState;
         parseState_init(&parseState, tokens);
         const string_t message = "message";
-        ASSERT_IEQ(PS_Error, pError(message, &parseState));
-        ASSERT_ISA(OT_String, parseState.result);
-        ASSERT_IEQ(CompareResult_Equal, string_compare_chars(((struct String*)parseState.result)->chars, message));
+        ASSERT_IEQ(PRS_Error, pError(message, &parseState));
+        SHOW("Got error object", parseState.result);
+        ASSERT_ISA(OT_Term, parseState.result);
     END
 
     TEST(pSequence_withError)
@@ -371,7 +397,7 @@ int main(int argc, char* argv[]) {
         parseState_init(&parseState, tokens);
         count_t nParsers = 3;
         ParserFunction parsers[] = {testParser_pass, testParser_pass, testParser_error1};
-        ASSERT_IEQ(PS_Error, pSequence(nParsers, parsers, &parseState));
+        ASSERT_IEQ(PRS_Error, pSequence(nParsers, parsers, &parseState));
     END
 
     TEST(pOneOf_withError)
@@ -380,16 +406,16 @@ int main(int argc, char* argv[]) {
         parseState_init(&parseState, tokens);
         count_t nParsers = 3;
         ParserFunction parsers[] = {testParser_fail, testParser_error1, testParser_pass};
-        ASSERT_IEQ(PS_Error, pOneOf(nParsers, parsers, &parseState));
+        ASSERT_IEQ(PRS_Error, pOneOf(nParsers, parsers, &parseState));
     END
 
     TEST(pDebug_pass)
         vector_clear(tokens);
         struct ParseState parseState;
         parseState_init(&parseState, tokens);
-        ASSERT_IEQ(PS_Success, pDebug(testParser_pass, "debug test Pass", &parseState));
-        ASSERT_IEQ(PS_Fail, pDebug(testParser_fail, "debug test Fail", &parseState));
-        ASSERT_IEQ(PS_Error, pDebug(testParser_error, "debug test Error", &parseState));
+        ASSERT_IEQ(PRS_Pass, pDebug(testParser_pass, "debug test Pass", &parseState));
+        ASSERT_IEQ(PRS_Fail, pDebug(testParser_fail, "debug test Fail", &parseState));
+        ASSERT_IEQ(PRS_Error, pDebug(testParser_error, "debug test Error", &parseState));
     END
 
     END_TESTS

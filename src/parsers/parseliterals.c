@@ -17,31 +17,41 @@
 
 /* Public functions **********************************************************/
 
-enum ParseStatus pBoolean(struct ParseState* parseState) {
+enum ParseResultStatus pLiteral(struct ParseState* parseState) {
+    static count_t nParsers = 7;
+    static ParserFunction parsers[] = {pBoolean, pIdentifier, pInteger, pNil, pReal, pString, pSymbol};
+    enum ParseResultStatus parseResult = pOneOf(nParsers, parsers, parseState);
+    if (parseResult == PRS_Pass) {
+        pStrip(parseState);
+    }
+        return parseResult;
+}
+
+enum ParseResultStatus pBoolean(struct ParseState* parseState) {
     return pSpot(g_symBoolean, parseState);
 }
 
-enum ParseStatus pIdentifier(struct ParseState* parseState) {
+enum ParseResultStatus pIdentifier(struct ParseState* parseState) {
     return pSpot(g_symIdentifier, parseState);
 }
 
-enum ParseStatus pInteger(struct ParseState* parseState) {
+enum ParseResultStatus pInteger(struct ParseState* parseState) {
     return pSpot(g_symInteger, parseState);
 }
 
-enum ParseStatus pNil(struct ParseState* parseState) {
+enum ParseResultStatus pNil(struct ParseState* parseState) {
     return pSpot(g_symNil, parseState);
 }
 
-enum ParseStatus pReal(struct ParseState* parseState) {
+enum ParseResultStatus pReal(struct ParseState* parseState) {
     return pSpot(g_symReal, parseState);
 }
 
-enum ParseStatus pString(struct ParseState* parseState) {
+enum ParseResultStatus pString(struct ParseState* parseState) {
     return pSpot(g_symString, parseState);
 }
 
-enum ParseStatus pSymbol(struct ParseState* parseState) {
+enum ParseResultStatus pSymbol(struct ParseState* parseState) {
     return pSpot(g_symSymbol, parseState);
 }
 

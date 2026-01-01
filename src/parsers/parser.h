@@ -6,10 +6,10 @@
 
 /* Types *********************************************************************/
 
-enum ParseStatus {
-    PS_Success,
-    PS_Fail,
-    PS_Error
+enum ParseResultStatus {
+    PRS_Pass,
+    PRS_Fail,
+    PRS_Error
 };
 
 struct IntVector;
@@ -20,12 +20,12 @@ struct ParseState {
     struct Vector* tokens;
     index_t index;
     struct Object* result;
-    struct IntVector* memoVector;
+    struct Vector* memoVector;
 };
 
 struct Vector;
 
-typedef enum ParseStatus (*ParserFunction)(struct ParseState* parseState);
+typedef enum ParseResultStatus (*ParserFunction)(struct ParseState* parseState);
 
 /* Forward declarations ******************************************************/
 
@@ -38,4 +38,4 @@ void parseState_init(struct ParseState* parseState, struct Vector* tokens);
 
 /* Public functions **********************************************************/
 
-enum ParseStatus parse(ParserFunction parser, struct ParseState* parseState);
+enum ParseResultStatus parse(ParserFunction parser, struct ParseState* parseState);
