@@ -40,7 +40,7 @@ int main(int argc, char* argv[]) {
 
     TEST(inc_checkShow)
         struct Dec* dec = dec_new(OBJ(i100));
-        SHOW("Show show 'Dec(100)'", dec);
+        EXPECT_SHOW("Dec{100}", dec);
     END
 
     END_TESTS

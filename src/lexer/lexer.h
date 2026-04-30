@@ -54,17 +54,6 @@ struct Vector;
 
 /* Global variables **********************************************************/
 
-#if 0
-/* The reserved and bool_t words are defined in syntax.h */
-extern char* RESERVED_WORDS[];
-extern char* BOOL_WORDS[];
-
-/* These State, Action, and Token arrays are defined in lexer.c */
-extern char* S_NAMES[];
-extern char* A_NAMES[];
-extern char* T_NAMES[];
-#endif
-
 /* Lifecycle functions *******************************************************/
 
 /* Public functions **********************************************************/

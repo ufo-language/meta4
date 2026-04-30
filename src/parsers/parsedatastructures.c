@@ -8,6 +8,7 @@
 #include "parsers/parserprims.h"
 #include "parsers/parsespecialchars.h"
 #include "parsers/parseoperators.h"
+#include "parsers/parsememotable.h"
 
 /* Defines *******************************************************************/
 
@@ -33,6 +34,7 @@ enum ParseResultStatus pArray(struct ParseState* parseState) {
 
 enum ParseResultStatus pBinding(struct ParseState* parseState) {
     ParserFunction parsers[] = {pAny, pOperatorEqual, pAny};
+    parser_addRecursionBarrier(pBinding, parseState);
     enum ParseResultStatus status = pSequence(3, parsers, parseState);
 
     (void)parseState;

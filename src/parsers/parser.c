@@ -38,8 +38,9 @@ enum ParseResultStatus parse(ParserFunction parser, struct ParseState* parseStat
         parseState->result = resultObj;
         return status;
     }
-    /* TODO does adding the recursion barrier here cause any problems? */
-    parser_addRecursionBarrier(parser, parseState);
+    /* TODO does adding the recursion barrier here cause any problems?
+        -> Yes, it's too strong. */
+    // parser_addRecursionBarrier(parser, parseState);
     index_t savedIndex = parseState->index;
     status = parser(parseState);
     if (status != PRS_Pass) {

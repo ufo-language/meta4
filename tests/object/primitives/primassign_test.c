@@ -97,7 +97,7 @@ int main(int argc, char* argv[]) {
         struct HashTable* hashTable = hashTable_new();
         etor_rec_bind(etor, h, OBJ(hashTable));
         struct Object* value;
-        SHOW("binOp", binOp);
+        EXPECT_SHOW("h[X] := 200", binOp);
         ASSERT_TRUE(eval_rec(OBJ(binOp), etor, &value));
         EXPECT_EQ(i200, value);
         EXPECT_IEQ(SubscriptResult_OK, hashTable_get(hashTable, OBJ(x), &value));
