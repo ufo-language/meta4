@@ -84,7 +84,7 @@ void globals_init(void) {
     g_symInteger            = symbol_new("Integer");
     g_symBoolean               = symbol_new("Bool");
     g_symEOI                = symbol_new("EOI");
-    g_symIdentifier         = symbol_new("Identifeir");
+    g_symIdentifier         = symbol_new("Identifier");
     g_symInteger            = symbol_new("Integer");
     g_symNil                = symbol_new("Nil");
     g_symNone               = symbol_new("None");
