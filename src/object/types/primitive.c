@@ -7,10 +7,12 @@
 #include "_typedefs.h"
 
 #include "memory/memory.h"
+#include "object/errorterm.h"
 #include "object/functions/hash.h"
 #include "object/globals.h"
 #include "object/types/array.h"
 #include "object/types/identifier.h"
+#include "object/types/integer.h"
 #include "object/types/outstream.h"
 #include "object/types/primitive.h"
 #include "utils.h"
@@ -88,6 +90,7 @@ struct PrimitiveRule* prim_emptyRule(void) {
 bool_t prim_apply(struct Primitive* prim, struct Etor_rec* etor, count_t nArgs, struct Object* args[], struct Object** value) {
     PrimFunction function;
     if (!_prim_checkArgs(prim, nArgs, args, &function)) {
+        *value = (struct Object*)errorTerm1("TypeError", "No matching signature for primitive", (struct Object*)prim->name);
         return false;
     }
     struct Object** argVals;
@@ -136,7 +139,7 @@ static bool_t _prim_checkArgs(struct Primitive* prim, count_t nArgs, struct Obje
             goto RETURN_TRUE;
         }
         if (rule->nParams != nArgs) {
-            continue;
+            goto NEXT_RULE;
         }
         for (index_t n=0; n<rule->nParams; ++n) {
             enum TypeId paramTypeId = rule->paramTypes[n];

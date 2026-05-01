@@ -111,8 +111,10 @@ void _repl(void) {
             bool_t evalSuccess = etor_rec_run(etor, parseState.result, &value);
             
             if (evalSuccess) {
-                show(value, g_stdout);
-                printf(" :: %s\n", typeName(value->typeId));
+                if (value != (struct Object*)g_nil) {
+                    show(value, g_stdout);
+                    printf(" :: %s\n", typeName(value->typeId));
+                }
             } else {
                 if (value != NULL && value != (struct Object*)g_nil) {
                     show(value, g_stderr);

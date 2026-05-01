@@ -2,6 +2,7 @@
 
 #include "parsers/parseany.h"
 #include "parsers/parsedatastructures.h"
+#include "parsers/parseexpressions.h"
 #include "parsers/parseliterals.h"
 #include "parsers/parser.h"
 #include "parsers/parserprims.h"
@@ -19,8 +20,8 @@
 /* Public functions **********************************************************/
 
 enum ParseResultStatus pAny(struct ParseState* parseState) {
-    static count_t nParsers = 4;
-    static ParserFunction parsers[] = {pArray, pPair, pTerm, pLiteral};
+    static count_t nParsers = 5;
+    static ParserFunction parsers[] = {pApply, pArray, pPair, pTerm, pLiteral};
     return pOneOf(nParsers, parsers, parseState);
 }
 
