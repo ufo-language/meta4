@@ -6,8 +6,12 @@
 #include "parsers/parsespecialchars.h"
 #include "parsers/parserprims.h"
 #include "parsers/parsememotable.h"
+#include "parsers/parsereservedwords.h"
 #include "object/types/application.h"
+#include "object/types/function.h"
+#include "object/types/identifier.h"
 #include "object/types/vector.h"
+#include "object/globals.h"
 
 /* Defines *******************************************************************/
 
@@ -76,8 +80,78 @@ enum ParseResultStatus pCobegin(struct ParseState* parseState) {
 }
 
 enum ParseResultStatus pFunction(struct ParseState* parseState) {
-    (void)parseState;
-    return PRS_Fail;
+    index_t savedIndex = parseState->index;
+    
+    if (pSpotReserved("fun", parseState) != PRS_Pass) {
+        parseState->index = savedIndex;
+        return PRS_Fail;
+    }
+    
+    pStrip(parseState);
+    
+    struct Identifier* name = g_idNil;
+    if (pIdentifier(parseState) == PRS_Pass) {
+        pStrip(parseState);
+        name = (struct Identifier*)parseState->result;
+    }
+    
+    struct Function* function = function_new(name);
+    
+    while (true) {
+        if (pSpecialOpenParen(parseState) != PRS_Pass) {
+            parseState->index = savedIndex;
+            return PRS_Fail;
+        }
+        
+        struct Vector* params = vector_new();
+        if (pSpecialCloseParen(parseState) != PRS_Pass) {
+            while (true) {
+                if (pAny(parseState) != PRS_Pass) {
+                    parseState->index = savedIndex;
+                    return PRS_Fail;
+                }
+                vector_push(params, parseState->result);
+                
+                if (pSpecialComma(parseState) != PRS_Pass) {
+                    break;
+                }
+            }
+            
+            if (pSpecialCloseParen(parseState) != PRS_Pass) {
+                parseState->index = savedIndex;
+                return PRS_Fail;
+            }
+        }
+        
+        pStrip(parseState);
+        
+        if (pSpecialEqual(parseState) != PRS_Pass) {
+            parseState->index = savedIndex;
+            return PRS_Fail;
+        }
+        
+        pStrip(parseState);
+        
+        if (pAny(parseState) != PRS_Pass) {
+            parseState->index = savedIndex;
+            return PRS_Fail;
+        }
+        
+        struct Object* body = parseState->result;
+        
+        function_addlRule(function, params->nElems, params->elems->elems, body);
+        
+        pStrip(parseState);
+        
+        if (pSpecialPipe(parseState) != PRS_Pass) {
+            break;
+        }
+        
+        pStrip(parseState);
+    }
+    
+    parseState->result = (struct Object*)function;
+    return PRS_Pass;
 }
 
 enum ParseResultStatus pIfThen(struct ParseState* parseState) {

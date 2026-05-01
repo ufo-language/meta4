@@ -20,8 +20,8 @@
 /* Public functions **********************************************************/
 
 enum ParseResultStatus pAny(struct ParseState* parseState) {
-    static count_t nParsers = 5;
-    static ParserFunction parsers[] = {pApply, pArray, pPair, pTerm, pLiteral};
+    static count_t nParsers = 6;
+    static ParserFunction parsers[] = {pFunction, pApply, pArray, pPair, pTerm, pLiteral};
     return pOneOf(nParsers, parsers, parseState);
 }
 

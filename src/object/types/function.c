@@ -104,10 +104,11 @@ enum Function_ApplyResult function_apply_aux(struct Function* function, struct E
 /* Object functions ******************/
 
 struct Object* function_close_rec(struct Function* function, struct Etor_rec* etor) {
+    if (function->name != g_idNil) {
+        etor_rec_bind(etor, function->name, (struct Object*)function);
+    }
     for (struct FunctionRule* rule=function->rules; rule!=g_emptyFunctionRule; rule=rule->nextRule) {
-        index_t savedEnv = etor_rec_envSave(etor);
         _function_closeRule(rule, etor);
-        etor_rec_envRestore(etor, savedEnv);
     }
     return (struct Object*)function;
 }
@@ -137,7 +138,6 @@ void function_show(struct Function* function, struct OutStream* outStream) {
         _function_showRule(rule, outStream);
         assert(outStream->streamType < 2);
     }
-    outStream_writeString(outStream, " end");
 }
 
 /* Private functions *********************************************************/
