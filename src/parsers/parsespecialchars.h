@@ -26,5 +26,7 @@ enum ParseResultStatus pSpecialOpenParen(struct ParseState* parseState);
 enum ParseResultStatus pSpecialCloseParen(struct ParseState* parseState);
 enum ParseResultStatus pSpecialComma(struct ParseState* parseState);
 enum ParseResultStatus pSpecialSemicolon(struct ParseState* parseState);
+enum ParseResultStatus pSpecialEqual(struct ParseState* parseState);
+enum ParseResultStatus pSpecialPipe(struct ParseState* parseState);
 
 /* Private functions *********************************************************/

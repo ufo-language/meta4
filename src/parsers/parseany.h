@@ -17,3 +17,4 @@
 /* Public functions **********************************************************/
 
 enum ParseResultStatus pAny(struct ParseState* parseState);
+enum ParseResultStatus pAnyOrBinding(struct ParseState* parseState);

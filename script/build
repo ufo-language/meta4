@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# PLX build script
+# Meta4 build script
 
 # compile options
 compileForSpeed="-DNDEBUG -std=c17 -Wall -O3 -ffast-math"
@@ -30,13 +30,13 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 # build the archive library and then remove the .o files
-ar rcs libplx.a *.o
+ar rcs libmeta4.a *.o
 rm *.o
 cd ..
 
 # build the main executable concurrently
-echo $CC $options -o bin/plx -I src -Llib src/main.c -lplx
-$CC $options -o bin/plx -I src -Llib src/main.c -lplx &
+echo $CC $options -o bin/meta4 -I src -Llib src/main.c -lmeta4
+$CC $options -o bin/meta4 -I src -Llib src/main.c -lmeta4 &
 
 # build each test executable concurrently
 testDir=tests
@@ -45,6 +45,6 @@ for sourceFile in ${testSources}; do
     f=$(basename $sourceFile .c)
     s="${f%_test}"
     exeFile=bin/$f
-    # echo $CC $options -o $exeFile -I src -I ${testDir} $sourceFile -Llib -lplx
-    $CC $options -o $exeFile -I src -I ${testDir} $sourceFile -Llib -lplx &
+    # echo $CC $options -o $exeFile -I src -I ${testDir} $sourceFile -Llib -lmeta4
+    $CC $options -o $exeFile -I src -I ${testDir} $sourceFile -Llib -lmeta4 &
 done

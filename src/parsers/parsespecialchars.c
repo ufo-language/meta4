@@ -72,5 +72,13 @@ enum ParseResultStatus pSpecialSemicolon(struct ParseState* parseState) {
     return pSpotSpecialChar(';', parseState);
 }
 
-/* Private functions *********************************************************/
+enum ParseResultStatus pSpecialEqual(struct ParseState* parseState) {
+    return pSpotSpecialChar('=', parseState);
+}
+
+enum ParseResultStatus pSpecialPipe(struct ParseState* parseState) {
+    return pSpotSpecialChar('|', parseState);
+}
+
+/* Private functions --------------------------------------------------------*/
 

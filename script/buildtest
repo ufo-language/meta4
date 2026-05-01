@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# PLX build script
+# Meta4 build script
 
 # compile options
 compileForSpeed="-DNDEBUG -std=c17 -Wall -O3 -ffast-math"
@@ -24,6 +24,6 @@ for sourceFile in ${testSources}; do
     f=$(basename $sourceFile .c)
     s="${f%_test}"
     exeFile=bin/$f
-    echo $CC $options -o $exeFile -I src -I ${testDir} $sourceFile -Llib -lplx
-    $CC $options -o $exeFile -I src -I ${testDir} $sourceFile -Llib -lplx &
+    echo $CC $options -o $exeFile -I src -I ${testDir} $sourceFile -Llib -lmeta4
+    $CC $options -o $exeFile -I src -I ${testDir} $sourceFile -Llib -lmeta4 &
 done

@@ -9,6 +9,7 @@
 #include "object/typeids.h"
 #include "object/types/application.h"
 #include "object/types/array.h"
+#include "object/types/binding.h"
 #include "object/types/binop.h"
 #include "object/types/dec.h"
 #include "object/types/function.h"
@@ -62,6 +63,7 @@ bool_t eval_rec(struct Object* obj, struct Etor_rec* etor, struct Object** value
         /* Non-constants */
         case OT_Application:     return application_eval_rec((struct Application*)obj, etor, value);
         case OT_Array:           return array_eval_rec((struct Array*)obj, etor, value);
+        case OT_Binding:         return binding_eval_rec((struct Binding*)obj, etor, value);
         case OT_BinOp:           return binOp_eval_rec((struct BinOp*)obj, etor, value);
         case OT_ByteBuffer:      break;
         case OT_Dec:             return dec_eval_rec((struct Dec*)obj, etor, value);

@@ -34,4 +34,7 @@ struct Binding* binding_new_empty(void);
 
 /* Object functions ******************/
 
+struct Etor_rec;
+
+bool_t binding_eval_rec(struct Binding* binding, struct Etor_rec* etor, struct Object** value);
 void binding_show(struct Binding* triple, struct OutStream* outStream);

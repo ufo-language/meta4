@@ -12,6 +12,8 @@
 
 /* Global variables **********************************************************/
 
+extern struct BumpAllocator* g_bumpAllocator;
+
 /* Lifecycle functions *******************************************************/
 
 void memory_init(count_t nWords);

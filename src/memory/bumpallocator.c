@@ -48,6 +48,14 @@ void bumpAllocator_free(struct BumpAllocator* bumpAllocator) {
 
 address_t bumpAllocator_allocate(struct BumpAllocator* allocator, count_t nWords) {
     struct BumpAllocator* bumpAllocator = (struct BumpAllocator*)allocator;
+    
+    gc_recordAllocation(g_gc, nWords);
+    
+    if (g_gc->allocatedSinceGC >= g_gc->gcThreshold) {
+        gc_doGC(g_gc);
+        bumpAllocator = g_bumpAllocator;
+    }
+    
     if (bumpAllocator->nextFree + nWords > bumpAllocator->nWordsCapacity) {
         if (!gc_doGC(g_gc)) {
             fprintf(stderr, "\nFATAL ERROR\nBumpAllocator out of memory allocating %lu words\n"
@@ -56,6 +64,7 @@ address_t bumpAllocator_allocate(struct BumpAllocator* allocator, count_t nWords
             assert(false);
             exit(1);
         }
+        bumpAllocator = g_bumpAllocator;
     }
     index_t objIndex = bumpAllocator->nextFree;
     bumpAllocator->nextFree += nWords;

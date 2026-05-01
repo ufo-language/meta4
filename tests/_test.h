@@ -7,7 +7,7 @@
 #include "object/globals.h"
 #include "object/types/string.h"
 #include "object/types/vector.h"
-#include "plx.h"
+#include "meta4.h"
 
 #define RED "\033[31m"
 #define GREEN "\033[32m"
@@ -22,8 +22,8 @@ size_t  _TEST_NPASS_        = 0;
 size_t  _TEST_NFAIL_        = 0;
 index_t _SAVED_GLOBALS_TOP_ = 0;
 
-#define BEGIN_TESTS (void)argc; (void)argv; plx_startup();
-#define END_TESTS fprintf(stdout, "Passed %lu Failed %lu\n", _TEST_NPASS_, _TEST_NFAIL_); plx_shutdown();
+#define BEGIN_TESTS (void)argc; (void)argv; meta4_startup();
+#define END_TESTS fprintf(stdout, "Passed %lu Failed %lu\n", _TEST_NPASS_, _TEST_NFAIL_); meta4_shutdown();
 
 #define TEST(name) \
     fprintf(stderr, "[%sTEST%s] %s:\n", BLUE, NORMAL, #name); \

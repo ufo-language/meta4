@@ -97,6 +97,34 @@ void globals_init(void) {
     g_symWord               = symbol_new("Word");
     /* Global environment last */
     g_globalEnv             = vector_new();
+    
+    gc_registerPermanentRoot(g_gc, (struct Object**)&g_emptyBinding);
+    gc_registerPermanentRoot(g_gc, (struct Object**)&g_false);
+    gc_registerPermanentRoot(g_gc, (struct Object**)&g_true);
+    gc_registerPermanentRoot(g_gc, (struct Object**)&g_emptyFunctionRule);
+    gc_registerPermanentRoot(g_gc, (struct Object**)&g_idNil);
+    gc_registerPermanentRoot(g_gc, (struct Object**)&g_nil);
+    gc_registerPermanentRoot(g_gc, (struct Object**)&g_uniqueObject);
+    gc_registerPermanentRoot(g_gc, (struct Object**)&g_emptyPair);
+    gc_registerPermanentRoot(g_gc, (struct Object**)&g_emptyPrimRule);
+    gc_registerPermanentRoot(g_gc, (struct Object**)&g_globalEnv);
+    gc_registerPermanentRoot(g_gc, (struct Object**)&g_identifierInternTable);
+    gc_registerPermanentRoot(g_gc, (struct Object**)&g_symbolInternTable);
+    gc_registerPermanentRoot(g_gc, (struct Object**)&g_stdout);
+    gc_registerPermanentRoot(g_gc, (struct Object**)&g_stderr);
+    gc_registerPermanentRoot(g_gc, (struct Object**)&g_symBoolean);
+    gc_registerPermanentRoot(g_gc, (struct Object**)&g_symEOI);
+    gc_registerPermanentRoot(g_gc, (struct Object**)&g_symIdentifier);
+    gc_registerPermanentRoot(g_gc, (struct Object**)&g_symInteger);
+    gc_registerPermanentRoot(g_gc, (struct Object**)&g_symNil);
+    gc_registerPermanentRoot(g_gc, (struct Object**)&g_symNone);
+    gc_registerPermanentRoot(g_gc, (struct Object**)&g_symOperator);
+    gc_registerPermanentRoot(g_gc, (struct Object**)&g_symReal);
+    gc_registerPermanentRoot(g_gc, (struct Object**)&g_symReserved);
+    gc_registerPermanentRoot(g_gc, (struct Object**)&g_symSpecial);
+    gc_registerPermanentRoot(g_gc, (struct Object**)&g_symString);
+    gc_registerPermanentRoot(g_gc, (struct Object**)&g_symSymbol);
+    gc_registerPermanentRoot(g_gc, (struct Object**)&g_symWord);
 }
 
 /* Private functions *********************************************************/

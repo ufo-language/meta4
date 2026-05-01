@@ -21,8 +21,8 @@ struct InitFunction_handler {
 
 /* Public functions ---------------------------------------------------------*/
 
-int plx_main(void);
-void plx_startup(void);
-void plx_shutdown(void);
+int meta4_main(void);
+void meta4_startup(void);
+void meta4_shutdown(void);
 
 /* Private functions --------------------------------------------------------*/
