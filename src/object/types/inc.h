@@ -31,5 +31,6 @@ struct Inc* inc_new(struct Object* expr);
 
 /* Object functions ******************/
 
+struct Object* inc_close_rec(struct Inc* inc, struct Etor_rec* etor);
 bool_t inc_eval_rec(struct Inc* inc, struct Etor_rec* etor, struct Object** value);
 void inc_show(struct Inc* inc, struct OutStream* outStream);

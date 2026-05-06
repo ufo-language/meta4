@@ -2,6 +2,7 @@
 
 #include "object/errorterm.h"
 #include "object/evaluator/etor_rec.h"
+#include "object/functions/close_rec.h"
 #include "object/functions/eval_rec.h"
 #include "object/functions/show.h"
 #include "object/globals.h"
@@ -42,6 +43,12 @@ struct Binding* binding_new_empty(void) {
 /* Unique functions ******************/
 
 /* Object functions ******************/
+
+struct Object* binding_close_rec(struct Binding* binding, struct Etor_rec* etor) {
+    binding->key = close_rec(binding->key, etor);
+    binding->value = close_rec(binding->value, etor);
+    return (struct Object*)binding;
+}
 
 bool_t binding_eval_rec(struct Binding* binding, struct Etor_rec* etor, struct Object** value) {
     if (!eval_rec(binding->value, etor, value)) {

@@ -60,15 +60,14 @@ struct Term* term_new_nArgs(struct Symbol* name, count_t nArgs, struct Object* a
 
 /* Object functions ******************/
 
-bool_t term_close(struct Term* term, struct Etor_rec* etor, struct Object** value) {
-    /* TODO Change the array_close function. Add array_closeElems, and then call that
-       function from this one.
-    */
-    (void)term;
-    (void)etor;
-    (void)value;
-    fputs("term_close is incomplete\n", stderr);
-    return false;
+struct Object* term_close_rec(struct Term* term, struct Etor_rec* etor) {
+    count_t nArgs = term->nArgs;
+    struct Term* newTerm = (struct Term*)object_new(OT_Term, NWORDS(*term) + nArgs);
+    newTerm->name = term->name;
+    newTerm->nArgs = nArgs;
+    newTerm->attrib = close_rec(term->attrib, etor);
+    array_close_rec_usingElems(nArgs, term->args, newTerm->args, etor);
+    return (struct Object*)newTerm;
 }
 
 bool_t term_equal(struct Term* term, struct Term* other) {

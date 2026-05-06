@@ -2,6 +2,7 @@
 
 #include "_typedefs.h"
 
+#include "object/functions/close_rec.h"
 #include "object/functions/eval_rec.h"
 #include "object/functions/show.h"
 #include "object/typeids.h"
@@ -32,6 +33,11 @@ struct Dec* dec_new(struct Object* expr) {
 /* Unique functions ******************/
 
 /* Object functions ******************/
+
+struct Object* dec_close_rec(struct Dec* dec, struct Etor_rec* etor) {
+    dec->expr = close_rec(dec->expr, etor);
+    return (struct Object*)dec;
+}
 
 bool_t dec_eval_rec(struct Dec* dec, struct Etor_rec* etor, struct Object** value) {
     struct Object* exprValue;

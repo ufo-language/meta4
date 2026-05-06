@@ -36,5 +36,6 @@ struct Binding* binding_new_empty(void);
 
 struct Etor_rec;
 
+struct Object* binding_close_rec(struct Binding* binding, struct Etor_rec* etor);
 bool_t binding_eval_rec(struct Binding* binding, struct Etor_rec* etor, struct Object** value);
 void binding_show(struct Binding* triple, struct OutStream* outStream);

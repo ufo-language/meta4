@@ -31,5 +31,6 @@ struct Dec* dec_new(struct Object* expr);
 
 /* Object functions ******************/
 
+struct Object* dec_close_rec(struct Dec* dec, struct Etor_rec* etor);
 bool_t dec_eval_rec(struct Dec* dec, struct Etor_rec* etor, struct Object** value);
 void dec_show(struct Dec* dec, struct OutStream* outStream);

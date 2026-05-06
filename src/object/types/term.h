@@ -40,7 +40,7 @@ struct Term* term_new_nArgs(struct Symbol* name, count_t nArgs, struct Object* a
 
 /* Object functions ******************/
 
-bool_t term_close(struct Term* term, struct Etor_rec* etor, struct Object** value);
+struct Object* term_close_rec(struct Term* term, struct Etor_rec* etor);
 bool_t term_equal(struct Term* term, struct Term* other);
 bool_t term_eval_rec(struct Term* term, struct Etor_rec* etor, struct Object** value);
 void term_freeVars(struct Term* term, struct Vector* freeVars);

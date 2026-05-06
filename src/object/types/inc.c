@@ -2,6 +2,7 @@
 
 #include "_typedefs.h"
 
+#include "object/functions/close_rec.h"
 #include "object/functions/eval_rec.h"
 #include "object/functions/show.h"
 #include "object/globals.h"
@@ -32,6 +33,11 @@ struct Inc* inc_new(struct Object* expr) {
 /* Unique functions ******************/
 
 /* Object functions ******************/
+
+struct Object* inc_close_rec(struct Inc* inc, struct Etor_rec* etor) {
+    inc->expr = close_rec(inc->expr, etor);
+    return (struct Object*)inc;
+}
 
 bool_t inc_eval_rec(struct Inc* inc, struct Etor_rec* etor, struct Object** value) {
     struct Object* exprValue;
